@@ -12,12 +12,30 @@ const app = express();
 
 connectDB();
 
-/* IMPORTANT: Middleware first */
+/* Allowed origins */
 
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://joshspot-media.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  }),
+);
+
+/* Middleware */
+
 app.use(express.json());
 
-/* Routes after middleware */
+/* Routes */
 
 app.use("/api/payment", paymentRoutes);
 app.use("/api/booking", bookingRoutes);
