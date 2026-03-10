@@ -1,6 +1,7 @@
 const Booking = require("../models/Booking");
 const sendBookingEmail = require("../utils/sendBookingEmail");
 
+// Initialize payment and create booking
 exports.verifyBooking = async (req, res) => {
   try {
     const token = req.params.token;
