@@ -17,6 +17,7 @@ connectDB();
 const allowedOrigins = [
   "http://localhost:3000",
   "https://joshspot-media.vercel.app",
+  "https://joshspotmedia.com",
 ];
 
 app.use(
