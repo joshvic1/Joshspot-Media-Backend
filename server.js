@@ -22,19 +22,18 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // allow requests with no origin (mobile apps, curl, paystack redirects)
+      // allow requests with no origin (mobile apps, Paystack redirects)
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
 
-      return callback(null, true); // allow temporarily
+      return callback(null, true);
     },
     credentials: true,
   }),
 );
-app.options("*", cors());
 
 /* Middleware */
 
