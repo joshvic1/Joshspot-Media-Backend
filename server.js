@@ -18,6 +18,7 @@ const allowedOrigins = [
   "http://localhost:3000",
   "https://joshspot-media.vercel.app",
   "https://joshspotmedia.com",
+  "https://www.joshspotmedia.com",
 ];
 
 app.use(
