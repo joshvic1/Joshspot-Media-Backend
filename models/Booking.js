@@ -13,6 +13,13 @@ const bookingSchema = new mongoose.Schema({
 
   price: Number,
 
+  // 🔥 ADD THESE
+  duration: String,
+
+  adBudget: Number,
+
+  serviceFee: Number,
+
   status: {
     type: String,
     default: "confirmed",

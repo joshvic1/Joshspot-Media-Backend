@@ -17,6 +17,11 @@ exports.initializePayment = async (req, res) => {
       serviceTitle: service.title,
       price: service.calculatedPrice,
 
+      // 🔥 ADD THESE
+      duration: service.duration,
+      adBudget: service.adBudget,
+      serviceFee: service.serviceFee,
+
       bookingToken: token,
       paid: false,
     });
