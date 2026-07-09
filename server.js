@@ -7,6 +7,7 @@ const connectDB = require("./config/db");
 const paymentRoutes = require("./routes/paymentRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const crmRoutes = require("./routes/crmRoutes");
 
 const app = express();
 
@@ -70,6 +71,7 @@ app.use(express.json());
 app.use("/api/payment", paymentRoutes);
 app.use("/api/booking", bookingRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/crm", crmRoutes);
 
 app.get("/", (req, res) => {
   res.send("Joshspot Media API running");
