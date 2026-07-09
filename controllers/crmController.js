@@ -25,6 +25,8 @@ const rolePermissions = {
       "servicePaidFor",
       "clientLoginDetails",
       "landingPageLogins",
+      "landingPageLink",
+      "clientNumber",
     ],
   },
   SES: {

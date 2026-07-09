@@ -14,7 +14,11 @@ const clientSchema = new mongoose.Schema({
 
   servicePaidFor: {
     type: String,
-    enum: ["Meta ads setup", "TikTok ads setup"],
+    enum: [
+      "Meta ads setup",
+      "TikTok ads setup - DM",
+      "Tiktok Ads Setup - Landing Page",
+    ],
     required: true,
   },
 
