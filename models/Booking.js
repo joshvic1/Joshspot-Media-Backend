@@ -16,6 +16,8 @@ const bookingSchema = new mongoose.Schema({
   // 🔥 ADD THESE
   duration: String,
 
+  packageSelected: String,
+
   adBudget: Number,
 
   serviceFee: Number,

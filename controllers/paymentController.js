@@ -19,6 +19,7 @@ exports.initializePayment = async (req, res) => {
 
       // 🔥 ADD THESE
       duration: service.duration,
+      packageSelected: service.packageSelected || service.duration,
       adBudget: service.adBudget,
       serviceFee: service.serviceFee,
 
