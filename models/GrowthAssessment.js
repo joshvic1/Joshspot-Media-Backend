@@ -8,6 +8,7 @@ const growthAssessmentSchema = new mongoose.Schema({
   websiteOrSocialPage: { type: String, required: true, trim: true },
 
   businessType: { type: String, required: true },
+  brandDescription: { type: String, required: true, trim: true },
   businessAge: { type: String, required: true },
   monthlyRevenue: { type: String, required: true },
 
@@ -20,15 +21,13 @@ const growthAssessmentSchema = new mongoose.Schema({
   marketingGoal: { type: String, required: true, trim: true },
   growthBlocker: { type: String, required: true, trim: true },
   attemptedSolutions: { type: String, required: true, trim: true },
-  attemptedResults: { type: String, required: true, trim: true },
-  sixMonthImpact: { type: String, required: true, trim: true },
 
-  decisionAuthority: { type: String, required: true },
-  finalDecisionMaker: { type: String, default: "", trim: true },
-  investmentCapacity: { type: String, required: true },
+  businessOwnership: { type: String, required: true },
+  proposedMonthlyAdBudget: { type: String, required: true },
   desiredHelp: { type: String, required: true },
   urgency: { type: String, required: true },
   implementationReadiness: { type: String, required: true },
+  teamMonthlyBudget: { type: String, default: "", trim: true },
   extraContext: { type: String, default: "", trim: true },
 
   score: { type: Number, required: true },
@@ -37,6 +36,8 @@ const growthAssessmentSchema = new mongoose.Schema({
   recommendationMessage: { type: String, required: true },
   recommendedAction: { type: String, required: true },
   redirectUrl: { type: String, required: true },
+  called: { type: Boolean, default: false },
+  calledAt: { type: Date },
 
   createdAt: {
     type: Date,

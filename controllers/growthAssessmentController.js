@@ -35,8 +35,8 @@ const scoreMaps = {
     "Within the next few weeks": 8,
     Immediately: 10,
   },
-  investmentCapacity: {
-    "I am only looking for free information": 0,
+  proposedMonthlyAdBudget: {
+    "I am not ready to spend on ads yet": 0,
     "Below NGN 50k": 2,
     "NGN 50k-NGN 100k": 5,
     "NGN 100k-NGN 250k": 8,
@@ -44,10 +44,10 @@ const scoreMaps = {
     "NGN 500k-NGN 1m": 13,
     "NGN 1m+": 15,
   },
-  decisionAuthority: {
-    Yes: 5,
-    "I make the decisions together with someone else": 3,
-    No: 0,
+  businessOwnership: {
+    "I am the sole owner": 5,
+    "I own the business with a partner/co-founder": 3,
+    "I manage marketing, but I am not an owner": 0,
   },
   businessAge: {
     "Less than 3 months": 1,
@@ -71,6 +71,7 @@ const requiredFields = [
   "email",
   "websiteOrSocialPage",
   "businessType",
+  "brandDescription",
   "businessAge",
   "monthlyRevenue",
   "marketingPlatforms",
@@ -80,10 +81,8 @@ const requiredFields = [
   "marketingGoal",
   "growthBlocker",
   "attemptedSolutions",
-  "attemptedResults",
-  "sixMonthImpact",
-  "decisionAuthority",
-  "investmentCapacity",
+  "businessOwnership",
+  "proposedMonthlyAdBudget",
   "desiredHelp",
   "urgency",
   "implementationReadiness",
@@ -93,7 +92,11 @@ const getScore = (group, value) => scoreMaps[group]?.[value] || 0;
 
 const hasNoRealBudget = (body) =>
   body.monthlyAdSpend === "NGN 0" ||
-  body.investmentCapacity === "I am only looking for free information";
+  body.proposedMonthlyAdBudget === "I am not ready to spend on ads yet";
+
+const hasLowTeamBudget = (body) =>
+  body.implementationReadiness === "Yes" &&
+  (body.teamMonthlyBudget === "Below NGN 50k" || !body.teamMonthlyBudget);
 
 const getAssessmentResult = (body) => {
   const score =
@@ -101,8 +104,8 @@ const getAssessmentResult = (body) => {
     getScore("monthlyAdSpend", body.monthlyAdSpend) +
     getScore("biggestAdsProblem", body.biggestAdsProblem) +
     getScore("urgency", body.urgency) +
-    getScore("investmentCapacity", body.investmentCapacity) +
-    getScore("decisionAuthority", body.decisionAuthority) +
+    getScore("proposedMonthlyAdBudget", body.proposedMonthlyAdBudget) +
+    getScore("businessOwnership", body.businessOwnership) +
     getScore("businessAge", body.businessAge) +
     getScore("paidAdsExperience", body.paidAdsExperience);
 
@@ -110,7 +113,8 @@ const getAssessmentResult = (body) => {
     body.desiredHelp === "Free advice/resources" ||
     body.implementationReadiness === "No, I am only looking for free advice";
 
-  const isNotDecisionMaker = body.decisionAuthority === "No";
+  const isNotDecisionMaker =
+    body.businessOwnership === "I manage marketing, but I am not an owner";
   const revenueTooLow =
     body.monthlyRevenue === "NGN 0-NGN 100k" ||
     body.monthlyRevenue === "NGN 100k-NGN 500k";
@@ -127,7 +131,7 @@ const getAssessmentResult = (body) => {
     };
   }
 
-  if (hasNoRealBudget(body) || score <= 49) {
+  if (hasNoRealBudget(body) || hasLowTeamBudget(body) || score <= 49) {
     return {
       score,
       endpoint: "LOW_TICKET_AUDIT",
@@ -197,9 +201,12 @@ exports.createGrowthAssessment = async (req, res) => {
       });
     }
 
-    if (req.body.decisionAuthority === "No" && !req.body.finalDecisionMaker) {
+    if (
+      req.body.implementationReadiness === "Yes" &&
+      !req.body.teamMonthlyBudget
+    ) {
       return res.status(400).json({
-        message: "Please tell us who makes the final marketing decision.",
+        message: "Please select how much you can realistically pay our team.",
       });
     }
 
@@ -218,5 +225,38 @@ exports.createGrowthAssessment = async (req, res) => {
   } catch (error) {
     console.log("GROWTH ASSESSMENT ERROR:", error);
     res.status(500).json({ message: "Unable to submit assessment" });
+  }
+};
+
+exports.getGrowthAssessments = async (req, res) => {
+  try {
+    const assessments = await GrowthAssessment.find().sort({ createdAt: -1 });
+
+    res.json(assessments);
+  } catch (error) {
+    console.log("GET GROWTH ASSESSMENTS ERROR:", error);
+    res.status(500).json({ message: "Unable to fetch assessments" });
+  }
+};
+
+exports.markGrowthAssessmentCalled = async (req, res) => {
+  try {
+    const assessment = await GrowthAssessment.findByIdAndUpdate(
+      req.params.id,
+      {
+        called: true,
+        calledAt: new Date(),
+      },
+      { new: true },
+    );
+
+    if (!assessment) {
+      return res.status(404).json({ message: "Assessment not found" });
+    }
+
+    res.json(assessment);
+  } catch (error) {
+    console.log("MARK ASSESSMENT CALLED ERROR:", error);
+    res.status(500).json({ message: "Unable to mark assessment as called" });
   }
 };
