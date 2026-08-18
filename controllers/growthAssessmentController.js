@@ -98,6 +98,18 @@ const hasLowTeamBudget = (body) =>
   body.implementationReadiness === "Yes" &&
   (body.teamMonthlyBudget === "Below NGN 50k" || !body.teamMonthlyBudget);
 
+const qualifyingBudgetOptions = [
+  "NGN 50k-NGN 100k",
+  "NGN 100k-NGN 250k",
+  "NGN 250k-NGN 500k",
+  "NGN 500k-NGN 1m",
+  "NGN 1m+",
+];
+
+const hasAutoQualifyingBudget = (body) =>
+  qualifyingBudgetOptions.includes(body.proposedMonthlyAdBudget) ||
+  qualifyingBudgetOptions.includes(body.teamMonthlyBudget);
+
 const getAssessmentResult = (body) => {
   const score =
     getScore("monthlyRevenue", body.monthlyRevenue) +
@@ -118,6 +130,18 @@ const getAssessmentResult = (body) => {
   const revenueTooLow =
     body.monthlyRevenue === "NGN 0-NGN 100k" ||
     body.monthlyRevenue === "NGN 100k-NGN 500k";
+
+  if (hasAutoQualifyingBudget(body)) {
+    return {
+      score: Math.max(score, 70),
+      endpoint: "STRATEGIC_GROWTH_CALL",
+      recommendationTitle: "Request A Strategic Growth Call",
+      recommendationMessage:
+        "Your answers show enough budget readiness to justify a direct strategy conversation. Joshspot will review your assessment and reach out with the next step.",
+      recommendedAction: "Message Josh On WhatsApp",
+      redirectUrl: "/#services",
+    };
+  }
 
   if (wantsFreeOnly || score <= 29) {
     return {

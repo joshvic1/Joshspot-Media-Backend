@@ -9,6 +9,7 @@ const bookingRoutes = require("./routes/bookingRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const crmRoutes = require("./routes/crmRoutes");
 const growthAssessmentRoutes = require("./routes/growthAssessmentRoutes");
+const invoiceRoutes = require("./routes/invoiceRoutes");
 
 const app = express();
 
@@ -74,6 +75,7 @@ app.use("/api/booking", bookingRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/crm", crmRoutes);
 app.use("/api/growth-assessment", growthAssessmentRoutes);
+app.use("/api/invoice", invoiceRoutes);
 
 app.get("/", (req, res) => {
   res.send("Joshspot Media API running");
