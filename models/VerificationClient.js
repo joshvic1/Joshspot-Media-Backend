@@ -38,7 +38,8 @@ const verificationClientSchema = new mongoose.Schema({
   idCard: {
     fileName: String,
     mimeType: String,
-    data: String,
+    key: String,
+    size: Number,
   },
 
   createdBy: {

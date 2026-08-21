@@ -9,6 +9,7 @@ const {
 } = require("../controllers/crmController");
 const {
   createVerificationClient,
+  downloadVerificationIdCard,
   getVerificationClients,
   updateVerificationClient,
 } = require("../controllers/verificationController");
@@ -20,5 +21,10 @@ router.put("/clients/:id", staffAuth, updateClient);
 router.get("/verification-clients", staffAuth, getVerificationClients);
 router.post("/verification-clients", staffAuth, createVerificationClient);
 router.put("/verification-clients/:id", staffAuth, updateVerificationClient);
+router.get(
+  "/verification-clients/:id/id-card",
+  staffAuth,
+  downloadVerificationIdCard,
+);
 
 module.exports = router;
