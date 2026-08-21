@@ -66,7 +66,7 @@ app.use((req, res, next) => {
 
 /* Middleware */
 
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 
 /* Routes */
 

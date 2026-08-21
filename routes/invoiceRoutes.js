@@ -8,7 +8,7 @@ const {
   startInvoiceTransfer,
 } = require("../controllers/invoiceController");
 
-router.post("/", adminAuth, createInvoice);
+router.post("/", createInvoice);
 router.get("/", adminAuth, listInvoices);
 router.get("/:token", getInvoice);
 router.post("/:token/transfer", startInvoiceTransfer);
