@@ -57,6 +57,59 @@ const refreshInvoiceStatus = async (invoice) => {
   return invoice;
 };
 
+const generateInvoiceTransfer = async (invoice) => {
+  const refreshedInvoice = await refreshInvoiceStatus(invoice);
+
+  if (refreshedInvoice.status === "paid" || refreshedInvoice.status === "expired") {
+    return refreshedInvoice;
+  }
+
+  if (refreshedInvoice.accountNumber && refreshedInvoice.status === "pending") {
+    return refreshedInvoice;
+  }
+
+  const reference = `invoice-${Date.now()}-${uuidv4().slice(0, 8)}`;
+  const expiresAt = new Date(
+    Date.now() + INVOICE_LIFETIME_HOURS * 60 * 60 * 1000,
+  );
+  const email =
+    refreshedInvoice.customerEmail ||
+    `invoice-${refreshedInvoice.token}@joshspotmedia.com`;
+
+  const response = await axios.post(
+    `${PAYSTACK_BASE_URL}/charge`,
+    {
+      email,
+      amount: refreshedInvoice.amount * 100,
+      reference,
+      bank_transfer: {
+        account_expires_at: expiresAt.toISOString(),
+      },
+      metadata: {
+        invoiceId: refreshedInvoice._id,
+        invoiceToken: refreshedInvoice.token,
+        customerName: refreshedInvoice.customerName,
+        note: refreshedInvoice.note,
+      },
+    },
+    { headers: paystackHeaders() },
+  );
+
+  const charge = response.data.data;
+
+  refreshedInvoice.reference = charge.reference || reference;
+  refreshedInvoice.status = "pending";
+  refreshedInvoice.paystackStatus = charge.status;
+  refreshedInvoice.accountName = charge.account_name;
+  refreshedInvoice.accountNumber = charge.account_number;
+  refreshedInvoice.bankName = charge.bank?.name;
+  refreshedInvoice.expiresAt = charge.account_expires_at || expiresAt;
+
+  await refreshedInvoice.save();
+
+  return refreshedInvoice;
+};
+
 exports.createInvoice = async (req, res) => {
   try {
     const amount = Number(req.body.amount);
@@ -74,15 +127,16 @@ exports.createInvoice = async (req, res) => {
       expiresAt: new Date(Date.now() + INVOICE_LIFETIME_HOURS * 60 * 60 * 1000),
     });
 
+    const invoiceWithTransfer = await generateInvoiceTransfer(invoice);
     const clientUrl =
       process.env.CLIENT_URL || req.headers.origin || "http://localhost:3000";
 
     res.status(201).json({
-      invoice: getPublicInvoice(invoice),
+      invoice: getPublicInvoice(invoiceWithTransfer),
       invoiceUrl: `${clientUrl}/pay-invoice/${invoice.token}`,
     });
   } catch (error) {
-    console.log("CREATE INVOICE ERROR:", error);
+    console.log("CREATE INVOICE ERROR:", error.response?.data || error);
     res.status(500).json({ message: "Unable to create invoice" });
   }
 };
@@ -95,11 +149,19 @@ exports.getInvoice = async (req, res) => {
       return res.status(404).json({ message: "Invoice not found" });
     }
 
-    const refreshedInvoice = await refreshInvoiceStatus(invoice);
+    let refreshedInvoice = await refreshInvoiceStatus(invoice);
+
+    if (
+      refreshedInvoice.status !== "paid" &&
+      refreshedInvoice.status !== "expired" &&
+      !refreshedInvoice.accountNumber
+    ) {
+      refreshedInvoice = await generateInvoiceTransfer(refreshedInvoice);
+    }
 
     res.json(getPublicInvoice(refreshedInvoice));
   } catch (error) {
-    console.log("GET INVOICE ERROR:", error);
+    console.log("GET INVOICE ERROR:", error.response?.data || error);
     res.status(500).json({ message: "Unable to fetch invoice" });
   }
 };
@@ -112,60 +174,13 @@ exports.startInvoiceTransfer = async (req, res) => {
       return res.status(404).json({ message: "Invoice not found" });
     }
 
-    const refreshedInvoice = await refreshInvoiceStatus(invoice);
+    const invoiceWithTransfer = await generateInvoiceTransfer(invoice);
 
-    if (refreshedInvoice.status === "paid") {
-      return res.json(getPublicInvoice(refreshedInvoice));
-    }
-
-    if (refreshedInvoice.status === "expired") {
+    if (invoiceWithTransfer.status === "expired") {
       return res.status(410).json({ message: "This invoice has expired." });
     }
 
-    if (refreshedInvoice.accountNumber && refreshedInvoice.status === "pending") {
-      return res.json(getPublicInvoice(refreshedInvoice));
-    }
-
-    const reference = `invoice-${Date.now()}-${uuidv4().slice(0, 8)}`;
-    const expiresAt = new Date(
-      Date.now() + INVOICE_LIFETIME_HOURS * 60 * 60 * 1000,
-    );
-    const email =
-      refreshedInvoice.customerEmail ||
-      `invoice-${refreshedInvoice.token}@joshspotmedia.com`;
-
-    const response = await axios.post(
-      `${PAYSTACK_BASE_URL}/charge`,
-      {
-        email,
-        amount: refreshedInvoice.amount * 100,
-        reference,
-        bank_transfer: {
-          account_expires_at: expiresAt.toISOString(),
-        },
-        metadata: {
-          invoiceId: refreshedInvoice._id,
-          invoiceToken: refreshedInvoice.token,
-          customerName: refreshedInvoice.customerName,
-          note: refreshedInvoice.note,
-        },
-      },
-      { headers: paystackHeaders() },
-    );
-
-    const charge = response.data.data;
-
-    refreshedInvoice.reference = charge.reference || reference;
-    refreshedInvoice.status = "pending";
-    refreshedInvoice.paystackStatus = charge.status;
-    refreshedInvoice.accountName = charge.account_name;
-    refreshedInvoice.accountNumber = charge.account_number;
-    refreshedInvoice.bankName = charge.bank?.name;
-    refreshedInvoice.expiresAt = charge.account_expires_at || expiresAt;
-
-    await refreshedInvoice.save();
-
-    res.json(getPublicInvoice(refreshedInvoice));
+    res.json(getPublicInvoice(invoiceWithTransfer));
   } catch (error) {
     console.log("START INVOICE TRANSFER ERROR:", error.response?.data || error);
     res.status(500).json({ message: "Unable to generate payment account" });
