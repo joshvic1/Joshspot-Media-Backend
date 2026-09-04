@@ -5,21 +5,36 @@ const MASK = "******";
 const rolePermissions = {
   SS: {
     canCreate: true,
-    fields: ["businessName", "amountPaid", "videoLinks", "servicePaidFor", "note"],
+    fields: [
+      "businessName",
+      "amountPaid",
+      "clientLoginDetails",
+      "videoLinks",
+      "servicePaidFor",
+      "note",
+    ],
   },
   CSS: {
     canCreate: true,
-    fields: ["businessName", "amountPaid", "videoLinks", "servicePaidFor", "note"],
+    fields: [
+      "businessName",
+      "amountPaid",
+      "clientLoginDetails",
+      "videoLinks",
+      "servicePaidFor",
+      "note",
+    ],
   },
   SES: {
     canCreate: false,
-    fields: ["businessName", "videoLinks", "servicePaidFor", "note"],
+    fields: ["businessName", "clientLoginDetails", "videoLinks", "servicePaidFor", "note"],
   },
 };
 
 const allAdsFields = [
   "businessName",
   "amountPaid",
+  "clientLoginDetails",
   "videoLinks",
   "servicePaidFor",
   "note",

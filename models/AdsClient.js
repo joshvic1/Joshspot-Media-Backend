@@ -18,6 +18,12 @@ const adsClientSchema = new mongoose.Schema({
     trim: true,
   },
 
+  clientLoginDetails: {
+    type: String,
+    default: "",
+    trim: true,
+  },
+
   servicePaidFor: {
     type: String,
     enum: [
