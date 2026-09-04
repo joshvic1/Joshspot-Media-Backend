@@ -68,6 +68,14 @@ const pickAllowedFields = (body, role) => {
   return update;
 };
 
+const pickAdsPublishStatus = (body) => {
+  if (!Object.prototype.hasOwnProperty.call(body, "adsPublished")) {
+    return {};
+  }
+
+  return { adsPublished: Boolean(body.adsPublished) };
+};
+
 exports.getAdsClients = async (req, res) => {
   try {
     const clients = await AdsClient.find().sort({ createdAt: -1 });
@@ -114,7 +122,10 @@ exports.createAdsClient = async (req, res) => {
 
 exports.updateAdsClient = async (req, res) => {
   try {
-    const update = pickAllowedFields(req.body, req.staff.role);
+    const update = {
+      ...pickAllowedFields(req.body, req.staff.role),
+      ...pickAdsPublishStatus(req.body),
+    };
 
     if (Object.keys(update).length === 0) {
       return res.status(400).json({ message: "No allowed fields to update" });

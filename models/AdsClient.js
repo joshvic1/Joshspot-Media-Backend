@@ -41,6 +41,11 @@ const adsClientSchema = new mongoose.Schema({
     trim: true,
   },
 
+  adsPublished: {
+    type: Boolean,
+    default: false,
+  },
+
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Staff",
