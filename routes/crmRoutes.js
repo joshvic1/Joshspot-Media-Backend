@@ -8,6 +8,11 @@ const {
   updateClient,
 } = require("../controllers/crmController");
 const {
+  createAdsClient,
+  getAdsClients,
+  updateAdsClient,
+} = require("../controllers/adsController");
+const {
   createVerificationClient,
   downloadVerificationIdCard,
   getVerificationClients,
@@ -18,6 +23,9 @@ router.post("/login", crmLogin);
 router.get("/clients", staffAuth, getClients);
 router.post("/clients", staffAuth, createClient);
 router.put("/clients/:id", staffAuth, updateClient);
+router.get("/ads-clients", staffAuth, getAdsClients);
+router.post("/ads-clients", staffAuth, createAdsClient);
+router.put("/ads-clients/:id", staffAuth, updateAdsClient);
 router.get("/verification-clients", staffAuth, getVerificationClients);
 router.post("/verification-clients", staffAuth, createVerificationClient);
 router.put("/verification-clients/:id", staffAuth, updateVerificationClient);
