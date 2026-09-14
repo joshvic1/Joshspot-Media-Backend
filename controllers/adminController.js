@@ -2,10 +2,6 @@ const jwt = require("jsonwebtoken");
 
 exports.adminLogin = async (req, res) => {
   try {
-    console.log("EMAIL:", process.env.ADMIN_EMAIL);
-    console.log("PASSWORD:", process.env.ADMIN_PASSWORD);
-    console.log("SECRET:", process.env.JWT_SECRET);
-
     const { email, password } = req.body;
 
     if (

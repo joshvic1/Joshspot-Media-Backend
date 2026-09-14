@@ -24,6 +24,12 @@ const invoiceSchema = new mongoose.Schema({
     lowercase: true,
     trim: true,
   },
+  customerPhone: { type: String, default: "", trim: true },
+  product: { type: String, default: "", index: true },
+  reminderSentAt: Date,
+  reminderClaimedAt: Date,
+  reminderCount: { type: Number, default: 0 },
+  paymentCheckedAt: Date,
 
   note: {
     type: String,
@@ -43,6 +49,7 @@ const invoiceSchema = new mongoose.Schema({
   bankName: String,
   paystackStatus: String,
   paidAt: Date,
+  courseEmailSentAt: Date,
   expiresAt: Date,
 
   createdAt: {

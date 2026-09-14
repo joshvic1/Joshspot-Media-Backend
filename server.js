@@ -66,7 +66,9 @@ app.use((req, res, next) => {
 
 /* Middleware */
 
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json({ limit: "10mb", verify: (req, res, buffer) => {
+  if (req.originalUrl.split("?")[0] === "/api/payment/webhook") req.rawBody = buffer;
+} }));
 
 /* Routes */
 
