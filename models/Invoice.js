@@ -30,6 +30,7 @@ const invoiceSchema = new mongoose.Schema({
   reminderClaimedAt: Date,
   reminderCount: { type: Number, default: 0 },
   paymentCheckedAt: Date,
+  deletedAt: Date,
 
   note: {
     type: String,

@@ -2,7 +2,7 @@ const Invoice = require("../models/Invoice");
 const { Resend } = require("resend");
 const { refreshInvoiceStatus } = require("./invoiceController");
 const { isCourse } = require("../utils/courseAccess");
-const courseQuery = { $or: [{ product: "ads-course" }, { note: /^Course purchase - WhatsApp:/ }] };
+const courseQuery = { deletedAt: null, $or: [{ product: "ads-course" }, { note: /^Course purchase - WhatsApp:/ }] };
 const phoneOf = (record) => record.customerPhone || (record.note || "").split("WhatsApp:")[1]?.trim() || "";
 const statusOf = (record) => {
   if (record.status === "paid") return "paid";

@@ -38,6 +38,7 @@ const growthAssessmentSchema = new mongoose.Schema({
   redirectUrl: { type: String, required: true },
   called: { type: Boolean, default: false },
   calledAt: { type: Date },
+  deletedAt: Date,
 
   createdAt: {
     type: Date,

@@ -9,5 +9,11 @@ const { listCoursePayments, checkCoursePayment, remindCoursePayment } = require(
 router.get("/course-payments", adminAuth, listCoursePayments);
 router.post("/course-payments/:id/check", adminAuth, checkCoursePayment);
 router.post("/course-payments/:id/remind", adminAuth, remindCoursePayment);
+const reports = require("../controllers/adminReportsController");
+router.get("/overview", adminAuth, reports.overview);
+router.get("/paid-invoices", adminAuth, reports.paidInvoices);
+router.post("/sync-payments", adminAuth, reports.syncPayments);
+router.delete("/records/:kind/:id", adminAuth, reports.deleteRecord);
+router.post("/records/:kind/:id/restore", adminAuth, reports.deleteRecord);
 
 module.exports = router;

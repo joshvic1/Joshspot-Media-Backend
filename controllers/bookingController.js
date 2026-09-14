@@ -1,5 +1,6 @@
 const Booking = require("../models/Booking");
 const sendBookingEmail = require("../utils/sendBookingEmail");
+const { refreshBookingPayment } = require("../utils/bookingPayment");
 
 // Initialize payment and create booking
 exports.verifyBooking = async (req, res) => {
@@ -12,6 +13,7 @@ exports.verifyBooking = async (req, res) => {
       return res.status(404).json({ message: "Invalid booking" });
     }
 
+    await refreshBookingPayment(booking, String(req.query.reference || ""));
     res.json(booking);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -45,6 +47,10 @@ exports.completeBooking = async (req, res) => {
     }
 
     const today = new Date();
+    await refreshBookingPayment(booking);
+    if (!booking.paid || !booking.paymentVerifiedAt) {
+      return res.status(402).json({ message: "Your Paystack payment must be confirmed before choosing a date." });
+    }
 
     const slotDate = new Date(normalizedDate);
 
@@ -82,7 +88,6 @@ exports.completeBooking = async (req, res) => {
     booking.date = normalizedDate;
     booking.time = time;
     booking.notes = notes;
-    booking.paid = true;
 
     await booking.save();
 
@@ -96,7 +101,7 @@ exports.completeBooking = async (req, res) => {
 
 exports.getAllBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find().sort({ createdAt: -1 });
+    const bookings = await Booking.find({ deletedAt: null }).sort({ createdAt: -1 });
 
     res.json(bookings);
   } catch (error) {

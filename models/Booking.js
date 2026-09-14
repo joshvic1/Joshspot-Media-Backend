@@ -28,6 +28,10 @@ const bookingSchema = new mongoose.Schema({
   },
 
   paymentReference: String,
+  paidAt: Date,
+  paymentVerifiedAt: Date,
+  paymentCheckedAt: Date,
+  deletedAt: Date,
 
   bookingToken: String,
 

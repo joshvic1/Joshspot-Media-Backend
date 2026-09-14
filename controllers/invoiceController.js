@@ -221,7 +221,7 @@ exports.startInvoiceTransfer = async (req, res) => {
 
 exports.listInvoices = async (req, res) => {
   try {
-    const invoices = await Invoice.find().sort({ createdAt: -1 });
+    const invoices = await Invoice.find({ deletedAt: null }).sort({ createdAt: -1 });
     res.json(invoices);
   } catch (error) {
     console.log("LIST INVOICES ERROR:", error);

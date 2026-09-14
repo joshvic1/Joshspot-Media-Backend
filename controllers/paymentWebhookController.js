@@ -1,5 +1,7 @@
 const crypto = require("node:crypto");
 const Invoice = require("../models/Invoice");
+const Booking = require("../models/Booking");
+const { matchesBookingPayment } = require("../utils/bookingPayment");
 
 exports.paystackWebhook = async (req, res) => {
   if (!process.env.PAYSTACK_SECRET || !req.rawBody) return res.sendStatus(400);
@@ -13,6 +15,12 @@ exports.paystackWebhook = async (req, res) => {
       if (invoice && transaction.amount === invoice.amount * 100) {
         await Invoice.updateOne({ _id: invoice._id }, { $set: { status: "paid", paystackStatus: "success",
           paidAt: transaction.paid_at || new Date(), paymentCheckedAt: new Date() } });
+      }
+      const booking = await Booking.findOne({ paymentReference: transaction.reference });
+      if (booking && matchesBookingPayment(booking, transaction)) {
+        await Booking.updateOne({ _id: booking._id }, { $set: {
+          paid: true, paidAt: transaction.paid_at || new Date(), paymentVerifiedAt: new Date(),
+        } });
       }
     }
     return res.sendStatus(200);

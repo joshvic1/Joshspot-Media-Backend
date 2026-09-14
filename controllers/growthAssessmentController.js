@@ -254,7 +254,7 @@ exports.createGrowthAssessment = async (req, res) => {
 
 exports.getGrowthAssessments = async (req, res) => {
   try {
-    const assessments = await GrowthAssessment.find().sort({ createdAt: -1 });
+    const assessments = await GrowthAssessment.find({ deletedAt: null }).sort({ createdAt: -1 });
 
     res.json(assessments);
   } catch (error) {

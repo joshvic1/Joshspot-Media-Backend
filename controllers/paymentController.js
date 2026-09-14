@@ -1,12 +1,14 @@
 const axios = require("axios");
 const { v4: uuidv4 } = require("uuid");
 const Booking = require("../models/Booking");
-const sendBookingEmail = require("../utils/sendEmail");
 exports.initializePayment = async (req, res) => {
   try {
     const { name, email, phone, service } = req.body;
 
     const token = uuidv4();
+    const paymentReference = `booking-${uuidv4()}`;
+    const price = Number(service.calculatedPrice || service.price);
+    if (!Number.isFinite(price) || price <= 0) return res.status(400).json({ message: "Invalid booking amount." });
 
     const booking = await Booking.create({
       name,
@@ -15,7 +17,8 @@ exports.initializePayment = async (req, res) => {
 
       serviceId: service.id,
       serviceTitle: service.title,
-      price: service.calculatedPrice,
+      price,
+      paymentReference,
 
       // 🔥 ADD THESE
       duration: service.duration,
@@ -27,15 +30,14 @@ exports.initializePayment = async (req, res) => {
       paid: false,
     });
 
-    await sendBookingEmail(booking);
-
     const response = await axios.post(
       "https://api.paystack.co/transaction/initialize",
 
       {
         email: email,
 
-        amount: (service.calculatedPrice || service.price) * 100,
+        amount: Math.round(price * 100),
+        reference: paymentReference,
 
         callback_url: `${process.env.CLIENT_URL}/pickadate?token=${token}`,
 
