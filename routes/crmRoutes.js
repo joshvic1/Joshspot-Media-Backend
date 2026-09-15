@@ -20,6 +20,9 @@ const {
 } = require("../controllers/verificationController");
 
 router.post("/login", crmLogin);
+router.get("/session", staffAuth, (req, res) => res.json({ staff: req.staff }));
+const deleteClient = require("../controllers/crmDeletionController");
+router.delete("/:kind/:id", staffAuth, deleteClient);
 router.get("/clients", staffAuth, getClients);
 router.post("/clients", staffAuth, createClient);
 router.put("/clients/:id", staffAuth, updateClient);

@@ -51,7 +51,7 @@ const allClientFields = [
   "clientNumber",
 ];
 
-const getPermissions = (role) => rolePermissions[role] || rolePermissions.SES;
+const getPermissions = (role) => role === "ADMIN" ? { canCreate: true, fields: allClientFields } : rolePermissions[role] || rolePermissions.SES;
 
 const maskClientForRole = (client, role) => {
   const allowedFields = getPermissions(role).fields;

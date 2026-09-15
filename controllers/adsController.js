@@ -40,7 +40,7 @@ const allAdsFields = [
   "note",
 ];
 
-const getPermissions = (role) => rolePermissions[role] || rolePermissions.SES;
+const getPermissions = (role) => role === "ADMIN" ? { canCreate: true, fields: allAdsFields } : rolePermissions[role] || rolePermissions.SES;
 
 const maskAdsClientForRole = (client, role) => {
   const allowedFields = getPermissions(role).fields;

@@ -9,7 +9,7 @@ const MASK = "******";
 const maskVerificationClientForRole = (client, role) => {
   const data = client.toObject ? client.toObject() : client;
 
-  if (role !== "SS") {
+  if (role !== "SS" && role !== "ADMIN") {
     data.amountPaid = MASK;
   }
 
@@ -42,7 +42,7 @@ exports.createVerificationClient = async (req, res) => {
       return res.status(400).json({ message: "Please fill all required fields" });
     }
 
-    if (req.staff.role === "SS" && !amountPaid) {
+    if (["SS", "ADMIN"].includes(req.staff.role) && !amountPaid) {
       return res.status(400).json({ message: "Amount paid is required" });
     }
 
@@ -56,7 +56,7 @@ exports.createVerificationClient = async (req, res) => {
       name,
       businessName,
       clientLoginDetails,
-      amountPaid: req.staff.role === "SS" ? Number(amountPaid) : 0,
+      amountPaid: ["SS", "ADMIN"].includes(req.staff.role) ? Number(amountPaid) : 0,
       clientNumber,
       idCard: uploadedIdCard,
       createdBy: req.staff.staffId,
@@ -79,7 +79,7 @@ exports.updateVerificationClient = async (req, res) => {
     }
 
     if (Object.prototype.hasOwnProperty.call(update, "amountPaid")) {
-      if (req.staff.role !== "SS") {
+      if (req.staff.role !== "SS" && req.staff.role !== "ADMIN") {
         delete update.amountPaid;
       } else {
         update.amountPaid = Number(update.amountPaid || 0);

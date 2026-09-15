@@ -13,6 +13,11 @@ module.exports = (req, res, next) => {
       process.env.JWT_SECRET || "joshspotsecret",
     );
 
+    if (decoded.admin === true) {
+      req.staff = { role: "ADMIN", name: "Administrator", admin: true };
+      return next();
+    }
+
     if (!decoded.staffId || !decoded.role) {
       return res.status(401).json({ message: "Unauthorized" });
     }
