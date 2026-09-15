@@ -1,44 +1,19 @@
 const { Resend } = require("resend");
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const sendBookingEmail = async (booking) => {
-  try {
-    await resend.emails.send({
-      from: "Joshspot Media <booking@joshspotmedia.com>",
+    if (!process.env.RESEND_API_KEY) throw new Error("Resend is not configured");
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const { data, error } = await resend.emails.send({
+      from: process.env.RESEND_FROM_EMAIL || "Joshspot Media <booking@joshspotmedia.com>",
 
       to: booking.email,
 
       subject: "Your Booking is Confirmed",
 
-      html: `
-
-<h2>Booking Confirmed</h2>
-
-<p>Hello ${booking.name},</p>
-
-<p>Your booking with Joshspot Media has been confirmed.</p>
-
-<hr/>
-
-<h3>Booking Details</h3>
-
-<p><b>Date:</b> ${booking.date}</p>
-<p><b>Time:</b> ${booking.time}</p>
-<p><b>WhatsApp:</b> ${booking.phone}</p>
-<p><b>Notes:</b> ${booking.notes || "None"}</p>
-
-<hr/>
-
-<p>Our team will contact you shortly.</p>
-
-<p>Joshspot Media</p>
-
-`,
-    });
-  } catch (err) {
-    console.log("Email error:", err);
-  }
+      text: `Booking Confirmed\n\nHello ${booking.name},\n\nYour booking with Joshspot Media has been confirmed.\n\nService: ${booking.serviceTitle}\nDate: ${booking.date}\nTime: ${booking.time}\nWhatsApp: ${booking.phone}\nNotes: ${booking.notes || "None"}\n\nOur team will contact you shortly.\n\nJoshspot Media`,
+    }, { idempotencyKey: `booking-confirmation/${booking._id}/${booking.date}/${booking.time}` });
+    if (error) throw new Error("Resend rejected the booking confirmation");
+    return data;
 };
 
 module.exports = sendBookingEmail;

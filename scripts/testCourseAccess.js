@@ -18,7 +18,7 @@ async function run({ status = "paid", amount = 8000, note = "Course purchase - W
       if (name === "../models/Invoice") return {
         findOne: async () => invoice,
         findOneAndUpdate: async () => cooldown ? null : invoice,
-        updateOne: async () => { released = true; },
+        updateOne: async (query, update) => { if (update.$unset) released = true; },
       };
       if (name === "resend") return { Resend: class {
         emails = { send: async (message) => {

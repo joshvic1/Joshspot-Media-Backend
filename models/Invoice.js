@@ -51,6 +51,8 @@ const invoiceSchema = new mongoose.Schema({
   paystackStatus: String,
   paidAt: Date,
   courseEmailSentAt: Date,
+  courseEmailId: String,
+  reminderEmailId: String,
   expiresAt: Date,
 
   createdAt: {

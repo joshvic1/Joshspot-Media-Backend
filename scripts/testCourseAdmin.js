@@ -49,6 +49,8 @@ async function webhook({ amount = 800000, currency = "NGN", signatureValid = tru
   let updates = 0;
   const controller = load("../controllers/paymentWebhookController.js", {
     "node:crypto": crypto,
+    "../models/Booking": { findOne: async () => null },
+    "../utils/bookingPayment": { matchesBookingPayment: () => false },
     "../models/Invoice": { findOne: async () => base, updateOne: async (query, update) => { assert.equal(update.$set.status, "paid"); updates++; } },
   });
   const body = { event: "charge.success", data: { status: "success", reference: "test", amount, currency } };

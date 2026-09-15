@@ -91,9 +91,9 @@ exports.completeBooking = async (req, res) => {
 
     await booking.save();
 
-    await sendBookingEmail(booking);
-
-    res.json({ message: "Booking completed" });
+    let emailSent = false;
+    try { await sendBookingEmail(booking); emailSent = true; } catch { /* The saved appointment remains valid if email delivery fails. */ }
+    res.json({ message: "Booking completed", emailSent });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

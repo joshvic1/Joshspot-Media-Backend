@@ -90,8 +90,8 @@ exports.deleteRecord = async (req, res) => {
 exports.syncPayments = async (req, res) => {
   try {
     const [bookings, invoices] = await Promise.all([
-      Booking.find({ ...active, paymentReference: { $exists: true, $ne: "" }, paymentVerifiedAt: null }).sort({ paymentCheckedAt: 1 }).limit(25),
-      Invoice.find({ ...active, status: { $ne: "paid" }, reference: { $exists: true, $ne: "" } }).sort({ paymentCheckedAt: 1 }).limit(25),
+      Booking.find({ ...active, paymentReference: { $exists: true, $ne: "" }, paymentVerifiedAt: null }).sort({ paymentCheckedAt: 1 }).limit(10),
+      Invoice.find({ ...active, status: { $ne: "paid" }, reference: { $exists: true, $ne: "" } }).sort({ paymentCheckedAt: 1 }).limit(10),
     ]);
     let failed = 0, confirmed = 0;
     const tasks = [...bookings.map((row) => async () => { await refreshBookingPayment(row); if (row.paymentVerifiedAt) confirmed++; }),

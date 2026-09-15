@@ -42,7 +42,7 @@ exports.listCoursePayments = async (req, res) => {
 exports.checkCoursePayment = async (req, res) => {
   try {
     const invoice = await Invoice.findById(req.params.id);
-    if (!invoice || !isCourse(invoice)) return res.status(404).json({ message: "Course payment not found." });
+    if (!invoice || invoice.deletedAt || !isCourse(invoice)) return res.status(404).json({ message: "Course payment not found." });
     await refreshInvoiceStatus(invoice, true);
     return res.json({ record: publicRecord(invoice), message: "Payment status checked." });
   } catch {
@@ -54,13 +54,13 @@ exports.remindCoursePayment = async (req, res) => {
   let claimed;
   try {
     const invoice = await Invoice.findById(req.params.id);
-    if (!invoice || !isCourse(invoice)) return res.status(404).json({ message: "Course payment not found." });
+    if (!invoice || invoice.deletedAt || !isCourse(invoice)) return res.status(404).json({ message: "Course payment not found." });
     await refreshInvoiceStatus(invoice, true);
     if (invoice.status === "paid") return res.status(409).json({ message: "This customer has already paid. No reminder was sent." });
     if (!invoice.customerEmail) return res.status(400).json({ message: "No email address was provided for this checkout." });
     const matches = [{ customerEmail: invoice.customerEmail }];
     if (phoneOf(invoice)) matches.push({ customerPhone: phoneOf(invoice) }, { note: `Course purchase - WhatsApp: ${phoneOf(invoice)}` });
-    const paidPurchase = await Invoice.exists({ $and: [courseQuery, { status: "paid" }, { $or: matches }] });
+    const paidPurchase = await Invoice.exists({ $and: [{ $or: courseQuery.$or }, { status: "paid" }, { $or: matches }] });
     if (paidPurchase) return res.status(409).json({ message: "This customer has another successful course payment. No reminder was sent." });
     if (!process.env.RESEND_API_KEY) return res.status(503).json({ message: "Email delivery is not configured." });
     const now = new Date();
@@ -70,14 +70,14 @@ exports.remindCoursePayment = async (req, res) => {
     ] }, { $set: { reminderClaimedAt: now } }, { new: true });
     if (!claimed) return res.status(429).json({ message: "A reminder was already sent in the last 24 hours, or is being sent now." });
     const retryUrl = `${(process.env.CLIENT_URL || "https://joshspotmedia.com").replace(/\/$/, "")}/course`;
-    const { error } = await new Resend(process.env.RESEND_API_KEY).emails.send({
-      from: "Joshspot Media <booking@joshspot.com>", to: invoice.customerEmail,
+    const { data: emailResult, error } = await new Resend(process.env.RESEND_API_KEY).emails.send({
+      from: process.env.RESEND_FROM_EMAIL || "Joshspot Media <booking@joshspotmedia.com>", to: invoice.customerEmail,
       subject: "Still want to learn TikTok, Facebook and Instagram ads?",
       text: `Hi ${invoice.customerName || "there"},\n\nYou started signing up for my TikTok, Facebook and Instagram ads course, but your payment has not been completed.\n\nWere you having a problem making the payment? You can go back to the course page and try again whenever you are ready:\n\n${retryUrl}\n\nOnce your payment is confirmed, you will get access to the course channels immediately.\n\nIf you have already paid, please check your payment status before making another payment.\n\nSee you inside the channels!\nJosh`,
-    });
-    if (error) throw new Error("Email delivery failed");
+    }, { idempotencyKey: `course-reminder/${invoice._id}/${(invoice.reminderCount || 0) + 1}` });
+    if (error) throw new Error("Resend email delivery failed");
     await Invoice.updateOne({ _id: invoice._id, reminderClaimedAt: now }, {
-      $set: { reminderSentAt: now }, $unset: { reminderClaimedAt: 1 }, $inc: { reminderCount: 1 },
+      $set: { reminderSentAt: now, reminderEmailId: emailResult?.id || "" }, $unset: { reminderClaimedAt: 1 }, $inc: { reminderCount: 1 },
     });
     return res.json({ message: "Reminder email sent." });
   } catch {

@@ -258,8 +258,8 @@ exports.emailCourseAccess = async (req, res) => {
       return res.status(429).json({ message: "Please wait a minute before sending the links again." });
     }
     const resend = new Resend(process.env.RESEND_API_KEY);
-    const { error } = await resend.emails.send({
-      from: "Joshspot Media <booking@joshspot.com>",
+    const { data: emailResult, error } = await resend.emails.send({
+      from: process.env.RESEND_FROM_EMAIL || "Joshspot Media <booking@joshspotmedia.com>",
       to: email,
       subject: "How to run Tiktok, Fb and Ig ads — Joshspot Media",
       text: `Your payment is confirmed!
@@ -286,6 +286,7 @@ See you inside the channels!
 Josh`,
     });
     if (error) throw new Error("Email provider rejected delivery");
+    await Invoice.updateOne({ _id: invoice._id }, { $set: { courseEmailId: emailResult?.id || "" } }).catch(() => {});
     return res.json({ message: "The video links has been sent to your email. Also check your spam folder too incase you can't find it in your inbox." });
   } catch (error) {
     if (claimedInvoice) {
