@@ -122,7 +122,15 @@ exports.createAdsClient = async (req, res) => {
 
 exports.updateAdsClient = async (req, res) => {
   try {
+    const hasFundsStatus = Object.prototype.hasOwnProperty.call(req.body, "fundsSent");
+    if (hasFundsStatus && req.staff.admin !== true) {
+      return res.status(403).json({ message: "Only administrators can update funds sent status" });
+    }
+    if (hasFundsStatus && typeof req.body.fundsSent !== "boolean") {
+      return res.status(400).json({ message: "Funds sent must be true or false" });
+    }
     const update = {
+      ...(hasFundsStatus ? { fundsSent: req.body.fundsSent } : {}),
       ...pickAllowedFields(req.body, req.staff.role),
       ...pickAdsPublishStatus(req.body),
     };

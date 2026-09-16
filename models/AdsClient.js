@@ -45,6 +45,7 @@ const adsClientSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  fundsSent: { type: Boolean, default: false },
 
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
