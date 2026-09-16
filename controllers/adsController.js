@@ -45,6 +45,7 @@ const getPermissions = (role) => role === "ADMIN" ? { canCreate: true, fields: a
 const maskAdsClientForRole = (client, role) => {
   const allowedFields = getPermissions(role).fields;
   const data = client.toObject ? client.toObject() : client;
+  data.fundsStatus = data.fundsStatus || (data.fundsSent ? "sent" : "pending");
 
   allAdsFields.forEach((field) => {
     if (!allowedFields.includes(field)) {
@@ -122,15 +123,21 @@ exports.createAdsClient = async (req, res) => {
 
 exports.updateAdsClient = async (req, res) => {
   try {
-    const hasFundsStatus = Object.prototype.hasOwnProperty.call(req.body, "fundsSent");
+    const hasNewStatus = Object.prototype.hasOwnProperty.call(req.body, "fundsStatus");
+    const hasLegacyStatus = Object.prototype.hasOwnProperty.call(req.body, "fundsSent");
+    const hasFundsStatus = hasNewStatus || hasLegacyStatus;
     if (hasFundsStatus && req.staff.admin !== true) {
       return res.status(403).json({ message: "Only administrators can update funds sent status" });
     }
-    if (hasFundsStatus && typeof req.body.fundsSent !== "boolean") {
+    if (hasLegacyStatus && typeof req.body.fundsSent !== "boolean") {
       return res.status(400).json({ message: "Funds sent must be true or false" });
     }
+    const fundsStatus = hasNewStatus ? req.body.fundsStatus : req.body.fundsSent ? "sent" : "pending";
+    if (hasFundsStatus && !["pending", "sent", "not_needed"].includes(fundsStatus)) {
+      return res.status(400).json({ message: "Choose pending, sent, or not needed" });
+    }
     const update = {
-      ...(hasFundsStatus ? { fundsSent: req.body.fundsSent } : {}),
+      ...(hasFundsStatus ? { fundsStatus, fundsSent: fundsStatus === "sent" } : {}),
       ...pickAllowedFields(req.body, req.staff.role),
       ...pickAdsPublishStatus(req.body),
     };

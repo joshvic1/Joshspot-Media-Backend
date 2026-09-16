@@ -46,6 +46,7 @@ const adsClientSchema = new mongoose.Schema({
     default: false,
   },
   fundsSent: { type: Boolean, default: false },
+  fundsStatus: { type: String, enum: ["pending", "sent", "not_needed"], default: function () { return this.fundsSent ? "sent" : "pending"; } },
 
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
