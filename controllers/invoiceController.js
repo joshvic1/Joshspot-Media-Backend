@@ -6,6 +6,7 @@ const { courses, isPaidCourse } = require("../utils/courseAccess");
 
 const PAYSTACK_BASE_URL = "https://api.paystack.co";
 const INVOICE_LIFETIME_HOURS = 8;
+const sanitizeAttribution = require("../utils/courseAttribution");
 
 const paystackHeaders = () => ({
   Authorization: `Bearer ${process.env.PAYSTACK_SECRET}`,
@@ -151,6 +152,7 @@ exports.createInvoice = async (req, res) => {
       customerEmail,
       customerPhone,
       product: coursePurchase ? "ads-course" : "",
+      ...(coursePurchase ? { attribution: sanitizeAttribution(req.body.attribution) } : {}),
       note: req.body.note || "",
       expiresAt: new Date(Date.now() + INVOICE_LIFETIME_HOURS * 60 * 60 * 1000),
     });

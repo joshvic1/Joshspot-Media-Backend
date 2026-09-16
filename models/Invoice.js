@@ -25,6 +25,11 @@ const invoiceSchema = new mongoose.Schema({
     trim: true,
   },
   customerPhone: { type: String, default: "", trim: true },
+  attribution: {
+    source: { type: String, default: "unknown" },
+    method: { type: String, default: "none" },
+    browser: { type: String, default: "unknown" },
+  },
   product: { type: String, default: "", index: true },
   reminderSentAt: Date,
   reminderClaimedAt: Date,

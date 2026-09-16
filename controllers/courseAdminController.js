@@ -13,6 +13,7 @@ const statusOf = (record) => {
 };
 const publicRecord = (record) => ({
   id: String(record._id), name: record.customerName, phone: phoneOf(record),
+  attribution: record.attribution || { source: "unknown", browser: "unknown", method: "none" },
   email: record.customerEmail || "", amount: record.amount, status: statusOf(record),
   createdAt: record.createdAt, paidAt: record.paidAt, reminderSentAt: record.reminderSentAt,
   reminderCount: record.reminderCount || 0, paymentCheckedAt: record.paymentCheckedAt,
