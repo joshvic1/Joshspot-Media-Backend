@@ -27,6 +27,7 @@ const invoiceSchema = new mongoose.Schema({
   customerPhone: { type: String, default: "", trim: true },
   attribution: {
     source: { type: String, default: "unknown" },
+    sourceLabel: { type: String, default: "", maxlength: 80 },
     method: { type: String, default: "none" },
     browser: { type: String, default: "unknown" },
   },
