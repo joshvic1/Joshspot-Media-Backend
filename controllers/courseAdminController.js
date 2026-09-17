@@ -88,3 +88,16 @@ exports.remindCoursePayment = async (req, res) => {
 };
 
 exports.statusOf = statusOf;
+
+exports.resendCourseEmail = async (req, res) => {
+  try {
+    const invoice = await Invoice.findById(req.params.id);
+    if (!invoice || invoice.deletedAt || !isCourse(invoice)) return res.status(404).json({ message: "Course checkout not found." });
+    if (invoice.status !== "paid") return res.status(403).json({ message: "Course access can only be emailed for confirmed payments." });
+    if (!invoice.customerEmail) return res.status(400).json({ message: "This customer has no saved email address." });
+    // Reuse the paid-access email, its payment checks and one-minute send limit.
+    return await require("./invoiceController").emailCourseAccess({ params: { token: invoice.token }, body: { email: invoice.customerEmail } }, res);
+  } catch {
+    return res.status(500).json({ message: "Unable to resend the course email. Please try again." });
+  }
+};
