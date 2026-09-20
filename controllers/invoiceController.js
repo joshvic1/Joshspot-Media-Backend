@@ -25,7 +25,7 @@ const getPublicInvoice = (invoice) => ({
   expiresAt: invoice.expiresAt,
   paidAt: invoice.paidAt,
   createdAt: invoice.createdAt,
-  ...(isPaidCourse(invoice) ? { courses } : {}),
+  ...(invoice.product === "whatsapp-course" && invoice.status === "paid" && invoice.amount === 10000 ? { contactUrl: "https://wa.me/2348143017102?text=I%20just%20paid" } : isPaidCourse(invoice) ? { courses } : {}),
 });
 
 const refreshInvoiceStatus = async (invoice, strict = false) => {
@@ -129,8 +129,9 @@ const generateInvoiceTransfer = async (invoice) => {
 exports.createInvoice = async (req, res) => {
   let invoice;
   try {
-    const coursePurchase = req.body.product === "ads-course" || String(req.body.note || "").startsWith("Course purchase - WhatsApp:");
-    const amount = coursePurchase ? 8000 : Number(req.body.amount);
+    const coursePurchase = ["ads-course", "whatsapp-course"].includes(req.body.product) || String(req.body.note || "").startsWith("Course purchase - WhatsApp:");
+    const whatsappCourse = req.body.product === "whatsapp-course";
+    const amount = whatsappCourse ? 10000 : coursePurchase ? 8000 : Number(req.body.amount);
     const customerEmail = String(req.body.customerEmail || "").trim().toLowerCase();
     const customerName = String(req.body.customerName || "").trim();
     const customerPhone = String(req.body.customerPhone || "").trim();
@@ -151,7 +152,7 @@ exports.createInvoice = async (req, res) => {
       customerName,
       customerEmail,
       customerPhone,
-      product: coursePurchase ? "ads-course" : "",
+      product: whatsappCourse ? "whatsapp-course" : coursePurchase ? "ads-course" : "",
       ...(coursePurchase ? { attribution: sanitizeAttribution(req.body.attribution) } : {}),
       note: req.body.note || "",
       expiresAt: new Date(Date.now() + INVOICE_LIFETIME_HOURS * 60 * 60 * 1000),
@@ -241,7 +242,8 @@ exports.emailCourseAccess = async (req, res) => {
     const invoice = await Invoice.findOne({ token: req.params.token });
     if (!invoice) return res.status(404).json({ message: "Invoice not found." });
     await refreshInvoiceStatus(invoice);
-    if (!isPaidCourse(invoice)) {
+    const whatsappAccess = invoice.product === "whatsapp-course" && invoice.status === "paid" && invoice.amount === 10000;
+    if (!isPaidCourse(invoice) && !whatsappAccess) {
       return res.status(403).json({ message: "Your course payment must be confirmed first." });
     }
     invoice.customerEmail = email;
@@ -263,8 +265,8 @@ exports.emailCourseAccess = async (req, res) => {
     const { data: emailResult, error } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || "Joshspot Media <booking@joshspotmedia.com>",
       to: email,
-      subject: "How to run Tiktok, Fb and Ig ads — Joshspot Media",
-      text: `Your payment is confirmed!
+      subject: whatsappAccess ? "How to run WhatsApp Status ads — Joshspot Media" : "How to run Tiktok, Fb and Ig ads — Joshspot Media",
+      text: whatsappAccess ? "Your payment is confirmed!\n\nThanks for buying the WhatsApp Status ads course. Message me using the link below so I can get you started:\n\nhttps://wa.me/2348143017102?text=I%20just%20paid\n\nKeep this email so you can find your way back anytime.\n\nJosh" : `Your payment is confirmed!
 
 Here are your course links. Join both Telegram channels and start learning. Keep this email so you can always find your way back.
 
@@ -300,3 +302,4 @@ Josh`,
 };
 
 exports.refreshInvoiceStatus = refreshInvoiceStatus;
+

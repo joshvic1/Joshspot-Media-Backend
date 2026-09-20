@@ -70,11 +70,12 @@ exports.remindCoursePayment = async (req, res) => {
       { $or: [{ reminderClaimedAt: { $exists: false } }, { reminderClaimedAt: { $lt: new Date(Date.now() - 300000) } }] },
     ] }, { $set: { reminderClaimedAt: now } }, { new: true });
     if (!claimed) return res.status(429).json({ message: "A reminder was already sent in the last 24 hours, or is being sent now." });
-    const retryUrl = `${(process.env.CLIENT_URL || "https://joshspotmedia.com").replace(/\/$/, "")}/course`;
+    const courseName = invoice.product === "whatsapp-course" ? "WhatsApp Status ads course" : "TikTok, Facebook and Instagram ads course";
+    const retryUrl = `${(process.env.CLIENT_URL || "https://joshspotmedia.com").replace(/\/$/, "")}/${invoice.product === "whatsapp-course" ? "whatsapp" : "course"}`;
     const { data: emailResult, error } = await new Resend(process.env.RESEND_API_KEY).emails.send({
       from: process.env.RESEND_FROM_EMAIL || "Joshspot Media <booking@joshspotmedia.com>", to: invoice.customerEmail,
-      subject: "Still want to learn TikTok, Facebook and Instagram ads?",
-      text: `Hi ${invoice.customerName || "there"},\n\nYou started signing up for my TikTok, Facebook and Instagram ads course, but your payment has not been completed.\n\nWere you having a problem making the payment? You can go back to the course page and try again whenever you are ready:\n\n${retryUrl}\n\nOnce your payment is confirmed, you will get access to the course channels immediately.\n\nIf you have already paid, please check your payment status before making another payment.\n\nSee you inside the channels!\nJosh`,
+      subject: `Still want to learn ${courseName}?`,
+      text: `Hi ${invoice.customerName || "there"},\n\nYou started signing up for my ${courseName}, but your payment has not been completed.\n\nWere you having a problem making the payment? You can go back to the course page and try again whenever you are ready:\n\n${retryUrl}\n\nOnce your payment is confirmed, you can follow the access button on the confirmation page to get your course.\n\nIf you have already paid, please check your payment status before making another payment.\n\nSee you inside the channels!\nJosh`,
     }, { idempotencyKey: `course-reminder/${invoice._id}/${(invoice.reminderCount || 0) + 1}` });
     if (error) throw new Error("Resend email delivery failed");
     await Invoice.updateOne({ _id: invoice._id, reminderClaimedAt: now }, {

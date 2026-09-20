@@ -6,6 +6,6 @@ const courses = [
 const isCourse = (invoice) => invoice.product === "ads-course" ||
   (invoice.note || "").startsWith("Course purchase - WhatsApp:");
 const isPaidCourse = (invoice) =>
-  invoice.status === "paid" && invoice.amount === 8000 && isCourse(invoice);
+  invoice.status === "paid" && invoice.product !== "whatsapp-course" && invoice.amount === 8000 && isCourse(invoice);
 
 module.exports = { courses, isPaidCourse, isCourse };
