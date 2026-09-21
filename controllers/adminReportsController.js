@@ -66,7 +66,7 @@ exports.overview = async (req, res) => {
     res.setHeader("Cache-Control", "no-store");
     return res.json({ revenue, payments: rows.length, bookingRevenue: rows.filter((row) => row.source === "bookings").reduce((sum, row) => sum + row.amount, 0),
       invoiceRevenue: rows.filter((row) => row.source === "invoices").reduce((sum, row) => sum + row.amount, 0),
-      courseRevenue: rows.filter((row) => row.service === "Ads course").reduce((sum, row) => sum + row.amount, 0),
+      courseRevenue: rows.filter((row) => ["Ads course", "WhatsApp Status ads course"].includes(row.service)).reduce((sum, row) => sum + row.amount, 0),
       bookings: bookingRows.length, completed: bookingRows.filter((row) => row.status === "completed").length,
       leads: leadRows.length, highPriority: leadRows.filter((row) => row.score >= 70 || row.endpoint === "STRATEGIC_GROWTH_CALL").length,
       unverifiedBookings: bookings.filter((row) => row.paid && !row.paymentVerifiedAt).length,

@@ -11,6 +11,7 @@ const adsClientSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  clientNumber: { type: String, trim: true, default: "" },
 
   videoLinks: {
     type: String,

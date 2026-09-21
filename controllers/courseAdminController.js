@@ -15,7 +15,7 @@ const publicRecord = (record) => ({
   id: String(record._id), name: record.customerName, phone: phoneOf(record),
   attribution: record.attribution || { source: "unknown", browser: "unknown", method: "none" },
   email: record.customerEmail || "", amount: record.amount, status: statusOf(record),
-  product: record.product || "ads-course",
+  product: record.product === "whatsapp-course" ? "whatsapp-course" : "ads-course",
   courseName: record.product === "whatsapp-course" ? "WhatsApp Status ads" : "TikTok, Facebook & Instagram ads",
   courseEmailSentAt: record.courseEmailSentAt,
   courseEmailStatus: record.courseEmailQueuedAt ? "Queued for delivery" : record.courseEmailSentAt ? "Sent" : "Not sent",
@@ -26,7 +26,9 @@ const publicRecord = (record) => ({
 exports.listCoursePayments = async (req, res) => {
   try {
     res.setHeader("Cache-Control", "no-store");
-    const records = (await Invoice.find(courseQuery).sort({ createdAt: -1 }).lean()).map(publicRecord);
+    const course = String(req.query.course || "all");
+    if (!["all", "ads-course", "whatsapp-course"].includes(course)) return res.status(400).json({message:"Choose a valid course."});
+    const records = (await Invoice.find(courseQuery).sort({ createdAt: -1 }).lean()).map(publicRecord).filter(record => course === "all" || record.product === course);
     const summary = { total: records.length, paid: 0, pending: 0, abandoned: 0, failed: 0, revenue: 0 };
     for (const record of records) {
       summary[record.status]++;

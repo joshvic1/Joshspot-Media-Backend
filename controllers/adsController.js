@@ -6,7 +6,7 @@ const rolePermissions = {
   SS: {
     canCreate: true,
     fields: [
-      "businessName",
+      "businessName", "clientNumber",
       "amountPaid",
       "clientLoginDetails",
       "videoLinks",
@@ -17,7 +17,7 @@ const rolePermissions = {
   CSS: {
     canCreate: true,
     fields: [
-      "businessName",
+      "businessName", "clientNumber",
       "amountPaid",
       "clientLoginDetails",
       "videoLinks",
@@ -27,12 +27,12 @@ const rolePermissions = {
   },
   SES: {
     canCreate: false,
-    fields: ["businessName", "clientLoginDetails", "videoLinks", "servicePaidFor", "note"],
+    fields: ["businessName", "clientNumber", "clientLoginDetails", "videoLinks", "servicePaidFor", "note"],
   },
 };
 
 const allAdsFields = [
-  "businessName",
+  "businessName", "clientNumber",
   "amountPaid",
   "clientLoginDetails",
   "videoLinks",
@@ -102,12 +102,13 @@ exports.createAdsClient = async (req, res) => {
 
     const payload = pickAllowedFields(req.body, req.staff.role);
 
-    if (!payload.businessName || !payload.videoLinks || !payload.servicePaidFor) {
+    if (!payload.businessName || !payload.videoLinks || !payload.servicePaidFor || !String(payload.clientNumber || "").trim()) {
       return res.status(400).json({
-        message: "Business name, video links, and service paid for are required",
+        message: "Business name, client number, video links, and service paid for are required",
       });
     }
 
+    if (!/^[+\d][\d\s()-]{6,24}$/.test(String(payload.clientNumber).trim())) return res.status(400).json({message:"Enter a valid client phone number."});
     const client = await AdsClient.create({
       ...payload,
       createdBy: req.staff.staffId,
@@ -145,6 +146,7 @@ exports.updateAdsClient = async (req, res) => {
     if (Object.keys(update).length === 0) {
       return res.status(400).json({ message: "No allowed fields to update" });
     }
+    if (Object.prototype.hasOwnProperty.call(update, "clientNumber") && update.clientNumber !== "" && !/^[+\d][\d\s()-]{6,24}$/.test(String(update.clientNumber).trim())) return res.status(400).json({message:"Enter a valid client phone number."});
 
     update.updatedBy = req.staff.staffId;
 
@@ -163,3 +165,4 @@ exports.updateAdsClient = async (req, res) => {
     res.status(500).json({ message: "Unable to update ads client" });
   }
 };
+
