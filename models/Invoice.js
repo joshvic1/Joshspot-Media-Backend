@@ -58,6 +58,11 @@ const invoiceSchema = new mongoose.Schema({
   paidAt: Date,
   courseEmailSentAt: Date,
   courseEmailId: String,
+  courseEmailClaimedAt: Date,
+  courseEmailQueuedAt: Date,
+  courseEmailRetryAt: Date,
+  courseEmailError: String,
+  courseEmailSendCount: { type: Number, default: 0 },
   reminderEmailId: String,
   expiresAt: Date,
 

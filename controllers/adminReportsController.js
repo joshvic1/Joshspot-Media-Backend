@@ -5,7 +5,7 @@ const { isCourse } = require("../utils/courseAccess");
 const { refreshBookingPayment } = require("../utils/bookingPayment");
 const { refreshInvoiceStatus } = require("./invoiceController");
 const active = { deletedAt: null };
-const invoiceService = (row) => isCourse(row) ? "Ads course" :
+const invoiceService = (row) => row.product === "whatsapp-course" ? "WhatsApp Status ads course" : isCourse(row) ? "Ads course" :
   (row.note || "").startsWith("Video script purchase") ? "Video script" : "Other invoices";
 const invoiceRecord = (row) => ({ id: String(row._id), kind: "invoices", name: row.customerName || "",
   email: row.customerEmail || "", phone: row.customerPhone || (row.note || "").split("WhatsApp:")[1]?.trim() || "",

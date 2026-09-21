@@ -2,7 +2,7 @@ const Invoice = require("../models/Invoice");
 const { Resend } = require("resend");
 const { refreshInvoiceStatus } = require("./invoiceController");
 const { isCourse } = require("../utils/courseAccess");
-const courseQuery = { deletedAt: null, $or: [{ product: "ads-course" }, { note: /^Course purchase - WhatsApp:/ }] };
+const courseQuery = { deletedAt: null, $or: [{ product: { $in: ["ads-course", "whatsapp-course"] } }, { note: /^Course purchase - WhatsApp:/ }] };
 const phoneOf = (record) => record.customerPhone || (record.note || "").split("WhatsApp:")[1]?.trim() || "";
 const statusOf = (record) => {
   if (record.status === "paid") return "paid";
@@ -15,6 +15,10 @@ const publicRecord = (record) => ({
   id: String(record._id), name: record.customerName, phone: phoneOf(record),
   attribution: record.attribution || { source: "unknown", browser: "unknown", method: "none" },
   email: record.customerEmail || "", amount: record.amount, status: statusOf(record),
+  product: record.product || "ads-course",
+  courseName: record.product === "whatsapp-course" ? "WhatsApp Status ads" : "TikTok, Facebook & Instagram ads",
+  courseEmailSentAt: record.courseEmailSentAt,
+  courseEmailStatus: record.courseEmailQueuedAt ? "Queued for delivery" : record.courseEmailSentAt ? "Sent" : "Not sent",
   createdAt: record.createdAt, paidAt: record.paidAt, reminderSentAt: record.reminderSentAt,
   reminderCount: record.reminderCount || 0, paymentCheckedAt: record.paymentCheckedAt,
 });
@@ -61,7 +65,8 @@ exports.remindCoursePayment = async (req, res) => {
     if (!invoice.customerEmail) return res.status(400).json({ message: "No email address was provided for this checkout." });
     const matches = [{ customerEmail: invoice.customerEmail }];
     if (phoneOf(invoice)) matches.push({ customerPhone: phoneOf(invoice) }, { note: `Course purchase - WhatsApp: ${phoneOf(invoice)}` });
-    const paidPurchase = await Invoice.exists({ $and: [{ $or: courseQuery.$or }, { status: "paid" }, { $or: matches }] });
+    const sameCourse = invoice.product === "whatsapp-course" ? { product: "whatsapp-course" } : { $or: [{ product: "ads-course" }, { product: { $ne: "whatsapp-course" }, note: /^Course purchase - WhatsApp:/ }] };
+    const paidPurchase = await Invoice.exists({ $and: [sameCourse, { status: "paid", deletedAt: null }, { $or: matches }] });
     if (paidPurchase) return res.status(409).json({ message: "This customer has another successful course payment. No reminder was sent." });
     if (!process.env.RESEND_API_KEY) return res.status(503).json({ message: "Email delivery is not configured." });
     const now = new Date();

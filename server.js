@@ -14,6 +14,11 @@ const invoiceRoutes = require("./routes/invoiceRoutes");
 const app = express();
 
 connectDB();
+const { retryCourseEmails } = require("./utils/deliverCourseEmail");
+const emailRetryTimer = setInterval(() => {
+  retryCourseEmails().catch(() => console.error("Course email retry temporarily unavailable"));
+}, 60000);
+emailRetryTimer.unref();
 
 /* CORS */
 

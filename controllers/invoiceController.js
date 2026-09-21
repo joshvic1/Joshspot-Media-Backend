@@ -1,7 +1,7 @@
 const axios = require("axios");
 const { v4: uuidv4 } = require("uuid");
 const Invoice = require("../models/Invoice");
-const { Resend } = require("resend");
+const { canEmailCourse, deliverCourseEmail, queueCourseEmail } = require("../utils/deliverCourseEmail");
 const { courses, isPaidCourse } = require("../utils/courseAccess");
 
 const PAYSTACK_BASE_URL = "https://api.paystack.co";
@@ -29,7 +29,7 @@ const getPublicInvoice = (invoice) => ({
 });
 
 const refreshInvoiceStatus = async (invoice, strict = false) => {
-  if (invoice.status === "paid") return invoice;
+  if (invoice.status === "paid") { await queueCourseEmail(invoice); return invoice; }
 
   if (!invoice.reference && invoice.expiresAt && new Date(invoice.expiresAt) < new Date()) {
     invoice.status = "expired";
@@ -61,6 +61,7 @@ const refreshInvoiceStatus = async (invoice, strict = false) => {
     }
 
     await invoice.save();
+    if (invoice.status === "paid") await queueCourseEmail(invoice);
   } catch (error) {
     if (strict) throw error;
     console.log("PAYSTACK VERIFY ERROR:", error.response?.data || error.message);
@@ -233,73 +234,20 @@ exports.listInvoices = async (req, res) => {
 };
 
 exports.emailCourseAccess = async (req, res) => {
-  let claimedInvoice;
   try {
     const email = String(req.body?.email || "").trim().toLowerCase();
-    if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res.status(400).json({ message: "Please enter a valid email address." });
-    }
+    if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ message: "Please enter a valid email address." });
     const invoice = await Invoice.findOne({ token: req.params.token });
     if (!invoice) return res.status(404).json({ message: "Invoice not found." });
     await refreshInvoiceStatus(invoice);
-    const whatsappAccess = invoice.product === "whatsapp-course" && invoice.status === "paid" && invoice.amount === 10000;
-    if (!isPaidCourse(invoice) && !whatsappAccess) {
-      return res.status(403).json({ message: "Your course payment must be confirmed first." });
-    }
-    invoice.customerEmail = email;
-    await invoice.save();
-    if (!process.env.RESEND_API_KEY) {
-      return res.status(503).json({ message: "Email is unavailable right now. You can still join both Telegram channels below." });
-    }
-    claimedInvoice = await Invoice.findOneAndUpdate({
-      _id: invoice._id,
-      $or: [
-        { courseEmailSentAt: { $exists: false } },
-        { courseEmailSentAt: { $lt: new Date(Date.now() - 60000) } },
-      ],
-    }, { $set: { courseEmailSentAt: new Date() } }, { new: true });
-    if (!claimedInvoice) {
-      return res.status(429).json({ message: "Please wait a minute before sending the links again." });
-    }
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    const { data: emailResult, error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || "Joshspot Media <booking@joshspotmedia.com>",
-      to: email,
-      subject: whatsappAccess ? "How to run WhatsApp Status ads — Joshspot Media" : "How to run Tiktok, Fb and Ig ads — Joshspot Media",
-      text: whatsappAccess ? "Your payment is confirmed!\n\nThanks for buying the WhatsApp Status ads course. Message me using the link below so I can get you started:\n\nhttps://wa.me/2348143017102?text=I%20just%20paid\n\nKeep this email so you can find your way back anytime.\n\nJosh" : `Your payment is confirmed!
-
-Here are your course links. Join both Telegram channels and start learning. Keep this email so you can always find your way back.
-
-${courses.map((course) => `${course.title}: ${course.url}`).join("\n\n")}
-
-The tutorial contains:
-- How to register on TikTok Ads Manager, set things up and start running ads from scratch.
-- How to create Facebook ad campaigns without getting confused by the buttons inside Ads Manager.
-- How to run Instagram ads to your Instagram page, WhatsApp or website.
-- How to create a simple online store where people can see your products and place orders.
-- How to open and arrange your ads account properly before you start spending money.
-- How to add your card and fund your ads account.
-- How to choose the right audience for your ads.
-- How to connect your ad to a landing page or store so people can buy or message you.
-- How to choose videos and pictures for your ads.
-- How to read your ad results, see what is working and know what to fix.
-- How to retarget people who have watched, clicked or shown interest in what you sell.
-- How to avoid common beginner mistakes that waste your ad budget.
-
-See you inside the channels!
-Josh`,
-    });
-    if (error) throw new Error("Email provider rejected delivery");
-    await Invoice.updateOne({ _id: invoice._id }, { $set: { courseEmailId: emailResult?.id || "" } }).catch(() => {});
+    if (!canEmailCourse(invoice)) return res.status(403).json({ message: "Your course payment must be confirmed first." });
+    await Invoice.updateOne({ _id: invoice._id }, { $set: { customerEmail: email } });
+    const result = await deliverCourseEmail(invoice._id, { resend: true });
+    if (result === "busy") return res.status(429).json({ message: "Your email is being sent, or was just sent. Please check your inbox and spam folder." });
     return res.json({ message: "The video links has been sent to your email. Also check your spam folder too incase you can't find it in your inbox." });
-  } catch (error) {
-    if (claimedInvoice) {
-      await Invoice.updateOne({ _id: claimedInvoice._id, courseEmailSentAt: claimedInvoice.courseEmailSentAt },
-        { $unset: { courseEmailSentAt: 1 } }).catch(() => {});
-    }
-    return res.status(500).json({ message: "The email did not send. Please try again, or join the Telegram channels below." });
+  } catch {
+    return res.status(503).json({ message: "Email delivery is delayed. Your address is saved and we will retry automatically. You can also use the access button on this page." });
   }
 };
-
 exports.refreshInvoiceStatus = refreshInvoiceStatus;
 

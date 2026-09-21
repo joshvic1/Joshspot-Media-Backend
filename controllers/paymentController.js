@@ -1,13 +1,19 @@
 const axios = require("axios");
 const { v4: uuidv4 } = require("uuid");
 const Booking = require("../models/Booking");
+const { resolveService } = require("../utils/serviceCatalog");
 exports.initializePayment = async (req, res) => {
   try {
     const { name, email, phone, service } = req.body;
+    let selected;
+    try { selected = resolveService(service); } catch (error) { return res.status(400).json({ message: error.message }); }
+    if (!String(name || "").trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "")) || !String(phone || "").trim()) {
+      return res.status(400).json({ message: "Please enter your name, email and WhatsApp number." });
+    }
 
     const token = uuidv4();
     const paymentReference = `booking-${uuidv4()}`;
-    const price = Number(service.calculatedPrice || service.price);
+    const price = selected.price;
     if (!Number.isFinite(price) || price <= 0) return res.status(400).json({ message: "Invalid booking amount." });
 
     const booking = await Booking.create({
@@ -15,16 +21,16 @@ exports.initializePayment = async (req, res) => {
       email,
       phone,
 
-      serviceId: service.id,
-      serviceTitle: service.title,
+      serviceId: selected.id,
+      serviceTitle: selected.title,
       price,
       paymentReference,
 
       // 🔥 ADD THESE
-      duration: service.duration,
-      packageSelected: service.packageSelected || service.duration,
+      duration: selected.duration,
+      packageSelected: selected.packageSelected,
       adBudget: service.adBudget,
-      serviceFee: service.serviceFee,
+      serviceFee: price,
 
       bookingToken: token,
       paid: false,

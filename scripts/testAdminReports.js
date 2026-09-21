@@ -58,7 +58,11 @@ async function verifyPayment(transaction, callback = false) {
   assert.equal((await verifyPayment({...success,metadata:{bookingId:"someone-else"}},true)).booking.paid,false);
   assert.equal((await verifyPayment({...success,metadata:{bookingId:"booking-id"}},true)).booking.paid,true);
   let webhookPaid=false;
+  invoices.push({_id:"whatsapp",status:"paid",amount:10000,product:"whatsapp-course",reference:"whatsapp-1",paidAt:paidDate});
+  response=res();await reports.overview({query:{service:"WhatsApp Status ads course"}},response);assert.equal(response.data.revenue,10000);
+  invoices.pop();
   const webhook=load("../controllers/paymentWebhookController.js",{
+    "../utils/deliverCourseEmail":{queueCourseEmail:async()=>{}},
     "node:crypto":crypto,"../models/Invoice":{findOne:async()=>null},
     "../models/Booking":{findOne:async()=>({price:8000,paymentReference:"test-ref"}),updateOne:async(query,update)=>{webhookPaid=update.$set.paid;}},
     "../utils/bookingPayment":(await verifyPayment(success)).helper,
