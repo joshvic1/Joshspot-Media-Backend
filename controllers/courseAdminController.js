@@ -4,6 +4,20 @@ const { refreshInvoiceStatus } = require("./invoiceController");
 const { isCourse } = require("../utils/courseAccess");
 const courseQuery = { deletedAt: null, $or: [{ product: { $in: ["ads-course", "whatsapp-course"] } }, { note: /^Course purchase - WhatsApp:/ }] };
 const phoneOf = (record) => record.customerPhone || (record.note || "").split("WhatsApp:")[1]?.trim() || "";
+exports.sourceAnalytics = async (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  const { course = "all", from = "", to = "" } = req.query;
+  const validDate = value => !value || (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(value)) && new Date(value).toISOString().slice(0,10) === value);
+  if (!["all", "ads-course", "whatsapp-course"].includes(course) || !validDate(from) || !validDate(to) || (from && to && from > to)) return res.status(400).json({message:"Choose a valid course and date range."});
+  try {
+    const conditions = [courseQuery];
+    if (course === "whatsapp-course") conditions.push({product:course});
+    if (course === "ads-course") conditions.push({product:{$ne:"whatsapp-course"}});
+    if (from || to) conditions.push({createdAt:{...(from ? {$gte:new Date(`${from}T00:00:00+01:00`)} : {}), ...(to ? {$lte:new Date(`${to}T23:59:59.999+01:00`)} : {})}});
+    const records = await Invoice.find({$and:conditions}).select("attribution status amount").lean();
+    return res.json(require("../utils/sourceAnalytics")(records));
+  } catch { return res.status(500).json({message:"Unable to load source analytics. Please try again."}); }
+};
 const statusOf = (record) => {
   if (record.status === "paid") return "paid";
   if (record.status === "failed") return "failed";

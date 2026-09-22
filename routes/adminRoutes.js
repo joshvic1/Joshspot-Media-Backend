@@ -7,6 +7,7 @@ router.post("/login", adminLogin);
 const adminAuth = require("../middleware/adminAuth");
 const { listCoursePayments, checkCoursePayment, remindCoursePayment } = require("../controllers/courseAdminController");
 router.get("/course-payments", adminAuth, listCoursePayments);
+router.get("/source-analytics", adminAuth, require("../controllers/courseAdminController").sourceAnalytics);
 router.post("/course-payments/:id/check", adminAuth, checkCoursePayment);
 router.post("/course-payments/:id/remind", adminAuth, remindCoursePayment);
 router.post("/course-payments/:id/resend", adminAuth, require("../controllers/courseAdminController").resendCourseEmail);
