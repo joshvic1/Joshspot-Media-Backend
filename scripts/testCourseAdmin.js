@@ -105,6 +105,19 @@ async function createCheckout(fail = false) {
   res = response();
   await admin.listCoursePayments({ query: { search: "8123456789", page: "999" } }, res);
   assert.equal(res.data.total, 1); assert.equal(res.data.page, 1);
+  records[0].attribution = {source:"tiktok",sourceLabel:" TikTok 3 "};
+  records[1].attribution = {source:"tiktok",sourceLabel:"tiktok 3"};
+  records[2].attribution = {source:"tiktok",sourceLabel:"TikTok 30"};
+  records[3].attribution = {source:"direct"};
+  res = response();
+  await admin.listCoursePayments({query:{source:"TikTok 3",status:"paid",page:"99"}},res);
+  assert.equal(res.code,200); assert.equal(res.data.total,1); assert.equal(res.data.page,1);
+  assert.equal(res.data.summary.total,2); assert.equal(res.data.summary.revenue,8000);
+  assert.equal(res.data.records[0].id,"1");
+  for (const [source, total] of [["unknown",1],["direct",1],["TikTok 30",1],["tiktok",0]]) {
+    res = response(); await admin.listCoursePayments({query:{source}},res);
+    assert.equal(res.data.total,total);
+  }
   for (const [options, expected] of [
     [{ invoice: { status: "paid" } }, 409], [{ justPaid: true }, 409], [{ otherPaid: true }, 409],
     [{ invoice: { customerEmail: "" } }, 400], [{ cooldown: true }, 429], [{ verificationError: true }, 502],

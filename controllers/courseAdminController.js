@@ -42,7 +42,10 @@ exports.listCoursePayments = async (req, res) => {
     res.setHeader("Cache-Control", "no-store");
     const course = String(req.query.course || "all");
     if (!["all", "ads-course", "whatsapp-course"].includes(course)) return res.status(400).json({message:"Choose a valid course."});
-    const records = (await Invoice.find(courseQuery).sort({ createdAt: -1 }).lean()).map(publicRecord).filter(record => course === "all" || record.product === course);
+    const source = String(req.query.source || "").toLowerCase();
+    const records = (await Invoice.find(courseQuery).sort({ createdAt: -1 }).lean()).map(publicRecord).filter(record =>
+      (course === "all" || record.product === course) &&
+      (!source || (record.attribution?.sourceLabel?.trim() || record.attribution?.source || "unknown").toLowerCase() === source));
     const summary = { total: records.length, paid: 0, pending: 0, abandoned: 0, failed: 0, revenue: 0 };
     for (const record of records) {
       summary[record.status]++;
