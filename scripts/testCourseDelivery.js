@@ -26,6 +26,7 @@ function load(file, deps) {
   const module = { exports: {} };
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, "..", file), "utf8"), {
     module, exports: module.exports, require: name => {
+      if (name === "../utils/tiktokEvents") return {queueTikTokPurchase:async () => {}};
       if (!(name in deps)) throw Error("Unexpected dependency: " + name);
       return deps[name];
     }, process: { env: { RESEND_API_KEY: "mock", PAYSTACK_SECRET: "mock" } }, Date, console, Buffer,

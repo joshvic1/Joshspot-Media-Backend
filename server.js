@@ -19,6 +19,11 @@ const emailRetryTimer = setInterval(() => {
   retryCourseEmails().catch(() => console.error("Course email retry temporarily unavailable"));
 }, 60000);
 emailRetryTimer.unref();
+const { retryTikTokPurchases } = require("./utils/tiktokEvents");
+const tiktokRetryTimer = setInterval(() => {
+  retryTikTokPurchases().catch(() => console.error("TikTok purchase retry temporarily unavailable"));
+}, 60000);
+tiktokRetryTimer.unref();
 
 /* CORS */
 

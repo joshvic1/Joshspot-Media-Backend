@@ -17,6 +17,7 @@ exports.paystackWebhook = async (req, res) => {
         await Invoice.updateOne({ _id: invoice._id }, { $set: { status: "paid", paystackStatus: "success",
           paidAt: transaction.paid_at || new Date(), paymentCheckedAt: new Date() } });
         invoice.status = "paid";
+        await require("../utils/tiktokEvents").queueTikTokPurchase(invoice);
         await queueCourseEmail(invoice);
       }
       const booking = await Booking.findOne({ paymentReference: transaction.reference });

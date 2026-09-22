@@ -63,6 +63,7 @@ async function verifyPayment(transaction, callback = false) {
   invoices.pop();
   const webhook=load("../controllers/paymentWebhookController.js",{
     "../utils/deliverCourseEmail":{queueCourseEmail:async()=>{}},
+    "../utils/tiktokEvents":{queueTikTokPurchase:async()=>{}},
     "node:crypto":crypto,"../models/Invoice":{findOne:async()=>null},
     "../models/Booking":{findOne:async()=>({price:8000,paymentReference:"test-ref"}),updateOne:async(query,update)=>{webhookPaid=update.$set.paid;}},
     "../utils/bookingPayment":(await verifyPayment(success)).helper,

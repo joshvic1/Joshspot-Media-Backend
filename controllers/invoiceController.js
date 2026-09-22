@@ -61,7 +61,10 @@ const refreshInvoiceStatus = async (invoice, strict = false) => {
     }
 
     await invoice.save();
-    if (invoice.status === "paid") await queueCourseEmail(invoice);
+    if (invoice.status === "paid") {
+      await require("../utils/tiktokEvents").queueTikTokPurchase(invoice);
+      await queueCourseEmail(invoice);
+    }
   } catch (error) {
     if (strict) throw error;
     console.log("PAYSTACK VERIFY ERROR:", error.response?.data || error.message);
