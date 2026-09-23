@@ -2,7 +2,7 @@ const axios = require("axios");
 const { v4: uuidv4 } = require("uuid");
 const Invoice = require("../models/Invoice");
 const { canEmailCourse, deliverCourseEmail, queueCourseEmail } = require("../utils/deliverCourseEmail");
-const { courses, isPaidCourse } = require("../utils/courseAccess");
+const { courses, isPaidCourse, whatsappCourseUrl } = require("../utils/courseAccess");
 
 const PAYSTACK_BASE_URL = "https://api.paystack.co";
 const INVOICE_LIFETIME_HOURS = 8;
@@ -25,7 +25,7 @@ const getPublicInvoice = (invoice) => ({
   expiresAt: invoice.expiresAt,
   paidAt: invoice.paidAt,
   createdAt: invoice.createdAt,
-  ...(invoice.product === "whatsapp-course" && invoice.status === "paid" && invoice.amount === 10000 ? { contactUrl: "https://wa.me/2348143017102?text=I%20just%20paid" } : isPaidCourse(invoice) ? { courses } : {}),
+  ...(invoice.product === "whatsapp-course" && invoice.status === "paid" && invoice.amount === 10000 ? { contactUrl: whatsappCourseUrl } : isPaidCourse(invoice) ? { courses } : {}),
 });
 
 const refreshInvoiceStatus = async (invoice, strict = false) => {

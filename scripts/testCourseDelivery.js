@@ -51,7 +51,7 @@ function invoice(product = "ads-course", status = "paid", email = "test@example.
   assert.equal(sends.length, 1); assert.ok(row.courseEmailSentAt); assert.match(sends[0].payload.text, /t.me/);
   await delivery.queueCourseEmail(row); assert.equal(sends.length, 1);
   row = invoice("whatsapp-course"); await delivery.queueCourseEmail(row);
-  assert.ok(sends.at(-1).payload.text.includes("https://wa.me/")); assert.ok(!sends.at(-1).payload.text.includes("https://t.me/"));
+  assert.ok(sends.at(-1).payload.text.includes("https://t.me/+LimBMFUxVvphZTU0")); assert.ok(!sends.at(-1).payload.text.includes("https://wa.me/"));
   row = invoice(); reject = true; await delivery.queueCourseEmail(row);
   assert.ok(row.courseEmailQueuedAt); assert.ok(row.courseEmailRetryAt); assert.equal(row.courseEmailSentAt, undefined);
   const retryKey = sends.at(-1).options.idempotencyKey;

@@ -1,9 +1,9 @@
-const { courses } = require("./courseAccess");
+const { courses, whatsappCourseUrl } = require("./courseAccess");
 module.exports = function courseEmailContent(invoice) {
 const whatsappAccess = invoice.product === "whatsapp-course";
 return {
       subject: whatsappAccess ? "How to run WhatsApp Status ads — Joshspot Media" : "How to run Tiktok, Fb and Ig ads — Joshspot Media",
-      text: whatsappAccess ? "Your payment is confirmed!\n\nThanks for buying the WhatsApp Status ads course. Message me using the link below so I can get you started:\n\nhttps://wa.me/2348143017102?text=I%20just%20paid\n\nKeep this email so you can find your way back anytime.\n\nJosh" : `Your payment is confirmed!
+      text: whatsappAccess ? `Your payment is confirmed!\n\nThanks for buying the WhatsApp Status ads course. Join the Telegram training channel below to start learning:\n\n${whatsappCourseUrl}\n\nKeep this email so you can find your way back anytime.\n\nJosh` : `Your payment is confirmed!
 
 Here are your course links. Join both Telegram channels and start learning. Keep this email so you can always find your way back.
 

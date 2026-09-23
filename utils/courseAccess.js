@@ -8,4 +8,5 @@ const isCourse = (invoice) => ["ads-course", "whatsapp-course"].includes(invoice
 const isPaidCourse = (invoice) =>
   invoice.status === "paid" && invoice.product !== "whatsapp-course" && invoice.amount === 8000 && isCourse(invoice);
 
-module.exports = { courses, isPaidCourse, isCourse };
+const whatsappCourseUrl = "https://t.me/+LimBMFUxVvphZTU0";
+module.exports = { courses, isPaidCourse, isCourse, whatsappCourseUrl };
