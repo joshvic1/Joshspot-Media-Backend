@@ -24,6 +24,11 @@ const tiktokRetryTimer = setInterval(() => {
   retryTikTokPurchases().catch(() => console.error("TikTok purchase retry temporarily unavailable"));
 }, 60000);
 tiktokRetryTimer.unref();
+const { checkSupportAlerts } = require("./utils/courseSupportAlerts");
+const supportAlertTimer = setInterval(() => {
+  checkSupportAlerts().catch(() => console.error("Course support alert check temporarily unavailable"));
+},60000);
+supportAlertTimer.unref();
 
 /* CORS */
 
