@@ -13,7 +13,7 @@ const context={exports:{},require:k=>deps[k],process:{env:{RESEND_API_KEY:'mock'
 vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../controllers/receiptController.js'),'utf8'),context);
 const response=()=>({code:200,status(n){this.code=n;return this;},json(v){this.data=v;return this;}});
 function reset(){row={_id:'123456789012345678901234',status:'paid',customerName:'Ada <Buyer>',customerEmail:'',amount:135000,reference:'invoice-123',paidAt:'2026-09-26T10:00:00Z',note:'Ads management'};sends=[];failure=false;}
-async function send(email){const res=response();await context.exports.sendReceipt({params:{id:row._id},body:{email}},res);return res;}
+async function send(email,name){const res=response();await context.exports.sendReceipt({params:{id:row._id},body:{email,name}},res);return res;}
 (async()=>{
   reset();row.status='pending';assert.equal((await send('ada@example.com')).code,409);assert.equal(sends.length,0);
   reset();assert.equal((await send('invalid')).code,400);assert.equal(row.customerEmail,'');
@@ -24,5 +24,8 @@ async function send(email){const res=response();await context.exports.sendReceip
   reset();failure=true;assert.equal((await send('ada@example.com')).code,502);assert.equal(row.customerEmail,'ada@example.com');assert.equal(row.receiptClaimedAt,undefined);assert.equal(row.receiptSentAt,undefined);
   const key=sends[0].options.idempotencyKey;failure=false;await send('ada@example.com');assert.equal(sends[1].options.idempotencyKey,key);
   reset();row.deletedAt=new Date();assert.equal((await send('ada@example.com')).code,404);
+  reset();row.customerName='';assert.equal((await send('ada@example.com','')).code,400);assert.equal(sends.length,0);
+  assert.equal((await send('ada@example.com','  Patricia Buyer  ')).code,200);assert.equal(row.customerName,'Patricia Buyer');assert.ok(sends[0].payload.html.includes('Patricia Buyer'));
+  assert.ok(!/tax/i.test(sends[0].payload.html));assert.ok(!/tax/i.test(sends[0].payload.text));
   console.log('Receipt checks passed: paid-only, saved/missing email, validation, escaping, receipt fields, repeat protection, retry idempotency, deleted invoices. No emails sent.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
