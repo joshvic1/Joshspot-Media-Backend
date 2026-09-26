@@ -14,6 +14,7 @@ router.post("/course-payments/:id/resend", adminAuth, require("../controllers/co
 const reports = require("../controllers/adminReportsController");
 router.get("/overview", adminAuth, reports.overview);
 router.get("/paid-invoices", adminAuth, reports.paidInvoices);
+router.post("/paid-invoices/:id/receipt", adminAuth, require("../controllers/receiptController").sendReceipt);
 router.post("/sync-payments", adminAuth, reports.syncPayments);
 router.delete("/records/:kind/:id", adminAuth, reports.deleteRecord);
 router.post("/records/:kind/:id/restore", adminAuth, reports.deleteRecord);
