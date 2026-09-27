@@ -52,6 +52,12 @@ const invoice = () => ({_id:"one",token:"private-course-access",product:"ads-cou
   assert.ok(row.tiktokPurchaseRetryAt); assert.equal(row.tiktokPurchaseSentAt,undefined);
   assert.equal(row.tiktokPurchaseClaimedAt,undefined);
   assert.equal(row.status,"paid");
+  row={...invoice(),product:"whatsapp-course",amount:10000};
+  await api.queueTikTokPurchase(row); assert.ok(row.tiktokPurchaseQueuedAt);
+  const whatsappPayload=api.purchasePayload(row);
+  assert.equal(whatsappPayload.data[0].properties.contents[0].content_id,"whatsapp-course");
+  assert.equal(whatsappPayload.data[0].properties.value,10000);
+  assert.equal(whatsappPayload.data[0].page.url,"https://www.joshspotmedia.com/whatsapp");
   delete env.TIKTOK_ACCESS_TOKEN;
   assert.equal(await api.deliverTikTokPurchase(row._id),"disabled");
   console.log("TikTok purchase tests passed: paid-only queue, deduplication ID, hashed matching, concurrency, retry, disabled configuration.");

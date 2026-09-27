@@ -5,9 +5,10 @@ const { isPaidCourse } = require("./courseAccess");
 
 const hash = value => createHash("sha256").update(value).digest("hex");
 const configured = () => Boolean(process.env.TIKTOK_ACCESS_TOKEN && process.env.TIKTOK_PIXEL_ID);
-const eligible = invoice => invoice && !invoice.deletedAt && isPaidCourse(invoice) && invoice.token;
+const eligible = invoice => invoice && !invoice.deletedAt && invoice.token && (isPaidCourse(invoice) || (invoice.product === "whatsapp-course" && invoice.status === "paid" && invoice.amount === 10000));
 
 function purchasePayload(invoice) {
+  const whatsapp = invoice.product === "whatsapp-course";
   const user = {};
   const email = String(invoice.customerEmail || "").trim().toLowerCase();
   const phone = String(invoice.customerPhone || "").replace(/[^\d+]/g, "");
@@ -23,10 +24,10 @@ function purchasePayload(invoice) {
       event_id: `course-${hash(invoice.token)}`,
       event_time: Math.floor(new Date(invoice.paidAt || invoice.tiktokPurchaseQueuedAt).getTime() / 1000),
       user,
-      page: { url: "https://www.joshspotmedia.com/course" },
+      page: { url: whatsapp ? "https://www.joshspotmedia.com/whatsapp" : "https://www.joshspotmedia.com/course" },
       properties: {
         currency: "NGN", value: Number(invoice.amount), content_type: "product",
-        contents: [{ content_id: "ads-course", content_name: "TikTok, Facebook & Instagram Ads Course", quantity: 1, price: Number(invoice.amount) }],
+        contents: [{ content_id: whatsapp ? "whatsapp-course" : "ads-course", content_name: whatsapp ? "WhatsApp Status Ads Course" : "TikTok, Facebook & Instagram Ads Course", quantity: 1, price: Number(invoice.amount) }],
       },
     }],
   };

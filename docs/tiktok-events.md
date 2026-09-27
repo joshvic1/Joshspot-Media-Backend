@@ -2,7 +2,7 @@
 
 Set `TIKTOK_ACCESS_TOKEN` and `TIKTOK_PIXEL_ID` in the backend hosting environment. The local token is stored only in the ignored `backend/.env`; deployment does not copy it automatically. Never put the token in frontend variables or source control.
 
-The Paystack webhook and successful payment verification queue new confirmed ads-course purchases. A worker runs every minute and retries failed deliveries after five minutes. The existing browser Pixel remains active. Both use `Purchase` and `course-` plus SHA-256 of the invoice token as the event ID, so TikTok can deduplicate them. WhatsApp-course purchases use a separate flow and are excluded.
+The Paystack webhook and successful payment verification queue new confirmed ads-course and WhatsApp-course purchases. A worker runs every minute and retries failed deliveries after five minutes. The existing browser Pixel remains active. Both use `Purchase` and `course-` plus SHA-256 of the invoice token as the event ID, so TikTok can deduplicate them. WhatsApp-course purchases use the same Pixel with their own product ID, course name, value and page URL.
 
 Email and international-format phone numbers are SHA-256 hashed for matching. No access link, raw contact information, or token is included in the event body. Click identifiers and browser matching cookies are not currently collected by this server integration, which limits attribution matching.
 
