@@ -82,7 +82,7 @@ app.use((req, res, next) => {
 /* Middleware */
 
 app.use(express.json({ limit: "10mb", verify: (req, res, buffer) => {
-  if (req.originalUrl.split("?")[0] === "/api/payment/webhook") req.rawBody = buffer;
+  if (["/api/payment/webhook", "/api/inbox/webhook"].includes(req.originalUrl.split("?")[0])) req.rawBody = buffer;
 } }));
 
 /* Routes */
@@ -93,6 +93,9 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/crm", crmRoutes);
 app.use("/api/growth-assessment", growthAssessmentRoutes);
 app.use("/api/invoice", invoiceRoutes);
+app.use("/api/inbox", require("./inbox/routes"));
+const inboxTimer = setInterval(() => require("./inbox/service").tick(), 5000);
+inboxTimer.unref();
 
 app.get("/", (req, res) => {
   res.send("Joshspot Media API running");

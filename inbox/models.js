@@ -1,0 +1,50 @@
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+const ref = (model) => ({ type: Schema.Types.ObjectId, ref: model });
+const contact = new Schema({
+  phone: { type: String, required: true, unique: true }, name: { type: String, default: '' },
+  email: { type: String, default: '' }, source: { type: String, default: 'WhatsApp' }, service: { type: String, default: '' },
+  status: { type: String, default: 'lead', enum: ['lead', 'customer', 'inactive'] },
+  revision: { type: Number, default: 0 },
+}, { timestamps: true });
+contact.index({ name: 'text', phone: 'text', email: 'text' });
+contact.index({ name: 1 });
+contact.index({ email: 1 });
+const conversation = new Schema({
+  contact: { ...ref('InboxContact'), required: true }, channel: { type: String, default: 'whatsapp' },
+  assignedTo: { ...ref('Staff'), default: null }, status: { type: String, enum: ['open', 'follow_up', 'resolved'], default: 'open' },
+  labels: [String], revision: { type: Number, default: 0 }, lastInboundAt: Date, followUpAt: Date,
+  lastMessageAt: { type: Date, default: Date.now }, lastMessageId: Schema.Types.ObjectId, preview: String,
+  reads: { type: Map, of: Schema.Types.ObjectId, default: {} }, lastInboundId: Schema.Types.ObjectId, resolvedAt: Date,
+}, { timestamps: true });
+conversation.index({ contact: 1, channel: 1 }, { unique: true });
+conversation.index({ assignedTo: 1, status: 1, lastMessageAt: -1, _id: -1 });
+conversation.index({ status: 1, lastMessageAt: -1, _id: -1 });
+conversation.index({ lastMessageAt: -1, _id: -1 });
+conversation.index({ assignedTo: 1, status: 1, followUpAt: 1 });
+const message = new Schema({
+  conversation: { ...ref('InboxConversation'), required: true }, direction: { type: String, enum: ['inbound', 'outbound', 'internal'], required: true },
+  type: { type: String, enum: ['text', 'template', 'image', 'document', 'audio', 'video', 'sticker', 'unsupported', 'note', 'activity'], required: true },
+  text: { type: String, default: '' }, author: String, authorName: String,
+  providerId: { type: String, unique: true, sparse: true }, clientKey: { type: String, unique: true, sparse: true },
+  status: { type: String, default: 'queued', enum: ['queued', 'sending', 'sent', 'delivered', 'read', 'failed', 'unknown', 'received', 'internal'] },
+  providerPayload: { type: Schema.Types.Mixed, select: false }, media: { id: String, mime: String, name: String },
+  error: String, sentAt: Date, deliveredAt: Date, readAt: Date, attemptedAt: Date, attempts: { type: Number, default: 0 },
+  occurredAt: { type: Date, default: Date.now },
+}, { timestamps: true });
+message.index({ conversation: 1, _id: -1 });
+message.index({ conversation: 1, type: 1, _id: -1 });
+message.index({ conversation: 1, direction: 1, occurredAt: -1 });
+message.index({ status: 1, createdAt: 1 });
+message.index({ text: 'text' });
+const job = new Schema({ key: { type: String, unique: true }, payload: Schema.Types.Mixed, state: { type: String, default: 'pending' }, leaseUntil: Date, attempts: { type: Number, default: 0 }, error: String, expiresAt: Date }, { timestamps: true });
+job.index({ state: 1, leaseUntil: 1 });
+job.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+const template = new Schema({ externalId: { type: String, unique: true }, name: String, language: String, category: String, status: String, components: [Schema.Types.Mixed], syncedAt: Date });
+const rate = new Schema({ key: { type: String, unique: true }, count: Number, expiresAt: Date });
+rate.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+module.exports = {
+  Contact: mongoose.model('InboxContact', contact), Conversation: mongoose.model('InboxConversation', conversation),
+  Message: mongoose.model('InboxMessage', message), WebhookJob: mongoose.model('InboxWebhookJob', job),
+  Template: mongoose.model('InboxTemplate', template), RateBucket: mongoose.model('InboxRateBucket', rate),
+};
