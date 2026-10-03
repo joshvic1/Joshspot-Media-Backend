@@ -129,7 +129,7 @@ test('AI batches rapid messages and media/errors hand off without sending conten
 });
 test('AI provider failures and sensitive text preserve input and route to a human',async()=>{
   const c=await aiFixture();aiProvider.interpret=async()=>{throw new Error('timeout');};await aiWorker.runOne(await aiSettings.getConfig());
-  assert.equal((await Conversation.findById(c._id)).ai.handoffReason,'AI_ERROR');assert.equal(await Message.countDocuments({direction:'inbound'}),1);
+  assert.equal((await Conversation.findById(c._id)).ai.handoffReason,'AI_PROCESSING_ERROR');assert.equal(await Message.countDocuments({direction:'inbound'}),1);
   await request(`/ai/conversations/${c._id}/control`,{method:'POST',body:{action:'return'}});
   const payload=inbound('wamid.secret');payload.messages[0].text.body='my password is TOP_SECRET';await service.receive(payload);await Conversation.updateOne({_id:c._id},{$set:{'ai.pendingAt':new Date(Date.now()-20000)}});await aiWorker.runOne(await aiSettings.getConfig());
   assert.equal((await Conversation.findById(c._id)).ai.handoffReason,'SENSITIVE_CASE');assert.equal(JSON.stringify(await aiModels.Log.find()).includes('TOP_SECRET'),false);
@@ -157,6 +157,23 @@ test('AI invoice action reuses the existing Invoice and account and never retrie
 test('AI worker lease prevents two workers generating for one conversation',async()=>{
   await aiFixture();const config=await aiSettings.getConfig();let calls=0;const interpret=aiProvider.interpret;aiProvider.interpret=async args=>{calls++;await new Promise(r=>setTimeout(r,30));return interpret(args);};
   await Promise.all([aiWorker.runOne(config),aiWorker.runOne(config)]);assert.equal(calls,1);
+});
+test('AI limits report their exact reason and blocked attempts do not inflate counters',async()=>{
+ const c=await aiFixture('LIVE');const day=new Date().toISOString().slice(0,10);
+ const config={...(await aiSettings.getConfig()).data,maxDailyCalls:2,maxConversationCalls:1};
+ await aiWorker.budget(config,c._id);
+ for(let i=0;i<3;i++)await assert.rejects(aiWorker.budget(config,c._id),{code:'AI_CONVERSATION_LIMIT'});
+ assert.equal((await aiModels.Usage.findOne({key:`global:${day}`})).calls,1);
+ assert.equal((await aiModels.Usage.findOne({key:`${c._id}:${day}`})).calls,1);
+ await aiWorker.budget(config,'another');
+ await assert.rejects(aiWorker.budget(config,'third'),{code:'AI_DAILY_LIMIT'});
+ assert.equal((await aiModels.Usage.findOne({key:`third:${day}`})).calls,0);
+ assert.equal((await aiModels.Usage.findOne({key:`global:${day}`})).calls,2);
+ await aiModels.Config.updateOne({key:'main'},{$set:{'data.maxDailyCalls':2}});
+ aiProvider.interpret=()=>{throw Error('Provider must not be called after the limit');};
+ await aiWorker.runOne(await aiSettings.getConfig());
+ assert.equal((await Conversation.findById(c._id)).ai.handoffReason,'AI_DAILY_LIMIT');
+ assert.match((await aiModels.Log.findOne({conversation:c._id,kind:'decision'})).error,/Daily AI request limit reached/);
 });
 
 test('business pack installs all approved entries once and preserves rollout and prices',async()=>{

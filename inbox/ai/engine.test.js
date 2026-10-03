@@ -1,6 +1,13 @@
 const {test,afterEach}=require('node:test');const assert=require('node:assert/strict');
 const engine=require('./engine'),provider=require('./provider'),defaults=require('./defaults');const axios=require('axios');
 const original=provider.interpret;const post=axios.post;
+test('AI diagnostics distinguish quota, authentication and timeouts without exposing raw errors',()=>{
+ const {providerError,describe}=require('./errors');
+ for(const [input,code] of [[{response:{status:429,data:{error:{code:'insufficient_quota',message:'SECRET'}}}},'AI_QUOTA_EXHAUSTED'],[{response:{status:401}},'AI_AUTH_FAILED'],[{code:'ECONNABORTED'},'AI_TIMEOUT']]){
+  const error=providerError(input);assert.equal(error.code,code);assert.equal(describe(error).message.includes('SECRET'),false);
+ }
+ assert.equal(describe({code:27}).code,'AI_KNOWLEDGE_INDEX');
+});
 afterEach(()=>{provider.interpret=original;axios.post=post;});
 const result=(changes={})=>({intent:'advertising',confidence:.99,platform:null,serviceType:null,budget:null,duration:null,...changes});
 async function decide(text,output,state={},extra={}){provider.interpret=async()=>result(output);return engine.decide({text,state,config:{...defaults.config,invoicesEnabled:true},records:defaults.records,knowledge:[],...extra});}

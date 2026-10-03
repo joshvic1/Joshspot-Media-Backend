@@ -66,10 +66,16 @@ async function recoverHandoffs(config){
 }
 async function budget(config,conversationId) {
   const day=new Date().toISOString().slice(0,10);
-  for(const [key,limit] of [[`global:${day}`,config.maxDailyCalls],[`${conversationId}:${day}`,config.maxConversationCalls]]) {
-    const bucket=await Usage.findOneAndUpdate({key},{$inc:{calls:1},$setOnInsert:{expiresAt:new Date(Date.now()+3*86400000)}},{upsert:true,returnDocument:'after'});
-    if(bucket.calls>limit)throw new Error('AI usage limit reached');
-  }
+  const reserve=async(key,limit,code)=>{
+    try{await Usage.updateOne({key},{$setOnInsert:{calls:0,expiresAt:new Date(Date.now()+3*86400000)}},{upsert:true});}catch(error){if(error.code!==11000)throw error;}
+    const bucket=await Usage.findOneAndUpdate({key,calls:{$lt:limit}},{$inc:{calls:1}},{returnDocument:'after'});
+    if(!bucket)throw Object.assign(new Error(code),{code});
+  };
+  const conversationKey=`${conversationId}:${day}`;
+  // Blocked conversation attempts never consume the global allowance.
+  await reserve(conversationKey,config.maxConversationCalls,'AI_CONVERSATION_LIMIT');
+  try{await reserve(`global:${day}`,config.maxDailyCalls,'AI_DAILY_LIMIT');}
+  catch(error){await Usage.updateOne({key:conversationKey},{$inc:{calls:-1}});throw error;}
 }
 async function queue(conversation,result,configRow,inputId,key) {
   const message=await Message.findOneAndUpdate({clientKey:key},{$setOnInsert:{conversation:conversation._id,type:'text',direction:'outbound',status:'queued',text:result.response,author:'ai',authorName:configRow.data.displayName,routingPhoneId:process.env.WHATSAPP_PHONE_NUMBER_ID,automation:{version:conversation.ai.version,inputId,configRevision:configRow.revision,handoff:Boolean(result.handoff)}}},{upsert:true,returnDocument:'after'});
@@ -97,7 +103,7 @@ async function runOne(configRow) {
         const [records,knowledge,history]=await Promise.all([settings.catalogue(),media?[]:settings.knowledge(text),Message.find({conversation:conversation._id,direction:{$in:['inbound','outbound']},type:'text',_id:{$lt:inputs[0]._id}}).sort({_id:-1}).limit(config.maxHistory || 1).lean()]);
         result=await engine.decide({text,type:media?.type || 'text',state:prior,config,records,knowledge,history:history.reverse()});
       }
-    } catch { result={action:'handoff',handoff:'AI_ERROR',state:prior,error:'Provider, configuration or usage limit unavailable'}; }
+    } catch(error) { const detail=require('./errors').describe(error);result={action:'handoff',handoff:detail.code,state:prior,error:detail.message}; }
     const currentConfig=await settings.getConfig();
     if(currentConfig.revision!==configRow.revision || !currentConfig.data.enabled || currentConfig.data.mode==='OFF') return true;
     if(!await Conversation.exists({_id:conversation._id,...guard,'ai.active':{$ne:false},assignedTo:null}))return true;

@@ -22,8 +22,8 @@ async function interpret({text,state,history,records,knowledge,config}) {
       for (const key of ['budget','duration']) if(result[key] !== null && (!Number.isFinite(result[key]) || result[key]<0 || result[key]>100000000)) throw new Error('Invalid extracted amount');
       return {...result,model,usage:data.usage || {}};
     } catch (error) {
-      if(attempt===0 && (error.response?.status===429 || error.response?.status>=500)) { await new Promise(r=>setTimeout(r,500)); continue; }
-      throw Object.assign(new Error('AI provider unavailable; human assistance required.'),{code:'AI_PROVIDER_ERROR'});
+      if(attempt===0 && (error.response?.status===429 && error.response?.data?.error?.code!=='insufficient_quota' || error.response?.status>=500)) { await new Promise(r=>setTimeout(r,500)); continue; }
+      throw require('./errors').providerError(error);
     }
   }
 }
