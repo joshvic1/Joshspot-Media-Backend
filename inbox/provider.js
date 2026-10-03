@@ -19,6 +19,13 @@ async function send(to, message) {
   if (!response.data.messages?.[0]?.id) throw new Error('No delivery identifier returned');
   return response.data.messages[0].id;
 }
+async function react(to, messageId, emoji) {
+  const { data } = await api().post(`/${process.env.WHATSAPP_PHONE_NUMBER_ID}/messages`, {
+    messaging_product: 'whatsapp', recipient_type: 'individual', to, type: 'reaction', reaction: { message_id: messageId, emoji }
+  });
+  if (!data.messages?.[0]?.id) throw new Error('No reaction identifier returned');
+  return data.messages[0].id;
+}
 async function templates() {
   const results = []; let after;
   do {
@@ -51,4 +58,4 @@ async function checkConnection() {
     return { valid: false, code: Number(error.response?.data?.error?.code) || null, subcode: Number(error.response?.data?.error?.error_subcode) || null, unavailable: !error.response };
   }
 }
-module.exports = { configuration, send, templates, upload, download, checkConnection };
+module.exports = { configuration, send, react, templates, upload, download, checkConnection };

@@ -122,11 +122,11 @@ router.post('/webhooks/retry', wrap(async (req, res) => {
 router.get('/conversations', wrap(async (req, res) => {
   const filter = { $and: [policy.visible(req.actor)] };
   const view = String(req.query.view || 'inbox');
-  if (view === 'mine') filter.$and.push({ assignedTo: req.actor.admin ? null : req.actor.id });
+  if (view === 'mine') filter.$and.push(req.actor.admin ? { _id: null } : { assignedTo: req.actor.id });
   if (view === 'unassigned') filter.$and.push({ assignedTo: null });
   if (view === 'follow_up') filter.$and.push({ status: 'follow_up' });
   else if (view === 'resolved') filter.$and.push({ status: 'resolved' });
-  else if (view !== 'contacts' && !['open', 'follow_up', 'resolved'].includes(req.query.status)) filter.$and.push({ status: { $ne: 'resolved' } });
+  else if (!['contacts', 'inbox'].includes(view) && !['open', 'follow_up', 'resolved'].includes(req.query.status)) filter.$and.push({ status: { $ne: 'resolved' } });
   if (view === 'unread') filter.$and.push({ $expr: { $gt: ['$lastInboundId', { $ifNull: [`$reads.${req.actor.id}`, new mongoose.Types.ObjectId('000000000000000000000000')] }] } });
   if (req.query.agent) filter.$and.push({ assignedTo: req.query.agent === 'unassigned' ? null : id(req.query.agent) });
   if (req.query.status && ['open', 'follow_up', 'resolved'].includes(req.query.status)) filter.$and.push({ status: req.query.status });
@@ -275,9 +275,8 @@ router.post('/conversations/:id/media', wrap(async (req, res) => {
   const mime = buffer.subarray(0, 5).toString() === '%PDF-' ? 'application/pdf' : buffer.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10])) ? 'image/png' : buffer[0] === 255 && buffer[1] === 216 && buffer[2] === 255 ? 'image/jpeg' : buffer.subarray(4, 8).toString() === 'ftyp' ? 'video/mp4' : buffer.subarray(0, 4).toString() === 'OggS' ? 'audio/ogg' : buffer.subarray(0, 3).toString() === 'ID3' || (buffer[0] === 255 && (buffer[1] & 224) === 224) ? 'audio/mpeg' : null;
   if (!mime) fail(400, 'Choose a PNG, JPEG, PDF, MP4, MP3 or OGG file.');
   const name = text(req.body.name || 'attachment', 120).replace(/[^\w. -]/g, '_');
-  const asset = await mediaService.upload(buffer, mime, name, conversation._id);
   const mediaId = await provider.upload(buffer, mime, name);
-  const media = { id: mediaId, mime, name, asset: String(asset._id) };
+  const media = { id: mediaId, mime, name };
   const ticket = jwt.sign({ media, conversation: String(conversation._id), actor: req.actor.id, purpose: 'inbox-media' }, process.env.JWT_SECRET, { expiresIn: '1h' });
   res.json({ ticket, name, type: mime === 'application/pdf' ? 'document' : mime.split('/')[0] });
 }));
@@ -317,6 +316,31 @@ router.post('/conversations/:id/messages', wrap(async (req, res) => {
   const result = message.toObject(); delete result.providerPayload;
   res.status(201).json(result);
 }));
+router.put('/conversations/:id/messages/:messageId/reaction', wrap(async (req, res) => {
+  await rateLimit(req, 60); const conversation = await conversationFor(req);
+  if (!policy.canReply(req.actor, conversation)) fail(403, 'Claim this conversation before reacting.');
+  const emoji = req.body.emoji;
+  if (!['', '👍', '❤️', '😂', '✅', '🙏', '😮'].includes(emoji)) fail(400, 'Choose one of the available reactions.');
+  const message = await Message.findOne({ _id: id(req.params.messageId), conversation: conversation._id });
+  if (!message || message.type === 'activity') fail(404, 'Message not found.');
+  const note = message.type === 'note';
+  if (!note && (!message.providerId || ['failed', 'queued', 'sending', 'unknown'].includes(message.status))) fail(400, 'This message is not available for a WhatsApp reaction.');
+  if (!note && Date.now() - new Date(message.occurredAt || message.createdAt).getTime() > 30 * 86400000) fail(400, 'WhatsApp reactions are available on messages from the last 30 days.');
+  const lease = new Date(Date.now() + 60000);
+  const claimed = await Message.updateOne({ _id: message._id, $or: [{ reactionLease: null }, { reactionLease: { $lt: new Date() } }] }, { $set: { reactionLease: lease } });
+  if (!claimed.modifiedCount) fail(409, 'Another reaction is being saved. Please try again.');
+  try {
+    let providerId;
+    if (!note) {
+      try { providerId = await provider.react(conversation.contact.phone, message.providerId, emoji); }
+      catch (error) { fail(502, `WhatsApp could not confirm the reaction${error.response?.data?.error?.code ? ` (code ${Number(error.response.data.error.code)})` : ''}. Please try again.`); }
+    }
+    const key = note ? `staff_${req.actor.id}` : 'business';
+    await Message.updateOne({ _id: message._id }, { $set: { [`reactions.${key}`]: { emoji, name: req.actor.name, timestamp: Date.now(), providerId, status: note ? 'internal' : 'sent' } } });
+    live.notify(); res.json({ ok: true });
+  } finally { await Message.updateOne({ _id: message._id, reactionLease: lease }, { $unset: { reactionLease: 1 } }); }
+}));
+
 router.post('/conversations/:id/messages/:messageId/retry', wrap(async (req, res) => {
   await rateLimit(req, 60); const conversation = await conversationFor(req);
   if (!policy.canReply(req.actor, conversation)) fail(403, 'Claim this conversation before retrying.');
@@ -341,9 +365,10 @@ router.get('/conversations/:id/messages/:messageId/media-info', wrap(async (req,
 }));
 router.get('/conversations/:id/messages/:messageId/media-link', wrap(async (req, res) => {
   const { asset } = await messageMedia(req);
-  if (['deleted', 'deleting'].includes(asset.state)) fail(410, 'This media has expired after 30 days.');
-  if (asset.state !== 'ready') fail(409, asset.state === 'failed' ? 'WhatsApp media is no longer available or could not be archived.' : 'Media is being saved. Please try again shortly.');
-  res.set('Cache-Control', 'private, no-store').json({ url: await mediaStorage.link(asset, req.query.download === '1') });
+  if (asset.keep && asset.state === 'ready' && asset.key) {
+    return res.set('Cache-Control', 'private, no-store').json({ source: 'r2', url: await mediaStorage.link(asset, req.query.download === '1') });
+  }
+  res.set('Cache-Control', 'private, no-store').json({ source: 'meta' });
 }));
 router.put('/conversations/:id/messages/:messageId/media-keep', wrap(async (req, res) => {
   await rateLimit(req, 60);
@@ -354,9 +379,9 @@ router.put('/conversations/:id/messages/:messageId/media-keep', wrap(async (req,
 }));
 router.get('/conversations/:id/messages/:messageId/media', wrap(async (req, res) => {
   const { asset } = await messageMedia(req);
-  if (['deleted', 'deleting'].includes(asset.state)) fail(410, 'This media has expired after 30 days.');
-  if (asset.state !== 'ready') fail(409, asset.state === 'failed' ? 'Media could not be saved from WhatsApp. It may have expired there.' : 'Media is being saved. Please try again shortly.');
-  const file = await mediaStorage.get(asset.key);
+  let file;
+  try { file = asset.keep && asset.state === 'ready' && asset.key ? await mediaStorage.get(asset.key) : await provider.download(asset.providerId); }
+  catch { fail(410, 'This media is no longer available from its provider.'); }
   const mime = String(file.mime || asset.mime).split(';')[0];
   res.set({ 'Content-Type': ['image/jpeg', 'image/png', 'image/webp', 'audio/ogg', 'audio/mpeg', 'audio/mp4', 'audio/aac', 'audio/amr', 'video/mp4', 'video/3gpp'].includes(mime) ? mime : 'application/octet-stream', 'Content-Disposition': `attachment; filename="${(asset.name || 'attachment').replace(/[^\w.-]/g, '_')}"`, 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'private, no-store' }).send(file.buffer);
 }));

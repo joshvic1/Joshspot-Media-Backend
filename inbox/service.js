@@ -33,6 +33,16 @@ async function receive(value) {
     const name = value.contacts?.find((contact) => contact.wa_id === item.from)?.profile?.name || '';
     const contact = await upsertContact(item.from, name);
     const conversation = await openConversation(contact);
+    if (item.type === 'reaction') {
+      const timestamp = Number(item.timestamp) * 1000;
+      if (typeof item.reaction?.message_id === 'string' && Number.isFinite(timestamp)) {
+        await Message.updateOne({ conversation: conversation._id, providerId: item.reaction.message_id,
+          $or: [{ 'reactions.customer.timestamp': { $lt: timestamp } }, { 'reactions.customer.timestamp': { $exists: false } }] },
+        { $set: { 'reactions.customer': { emoji: String(item.reaction.emoji || '').slice(0, 32), name: contact.name || contact.phone, timestamp, status: 'received' } } });
+        live.notify();
+      }
+      continue;
+    }
     const type = ['text', 'image', 'document', 'audio', 'video', 'sticker'].includes(item.type) ? item.type : 'unsupported';
     const text = item.text?.body || item[item.type]?.caption || item.interactive?.button_reply?.title || item.interactive?.list_reply?.title || item.button?.text || `[${item.type || 'Unsupported'} message]`;
     const timestamp = Number(item.timestamp) * 1000;
@@ -48,6 +58,14 @@ async function receive(value) {
     if (result?.upsertedCount) publish('message.received', { conversationId: String(conversation._id), providerId: item.id });
   }
   for (const item of value.statuses || []) {
+    if (item.id && ['sent', 'delivered', 'read', 'failed'].includes(item.status)) {
+      const reaction = await Message.findOne({ 'reactions.business.providerId': item.id });
+      if (reaction && policy.statusCanAdvance(reaction.reactions.get('business').status, item.status)) {
+        const current = reaction.reactions.get('business').status;
+        await Message.updateOne({ _id: reaction._id, 'reactions.business.providerId': item.id, 'reactions.business.status': current }, { $set: { 'reactions.business.status': item.status } });
+        live.notify();
+      }
+    }
     if (typeof item.id !== 'string' || !item.id || !['sent', 'delivered', 'read', 'failed'].includes(item.status)) continue;
     const clauses = [{ providerId: item.id }];
     const callback = /^([a-f0-9]{24}):(\d+)$/.exec(item.biz_opaque_callback_data || '');

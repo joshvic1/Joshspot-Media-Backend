@@ -34,6 +34,7 @@ beforeEach(async () => {
   sent = [];
   provider.send = async (to, message) => { sent.push({ to, message }); return `wamid.test-${message._id}-${message.attempts}`; };
   provider.upload = async () => 'test-upload';
+  provider.react = async (to, messageId, emoji) => { sent.push({ to, messageId, emoji }); return 'wamid.reaction'; };
 });
 async function request(path, { role = 'admin', method = 'GET', body, headers = {} } = {}) {
   const response = await fetch(`${base}${path}`, { method, headers: { 'Content-Type': 'application/json', ...(role ? { Authorization: `Bearer ${tokens[role]}` } : {}), ...headers }, ...(body ? { body: JSON.stringify(body) } : {}) });
@@ -48,6 +49,48 @@ async function fixture(assigned = true) {
   return conversation;
 }
 const outgoing = (text = 'Hello Ada') => ({ type: 'text', text, clientId: crypto.randomUUID() });
+
+test('All includes resolved chats and Mine never treats unassigned chats as admin assignments', async () => {
+  const conversation = await fixture();
+  assert.equal((await request('/conversations?view=mine', { role: 'agent' })).data.items.length, 1);
+  await Conversation.updateOne({ _id: conversation._id }, { $set: { status: 'resolved', assignedTo: null } });
+  assert.equal((await request('/conversations?view=inbox')).data.items.length, 1);
+  assert.equal((await request('/conversations?view=mine')).data.items.length, 0);
+});
+
+test('reactions send to WhatsApp, replace/remove and enforce permissions', async () => {
+  const conversation = await fixture(); const message = await Message.findOne({ providerId: 'wamid.inbound' });
+  const path = `/conversations/${conversation._id}/messages/${message._id}/reaction`;
+  assert.equal((await request(path, { role: 'second', method: 'PUT', body: { emoji: '👍' } })).status, 404);
+  assert.equal((await request(path, { method: 'PUT', body: { emoji: 'arbitrary' } })).status, 400);
+  for (const emoji of ['👍', '❤️', '']) {
+    assert.equal((await request(path, { method: 'PUT', body: { emoji } })).status, 200);
+    assert.equal((await Message.findById(message._id)).reactions.get('business').emoji, emoji);
+  }
+  assert.equal(sent.length, 3); assert.equal(sent[0].messageId, 'wamid.inbound');
+  provider.react = async () => { throw new Error('offline'); };
+  assert.equal((await request(path, { method: 'PUT', body: { emoji: '✅' } })).status, 502);
+  assert.equal((await Message.findById(message._id)).reactions.get('business').emoji, '');
+});
+
+test('note reactions stay internal and customer reaction webhooks update original messages', async () => {
+  const conversation = await fixture();
+  const note = await Message.create({ conversation: conversation._id, type: 'note', direction: 'internal', text: 'Team only', status: 'internal' });
+  assert.equal((await request(`/conversations/${conversation._id}/messages/${note._id}/reaction`, { method: 'PUT', body: { emoji: '✅' } })).status, 200);
+  assert.equal(sent.length, 0);
+  const payload = inbound(); const event = payload.messages[0];
+  event.id = 'wamid.reaction-in'; event.type = 'reaction'; event.reaction = { message_id: 'wamid.inbound', emoji: '😂' };
+  await service.receive(payload); await service.receive(payload);
+  assert.equal(await Message.countDocuments(), 2);
+  let message = await Message.findOne({ providerId: 'wamid.inbound' });
+  assert.equal(message.reactions.get('customer').emoji, '😂');
+  event.timestamp = String(Number(event.timestamp) + 1); event.reaction.emoji = '';
+  await service.receive(payload);
+  message = await Message.findById(message._id); assert.equal(message.reactions.get('customer').emoji, '');
+  event.timestamp = String(Number(event.timestamp) - 2); event.reaction.emoji = '👍';
+  await service.receive(payload);
+  assert.equal((await Message.findById(message._id)).reactions.get('customer').emoji, '');
+});
 test('authentication and existing restricted roles are enforced', async () => {
   assert.equal((await request('/session', { role: null })).status, 401);
   assert.equal((await request('/session', { role: 'restricted' })).status, 403);
@@ -350,14 +393,14 @@ test('R2 media links and keep controls enforce conversation access and retention
  const asset = await Media.create({ source: 'test-r2', conversation: conversation._id, key: 'joshspot-inbox/v1/000000000000000000000001', expiresAt: new Date(Date.now() + 86400000), state: 'ready', mime: 'audio/ogg' });
  const message = await Message.create({ conversation: conversation._id, direction: 'inbound', type: 'audio', media: { id: 'audio', asset: asset._id } });
  const basePath = `/conversations/${conversation._id}/messages/${message._id}`;
- const storage = require('./mediaStorage'); const original = storage.link; storage.link = async () => 'https://private-media.example.test/signed';
+ const storage = require('./mediaStorage'); const originalConfigured = storage.configured; storage.configured = () => true; const original = storage.link; storage.link = async () => 'https://private-media.example.test/signed';
  try {
   assert.equal((await request(`${basePath}/media-link`, { role: 'second' })).status, 404);
   assert.equal((await request(`${basePath}/media-link`, { role: 'agent' })).status, 200);
   assert.equal((await request(`${basePath}/media-keep`, { role: 'agent', method: 'PUT', body: { keep: true } })).data.keep, true);
   assert.equal((await request(`${basePath}/media-keep`, { role: 'second', method: 'PUT', body: { keep: false } })).status, 404);
   await Media.updateOne({ _id: asset._id }, { $set: { state: 'deleted' } });
-  assert.equal((await request(`${basePath}/media-link`, { role: 'agent' })).status, 410);
+  assert.equal((await request(`${basePath}/media-link`, { role: 'agent' })).data.source, 'meta');
   assert.equal((await request(`${basePath}/media-keep`, { role: 'agent', method: 'PUT', body: { keep: true } })).status, 409);
- } finally { storage.link = original; }
+ } finally { storage.link = original; storage.configured = originalConfigured; }
 });

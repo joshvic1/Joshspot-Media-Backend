@@ -100,19 +100,10 @@ Deployment: deploy the backend **before** the frontend, retain the existing `BAC
 
 Verification: integration tests include permissions, 20-row cursors, 24-hour windows, large-day caps, empty-period skipping, delta updates, duplicate mentions, notification recovery and single-use stream authentication. Frontend `scripts/check-inbox-updates.cjs` covers scroll pagination, tagging and recipient deep links with isolated browser fixtures; `scripts/check-inbox-layout.cjs` covers desktop, tablet and mobile layouts. Neither script sends real WhatsApp messages.
 
-### Inbox media in Cloudflare R2
+### Inbox media: Meta by default, R2 only on Keep
 
-Inbox media uses the existing R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET and R2_ENDPOINT. Ensure the same variables exist on Railway. No bucket lifecycle rule or bucket-wide delete/list operation is installed.
+Incoming and outgoing media store Meta IDs and metadata. Ordinary playback downloads from Meta through an authenticated backend endpoint into browser memory, without permanent backend, database or R2 file storage. The same-origin proxy supplies the authenticated backend download URL to avoid routing large files through Vercel. Meta credentials never reach the browser. Fresh Meta URLs are obtained per request; unavailable media shows an error.
 
-- Dedicated keys: `joshspot-inbox/v1/<InboxMedia ObjectId>`. Other application files are never cleanup candidates.
-- InboxMedia records store the R2 URI/key, provider ID, MIME/name/size, retention and processing state. InboxMessage stores the asset reference. Neither stores file bytes/base64.
-- A separate, bounded media worker copies incoming files; failures do not interrupt webhook receipt or outgoing text. Retries back off, recover expired leases and retain failed records after ten attempts.
-- Existing media messages from the past 30 days are gradually archived. Opening older media can enqueue it too, but Meta may no longer have the original. Unavailable originals cannot be reconstructed.
-- The retention clock starts when the Inbox asset is created for storage. After 30 days, unkept assets (including abandoned uploads) are deleted in small batches. Database metadata remains so the chat can show that media expired.
-- Keep and deletion claims are atomic. Kept assets are excluded; removing Keep restores the original expiration time and can cause immediate cleanup if already older than 30 days. Once deletion is claimed, Keep returns a conflict rather than falsely promising preservation.
-- Playback/download links expire after one hour and are issued only after conversation authorization. Native audio/video controls load from R2 directly, allowing seeking without proxying bytes through Next.js. Reopen media to refresh an expired link.
-- Uploads currently support JPEG/PNG/PDF/MP4/MP3/OGG up to the existing 5 MB request limit. Incoming downloads are bounded at 20 MB. Browser codec support varies; Download remains available.
-- Run `npm run test:inbox` for isolated database/storage tests. `node scripts/checkInboxR2.cjs` verifies configured R2 with one newly generated probe file and removes only that file; it does not connect to MongoDB.
-- Deploy both backend and frontend changes before using the new controls. Leave local workers disabled when using the production database. Keep the Railway worker running for archiving and retention cleanup. No Cloudflare credentials belong in frontend environment variables.
+Only an explicit Keep media request by the assigned representative or admin sets `keep: true`. The bounded worker only claims these assets and copies them into `joshspot-inbox/v1/<asset ObjectId>` using the existing server-side R2 variables. Completed kept assets play from temporary private R2 links. Failed copies retry with backoff, then expose a retryable failure; Save is not shown as complete until R2 confirms storage. No automatic incoming archive, history backfill, outgoing R2 upload, expiry or deletion runs. Existing bucket files remain untouched.
 
-Update: Automatic Inbox media deletion is disabled. New assets have no expiration. Existing expiresAt values are ignored by the no-op cleanup function; R2 files remain until explicitly removed. The UI displays inline media and no retention/Keep controls.
+The database stores file references and metadata only, never binary/base64. Tests: `npm run test:inbox`. Deploy backend and frontend together to use the new media-link response. Leave development workers disabled against production MongoDB. No Cloudflare credentials belong in frontend environment variables.

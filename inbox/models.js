@@ -34,11 +34,12 @@ const message = new Schema({
   error: String, sentAt: Date, deliveredAt: Date, readAt: Date, attemptedAt: Date, attempts: { type: Number, default: 0 },
   occurredAt: { type: Date, default: Date.now },
 }, { timestamps: true });
-message.add({ mentions: [{ type: Schema.Types.ObjectId, ref: 'Staff' }], mentionsPending: Boolean, routingPhoneId: String, 'media.asset': ref('InboxMedia') });
+message.add({ mentions: [{ type: Schema.Types.ObjectId, ref: 'Staff' }], mentionsPending: Boolean, routingPhoneId: String, 'media.asset': ref('InboxMedia'), reactions: { type: Map, of: new Schema({ emoji: String, name: String, timestamp: Number, providerId: String, status: String }, { _id: false }) }, reactionLease: Date });
 message.index({ 'media.id': 1, 'media.asset': 1 });
 message.index({ conversation: 1, createdAt: -1, _id: -1 });
 message.index({ conversation: 1, updatedAt: 1, _id: 1 });
 message.index({ mentionsPending: 1 });
+message.index({ 'reactions.business.providerId': 1 }, { sparse: true });
 message.index({ conversation: 1, _id: -1 });
 message.index({ conversation: 1, type: 1, _id: -1 });
 message.index({ conversation: 1, direction: 1, occurredAt: -1 });
