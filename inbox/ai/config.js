@@ -25,8 +25,8 @@ function validateConfig(input) {
 const fields = {
  service:['platforms','serviceType','price','currency','description','requirements','paymentEnabled','workflow','allowCustomBudget','minBudget','maxBudget'],
  plan:['duration','amount','currency','platforms','service','description'],
- knowledge:['question','answer','keywords'], tone:['customer','response'],
- response:['message','mode','intent','workflow','service','platform','description','variables'],
+ knowledge:['question','answer','keywords','handoffAfterReply','handoffReason','handoffTeam'], tone:['customer','response'],
+ response:['message','mode','intent','workflow','service','platform','description','variables','handoffAfterReply'],
  workflow:['intent','field','operator','value','response','nextStep','action','stateField','stateValue','options','serviceType'],
  handoff:['intent','reason','agent','team','customerResponse'],
 };
@@ -37,9 +37,10 @@ function validateRecord(input) {
     const value = source[key];
     if (['platforms','variables','options'].includes(key)) { if (!Array.isArray(value) || value.length > 20) fail('Invalid options.'); data[key] = value.map(v=>safeString(v,120)); }
     else if (['price','amount','duration','minBudget','maxBudget'].includes(key)) { if (!Number.isFinite(value) || value<0 || value>100000000) fail('Invalid numeric value.'); data[key] = value; }
-    else if (['paymentEnabled','allowCustomBudget'].includes(key)) { if (typeof value !== 'boolean') fail('Invalid checkbox.'); data[key] = value; }
+    else if (['paymentEnabled','allowCustomBudget','handoffAfterReply'].includes(key)) { if (typeof value !== 'boolean') fail('Invalid checkbox.'); data[key] = value; }
     else data[key] = safeString(value);
   }
+  if (data.handoffTeam && data.handoffTeam!=='CSS') fail('Knowledge handoff uses the customer-service team.');
   if (input.kind === 'response' && !['STRICT','FLEXIBLE','INFORMATION'].includes(data.mode)) fail('Choose a response mode.');
   if (['response','knowledge'].includes(input.kind) && /[₦$€£]\s*\d|\d[\d,]*\s*(?:naira|NGN|dollars)/i.test(data.message || data.answer || '')) fail('Use {{amount}} for prices; edit the amount in Services or Plans.');
   if (input.kind === 'service' && data.allowCustomBudget && (!(data.minBudget>=100) || !(data.maxBudget>=data.minBudget))) fail('Set valid minimum and maximum custom budgets.');

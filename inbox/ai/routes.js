@@ -11,7 +11,7 @@ router.post('/conversations/:id/control',wrap(async(req,res)=>{
   if(req.body.action==='takeover') {await worker.pause(c._id,req.actor,'HUMAN_TAKEOVER',true);await require('../service').activity(c._id,req.actor,'Took over from AI');}
   else if(req.body.action==='return') {
     if(!req.actor.admin && !config.data.allowReturn)fail(403,'Only administrators can return conversations to AI');
-    await Conversation.updateOne({_id:c._id},{$set:{assignedTo:null,'ai.active':true,'ai.pending':false,'ai.draft':null,'ai.needsHuman':false,'ai.handoffReason':'','ai.returnedBy':req.actor.id,'ai.consecutive':0,'ai.lastProcessedId':c.lastInboundId},$inc:{'ai.version':1,revision:1}});
+    await Conversation.updateOne({_id:c._id},{$set:{assignedTo:null,'ai.active':true,'ai.pending':false,'ai.draft':null,'ai.needsHuman':false,'ai.handoffPending':null,'ai.assignmentError':'','ai.handoffReason':'','ai.returnedBy':req.actor.id,'ai.consecutive':0,'ai.lastProcessedId':c.lastInboundId},$inc:{'ai.version':1,revision:1}});
     await require('../service').activity(c._id,req.actor,'Returned future messages to AI');
   } else fail(400,'Choose takeover or return');
   await Log.create({kind:'control',actor:req.actor.id,conversation:c._id,action:req.body.action});live.notify();res.json({ok:true});
@@ -43,6 +43,7 @@ router.post('/conversations/:id/draft',wrap(async(req,res)=>{
 }));
 router.use((req,res,next)=>{if(!req.actor.admin)return res.status(403).json({message:'Only administrators can configure the AI agent'});next();});
 router.get('/config',wrap(async(req,res)=>{const config=await settings.getConfig();res.json({...config,providerReady:Boolean(process.env.OPENAI_API_KEY && (config.data.model || process.env.OPENAI_MODEL)),staff:await Staff.find({role:{$in:['CSS','SS']}}).select('name role').lean()});}));
+router.post('/business-pack',wrap(async(req,res)=>res.json(await require('./installBusinessPack').install(req.actor.id))));
 router.post('/initialize',wrap(async(req,res)=>{await settings.seed(req.actor.id);await Log.create({kind:'configuration',actor:req.actor.id,action:'initialize'});res.json(await settings.getConfig());}));
 router.put('/config',wrap(async(req,res)=>{
   const before=await settings.getConfig();if(req.body.revision!==before.revision)fail(409,'Settings changed. Reload before saving');

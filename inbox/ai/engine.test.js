@@ -36,6 +36,22 @@ test('knowledge must match retrieved approved entries and template variables mus
  assert.equal((await decide('hours',{intent:'knowledge',knowledgeKey:entry.key},{},{knowledge:[entry]})).response,entry.data.answer);
  assert.throws(()=>engine.render('Pay {{invented_account}}',{}));
 });
+test('onboarding from requirements, saved workflow responses and knowledge always hands off to CSS',async()=>{
+ const state={selectedPlatform:'tiktok',serviceType:'account_setup'};
+ const requirements=await decide('What details do you need?',{intent:'requirements'},state);
+ assert.equal(requirements.action,'handoff');assert.equal(requirements.handoff,'SERVICE_ONBOARDING');assert.equal(requirements.handoffTeam,'CSS');assert.match(requirements.response,/email/);
+ const entry=defaults.records.find(r=>r.key==='tiktok_management_access');
+ const knowledge=await decide('How do I give access?',{intent:'knowledge',knowledgeKey:entry.key},state,{knowledge:[entry]});
+ assert.equal(knowledge.action,'handoff');assert.equal(knowledge.handoffTeam,'CSS');
+ const workflow={kind:'workflow',key:'onboard',data:{intent:'advertising',field:'selectedPlatform',operator:'present',response:'requirements',action:'reply'}};
+ assert.equal((await decide('Continue',{},state,{records:[workflow,...defaults.records]})).action,'handoff');
+});
+test('payment/human rules supply the approved fallback without bypassing mandatory handoff',async()=>{
+ for(const intent of ['human','payment_sent','receipt_sent','payment_problem']){
+  const rule=defaults.records.find(r=>r.kind==='handoff'&&r.data.intent===intent);
+  const value=await decide('help',{intent});assert.equal(value.action,'handoff');assert.equal(value.handoffRule,rule.key);assert.equal(value.response,rule.data.customerResponse);
+ }
+});
 test('OpenAI adapter uses structured Responses API, store false and redacted input',async()=>{
  process.env.OPENAI_API_KEY='fake-test-key';process.env.OPENAI_MODEL='test-model';let captured;
  axios.post=async(url,body)=>{captured={url,body};return{data:{status:'completed',output:[{content:[{type:'output_text',text:JSON.stringify(result({intent:'greeting'}))}]}],usage:{total_tokens:10}}};};

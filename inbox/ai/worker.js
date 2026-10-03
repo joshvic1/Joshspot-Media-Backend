@@ -8,7 +8,7 @@ const {redact}=require('./privacy');
 const live=require('../live');
 const policy=require('../policy');
 async function pause(conversation,actor,reason='HUMAN_TAKEOVER',assign=false) {
-  await Conversation.updateOne({_id:conversation},{$set:{'ai.active':false,'ai.draft':null,'ai.handoffReason':reason,...(assign?{assignedTo:actor.admin?null:actor.id}:{})},$inc:{'ai.version':1}});
+  await Conversation.updateOne({_id:conversation},{$set:{'ai.active':false,'ai.draft':null,'ai.handoffPending':null,'ai.assignmentError':'','ai.handoffReason':reason,...(assign?{assignedTo:actor.admin?null:actor.id}:{})},$inc:{'ai.version':1}});
   await Message.updateMany({conversation,author:'ai',status:'queued'},{$set:{status:'failed',error:'AI reply cancelled because a human took over.'}});
   live.notify();
 }
@@ -18,28 +18,51 @@ async function eligible(message) {
   return Boolean(conversation && config.revision===message.automation.configRevision && config.data.enabled && config.data.autoReply && config.data.mode==='LIVE');
 }
 async function handoff(conversation,result,config,guard={}) {
+  const row=await settings.getConfig();
+  // Persist the handoff before assignment/notification/outbox side effects. Recovery
+  // finishes interrupted handoffs without another model call or duplicate message.
+  const current=await Conversation.findOneAndUpdate({_id:conversation._id,...guard},{$set:{'ai.active':false,'ai.pending':false,'ai.draft':null,'ai.needsHuman':true,'ai.priority':Boolean(result.priority),'ai.handoffReason':result.handoff,'ai.state':result.state || conversation.ai?.state || {},'ai.handoffPending':{result,configRevision:row.revision,inputId:conversation.lastInboundId,mode:config.mode},'ai.handoffRetryAt':new Date(),status:'open'},$inc:{'ai.version':1,revision:1}},{returnDocument:'after'});
+  if(current)await finishHandoff(current,row);
+}
+async function finishHandoff(conversation,configRow) {
+  const pending=conversation.ai?.handoffPending;if(!pending)return;
+  const result=pending.result,config=configRow.data;
+  const guard={_id:conversation._id,'ai.version':conversation.ai.version,'ai.active':false,'ai.needsHuman':true,'ai.handoffPending.inputId':pending.inputId};
   const rule=result.handoffRule && await require('./models').Record.findOne({kind:'handoff',key:result.handoffRule,enabled:true,archived:false}).lean();
+  const team=result.handoffTeam || rule?.data.team || config.handoffTeam;
   let assigned=conversation.assignedTo;
+  if(assigned && !await Staff.exists({_id:assigned,role:{$in:['CSS','SS']}}))assigned=null;
   const preferred=rule?.data.agent || (result.priority?config.paymentAgent:'') || config.fallbackAgent;
-  if(!assigned && preferred) assigned=(await Staff.findOne({_id:preferred,role:{$in:['CSS','SS']}}))?._id;
+  if(!assigned && preferred)assigned=(await Staff.findOne({_id:preferred,role:team}))?._id;
   if(!assigned) {
-    const staff=await Staff.find({role:rule?.data.team || config.handoffTeam}).select('_id').sort({_id:1}).lean();
+    const staff=await Staff.find({role:team}).select('_id').sort({_id:1}).lean();
     if(config.assignment==='round_robin' && staff.length) {
       const sequence=await Usage.findOneAndUpdate({key:'assignment'},{$inc:{calls:1}},{upsert:true,returnDocument:'after'});assigned=staff[(sequence.calls-1)%staff.length]._id;
-    } else if(config.assignment!=='fallback') {
+    } else {
+      // Missing/deleted fallback staff must not strand a chat when CSS exists.
       const counts=await Promise.all(staff.map(async person=>({id:person._id,count:await Conversation.countDocuments({assignedTo:person._id,status:{$ne:'resolved'}})})));
       counts.sort((a,b)=>a.count-b.count);assigned=counts[0]?.id;
     }
   }
-  const changed=await Conversation.updateOne({_id:conversation._id,...guard},{$set:{'ai.active':false,'ai.pending':false,'ai.draft':null,'ai.needsHuman':true,'ai.priority':Boolean(result.priority),'ai.handoffReason':result.handoff,'ai.state':result.state || conversation.ai?.state || {},assignedTo:assigned || null,status:'open'},$inc:{'ai.version':1,revision:1}});
-  if(!changed.modifiedCount)return;
-  const note=await Message.create({conversation:conversation._id,type:'activity',direction:'internal',status:'internal',author:'ai',authorName:config.displayName,text:`AI handed this conversation to ${assigned?'a representative':'the human support queue'}. Reason: ${result.handoff}`});
-  if(assigned) await Notification.updateOne({recipient:assigned,message:note._id},{$setOnInsert:{conversation:conversation._id,authorName:config.displayName,kind:'handoff'}},{upsert:true});
-  if(result.response && config.mode==='LIVE' && config.autoReply && policy.windowOpen(conversation.lastInboundAt)) {
-    const row=await settings.getConfig();const current=await Conversation.findById(conversation._id);
-    await queue(current,{response:result.response,handoff:true},row,conversation.lastInboundId,`ai-handoff:${conversation._id}:${conversation.lastInboundId}`);
+  if(!assigned){await Conversation.updateOne(guard,{$set:{'ai.assignmentError':`No ${team} staff account is available. Add a representative; assignment will retry automatically.`,'ai.handoffRetryAt':new Date(Date.now()+30000)}});live.notify();return;}
+  const claimed=await Conversation.findOneAndUpdate({...guard,assignedTo:conversation.assignedTo || null},{$set:{assignedTo:assigned,'ai.assignmentError':'','ai.handoffRetryAt':new Date(Date.now()+30000)}},{returnDocument:'after'});
+  if(!claimed)return;
+  const key=`ai-handoff:${conversation._id}:${pending.inputId}:${conversation.ai.version}`;
+  const note=await Message.findOneAndUpdate({clientKey:`${key}:activity`},{$setOnInsert:{conversation:conversation._id,type:'activity',direction:'internal',status:'internal',author:'ai',authorName:config.displayName,text:`AI assigned this conversation to customer support. Reason: ${result.handoff}`}},{upsert:true,returnDocument:'after'});
+  await Notification.updateOne({recipient:assigned,message:note._id},{$setOnInsert:{conversation:conversation._id,authorName:config.displayName,kind:'handoff'}},{upsert:true});
+  const fresh=String(claimed.lastInboundId)===String(pending.inputId) && pending.configRevision===configRow.revision;
+  const response=result.response || config.fallbackResponse;
+  if(fresh && response && pending.mode==='LIVE' && config.mode==='LIVE' && config.enabled && config.autoReply && policy.windowOpen(claimed.lastInboundAt)) {
+    await queue(claimed,{response,handoff:true},configRow,pending.inputId,key);
+  } else if(fresh && response && pending.mode==='DRAFT') {
+    await Conversation.updateOne(guard,{$set:{'ai.draft':{...result,response,action:'handoff',mode:'DRAFT',inputId:String(pending.inputId),version:claimed.ai.version,configRevision:configRow.revision,createdAt:new Date()}}});
   }
+  await Conversation.updateOne(guard,{$unset:{'ai.handoffPending':1,'ai.handoffRetryAt':1}});
   live.notify();
+}
+async function recoverHandoffs(config){
+  const rows=await Conversation.find({'ai.phoneId':process.env.WHATSAPP_PHONE_NUMBER_ID,'ai.handoffPending':{$ne:null},'ai.handoffRetryAt':{$lte:new Date()},'ai.active':false,'ai.needsHuman':true}).limit(20);
+  for(const row of rows)await finishHandoff(row,config);
 }
 async function budget(config,conversationId) {
   const day=new Date().toISOString().slice(0,10);
@@ -105,5 +128,5 @@ async function recover(config){
   for(const item of items){const draft=item.ai.draft;if(draft.response && String(item.lastInboundId)===draft.inputId && item.ai.version===draft.version)await queue(item,draft,config,draft.inputId,`ai:${item._id}:${draft.inputId}`);await Conversation.updateOne({_id:item._id,'ai.draft.inputId':draft.inputId},{$set:{'ai.draft':null}});}
 }
 let running=false;
-async function tick(){if(running || !require('../workerPolicy').workerEnabled())return;running=true;try{const config=await settings.getConfig();if(!config.data.enabled || config.data.mode==='OFF')return;await recover(config);for(let i=0;i<3;i++)if(!await runOne(config))break;}catch{console.error('Inbox AI worker deferred; incoming messages are retained');}finally{running=false;}}
-module.exports={tick,runOne,pause,eligible,handoff,queue,budget};
+async function tick(){if(running || !require('../workerPolicy').workerEnabled())return;running=true;try{const config=await settings.getConfig();await recoverHandoffs(config);if(!config.data.enabled || config.data.mode==='OFF')return;await recover(config);for(let i=0;i<3;i++)if(!await runOne(config))break;}catch{console.error('Inbox AI worker deferred; incoming messages are retained');}finally{running=false;}}
+module.exports={tick,runOne,pause,eligible,handoff,finishHandoff,recoverHandoffs,queue,budget};

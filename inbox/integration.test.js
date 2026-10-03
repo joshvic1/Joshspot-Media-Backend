@@ -130,6 +130,63 @@ test('AI worker lease prevents two workers generating for one conversation',asyn
   await Promise.all([aiWorker.runOne(config),aiWorker.runOne(config)]);assert.equal(calls,1);
 });
 
+test('business pack installs all approved entries once and preserves rollout and prices',async()=>{
+ await aiSettings.seed('admin');await aiModels.Config.updateOne({key:'main'},{$set:{'data.mode':'OFF','data.model':'existing-model'}});
+ await aiModels.Record.updateOne({key:'tiktok_setup'},{$set:{'data.price':22000}});
+ const install=require('./ai/installBusinessPack').install;
+ assert.equal((await install('admin')).knowledge,34);
+ assert.equal(await aiModels.Record.countDocuments({kind:'knowledge'}),34);
+ assert.equal((await aiSettings.getConfig()).data.mode,'OFF');
+ assert.equal((await aiModels.Record.findOne({key:'tiktok_setup'})).data.price,22000);
+ await aiModels.Record.updateOne({key:'advertising_services'},{$set:{'data.answer':'Later admin edit'}});
+ assert.equal((await install('admin')).installed,false);
+ assert.equal((await aiModels.Record.findOne({key:'advertising_services'})).data.answer,'Later admin edit');
+ assert.equal((await request('/ai/business-pack',{role:'agent',method:'POST',body:{}})).status,403);
+});
+test('LIVE onboarding assigns CSS immediately, notifies once and sends only one onboarding response',async()=>{
+ const c=await aiFixture('LIVE');const original=aiProvider.interpret;
+ aiProvider.interpret=async args=>({...await original(args),intent:'requirements'});
+ await aiWorker.runOne(await aiSettings.getConfig());
+ let current=await Conversation.findById(c._id);
+ assert.equal(String(current.assignedTo),String(second._id));assert.equal(current.ai.active,false);assert.equal(current.ai.handoffReason,'SERVICE_ONBOARDING');
+ assert.equal(await Notification.countDocuments({recipient:second._id}),1);
+ await service.processOutbox();assert.equal(sent.length,1);assert.match(sent[0].message.text,/email/);
+ await service.receive(inbound('wamid.followup'));await Conversation.updateOne({_id:c._id},{$set:{'ai.pendingAt':new Date(0)}});
+ await aiWorker.runOne(await aiSettings.getConfig());await service.processOutbox();assert.equal(sent.length,1);
+});
+test('DRAFT onboarding is assigned to CSS without automatic sending and CSS can approve it',async()=>{
+ const c=await aiFixture();const original=aiProvider.interpret;aiProvider.interpret=async args=>({...await original(args),intent:'requirements'});
+ await aiWorker.runOne(await aiSettings.getConfig());const current=await Conversation.findById(c._id);
+ assert.equal(String(current.assignedTo),String(second._id));assert.equal(current.ai.draft.mode,'DRAFT');assert.equal(await Message.countDocuments({direction:'outbound'}),0);
+ assert.equal((await request(`/ai/conversations/${c._id}/draft`,{role:'second',method:'POST',body:{action:'send'}})).status,200);
+ await service.processOutbox();assert.equal(sent.length,1);
+});
+test('missing fallback chooses CSS and absent CSS remains visible and retries without duplicate notices',async()=>{
+ const c=await aiFixture();await aiModels.Config.updateOne({key:'main'},{$set:{'data.assignment':'fallback','data.fallbackAgent':String(agent._id)}});
+ await Staff.deleteOne({_id:second._id});const original=aiProvider.interpret;aiProvider.interpret=async args=>({...await original(args),intent:'requirements'});
+ await aiWorker.runOne(await aiSettings.getConfig());let current=await Conversation.findById(c._id);
+ assert.equal(current.assignedTo,null);assert.match(current.ai.assignmentError,/No CSS/);assert.ok(current.ai.handoffPending);assert.equal(current.ai.active,false);
+ await Staff.create({_id:second._id,name:'Restored CSS',email:'restored@example.test',password:'test',role:'CSS'});
+ await Conversation.updateOne({_id:c._id},{$set:{'ai.handoffRetryAt':new Date(0)}});
+ await aiWorker.recoverHandoffs(await aiSettings.getConfig());current=await Conversation.findById(c._id);
+ assert.equal(String(current.assignedTo),String(second._id));assert.equal(current.ai.assignmentError,'');assert.equal(current.ai.handoffPending,undefined);
+ await aiWorker.recoverHandoffs(await aiSettings.getConfig());assert.equal(await Notification.countDocuments({recipient:second._id}),1);
+});
+test('interrupted handoff notification is recovered once and manual assignment cancels recovery',async()=>{
+ const c=await aiFixture('LIVE');const original=aiProvider.interpret;aiProvider.interpret=async args=>({...await original(args),intent:'requirements'});
+ const notify=Notification.updateOne;
+ try{Notification.updateOne=async()=>{throw new Error('Temporary write failure');};await assert.rejects(aiWorker.runOne(await aiSettings.getConfig()));}finally{Notification.updateOne=notify;}
+ let current=await Conversation.findById(c._id);assert.equal(String(current.assignedTo),String(second._id));assert.ok(current.ai.handoffPending);
+ await Conversation.updateOne({_id:c._id},{$set:{'ai.handoffRetryAt':new Date(0)}});
+ await aiWorker.recoverHandoffs(await aiSettings.getConfig());await aiWorker.recoverHandoffs(await aiSettings.getConfig());
+ assert.equal(await Notification.countDocuments({recipient:second._id}),1);assert.equal(await Message.countDocuments({type:'activity',author:'ai'}),1);
+ await service.processOutbox();assert.equal(sent.length,1);
+ current=await Conversation.findById(c._id);
+ await Conversation.updateOne({_id:c._id},{$set:{'ai.handoffPending':{result:{handoff:'SERVICE_ONBOARDING'},inputId:current.lastInboundId},'ai.handoffRetryAt':new Date(0)}});
+ assert.equal((await request(`/conversations/${c._id}`,{method:'PUT',body:{revision:current.revision,assignedTo:String(agent._id)}})).status,200);
+ await aiWorker.recoverHandoffs(await aiSettings.getConfig());assert.equal(String((await Conversation.findById(c._id)).assignedTo),String(agent._id));
+});
+
 test('All includes resolved chats and Mine never treats unassigned chats as admin assignments', async () => {
   const conversation = await fixture();
   assert.equal((await request('/conversations?view=mine', { role: 'agent' })).data.items.length, 1);

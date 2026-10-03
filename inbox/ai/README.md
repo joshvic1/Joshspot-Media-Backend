@@ -54,3 +54,11 @@ Seeded services: TikTok setup NGN20,000; Meta setup NGN30,000; management plans 
 The first version supports setup and management service types, safe condition-based workflows and staff roles already present in this CRM. It does not infer staff online availability, process media with AI, or introduce a second payment system.
 
 API contract reference: https://developers.openai.com/api/docs/guides/structured-outputs
+
+## Approved support content and mandatory onboarding handoff
+
+`businessPack.js` contains 34 approved knowledge entries, five intent handoff rules, the approved behavioural instructions and invoice message. `node inbox/ai/installBusinessPack.js` previews the target database; add `--apply` to install once. The install preserves model, rollout mode, invoice enablement, service/plan prices and unrelated entries. Later edits are preserved on reruns. The admin-only `POST /api/inbox/ai/business-pack` performs the same installation.
+
+Onboarding requirements are a reply-and-handoff action, including requirements emitted by a configured workflow. Knowledge entries can explicitly request CSS handoff after their answer; the Onboarding category also requires it. Payment, support and exception entries that promise staff review have that action configured, not merely text suggesting someone will help.
+
+Assignment is recorded before the response enters the WhatsApp outbox. DRAFT assigns/notifies CSS and stores the response for approval; LIVE queues the one handoff response. Human ownership then blocks further automatic replies. Missing/deleted fallback agents fall back to the configured team. If no CSS account exists, AI pauses, an assignment error appears in the Inbox, and a durable retry runs every 30 seconds. Staff must exist for assignment to succeed. Interrupted notification/outbox work is recovered using idempotent keys; explicit manual takeover/assignment cancels recovery.

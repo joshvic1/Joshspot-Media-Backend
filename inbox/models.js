@@ -23,7 +23,7 @@ conversation.add({ collaborators: [{ type: Schema.Types.ObjectId, ref: 'Staff' }
 conversation.add({ ai: {
   phoneId:String, active: {type:Boolean,default:true}, pending:Boolean, pendingAt:Date, leaseUntil:Date, leaseToken:String,
   version:{type:Number,default:0}, lastProcessedId:Schema.Types.ObjectId, state:Schema.Types.Mixed,
-  draft:Schema.Types.Mixed, handoffReason:String, needsHuman:Boolean, priority:Boolean,
+  handoffPending:Schema.Types.Mixed, handoffRetryAt:Date, assignmentError:String, draft:Schema.Types.Mixed, handoffReason:String, needsHuman:Boolean, priority:Boolean,
   consecutive:{type:Number,default:0}, returnedBy:String, sendLease:Date,
 } });
 conversation.index({'ai.pending':1,'ai.pendingAt':1,'ai.leaseUntil':1});

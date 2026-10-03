@@ -204,7 +204,7 @@ router.put('/conversations/:id', wrap(async (req, res) => {
     if (!req.actor.admin && (target !== req.actor.id || current.assignedTo)) fail(403, 'You can only claim an unassigned conversation.');
     const agent = target ? await Staff.findOne({ _id: id(target), role: { $in: ['SS', 'CSS'] } }).select('name') : null;
     if (target && !agent) fail(400, 'Choose an available representative.');
-    changes.assignedTo = target; changes['ai.active'] = false; changes['ai.draft'] = null; changes['ai.handoffReason'] = 'ASSIGNMENT_CHANGED'; descriptions.push(target ? `Assigned to ${agent.name}` : 'Unassigned conversation');
+    changes.assignedTo = target; changes['ai.active'] = false; changes['ai.draft'] = null; changes['ai.handoffPending'] = null; changes['ai.assignmentError'] = ''; changes['ai.needsHuman'] = false; changes['ai.handoffReason'] = 'ASSIGNMENT_CHANGED'; descriptions.push(target ? `Assigned to ${agent.name}` : 'Unassigned conversation');
   }
   if ('status' in req.body || 'labels' in req.body || 'followUpAt' in req.body) {
     if (!policy.canReply(req.actor, current)) fail(403, 'Claim this conversation before changing it.');
