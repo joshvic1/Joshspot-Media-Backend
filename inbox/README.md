@@ -79,6 +79,14 @@ From `frontend`: `npx eslint components/inbox pages/crm-inbox.js "pages/api/inbo
 Manual acceptance: open a staff and admin session separately; receive a test message; claim, reply, note, label and resolve it; confirm the other agent cannot access the claimed conversation; test at desktop and 390px mobile widths (list → conversation → back, then customer drawer). Browser automation was unavailable in this workspace during implementation, so this visual check and live Meta delivery remain deployment acceptance steps.
 # October 2026: bounded loading and staff mentions
 
+## Delivery worker incident safeguards
+
+Local Node servers do not start the Inbox worker by default, even if their `.env` points to the production database. Railway (`RAILWAY_ENVIRONMENT_ID`) and production Node environments do; `INBOX_WORKER_ENABLED=false` always disables it. Explicit `INBOX_WORKER_ENABLED=true` is for a deliberately isolated development worker. Do not run an old checkout's worker against the production database.
+
+Webhooks persist routing phone IDs before acknowledgment. Workers only claim matching jobs (or legacy unrouted jobs). A legacy phone mismatch is marked `blocked`, retains its payload and appears in administrator failed-job counts; it can no longer silently finish as `done`. Completed payloads are retained for seven days under the existing TTL for diagnostics/recovery. Outgoing messages record their intended phone ID, so a mismatched worker cannot claim them. This does not restore payloads already discarded by older code.
+
+Administrator-only `/diagnostics` exposes queue state and worker/result metadata without customer text or credentials. `/connection-check` validates the running server's token with a read-only Meta request. `scripts/inspectInboxDelivery.cjs` is a read-only local diagnostic using `.env`, with no tokens or customer message bodies in output. Do not confuse its local-token result with Railway's token.
+
 - Conversation pages now contain 20 records, using the existing `(lastMessageAt, _id)` cursor. The browser appends the next page on scroll and deduplicates rows.
 - Default message history covers the last 24 hours by server arrival time (`createdAt`). Each response is limited to 50 records. Opaque `page` cursors continue the same period before advancing to earlier periods; empty historical periods are skipped. Older history remains in the database. `target` loads bounded context ending at a particular message for notification deep links.
 - `changes` cursors retrieve only changed messages, including receipts. The UI merges updates into loaded history. Large reconnect backlogs are drained in bounded batches.

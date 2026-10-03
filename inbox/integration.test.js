@@ -177,7 +177,7 @@ test('invalid signature, verification challenge and wrong phone routing are hand
   const response = await fetch(`${base}/webhook?hub.mode=subscribe&hub.verify_token=${process.env.WHATSAPP_VERIFY_TOKEN}&hub.challenge=12345`);
   assert.equal(response.status, 200); assert.equal(await response.text(), '12345');
   assert.equal((await fetch(`${base}/webhook?hub.mode=subscribe&hub.verify_token=wrong&hub.challenge=12345`)).status, 403);
-  await service.receive({ ...inbound(), metadata: { phone_number_id: 'other-phone' } });
+  await assert.rejects(service.receive({ ...inbound(), metadata: { phone_number_id: 'other-phone' } }), { code: 'PHONE_NUMBER_MISMATCH' });
   assert.equal(await Message.countDocuments(), 0);
 });
 test('CRM lookup exposes service context without credentials or staff-visible payments', async () => {
@@ -303,4 +303,44 @@ test('durable pending mentions repair once after interruption', async () => {
   await service.processMentions(); await service.processMentions();
   assert.equal(await Notification.countDocuments({ message: note._id }), 1);
   assert.equal((await Message.findById(note._id)).mentionsPending, false);
+});
+
+test('a mismatched worker cannot claim a routed webhook or erase its payload', async () => {
+  const original = process.env.WHATSAPP_PHONE_NUMBER_ID;
+  const payload = { object: 'whatsapp_business_account', entry: [{ changes: [{ field: 'messages', value: inbound('wamid.routing-test') }] }] };
+  await service.enqueueWebhook(Buffer.from(JSON.stringify(payload)), payload);
+  try {
+    process.env.WHATSAPP_PHONE_NUMBER_ID = 'wrong-worker-phone';
+    await service.processWebhooks();
+    const waiting = await WebhookJob.findOne();
+    assert.equal(waiting.state, 'pending'); assert.equal(waiting.attempts, 0); assert.ok(waiting.payload);
+    assert.equal(await Message.countDocuments(), 0);
+  } finally { process.env.WHATSAPP_PHONE_NUMBER_ID = original; }
+  await service.processWebhooks();
+  const completed = await WebhookJob.findOne();
+  assert.equal(completed.state, 'done'); assert.ok(completed.payload); assert.equal(completed.result.inbound, 1);
+  assert.equal(await Message.countDocuments({ providerId: 'wamid.routing-test' }), 1);
+});
+
+test('legacy wrong-phone payload is blocked and retained rather than silently completed', async () => {
+  await WebhookJob.create({ key: 'legacy-other-phone', state: 'pending', payload: { entry: [{ changes: [{ field: 'messages', value: { ...inbound(), metadata: { phone_number_id: 'another-number' } } }] }] } });
+  await service.processWebhooks(); const stored = await WebhookJob.findOne();
+  assert.equal(stored.state, 'blocked'); assert.equal(stored.errorCode, 'PHONE_NUMBER_MISMATCH'); assert.ok(stored.payload); assert.equal(stored.expiresAt, undefined);
+});
+
+test('a mismatched outbound worker leaves the message queued for the correct worker', async () => {
+  const conversation = await fixture();
+  const response = await request(`/conversations/${conversation._id}/messages`, { method: 'POST', body: outgoing() });
+  const original = process.env.WHATSAPP_PHONE_NUMBER_ID;
+  try {
+    process.env.WHATSAPP_PHONE_NUMBER_ID = 'wrong-worker-phone'; await service.processOutbox();
+    assert.equal(sent.length, 0); assert.equal((await Message.findById(response.data._id)).status, 'queued');
+  } finally { process.env.WHATSAPP_PHONE_NUMBER_ID = original; }
+  await service.processOutbox(); assert.equal(sent.length, 1);
+});
+
+test('connection diagnostics are restricted to administrators', async () => {
+  assert.equal((await request('/diagnostics', { role: 'agent' })).status, 403);
+  assert.equal((await request('/connection-check', { role: 'agent', method: 'POST', body: {} })).status, 403);
+  assert.equal((await request('/diagnostics')).status, 200);
 });

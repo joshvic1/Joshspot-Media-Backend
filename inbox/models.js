@@ -34,7 +34,7 @@ const message = new Schema({
   error: String, sentAt: Date, deliveredAt: Date, readAt: Date, attemptedAt: Date, attempts: { type: Number, default: 0 },
   occurredAt: { type: Date, default: Date.now },
 }, { timestamps: true });
-message.add({ mentions: [{ type: Schema.Types.ObjectId, ref: 'Staff' }], mentionsPending: Boolean });
+message.add({ mentions: [{ type: Schema.Types.ObjectId, ref: 'Staff' }], mentionsPending: Boolean, routingPhoneId: String });
 message.index({ conversation: 1, createdAt: -1, _id: -1 });
 message.index({ conversation: 1, updatedAt: 1, _id: 1 });
 message.index({ mentionsPending: 1 });
@@ -44,6 +44,8 @@ message.index({ conversation: 1, direction: 1, occurredAt: -1 });
 message.index({ status: 1, createdAt: 1 });
 message.index({ text: 'text' });
 const job = new Schema({ key: { type: String, unique: true }, payload: Schema.Types.Mixed, state: { type: String, default: 'pending' }, leaseUntil: Date, attempts: { type: Number, default: 0 }, error: String, expiresAt: Date }, { timestamps: true });
+job.add({ routingPhoneIds: { type: [String], default: undefined }, worker: String, result: Schema.Types.Mixed, errorCode: String });
+job.index({ routingPhoneIds: 1, state: 1, leaseUntil: 1 });
 job.index({ state: 1, leaseUntil: 1 });
 job.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 const template = new Schema({ externalId: { type: String, unique: true }, name: String, language: String, category: String, status: String, components: [Schema.Types.Mixed], syncedAt: Date });

@@ -96,13 +96,25 @@ router.post('/notifications/:notificationId/read', wrap(async (req, res) => {
 router.get('/session', wrap(async (req, res) => {
   const config = provider.configuration();
   const staff = await Staff.find({ role: { $in: ['SS', 'CSS'] } }).select('name role').sort({ name: 1 }).lean();
-  const failedJobs = req.actor.admin ? await WebhookJob.countDocuments({ state: 'dead' }) : undefined;
+  const failedJobs = req.actor.admin ? await WebhookJob.countDocuments({ state: { $in: ['dead', 'blocked'] } }) : undefined;
   res.json({ actor: req.actor, staff, provider: { configured: config.configured, ...(req.actor.admin ? { missing: config.missing, failedJobs } : {}) } });
+}));
+router.get('/diagnostics', wrap(async (req, res) => {
+  if (!req.actor.admin) fail(403, 'Administrator access required.');
+  const since = new Date(Date.now() - 86400000);
+  const queue = await WebhookJob.aggregate([{ $match: { createdAt: { $gte: since } } }, { $group: { _id: '$state', count: { $sum: 1 }, latest: { $max: '$createdAt' } } }]);
+  const recent = await WebhookJob.find().select('state createdAt attempts worker result errorCode').sort({ createdAt: -1 }).limit(10).lean();
+  res.json({ workerEnabled: require('./workerPolicy').workerEnabled(), phoneIdSuffix: process.env.WHATSAPP_PHONE_NUMBER_ID?.slice(-4), queue, recent });
+}));
+router.post('/connection-check', wrap(async (req, res) => {
+  if (!req.actor.admin) fail(403, 'Administrator access required.');
+  await rateLimit(req, 10);
+  res.json(await provider.checkConnection());
 }));
 router.post('/webhooks/retry', wrap(async (req, res) => {
   if (!req.actor.admin) fail(403, 'Administrator access required.');
   await rateLimit(req);
-  const result = await WebhookJob.updateMany({ state: 'dead' }, { $set: { state: 'pending', attempts: 0, leaseUntil: null } });
+  const result = await WebhookJob.updateMany({ state: { $in: ['dead', 'blocked'] }, $or: [{ routingPhoneIds: process.env.WHATSAPP_PHONE_NUMBER_ID }, { routingPhoneIds: { $exists: false } }] }, { $set: { state: 'pending', attempts: 0, leaseUntil: null }, $unset: { expiresAt: 1 } });
   res.json({ retried: result.modifiedCount });
 }));
 router.get('/conversations', wrap(async (req, res) => {
@@ -295,7 +307,7 @@ router.post('/conversations/:id/messages', wrap(async (req, res) => {
     if (await Staff.countDocuments({ _id: { $in: mentions }, role: { $in: ['SS', 'CSS'] } }) !== mentions.length) fail(400, 'Choose an available staff member.');
   }
   let message;
-  try { message = await Message.create({ conversation: conversation._id, clientKey, direction: type === 'note' ? 'internal' : 'outbound', type, text: body, author: req.actor.id, authorName: req.actor.name, status: type === 'note' ? 'internal' : 'queued', providerPayload, media, mentions, mentionsPending: mentions.length > 0 }); }
+  try { message = await Message.create({ conversation: conversation._id, clientKey, direction: type === 'note' ? 'internal' : 'outbound', type, text: body, author: req.actor.id, authorName: req.actor.name, status: type === 'note' ? 'internal' : 'queued', providerPayload, media, mentions, mentionsPending: mentions.length > 0, ...(type !== 'note' ? { routingPhoneId: process.env.WHATSAPP_PHONE_NUMBER_ID } : {}) }); }
   catch (error) { if (error.code !== 11000) throw error; message = await Message.findOne({ clientKey }); }
   await Conversation.updateOne({ _id: conversation._id, $or: [{ lastMessageId: { $lt: message._id } }, { lastMessageId: null }] }, { $set: { lastMessageId: message._id, lastMessageAt: message.createdAt, preview: type === 'note' ? 'Internal note' : body.slice(0, 160) || `[${type}]` } });
   await service.deliverMentions(message);

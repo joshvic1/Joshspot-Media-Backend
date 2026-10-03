@@ -2,6 +2,15 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const p = require('./policy');
+test('local development never implicitly consumes production Inbox jobs', () => {
+  const { workerEnabled } = require('./workerPolicy');
+  assert.equal(workerEnabled({}), false);
+  assert.equal(workerEnabled({ NODE_ENV: 'development' }), false);
+  assert.equal(workerEnabled({ RAILWAY_ENVIRONMENT_ID: 'production-host' }), true);
+  assert.equal(workerEnabled({ NODE_ENV: 'production' }), true);
+  assert.equal(workerEnabled({ NODE_ENV: 'production', INBOX_WORKER_ENABLED: 'false' }), false);
+  assert.equal(workerEnabled({ INBOX_WORKER_ENABLED: 'true' }), true);
+});
 
 test('normalizes Nigerian local, international and formatted phone numbers', () => {
   for (const number of ['0801 234 5678', '+234 (801) 234-5678', '002348012345678', '2348012345678']) assert.equal(p.phone(number), '2348012345678');

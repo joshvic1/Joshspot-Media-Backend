@@ -25,7 +25,9 @@ async function activity(conversation, actor, text) {
   return Message.create({ conversation, direction: 'internal', type: 'activity', status: 'internal', author: actor.id, authorName: actor.name, text });
 }
 async function receive(value) {
-  if (String(value.metadata?.phone_number_id) !== process.env.WHATSAPP_PHONE_NUMBER_ID) return;
+  if (String(value.metadata?.phone_number_id) !== process.env.WHATSAPP_PHONE_NUMBER_ID) {
+    throw Object.assign(new Error('Webhook phone number does not match this worker. Payload retained for review.'), { code: 'PHONE_NUMBER_MISMATCH' });
+  }
   for (const item of value.messages || []) {
     if (!item.id || !item.from) continue;
     const name = value.contacts?.find((contact) => contact.wa_id === item.from)?.profile?.name || '';
@@ -61,7 +63,9 @@ async function receive(value) {
 }
 async function enqueueWebhook(raw, payload) {
   const key = crypto.createHash('sha256').update(raw).digest('hex');
-  try { await WebhookJob.updateOne({ key }, { $setOnInsert: { key, payload, state: 'pending' } }, { upsert: true }); }
+  const routingPhoneIds = [...new Set((payload.entry || []).flatMap(entry => (entry.changes || []).filter(change => change.field === 'messages').map(change => String(change.value?.metadata?.phone_number_id || '')).filter(Boolean)))];
+  const wrongPhone = routingPhoneIds.length && !routingPhoneIds.includes(process.env.WHATSAPP_PHONE_NUMBER_ID);
+  try { await WebhookJob.updateOne({ key }, { $setOnInsert: { key, payload, routingPhoneIds, state: wrongPhone ? 'blocked' : 'pending', ...(wrongPhone ? { errorCode: 'PHONE_NUMBER_MISMATCH', error: 'Webhook is for a different phone number. Payload retained for review.' } : {}) } }, { upsert: true }); }
   catch (error) { if (error.code !== 11000) throw error; }
 }
 async function deliverMentions(message) {
@@ -80,14 +84,23 @@ async function processMentions() {
 async function processWebhooks() {
   for (let count = 0; count < 25; count++) {
     const now = new Date();
-    const job = await WebhookJob.findOneAndUpdate({ $or: [{ state: 'pending', $or: [{ leaseUntil: null }, { leaseUntil: { $lt: now } }] }, { state: 'processing', leaseUntil: { $lt: now } }] }, { $set: { state: 'processing', leaseUntil: new Date(Date.now() + 120000) }, $inc: { attempts: 1 } }, { returnDocument: 'after', sort: { createdAt: 1 } });
+    const job = await WebhookJob.findOneAndUpdate({ $and: [
+      { $or: [{ routingPhoneIds: process.env.WHATSAPP_PHONE_NUMBER_ID }, { routingPhoneIds: { $exists: false } }, { routingPhoneIds: { $size: 0 } }] },
+      { $or: [{ state: 'pending', $or: [{ leaseUntil: null }, { leaseUntil: { $lt: now } }] }, { state: 'processing', leaseUntil: { $lt: now } }] },
+    ] }, { $set: { state: 'processing', worker: process.env.RAILWAY_REPLICA_ID || `host:${require('node:os').hostname()}:${process.pid}`, leaseUntil: new Date(Date.now() + 120000) }, $inc: { attempts: 1 } }, { returnDocument: 'after', sort: { createdAt: 1 } });
     if (!job) break;
     try {
-      for (const entry of job.payload.entry || []) for (const change of entry.changes || []) if (change.field === 'messages') await receive(change.value || {});
-      await WebhookJob.updateOne({ _id: job._id }, { $set: { state: 'done', expiresAt: new Date(Date.now() + 7 * 86400000) }, $unset: { payload: 1, error: 1 } });
-    } catch {
-      await WebhookJob.updateOne({ _id: job._id }, { $set: { state: job.attempts >= 10 ? 'dead' : 'pending', leaseUntil: new Date(Date.now() + Math.min(job.attempts * 30000, 600000)), error: 'Processing failed; inspect configuration and database availability.' } });
-      console.error('Inbox webhook processing failed', String(job._id));
+      let inbound = 0; let statuses = 0; let fields = 0;
+      for (const entry of job.payload.entry || []) for (const change of entry.changes || []) if (change.field === 'messages') {
+        await receive(change.value || {}); fields++; inbound += change.value?.messages?.length || 0; statuses += change.value?.statuses?.length || 0;
+      }
+      // Keep accepted payloads for seven days so a processing bug can be diagnosed
+      // and replayed. TTL removes the entire completed job afterwards.
+      await WebhookJob.updateOne({ _id: job._id }, { $set: { state: 'done', result: { inbound, statuses, fields }, expiresAt: new Date(Date.now() + 7 * 86400000) }, $unset: { error: 1, errorCode: 1 } });
+    } catch (error) {
+      const mismatch = error.code === 'PHONE_NUMBER_MISMATCH';
+      await WebhookJob.updateOne({ _id: job._id }, { $set: { state: mismatch ? 'blocked' : job.attempts >= 10 ? 'dead' : 'pending', leaseUntil: new Date(Date.now() + Math.min(job.attempts * 30000, 600000)), errorCode: mismatch ? error.code : 'PROCESSING_FAILED', error: mismatch ? error.message : 'Processing failed; inspect configuration and database availability.' } });
+      console.error('Inbox webhook processing failed', String(job._id), mismatch ? error.code : error.name);
     }
   }
 }
@@ -96,7 +109,7 @@ async function processOutbox() {
   await Message.updateMany({ status: 'sending', attemptedAt: { $lt: new Date(Date.now() - 120000) } }, { $set: { status: 'unknown', error: 'Delivery is uncertain. Wait for a WhatsApp status update before sending again.' } });
   if (!provider.configuration().configured) return;
   for (let count = 0; count < 15; count++) {
-    const message = await Message.findOneAndUpdate({ direction: 'outbound', status: 'queued' }, { $set: { status: 'sending', attemptedAt: new Date() }, $inc: { attempts: 1 } }, { returnDocument: 'after', sort: { createdAt: 1 } }).select('+providerPayload');
+    const message = await Message.findOneAndUpdate({ direction: 'outbound', status: 'queued', $or: [{ routingPhoneId: process.env.WHATSAPP_PHONE_NUMBER_ID }, { routingPhoneId: { $exists: false } }] }, { $set: { status: 'sending', attemptedAt: new Date() }, $inc: { attempts: 1 } }, { returnDocument: 'after', sort: { createdAt: 1 } }).select('+providerPayload');
     if (!message) break;
     try {
       const conversation = await Conversation.findById(message.conversation).populate('contact');
@@ -110,12 +123,13 @@ async function processOutbox() {
       live.notify();
       const definite = error.safe || (error.response?.status >= 400 && error.response?.status < 500 && error.response.status !== 408);
       const code = Number(error.response?.data?.error?.code);
-      await Message.updateOne({ _id: message._id, status: 'sending' }, { $set: { status: definite ? 'failed' : 'unknown', error: error.safe ? error.message : definite ? `WhatsApp rejected this message${code ? ` (code ${code})` : ''}. Check the recipient, template and provider settings before retrying.` : 'Delivery is uncertain. Wait for a WhatsApp status update before sending again.' } });
+      await Message.updateOne({ _id: message._id, status: 'sending' }, { $set: { status: definite ? 'failed' : 'unknown', error: error.safe ? error.message : code === 190 ? 'WhatsApp rejected this worker’s access token (code 190). Ask your administrator to check the token and ensure only the production worker is running.' : definite ? `WhatsApp rejected this message${code ? ` (code ${code})` : ''}. Check the recipient, template and provider settings before retrying.` : 'Delivery is uncertain. Wait for a WhatsApp status update before sending again.' } });
     }
   }
 }
 let running = false;
 async function tick() {
+  if (!require('./workerPolicy').workerEnabled()) return;
   if (running) return;
   running = true;
   try { live.start(); await processWebhooks(); await processOutbox(); await processMentions(); } catch { console.error('Inbox worker temporarily unavailable'); } finally { running = false; }

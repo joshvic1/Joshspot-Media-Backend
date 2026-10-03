@@ -43,4 +43,12 @@ async function download(id) {
   const response = await axios.get(url.href, { headers: { Authorization: `Bearer ${process.env.WHATSAPP_ACCESS_TOKEN}` }, responseType: 'arraybuffer', timeout: 20000, maxContentLength: 20 * 1024 * 1024, maxRedirects: 0 });
   return { buffer: response.data, mime: data.mime_type };
 }
-module.exports = { configuration, send, templates, upload, download };
+async function checkConnection() {
+  try {
+    const { data } = await api().get(`/${process.env.WHATSAPP_PHONE_NUMBER_ID}`, { params: { fields: 'id' } });
+    return { valid: String(data.id) === process.env.WHATSAPP_PHONE_NUMBER_ID };
+  } catch (error) {
+    return { valid: false, code: Number(error.response?.data?.error?.code) || null, subcode: Number(error.response?.data?.error?.error_subcode) || null, unavailable: !error.response };
+  }
+}
+module.exports = { configuration, send, templates, upload, download, checkConnection };

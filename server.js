@@ -74,8 +74,12 @@ app.use("/api/crm", crmRoutes);
 app.use("/api/growth-assessment", growthAssessmentRoutes);
 app.use("/api/invoice", invoiceRoutes);
 app.use("/api/inbox", require("./inbox/routes"));
-const inboxTimer = setInterval(() => require("./inbox/service").tick(), 5000);
-inboxTimer.unref();
+if (require('./inbox/workerPolicy').workerEnabled()) {
+  const inboxTimer = setInterval(() => require("./inbox/service").tick(), 5000);
+  inboxTimer.unref();
+} else {
+  console.log('Inbox delivery worker disabled on this host. Railway handles production delivery.');
+}
 
 app.get("/", (req, res) => {
   res.send("Joshspot Media API running");
