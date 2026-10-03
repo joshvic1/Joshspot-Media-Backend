@@ -130,6 +130,8 @@ async function processOutbox() {
 let running = false;
 async function tick() {
   if (!require('./workerPolicy').workerEnabled()) return;
+  // Media transfers have their own lease/concurrency guard and never block message delivery.
+  void require('./media').tick();
   if (running) return;
   running = true;
   try { live.start(); await processWebhooks(); await processOutbox(); await processMentions(); } catch { console.error('Inbox worker temporarily unavailable'); } finally { running = false; }

@@ -6,7 +6,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const { Contact, Conversation, Message, Template, WebhookJob, RateBucket, Notification } = require('./models');
+const { Contact, Conversation, Message, Template, WebhookJob, RateBucket, Notification, Media } = require('./models');
 const Staff = require('../models/Staff');
 const service = require('./service');
 const provider = require('./provider');
@@ -18,14 +18,14 @@ before(async () => {
   process.env.WHATSAPP_GRAPH_VERSION = 'v23.0';
   mongo = await MongoMemoryServer.create();
   await mongoose.connect(mongo.getUri());
-  await Promise.all([Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification].map((model) => model.init()));
+  await Promise.all([Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media].map((model) => model.init()));
   const app = express(); app.use(express.json({ verify: (req, res, raw) => { req.rawBody = raw; } })); app.use('/inbox', require('./routes'));
   server = app.listen(0, '127.0.0.1'); await new Promise((resolve) => server.once('listening', resolve));
   base = `http://127.0.0.1:${server.address().port}/inbox`;
 }, { timeout: 300000 });
 after(async () => { Object.assign(provider, providerOriginal); if (server) await new Promise((resolve) => server.close(resolve)); await mongoose.disconnect(); if (mongo) await mongo.stop(); });
 beforeEach(async () => {
-  await Promise.all([Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification].map((model) => model.deleteMany({})));
+  await Promise.all([Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media].map((model) => model.deleteMany({})));
   agent = await Staff.create({ name: 'Agent One', email: 'one@example.test', password: 'not-a-real-password', role: 'SS' });
   second = await Staff.create({ name: 'Agent Two', email: 'two@example.test', password: 'not-a-real-password', role: 'CSS' });
   const restricted = await Staff.create({ name: 'Restricted', email: 'restricted@example.test', password: 'not-a-real-password', role: 'SES' });
@@ -343,4 +343,21 @@ test('connection diagnostics are restricted to administrators', async () => {
   assert.equal((await request('/diagnostics', { role: 'agent' })).status, 403);
   assert.equal((await request('/connection-check', { role: 'agent', method: 'POST', body: {} })).status, 403);
   assert.equal((await request('/diagnostics')).status, 200);
+});
+
+test('R2 media links and keep controls enforce conversation access and retention state', async () => {
+ const conversation = await fixture();
+ const asset = await Media.create({ source: 'test-r2', conversation: conversation._id, key: 'joshspot-inbox/v1/000000000000000000000001', expiresAt: new Date(Date.now() + 86400000), state: 'ready', mime: 'audio/ogg' });
+ const message = await Message.create({ conversation: conversation._id, direction: 'inbound', type: 'audio', media: { id: 'audio', asset: asset._id } });
+ const basePath = `/conversations/${conversation._id}/messages/${message._id}`;
+ const storage = require('./mediaStorage'); const original = storage.link; storage.link = async () => 'https://private-media.example.test/signed';
+ try {
+  assert.equal((await request(`${basePath}/media-link`, { role: 'second' })).status, 404);
+  assert.equal((await request(`${basePath}/media-link`, { role: 'agent' })).status, 200);
+  assert.equal((await request(`${basePath}/media-keep`, { role: 'agent', method: 'PUT', body: { keep: true } })).data.keep, true);
+  assert.equal((await request(`${basePath}/media-keep`, { role: 'second', method: 'PUT', body: { keep: false } })).status, 404);
+  await Media.updateOne({ _id: asset._id }, { $set: { state: 'deleted' } });
+  assert.equal((await request(`${basePath}/media-link`, { role: 'agent' })).status, 410);
+  assert.equal((await request(`${basePath}/media-keep`, { role: 'agent', method: 'PUT', body: { keep: true } })).status, 409);
+ } finally { storage.link = original; }
 });

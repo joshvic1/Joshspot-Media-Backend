@@ -6,6 +6,8 @@ const Staff = require('../models/Staff');
 const { Contact, Conversation, Message, Template, RateBucket, WebhookJob, Notification } = require('./models');
 const policy = require('./policy');
 const provider = require('./provider');
+const mediaService = require('./media');
+const mediaStorage = require('./mediaStorage');
 const service = require('./service');
 const router = express.Router();
 const live = require('./live');
@@ -270,19 +272,20 @@ router.post('/conversations/:id/media', wrap(async (req, res) => {
   if (!policy.windowOpen(conversation.lastInboundAt)) fail(400, 'The reply window is closed. Send an approved template.');
   const encoded = text(req.body.data, 7000000); const buffer = Buffer.from(encoded, 'base64');
   if (!buffer.length || buffer.length > 5 * 1024 * 1024) fail(400, 'Choose a file smaller than 5 MB.');
-  const mime = buffer.subarray(0, 5).toString() === '%PDF-' ? 'application/pdf' : buffer.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10])) ? 'image/png' : buffer[0] === 255 && buffer[1] === 216 && buffer[2] === 255 ? 'image/jpeg' : null;
-  if (!mime) fail(400, 'Choose a PNG, JPEG or PDF file.');
+  const mime = buffer.subarray(0, 5).toString() === '%PDF-' ? 'application/pdf' : buffer.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10])) ? 'image/png' : buffer[0] === 255 && buffer[1] === 216 && buffer[2] === 255 ? 'image/jpeg' : buffer.subarray(4, 8).toString() === 'ftyp' ? 'video/mp4' : buffer.subarray(0, 4).toString() === 'OggS' ? 'audio/ogg' : buffer.subarray(0, 3).toString() === 'ID3' || (buffer[0] === 255 && (buffer[1] & 224) === 224) ? 'audio/mpeg' : null;
+  if (!mime) fail(400, 'Choose a PNG, JPEG, PDF, MP4, MP3 or OGG file.');
   const name = text(req.body.name || 'attachment', 120).replace(/[^\w. -]/g, '_');
+  const asset = await mediaService.upload(buffer, mime, name, conversation._id);
   const mediaId = await provider.upload(buffer, mime, name);
-  const media = { id: mediaId, mime, name };
+  const media = { id: mediaId, mime, name, asset: String(asset._id) };
   const ticket = jwt.sign({ media, conversation: String(conversation._id), actor: req.actor.id, purpose: 'inbox-media' }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  res.json({ ticket, name, type: mime === 'application/pdf' ? 'document' : 'image' });
+  res.json({ ticket, name, type: mime === 'application/pdf' ? 'document' : mime.split('/')[0] });
 }));
 router.post('/conversations/:id/messages', wrap(async (req, res) => {
   await rateLimit(req, 60); const conversation = await conversationFor(req);
   if (!policy.canReply(req.actor, conversation)) fail(403, 'Claim this conversation before replying.');
   const type = req.body.type || 'text';
-  if (!['text', 'note', 'template', 'image', 'document'].includes(type)) fail(400, 'Unsupported message type.');
+  if (!['text', 'note', 'template', 'image', 'document', 'audio', 'video'].includes(type)) fail(400, 'Unsupported message type.');
   if (!/^[a-zA-Z0-9-]{16,80}$/.test(req.body.clientId || '')) fail(400, 'A unique message key is required.');
   const clientKey = `${req.actor.id}:${conversation._id}:${req.body.clientId}`;
   const existing = await Message.findOne({ clientKey }).lean(); if (existing) return res.json(existing);
@@ -293,11 +296,11 @@ router.post('/conversations/:id/messages', wrap(async (req, res) => {
     const template = await Template.findById(id(req.body.templateId)).lean();
     if (!template || !template.syncedAt || Date.now() - new Date(template.syncedAt).getTime() > 86400000) fail(400, 'Refresh templates before sending.');
     const result = policy.templatePayload(template, req.body.values || {}); body = result.preview; providerPayload = result.payload;
-  } else if (['image', 'document'].includes(type)) {
+  } else if (['image', 'document', 'audio', 'video'].includes(type)) {
     let ticket; try { ticket = jwt.verify(req.body.ticket, process.env.JWT_SECRET); } catch { fail(400, 'Attachment expired. Upload it again.'); }
     if (ticket.purpose !== 'inbox-media' || ticket.actor !== req.actor.id || ticket.conversation !== String(conversation._id)) fail(400, 'Invalid attachment.');
     media = ticket.media;
-    if ((type === 'document') !== (media.mime === 'application/pdf')) fail(400, 'Attachment type mismatch.');
+    if (type !== (media.mime === 'application/pdf' ? 'document' : media.mime.split('/')[0])) fail(400, 'Attachment type mismatch.');
     if (body.length > 1024) fail(400, 'Attachment captions must be at most 1024 characters.');
   } else if (!body) fail(400, 'Write a message first.');
   let mentions = [];
@@ -325,12 +328,37 @@ router.post('/conversations/:id/messages/:messageId/retry', wrap(async (req, res
   if (!result.modifiedCount) fail(409, 'Message status changed. Refresh before retrying.');
   await service.activity(conversation._id, req.actor, 'Retried a failed message'); res.json({ ok: true });
 }));
-router.get('/conversations/:id/messages/:messageId/media', wrap(async (req, res) => {
+async function messageMedia(req) {
   const conversation = await conversationFor(req);
   const message = await Message.findOne({ _id: id(req.params.messageId), conversation: conversation._id });
   if (!message?.media?.id) fail(404, 'Attachment not found.');
-  const media = await provider.download(message.media.id);
-  res.set({ 'Content-Type': ['image/jpeg', 'image/png', 'image/webp', 'audio/ogg', 'audio/mpeg', 'video/mp4'].includes(media.mime) ? media.mime : 'application/octet-stream', 'Content-Disposition': `attachment; filename="${(message.media.name || `attachment-${message._id}`).replace(/[^\w.-]/g, '_')}"`, 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'private, no-store' }).send(Buffer.from(media.buffer));
+  const asset = await mediaService.ensure(message);
+  if (!asset || String(asset.conversation) !== String(conversation._id)) fail(404, 'Attachment not found.');
+  return { asset, conversation };
+}
+router.get('/conversations/:id/messages/:messageId/media-info', wrap(async (req, res) => {
+  const { asset } = await messageMedia(req); res.json(mediaService.safe(asset));
+}));
+router.get('/conversations/:id/messages/:messageId/media-link', wrap(async (req, res) => {
+  const { asset } = await messageMedia(req);
+  if (['deleted', 'deleting'].includes(asset.state)) fail(410, 'This media has expired after 30 days.');
+  if (asset.state !== 'ready') fail(409, asset.state === 'failed' ? 'WhatsApp media is no longer available or could not be archived.' : 'Media is being saved. Please try again shortly.');
+  res.set('Cache-Control', 'private, no-store').json({ url: await mediaStorage.link(asset, req.query.download === '1') });
+}));
+router.put('/conversations/:id/messages/:messageId/media-keep', wrap(async (req, res) => {
+  await rateLimit(req, 60);
+  const { asset, conversation } = await messageMedia(req);
+  if (!policy.canReply(req.actor, conversation)) fail(403, 'Only the assigned representative or admin can change media retention.');
+  if (typeof req.body.keep !== 'boolean') fail(400, 'Choose whether to keep this media.');
+  res.json(await mediaService.keep(asset, req.body.keep));
+}));
+router.get('/conversations/:id/messages/:messageId/media', wrap(async (req, res) => {
+  const { asset } = await messageMedia(req);
+  if (['deleted', 'deleting'].includes(asset.state)) fail(410, 'This media has expired after 30 days.');
+  if (asset.state !== 'ready') fail(409, asset.state === 'failed' ? 'Media could not be saved from WhatsApp. It may have expired there.' : 'Media is being saved. Please try again shortly.');
+  const file = await mediaStorage.get(asset.key);
+  const mime = String(file.mime || asset.mime).split(';')[0];
+  res.set({ 'Content-Type': ['image/jpeg', 'image/png', 'image/webp', 'audio/ogg', 'audio/mpeg', 'audio/mp4', 'audio/aac', 'audio/amr', 'video/mp4', 'video/3gpp'].includes(mime) ? mime : 'application/octet-stream', 'Content-Disposition': `attachment; filename="${(asset.name || 'attachment').replace(/[^\w.-]/g, '_')}"`, 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'private, no-store' }).send(file.buffer);
 }));
 router.get('/templates', wrap(async (req, res) => {
   const q = text(String(req.query.q || ''), 100);

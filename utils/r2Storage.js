@@ -24,6 +24,7 @@ const getR2Client = () => {
     },
   });
 };
+exports.getR2Client = getR2Client;
 
 const getExtension = (fileName = "") => {
   const extension = fileName.split(".").pop();

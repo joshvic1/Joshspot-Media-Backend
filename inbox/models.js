@@ -34,7 +34,8 @@ const message = new Schema({
   error: String, sentAt: Date, deliveredAt: Date, readAt: Date, attemptedAt: Date, attempts: { type: Number, default: 0 },
   occurredAt: { type: Date, default: Date.now },
 }, { timestamps: true });
-message.add({ mentions: [{ type: Schema.Types.ObjectId, ref: 'Staff' }], mentionsPending: Boolean, routingPhoneId: String });
+message.add({ mentions: [{ type: Schema.Types.ObjectId, ref: 'Staff' }], mentionsPending: Boolean, routingPhoneId: String, 'media.asset': ref('InboxMedia') });
+message.index({ 'media.id': 1, 'media.asset': 1 });
 message.index({ conversation: 1, createdAt: -1, _id: -1 });
 message.index({ conversation: 1, updatedAt: 1, _id: 1 });
 message.index({ mentionsPending: 1 });
@@ -55,7 +56,17 @@ const notification = new Schema({ recipient: { type: Schema.Types.ObjectId, requ
 notification.index({ recipient: 1, message: 1 }, { unique: true });
 notification.index({ recipient: 1, _id: -1 });
 notification.index({ recipient: 1, readAt: 1 });
+const media = new Schema({
+  source: { type: String, unique: true }, conversation: { ...ref('InboxConversation'), required: true },
+  providerId: String, key: String, url: String, mime: String, name: String, size: Number,
+  state: { type: String, default: 'pending', enum: ['pending', 'copying', 'ready', 'failed', 'deleting', 'deleted'] },
+  keep: { type: Boolean, default: false }, expiresAt: Date,
+  leaseUntil: Date, attempts: { type: Number, default: 0 }, error: String,
+}, { timestamps: true });
+media.index({ state: 1, leaseUntil: 1 });
+media.index({ keep: 1, expiresAt: 1, state: 1 });
 module.exports = {
+  Media: mongoose.model('InboxMedia', media),
   Notification: mongoose.model('InboxNotification', notification),
   Contact: mongoose.model('InboxContact', contact), Conversation: mongoose.model('InboxConversation', conversation),
   Message: mongoose.model('InboxMessage', message), WebhookJob: mongoose.model('InboxWebhookJob', job),
