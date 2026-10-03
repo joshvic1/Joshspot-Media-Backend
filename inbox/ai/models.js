@@ -1,0 +1,12 @@
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+const config = new Schema({ key: { type: String, unique: true }, revision: { type: Number, default: 0 }, data: Schema.Types.Mixed, changedBy: String }, { timestamps: true });
+const record = new Schema({ kind: { type: String, required: true, enum: ['service', 'plan', 'knowledge', 'response', 'tone', 'workflow', 'handoff'] }, key: String, title: { type: String, required: true }, category: String, enabled: { type: Boolean, default: true }, archived: { type: Boolean, default: false }, priority: { type: Number, default: 0 }, data: Schema.Types.Mixed, revision: { type: Number, default: 0 }, createdBy: String, changedBy: String }, { timestamps: true });
+record.index({ kind: 1, key: 1 }, { unique: true, sparse: true });
+record.index({ kind: 1, enabled: 1, archived: 1, priority: -1 });
+record.index({ title: 'text', category: 'text', 'data.question': 'text', 'data.keywords': 'text', 'data.answer': 'text' });
+const log = new Schema({ kind: String, actor: String, conversation: { type: Schema.Types.ObjectId, ref: 'InboxConversation' }, inputIds: [Schema.Types.ObjectId], intent: String, service: String, action: String, mode: String, handoff: String, error: String, model: String, latency: Number, usage: Schema.Types.Mixed, before: Schema.Types.Mixed, after: Schema.Types.Mixed, decision: Schema.Types.Mixed, text: String, response: String, configRevision: Number }, { timestamps: true });
+log.index({ createdAt: -1 }); log.index({ conversation: 1, createdAt: -1 }); log.index({ intent: 1, createdAt: -1 });
+const usage = new Schema({ key: { type: String, unique: true }, calls: { type: Number, default: 0 }, tokens: { type: Number, default: 0 }, expiresAt: Date });
+usage.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+module.exports = { Config: mongoose.model('InboxAIConfig', config), Record: mongoose.model('InboxAIRecord', record), Log: mongoose.model('InboxAILog', log), Usage: mongoose.model('InboxAIUsage', usage) };

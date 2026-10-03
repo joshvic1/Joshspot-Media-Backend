@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const invoiceSchema = new mongoose.Schema({
+  automationKey: { type: String, unique: true, sparse: true },
+  automationGenerating: Boolean,
+  inboxConversation: { type: mongoose.Schema.Types.ObjectId, ref: 'InboxConversation' },
+  inboxContact: { type: mongoose.Schema.Types.ObjectId, ref: 'InboxContact' },
   token: {
     type: String,
     required: true,

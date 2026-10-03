@@ -70,6 +70,7 @@ router.use(wrap(async (req, res, next) => {
   }
   next();
 }));
+router.use('/ai', require('./ai/routes'));
 router.post('/events-ticket', wrap(async (req, res) => {
   for (const [key, value] of tickets) if (value.until < Date.now()) tickets.delete(key);
   if (tickets.size > 1000) fail(429, 'Please retry shortly.');
@@ -203,7 +204,7 @@ router.put('/conversations/:id', wrap(async (req, res) => {
     if (!req.actor.admin && (target !== req.actor.id || current.assignedTo)) fail(403, 'You can only claim an unassigned conversation.');
     const agent = target ? await Staff.findOne({ _id: id(target), role: { $in: ['SS', 'CSS'] } }).select('name') : null;
     if (target && !agent) fail(400, 'Choose an available representative.');
-    changes.assignedTo = target; descriptions.push(target ? `Assigned to ${agent.name}` : 'Unassigned conversation');
+    changes.assignedTo = target; changes['ai.active'] = false; changes['ai.draft'] = null; changes['ai.handoffReason'] = 'ASSIGNMENT_CHANGED'; descriptions.push(target ? `Assigned to ${agent.name}` : 'Unassigned conversation');
   }
   if ('status' in req.body || 'labels' in req.body || 'followUpAt' in req.body) {
     if (!policy.canReply(req.actor, current)) fail(403, 'Claim this conversation before changing it.');
@@ -308,6 +309,7 @@ router.post('/conversations/:id/messages', wrap(async (req, res) => {
     mentions = [...new Set(req.body.mentions.map(id))].filter(value => value !== req.actor.id);
     if (await Staff.countDocuments({ _id: { $in: mentions }, role: { $in: ['SS', 'CSS'] } }) !== mentions.length) fail(400, 'Choose an available staff member.');
   }
+  if (type !== 'note') await require('./ai/worker').pause(conversation._id, req.actor, 'HUMAN_REPLY');
   let message;
   try { message = await Message.create({ conversation: conversation._id, clientKey, direction: type === 'note' ? 'internal' : 'outbound', type, text: body, author: req.actor.id, authorName: req.actor.name, status: type === 'note' ? 'internal' : 'queued', providerPayload, media, mentions, mentionsPending: mentions.length > 0, ...(type !== 'note' ? { routingPhoneId: process.env.WHATSAPP_PHONE_NUMBER_ID } : {}) }); }
   catch (error) { if (error.code !== 11000) throw error; message = await Message.findOne({ clientKey }); }

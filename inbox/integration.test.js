@@ -8,6 +8,11 @@ const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const { Contact, Conversation, Message, Template, WebhookJob, RateBucket, Notification, Media } = require('./models');
 const Staff = require('../models/Staff');
+const aiModels = require('./ai/models');
+const aiProvider = require('./ai/provider');
+const aiWorker = require('./ai/worker');
+const aiSettings = require('./ai/config');
+const Invoice = require('../models/Invoice');
 const service = require('./service');
 const provider = require('./provider');
 let mongo, server, base, agent, second, tokens, sent;
@@ -18,19 +23,20 @@ before(async () => {
   process.env.WHATSAPP_GRAPH_VERSION = 'v23.0';
   mongo = await MongoMemoryServer.create();
   await mongoose.connect(mongo.getUri());
-  await Promise.all([Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media].map((model) => model.init()));
+  await Promise.all([Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels)].map((model) => model.init()));
   const app = express(); app.use(express.json({ verify: (req, res, raw) => { req.rawBody = raw; } })); app.use('/inbox', require('./routes'));
   server = app.listen(0, '127.0.0.1'); await new Promise((resolve) => server.once('listening', resolve));
   base = `http://127.0.0.1:${server.address().port}/inbox`;
 }, { timeout: 300000 });
 after(async () => { Object.assign(provider, providerOriginal); if (server) await new Promise((resolve) => server.close(resolve)); await mongoose.disconnect(); if (mongo) await mongo.stop(); });
 beforeEach(async () => {
-  await Promise.all([Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media].map((model) => model.deleteMany({})));
+  await Promise.all([Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels)].map((model) => model.deleteMany({})));
   agent = await Staff.create({ name: 'Agent One', email: 'one@example.test', password: 'not-a-real-password', role: 'SS' });
   second = await Staff.create({ name: 'Agent Two', email: 'two@example.test', password: 'not-a-real-password', role: 'CSS' });
   const restricted = await Staff.create({ name: 'Restricted', email: 'restricted@example.test', password: 'not-a-real-password', role: 'SES' });
   const token = (staff) => jwt.sign({ staffId: String(staff._id), name: staff.name, role: staff.role }, process.env.JWT_SECRET);
   tokens = { admin: jwt.sign({ admin: true }, process.env.JWT_SECRET), agent: token(agent), second: token(second), restricted: token(restricted) };
+  aiProvider.interpret = async () => ({ intent: 'advertising', confidence: .99, platform: 'tiktok', serviceType: 'account_setup', budget: null, duration: null, model: 'stub', usage: { total_tokens: 12 } });
   sent = [];
   provider.send = async (to, message) => { sent.push({ to, message }); return `wamid.test-${message._id}-${message.attempts}`; };
   provider.upload = async () => 'test-upload';
@@ -49,6 +55,80 @@ async function fixture(assigned = true) {
   return conversation;
 }
 const outgoing = (text = 'Hello Ada') => ({ type: 'text', text, clientId: crypto.randomUUID() });
+
+async function aiFixture(mode='DRAFT') {
+  await aiSettings.seed('admin');
+  await aiModels.Config.updateOne({key:'main'},{$set:{'data.mode':mode,'data.responseDelaySeconds':0}});
+  const c=await fixture(false);await Conversation.updateOne({_id:c._id},{$set:{'ai.pendingAt':new Date(Date.now()-20000)}});
+  return c;
+}
+test('AI configuration is admin-only and initialization is idempotent DRAFT',async()=>{
+  assert.equal((await request('/ai/config',{role:'agent'})).status,403);
+  assert.equal((await request('/ai/initialize',{method:'POST',body:{}})).data.data.mode,'DRAFT');
+  await request('/ai/initialize',{method:'POST',body:{}});
+  assert.equal(await aiModels.Record.countDocuments({kind:'plan'}),4);
+  assert.equal(await aiModels.Config.countDocuments(),1);
+});
+test('AI DRAFT persists a suggestion, does not send, and duplicate webhooks do not regenerate',async()=>{
+  const c=await aiFixture();let calls=0;const interpret=aiProvider.interpret;aiProvider.interpret=async args=>{calls++;return interpret(args);};
+  const config=await aiSettings.getConfig();await aiWorker.runOne(config);
+  let current=await Conversation.findById(c._id);assert.match(current.ai.draft.response,/20,000/);assert.equal(await Message.countDocuments({author:'ai',direction:'outbound'}),0);
+  await service.receive(inbound());await aiWorker.runOne(config);assert.equal(calls,1);
+  assert.equal((await request(`/ai/conversations/${c._id}/draft`,{method:'POST',body:{action:'send'}})).status,200);
+  await service.processOutbox();assert.equal(sent.length,1);assert.match(sent[0].message.text,/20,000/);
+});
+test('AI LIVE uses existing outbox and takeover cancels queued output',async()=>{
+  const c=await aiFixture('LIVE');await aiWorker.runOne(await aiSettings.getConfig());
+  assert.equal(await Message.countDocuments({author:'ai',status:'queued'}),1);
+  await request(`/ai/conversations/${c._id}/control`,{method:'POST',body:{action:'takeover'}});
+  await service.processOutbox();assert.equal(sent.length,0);
+});
+test('AI LIVE delivers normally and human takeover during generation suppresses output',async()=>{
+  const c=await aiFixture('LIVE');await aiWorker.runOne(await aiSettings.getConfig());await service.processOutbox();assert.equal(sent.length,1);
+  await service.receive(inbound('wamid.next'));await Conversation.updateOne({_id:c._id},{$set:{'ai.pendingAt':new Date(Date.now()-20000)}});
+  const interpret=aiProvider.interpret;aiProvider.interpret=async args=>{await aiWorker.pause(c._id,{id:'admin',admin:true});return interpret(args);};
+  await aiWorker.runOne(await aiSettings.getConfig());assert.equal(await Message.countDocuments({author:'ai',direction:'outbound'}),1);
+});
+test('AI batches rapid messages and media/errors hand off without sending content to model',async()=>{
+  const c=await aiFixture();await service.receive(inbound('wamid.second'));await service.receive(inbound('wamid.third'));
+  await Conversation.updateOne({_id:c._id},{$set:{'ai.pendingAt':new Date(Date.now()-20000)}});
+  let count=0;const interpret=aiProvider.interpret;aiProvider.interpret=async args=>{count++;assert.equal(args.text.split('\n').length,3);return interpret(args);};
+  await aiWorker.runOne(await aiSettings.getConfig());assert.equal(count,1);
+  const payload=inbound('wamid.image');payload.messages[0].type='image';payload.messages[0].image={id:'media-id'};await service.receive(payload);
+  await Conversation.updateOne({_id:c._id},{$set:{'ai.pendingAt':new Date(Date.now()-20000)}});await aiWorker.runOne(await aiSettings.getConfig());
+  const current=await Conversation.findById(c._id);assert.equal(count,1);assert.equal(current.ai.handoffReason,'MEDIA_RECEIVED');assert.equal(String(current.assignedTo),String(second._id));assert.equal(await Notification.countDocuments({conversation:c._id}),1);
+});
+test('AI provider failures and sensitive text preserve input and route to a human',async()=>{
+  const c=await aiFixture();aiProvider.interpret=async()=>{throw new Error('timeout');};await aiWorker.runOne(await aiSettings.getConfig());
+  assert.equal((await Conversation.findById(c._id)).ai.handoffReason,'AI_ERROR');assert.equal(await Message.countDocuments({direction:'inbound'}),1);
+  await request(`/ai/conversations/${c._id}/control`,{method:'POST',body:{action:'return'}});
+  const payload=inbound('wamid.secret');payload.messages[0].text.body='my password is TOP_SECRET';await service.receive(payload);await Conversation.updateOne({_id:c._id},{$set:{'ai.pendingAt':new Date(Date.now()-20000)}});await aiWorker.runOne(await aiSettings.getConfig());
+  assert.equal((await Conversation.findById(c._id)).ai.handoffReason,'SENSITIVE_CASE');assert.equal(JSON.stringify(await aiModels.Log.find()).includes('TOP_SECRET'),false);
+});
+test('AI test mode performs no invoice or WhatsApp writes; unavailable invoice generation hands off',async()=>{
+  const c=await aiFixture('LIVE');await aiModels.Config.updateOne({key:'main'},{$set:{'data.invoicesEnabled':true}});
+  aiProvider.interpret=async()=>({intent:'ready_to_pay',confidence:1,platform:'tiktok',serviceType:'account_setup',budget:null,duration:null});
+  const simulated=await request('/ai/test',{method:'POST',body:{text:'Send invoice'}});assert.equal(simulated.status,200);assert.equal(simulated.data.action,'invoice');assert.equal(await Invoice.countDocuments(),0);
+  await aiWorker.runOne(await aiSettings.getConfig());assert.equal((await Conversation.findById(c._id)).ai.handoffReason,'INVOICE_ERROR');assert.equal(sent.length,0);
+});
+test('AI invoice action reuses the existing Invoice and account and never retries uncertain account creation',async()=>{
+  const c=await aiFixture();await c.populate('contact');
+  const service=require('../controllers/invoiceController');const original=service.generateInvoiceTransfer;let calls=0;
+  const oldSecret=process.env.PAYSTACK_SECRET,oldUrl=process.env.CLIENT_URL;process.env.PAYSTACK_SECRET='fake';process.env.CLIENT_URL='https://example.test';
+  const args={conversation:c,contact:c.contact,result:{amount:20000,serviceKey:'tiktok_setup',state:{selectedPlatform:'tiktok'}},config:{...(await aiSettings.getConfig()).data,invoicesEnabled:true}};
+  try{
+    service.generateInvoiceTransfer=async invoice=>{calls++;invoice.accountNumber='0000000000';invoice.accountName='Fixture Merchant';invoice.bankName='Fixture Bank';invoice.reference='fixture-reference';invoice.status='pending';return invoice.save();};
+    const first=await require('./ai/invoices').generate(args);const second=await require('./ai/invoices').generate(args);
+    assert.equal(first.invoiceId,second.invoiceId);assert.equal(calls,1);assert.equal(await Invoice.countDocuments(),1);assert.match(first.response,/0000000000/);
+    service.generateInvoiceTransfer=async()=>{calls++;throw new Error('timeout');};
+    const other={...args,result:{...args.result,amount:30000}};
+    await assert.rejects(require('./ai/invoices').generate(other));await assert.rejects(require('./ai/invoices').generate(other));assert.equal(calls,2);
+  }finally{service.generateInvoiceTransfer=original;if(oldSecret)process.env.PAYSTACK_SECRET=oldSecret;else delete process.env.PAYSTACK_SECRET;if(oldUrl)process.env.CLIENT_URL=oldUrl;else delete process.env.CLIENT_URL;}
+});
+test('AI worker lease prevents two workers generating for one conversation',async()=>{
+  await aiFixture();const config=await aiSettings.getConfig();let calls=0;const interpret=aiProvider.interpret;aiProvider.interpret=async args=>{calls++;await new Promise(r=>setTimeout(r,30));return interpret(args);};
+  await Promise.all([aiWorker.runOne(config),aiWorker.runOne(config)]);assert.equal(calls,1);
+});
 
 test('All includes resolved chats and Mine never treats unassigned chats as admin assignments', async () => {
   const conversation = await fixture();

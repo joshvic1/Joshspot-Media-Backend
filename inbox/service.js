@@ -53,7 +53,7 @@ async function receive(value) {
     } catch (error) { if (error.code !== 11000) throw error; }
     const stored = await Message.findOne({ providerId: item.id }).select('_id createdAt');
     // Repairable after a crash between storing the message and updating its conversation.
-    await Conversation.updateOne({ _id: conversation._id, $or: [{ lastInboundId: { $lt: stored._id } }, { lastInboundId: null }] }, { $set: { lastInboundId: stored._id, status: 'open', resolvedAt: null }, $max: { lastInboundAt: occurredAt }, $inc: { revision: 1 } });
+    await Conversation.updateOne({ _id: conversation._id, $or: [{ lastInboundId: { $lt: stored._id } }, { lastInboundId: null }] }, { $set: { lastInboundId: stored._id, status: 'open', resolvedAt: null, 'ai.pending': true, 'ai.pendingAt': new Date(Date.now() - (type !== 'text' || /\b(pay|paid|payment|receipt|invoice|account number)\b/i.test(text) ? 10000 : 0)), ...(/\b(pay|paid|payment|receipt|invoice|account number)\b/i.test(text) ? {'ai.priority':true} : {}), 'ai.phoneId': process.env.WHATSAPP_PHONE_NUMBER_ID }, $max: { lastInboundAt: occurredAt }, $inc: { revision: 1 } });
     await Conversation.updateOne({ _id: conversation._id, $or: [{ lastMessageId: { $lt: stored._id } }, { lastMessageId: null }] }, { $set: { lastMessageId: stored._id, lastMessageAt: stored.createdAt, preview: text.slice(0, 160) } });
     if (result?.upsertedCount) publish('message.received', { conversationId: String(conversation._id), providerId: item.id });
   }
@@ -131,8 +131,9 @@ async function processOutbox() {
     if (!message) break;
     try {
       const conversation = await Conversation.findById(message.conversation).populate('contact');
-      if (message.author !== 'admin' && !await require('../models/Staff').exists({ _id: message.author, role: { $in: ['SS', 'CSS'] } })) throw Object.assign(new Error('The sending representative no longer has messaging access.'), { safe: true });
-      if (!conversation || (message.author !== 'admin' && String(conversation.assignedTo) !== message.author)) throw Object.assign(new Error('Assignment changed. Claim the conversation and try again.'), { safe: true });
+      if (message.author === 'ai' && !await require('./ai/worker').eligible(message)) throw Object.assign(new Error('AI reply cancelled: ownership, input or settings changed.'), { safe: true });
+      if (!['admin','ai'].includes(message.author) && !await require('../models/Staff').exists({ _id: message.author, role: { $in: ['SS', 'CSS'] } })) throw Object.assign(new Error('The sending representative no longer has messaging access.'), { safe: true });
+      if (!conversation || (!['admin','ai'].includes(message.author) && String(conversation.assignedTo) !== message.author)) throw Object.assign(new Error('Assignment changed. Claim the conversation and try again.'), { safe: true });
       if (message.type !== 'template' && !policy.windowOpen(conversation.lastInboundAt)) throw Object.assign(new Error('The 24-hour reply window closed. Send an approved template.'), { safe: true });
       const id = await provider.send(conversation.contact.phone, message);
       await Message.updateOne({ _id: message._id, status: { $in: ['sending', 'unknown'] } }, { $set: { status: 'sent', providerId: id, sentAt: new Date(), error: '' } });
@@ -150,6 +151,7 @@ async function tick() {
   if (!require('./workerPolicy').workerEnabled()) return;
   // Media transfers have their own lease/concurrency guard and never block message delivery.
   void require('./media').tick();
+  void require('./ai/worker').tick();
   if (running) return;
   running = true;
   try { live.start(); await processWebhooks(); await processOutbox(); await processMentions(); } catch { console.error('Inbox worker temporarily unavailable'); } finally { running = false; }

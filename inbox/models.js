@@ -20,6 +20,13 @@ const conversation = new Schema({
 conversation.index({ contact: 1, channel: 1 }, { unique: true });
 conversation.index({ assignedTo: 1, status: 1, lastMessageAt: -1, _id: -1 });
 conversation.add({ collaborators: [{ type: Schema.Types.ObjectId, ref: 'Staff' }] });
+conversation.add({ ai: {
+  phoneId:String, active: {type:Boolean,default:true}, pending:Boolean, pendingAt:Date, leaseUntil:Date, leaseToken:String,
+  version:{type:Number,default:0}, lastProcessedId:Schema.Types.ObjectId, state:Schema.Types.Mixed,
+  draft:Schema.Types.Mixed, handoffReason:String, needsHuman:Boolean, priority:Boolean,
+  consecutive:{type:Number,default:0}, returnedBy:String, sendLease:Date,
+} });
+conversation.index({'ai.pending':1,'ai.pendingAt':1,'ai.leaseUntil':1});
 conversation.index({ collaborators: 1, lastMessageAt: -1, _id: -1 });
 conversation.index({ status: 1, lastMessageAt: -1, _id: -1 });
 conversation.index({ lastMessageAt: -1, _id: -1 });
@@ -36,6 +43,7 @@ const message = new Schema({
 }, { timestamps: true });
 message.add({ mentions: [{ type: Schema.Types.ObjectId, ref: 'Staff' }], mentionsPending: Boolean, routingPhoneId: String, 'media.asset': ref('InboxMedia'), reactions: { type: Map, of: new Schema({ emoji: String, name: String, timestamp: Number, providerId: String, status: String }, { _id: false }) }, reactionLease: Date });
 message.index({ 'media.id': 1, 'media.asset': 1 });
+message.add({ automation: {version:Number, inputId:Schema.Types.ObjectId, configRevision:Number, handoff:Boolean} });
 message.index({ conversation: 1, createdAt: -1, _id: -1 });
 message.index({ conversation: 1, updatedAt: 1, _id: 1 });
 message.index({ mentionsPending: 1 });
@@ -53,7 +61,7 @@ job.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 const template = new Schema({ externalId: { type: String, unique: true }, name: String, language: String, category: String, status: String, components: [Schema.Types.Mixed], syncedAt: Date });
 const rate = new Schema({ key: { type: String, unique: true }, count: Number, expiresAt: Date });
 rate.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
-const notification = new Schema({ recipient: { type: Schema.Types.ObjectId, required: true }, conversation: { ...ref('InboxConversation'), required: true }, message: { ...ref('InboxMessage'), required: true }, authorName: String, readAt: Date }, { timestamps: true });
+const notification = new Schema({ kind: {type:String,default:'mention'}, recipient: { type: Schema.Types.ObjectId, required: true }, conversation: { ...ref('InboxConversation'), required: true }, message: { ...ref('InboxMessage'), required: true }, authorName: String, readAt: Date }, { timestamps: true });
 notification.index({ recipient: 1, message: 1 }, { unique: true });
 notification.index({ recipient: 1, _id: -1 });
 notification.index({ recipient: 1, readAt: 1 });

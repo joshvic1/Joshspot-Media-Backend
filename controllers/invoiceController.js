@@ -112,7 +112,7 @@ const generateInvoiceTransfer = async (invoice) => {
         note: refreshedInvoice.note,
       },
     },
-    { headers: paystackHeaders() },
+    { headers: paystackHeaders(), timeout: 15000 },
   );
 
   const charge = response.data.data;
@@ -255,3 +255,6 @@ exports.emailCourseAccess = async (req, res) => {
 };
 exports.refreshInvoiceStatus = refreshInvoiceStatus;
 
+
+// Shared by the Inbox automation; uses the existing Invoice and Paystack flow.
+exports.generateInvoiceTransfer = generateInvoiceTransfer;
