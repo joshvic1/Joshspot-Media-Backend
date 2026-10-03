@@ -7,7 +7,7 @@ const media = require('./media'); const storage = require('./mediaStorage'); con
 let mongo; let removed; let conversation;
 before(async () => { mongo = await MongoMemoryServer.create(); await mongoose.connect(mongo.getUri()); await Promise.all([Media, Message, Conversation, Contact].map(m => m.init())); }, { timeout: 300000 });
 after(async () => { await mongoose.disconnect(); await mongo?.stop(); });
-beforeEach(async () => { await Promise.all([Media, Message, Conversation, Contact].map(m => m.deleteMany({}))); removed = []; storage.configured = () => true; storage.remove = async key => removed.push(key); storage.put = async () => {}; conversation = new mongoose.Types.ObjectId(); });
+beforeEach(async () => { await Promise.all([Media, Message, Conversation, Contact].map(m => m.deleteMany({}))); removed = []; storage.configured = () => true; storage.remove = async key => removed.push(key); storage.put = async () => {}; conversation = new mongoose.Types.ObjectId(); const contact=await Contact.create({phone:'2348012345678'}); await Conversation.create({_id:conversation,contact:contact._id}); });
 async function asset(extra = {}) { const id = new mongoose.Types.ObjectId(); return Media.create({ _id: id, source: String(id), conversation, state: 'ready', key: storage.keyFor(id), expiresAt: new Date(Date.now() - 1000), ...extra }); }
 test('automatic cleanup is disabled even for old unkept assets', async () => {
  const old = await asset(); await media.cleanup(); assert.deepEqual(removed, []); assert.equal((await Media.findById(old._id)).state, 'ready');

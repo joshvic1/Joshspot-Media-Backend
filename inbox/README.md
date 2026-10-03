@@ -107,3 +107,12 @@ Incoming and outgoing media store Meta IDs and metadata. Ordinary playback downl
 Only an explicit Keep media request by the assigned representative or admin sets `keep: true`. The bounded worker only claims these assets and copies them into `joshspot-inbox/v1/<asset ObjectId>` using the existing server-side R2 variables. Completed kept assets play from temporary private R2 links. Failed copies retry with backoff, then expose a retryable failure; Save is not shown as complete until R2 confirms storage. No automatic incoming archive, history backfill, outgoing R2 upload, expiry or deletion runs. Existing bucket files remain untouched.
 
 The database stores file references and metadata only, never binary/base64. Tests: `npm run test:inbox`. Deploy backend and frontend together to use the new media-link response. Leave development workers disabled against production MongoDB. No Cloudflare credentials belong in frontend environment variables.
+# Permanent Inbox deletion
+
+Admins can use Conversation actions → Delete chat and explicitly confirm. The API is `DELETE /api/inbox/conversations/:id` with `{ "confirm": true }`; staff requests are rejected. The frontend proxy permits DELETE.
+
+Deletion removes all Inbox conversations for that contact, messages/notes, notifications, media metadata and saved Inbox R2 objects, conversation AI logs/usage and the Inbox contact. Copied staff-response promotion records are removed as well. Customer content is removed from stored webhook envelopes without discarding other recipients in the same envelope. Invoices, payments and other CRM records are preserved. Meta/WhatsApp data is not modified.
+
+Active sends, media copies, AI generation or relevant webhook processing return a retryable conflict instead of claiming deletion succeeded. Automatic replies are paused during deletion. Storage failures are retryable; the API does not claim success until the purge finishes. No real chats are deleted during tests.
+
+A keyed phone digest and deletion cutoff (no name, phone text or message content) are retained for eight days solely to reject delayed webhook replays. Its TTL index is included by `npm run inbox:indexes`. New messages sent after deletion can create a fresh conversation. Database/provider backups and data retained independently by Meta are outside this live-database deletion operation.

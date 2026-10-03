@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const ref = (model) => ({ type: Schema.Types.ObjectId, ref: model });
 const contact = new Schema({
+  deleting: Boolean,
   phone: { type: String, required: true, unique: true }, name: { type: String, default: '' },
   email: { type: String, default: '' }, source: { type: String, default: 'WhatsApp' }, service: { type: String, default: '' },
   status: { type: String, default: 'lead', enum: ['lead', 'customer', 'inactive'] },
@@ -11,6 +12,7 @@ contact.index({ name: 'text', phone: 'text', email: 'text' });
 contact.index({ name: 1 });
 contact.index({ email: 1 });
 const conversation = new Schema({
+  deleting: Boolean,
   contact: { ...ref('InboxContact'), required: true }, channel: { type: String, default: 'whatsapp' },
   assignedTo: { ...ref('Staff'), default: null }, status: { type: String, enum: ['open', 'follow_up', 'resolved'], default: 'open' },
   labels: [String], revision: { type: Number, default: 0 }, lastInboundAt: Date, followUpAt: Date,
@@ -75,6 +77,7 @@ const media = new Schema({
 media.index({ state: 1, leaseUntil: 1 });
 media.index({ keep: 1, expiresAt: 1, state: 1 });
 module.exports = {
+  DeletionGuard: mongoose.model('InboxDeletionGuard', new Schema({ _id:String, cutoff:Date, expiresAt:{type:Date,index:{expireAfterSeconds:0}} })),
   Media: mongoose.model('InboxMedia', media),
   Notification: mongoose.model('InboxNotification', notification),
   Contact: mongoose.model('InboxContact', contact), Conversation: mongoose.model('InboxConversation', conversation),

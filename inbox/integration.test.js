@@ -6,7 +6,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const { Contact, Conversation, Message, Template, WebhookJob, RateBucket, Notification, Media } = require('./models');
+const { DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Notification, Media } = require('./models');
 const Staff = require('../models/Staff');
 const aiModels = require('./ai/models');
 const aiProvider = require('./ai/provider');
@@ -23,14 +23,14 @@ before(async () => {
   process.env.WHATSAPP_GRAPH_VERSION = 'v23.0';
   mongo = await MongoMemoryServer.create();
   await mongoose.connect(mongo.getUri());
-  await Promise.all([Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels)].map((model) => model.init()));
+  await Promise.all([DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels)].map((model) => model.init()));
   const app = express(); app.use(express.json({ verify: (req, res, raw) => { req.rawBody = raw; } })); app.use('/inbox', require('./routes'));
   server = app.listen(0, '127.0.0.1'); await new Promise((resolve) => server.once('listening', resolve));
   base = `http://127.0.0.1:${server.address().port}/inbox`;
 }, { timeout: 300000 });
 after(async () => { Object.assign(provider, providerOriginal); if (server) await new Promise((resolve) => server.close(resolve)); await mongoose.disconnect(); if (mongo) await mongo.stop(); });
 beforeEach(async () => {
-  await Promise.all([Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels)].map((model) => model.deleteMany({})));
+  await Promise.all([DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels)].map((model) => model.deleteMany({})));
   agent = await Staff.create({ name: 'Agent One', email: 'one@example.test', password: 'not-a-real-password', role: 'SS' });
   second = await Staff.create({ name: 'Agent Two', email: 'two@example.test', password: 'not-a-real-password', role: 'CSS' });
   const restricted = await Staff.create({ name: 'Restricted', email: 'restricted@example.test', password: 'not-a-real-password', role: 'SES' });
@@ -55,6 +55,35 @@ async function fixture(assigned = true) {
   return conversation;
 }
 const outgoing = (text = 'Hello Ada') => ({ type: 'text', text, clientId: crypto.randomUUID() });
+
+test('admin deletion purges Inbox data and saved media but preserves invoices and other customers',async()=>{
+ const c=await fixture();const contact=await Contact.findById(c.contact);
+ const other=await Contact.create({phone:'2348012345679',name:'Other customer'});const otherChat=await Conversation.create({contact:other._id});
+ const otherMessage=await Message.create({conversation:otherChat._id,direction:'inbound',type:'text',text:'Keep this'});
+ const note=await Message.create({conversation:c._id,direction:'internal',type:'note',text:'Private note'});
+ await Notification.create({recipient:agent._id,conversation:c._id,message:note._id});
+ await aiModels.Log.create({conversation:c._id,text:'Private AI context'});await aiModels.Usage.create({key:`${c._id}:today`});
+ const invoice=await Invoice.create({token:crypto.randomUUID(),amount:20000,customerPhone:contact.phone,inboxConversation:c._id});
+ const asset=await Media.create({conversation:c._id,source:'fixture',key:'joshspot-inbox/v1/012345678901234567890123',state:'ready'});
+ const payload={entry:[{changes:[{field:'messages',value:{...inbound(),contacts:[{wa_id:contact.phone,profile:{name:'Delete me'}},{wa_id:other.phone,profile:{name:'Keep me'}}],messages:[...inbound().messages,{id:'other',from:other.phone,type:'text',text:{body:'Keep me'}}]}}]}]};
+ await WebhookJob.create({key:'delete-test',payload,state:'done'});
+ const storage=require('./mediaStorage');const original=storage.remove;const removed=[];storage.remove=async key=>removed.push(key);
+ try{
+  assert.equal((await request(`/conversations/${c._id}`,{role:'agent',method:'DELETE',body:{confirm:true}})).status,403);
+  assert.equal((await request(`/conversations/${c._id}`,{method:'DELETE',body:{}})).status,400);
+  assert.equal((await request(`/conversations/${c._id}`,{method:'DELETE',body:{confirm:true}})).status,200);
+  assert.equal(await Contact.exists({_id:contact._id}),null);assert.equal(await Conversation.exists({_id:c._id}),null);
+  for(const model of [Message,Notification,Media,aiModels.Log])assert.equal(await model.countDocuments({conversation:c._id}),0);
+  assert.equal(await aiModels.Usage.countDocuments({key:`${c._id}:today`}),0);
+  assert.ok(await Invoice.exists({_id:invoice._id}));assert.ok(await Message.exists({_id:otherMessage._id}));assert.deepEqual(removed,[asset.key]);
+  const retained=JSON.stringify((await WebhookJob.findOne({key:'delete-test'})).payload);assert.equal(retained.includes(contact.phone),false);assert.ok(retained.includes(other.phone));
+  await service.receive(inbound());assert.equal(await Conversation.exists({_id:c._id}),null);assert.equal(await Contact.countDocuments({phone:contact.phone}),0);
+  await service.enqueueWebhook(Buffer.from('late-retry'),{entry:[{changes:[{field:'messages',value:inbound()}]}]});
+  assert.equal(JSON.stringify((await WebhookJob.findOne({key:crypto.createHash('sha256').update('late-retry').digest('hex')})).payload).includes(contact.phone),false);
+  const next=inbound('brand-new',Math.floor(Date.now()/1000)+2);await service.receive(next);assert.equal(await Contact.countDocuments({phone:contact.phone}),1);assert.equal(await Message.countDocuments({providerId:'brand-new'}),1);
+  assert.equal((await request(`/conversations/${c._id}`,{method:'DELETE',body:{confirm:true}})).status,200);
+ }finally{storage.remove=original;}
+});
 
 async function aiFixture(mode='DRAFT') {
   await aiSettings.seed('admin');

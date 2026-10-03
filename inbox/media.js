@@ -1,4 +1,4 @@
-const { Media, Message } = require('./models');
+const { Media, Message, Conversation } = require('./models');
 const storage = require('./mediaStorage');
 const provider = require('./provider');
 const live = require('./live');
@@ -19,6 +19,7 @@ async function copyNext() {
   const asset = await Media.findOneAndUpdate({ keep: true, providerId: { $exists: true }, $or: [{ state: 'pending', $or: [{ leaseUntil: null }, { leaseUntil: { $lte: now } }] }, { state: 'copying', leaseUntil: { $lte: now } }] }, { $set: { state: 'copying', leaseUntil: new Date(Date.now() + 120000) }, $inc: { attempts: 1 } }, { returnDocument: 'after', sort: { createdAt: 1 } });
   if (!asset) return false;
   try {
+    if(!await Conversation.exists({_id:asset.conversation,deleting:{$ne:true}})){await Media.updateOne({_id:asset._id},{$set:{state:'failed',leaseUntil:null}});return true;}
     const key = storage.keyFor(asset._id);
     await Media.updateOne({ _id: asset._id }, { $set: { key } });
     const file = await provider.download(asset.providerId);

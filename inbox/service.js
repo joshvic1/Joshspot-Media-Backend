@@ -30,9 +30,12 @@ async function receive(value) {
   }
   for (const item of value.messages || []) {
     if (!item.id || !item.from) continue;
+    if(await require('./deleteChat').wasDeleted(policy.phone(item.from),item.timestamp))continue;
     const name = value.contacts?.find((contact) => contact.wa_id === item.from)?.profile?.name || '';
     const contact = await upsertContact(item.from, name);
+    if(contact.deleting)throw new Error('Contact deletion in progress');
     const conversation = await openConversation(contact);
+    if(conversation.deleting)throw new Error('Conversation deletion in progress');
     if (item.type === 'reaction') {
       const timestamp = Number(item.timestamp) * 1000;
       if (typeof item.reaction?.message_id === 'string' && Number.isFinite(timestamp)) {
@@ -51,6 +54,7 @@ async function receive(value) {
     try {
       result = await Message.updateOne({ providerId: item.id }, { $setOnInsert: { conversation: conversation._id, direction: 'inbound', type, text: text.slice(0, 10000), status: 'received', providerId: item.id, occurredAt, ...(item[item.type]?.id ? { media: { id: item[item.type].id, mime: item[item.type].mime_type, name: item[item.type].filename } } : {}) } }, { upsert: true });
     } catch (error) { if (error.code !== 11000) throw error; }
+    if(await require('./deleteChat').wasDeleted(contact.phone,item.timestamp) || !await Conversation.exists({_id:conversation._id,deleting:{$ne:true}})){await Message.deleteMany({conversation:conversation._id});continue;}
     const stored = await Message.findOne({ providerId: item.id }).select('_id createdAt');
     // Repairable after a crash between storing the message and updating its conversation.
     await Conversation.updateOne({ _id: conversation._id, $or: [{ lastInboundId: { $lt: stored._id } }, { lastInboundId: null }] }, { $set: { lastInboundId: stored._id, status: 'open', resolvedAt: null, 'ai.pending': true, 'ai.pendingAt': new Date(Date.now() - (type !== 'text' || /\b(pay|paid|payment|receipt|invoice|account number)\b/i.test(text) ? 10000 : 0)), ...(/\b(pay|paid|payment|receipt|invoice|account number)\b/i.test(text) ? {'ai.priority':true} : {}), 'ai.phoneId': process.env.WHATSAPP_PHONE_NUMBER_ID }, $max: { lastInboundAt: occurredAt }, $inc: { revision: 1 } });
@@ -81,13 +85,14 @@ async function receive(value) {
 }
 async function enqueueWebhook(raw, payload) {
   const key = crypto.createHash('sha256').update(raw).digest('hex');
+  payload=await require('./deleteChat').scrubDeleted(payload);
   const routingPhoneIds = [...new Set((payload.entry || []).flatMap(entry => (entry.changes || []).filter(change => change.field === 'messages').map(change => String(change.value?.metadata?.phone_number_id || '')).filter(Boolean)))];
   const wrongPhone = routingPhoneIds.length && !routingPhoneIds.includes(process.env.WHATSAPP_PHONE_NUMBER_ID);
   try { await WebhookJob.updateOne({ key }, { $setOnInsert: { key, payload, routingPhoneIds, state: wrongPhone ? 'blocked' : 'pending', ...(wrongPhone ? { errorCode: 'PHONE_NUMBER_MISMATCH', error: 'Webhook is for a different phone number. Payload retained for review.' } : {}) } }, { upsert: true }); }
   catch (error) { if (error.code !== 11000) throw error; }
 }
 async function deliverMentions(message) {
-  if (!message.mentionsPending) return;
+  if (!message.mentionsPending || !await Conversation.exists({_id:message.conversation,deleting:{$ne:true}})) return;
   const recipients = message.mentions || [];
   if (recipients.length) {
     await Conversation.updateOne({ _id: message.conversation }, { $addToSet: { collaborators: { $each: recipients } } });
@@ -131,6 +136,7 @@ async function processOutbox() {
     if (!message) break;
     try {
       const conversation = await Conversation.findById(message.conversation).populate('contact');
+      if (!conversation || conversation.deleting || !conversation.contact || conversation.contact.deleting) throw Object.assign(new Error('Chat deleted or deletion in progress.'),{safe:true});
       if (message.author === 'ai' && !await require('./ai/worker').eligible(message)) throw Object.assign(new Error('AI reply cancelled: ownership, input or settings changed.'), { safe: true });
       if (!['admin','ai'].includes(message.author) && !await require('../models/Staff').exists({ _id: message.author, role: { $in: ['SS', 'CSS'] } })) throw Object.assign(new Error('The sending representative no longer has messaging access.'), { safe: true });
       if (!conversation || (!['admin','ai'].includes(message.author) && String(conversation.assignedTo) !== message.author)) throw Object.assign(new Error('Assignment changed. Claim the conversation and try again.'), { safe: true });

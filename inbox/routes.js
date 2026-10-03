@@ -21,6 +21,7 @@ const scoped = (req, query = {}) => ({ $and: [policy.visible(req.actor), query] 
 async function conversationFor(req) {
   const item = await Conversation.findOne(scoped(req, { _id: id(req.params.id) })).populate('contact');
   if (!item) fail(404, 'Conversation not found or no longer assigned to you.');
+  if(item.deleting) fail(409, 'This chat is being deleted.');
   return item;
 }
 async function rateLimit(req, limit = 90) {
@@ -194,6 +195,11 @@ router.get('/conversations/:id/crm', wrap(async (req, res) => {
     invoices.forEach((row) => records.push({ id: row._id, kind: 'Invoice', name: row.customerName, service: row.product, amount: row.amount, status: row.status, href: '/admin-7812er/invoices' }));
   }
   res.json(records);
+}));
+router.delete('/conversations/:id',wrap(async(req,res)=>{
+  if(!req.actor.admin)fail(403,'Only administrators can delete chats.');
+  if(req.body.confirm!==true)fail(400,'Confirm permanent chat deletion.');
+  await rateLimit(req);res.json(await require('./deleteChat').deleteChat(id(req.params.id)));
 }));
 router.put('/conversations/:id', wrap(async (req, res) => {
   await rateLimit(req); const current = await conversationFor(req);
