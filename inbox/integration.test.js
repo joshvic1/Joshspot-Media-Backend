@@ -6,7 +6,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const { Contact, Conversation, Message, Template, WebhookJob, RateBucket } = require('./models');
+const { Contact, Conversation, Message, Template, WebhookJob, RateBucket, Notification } = require('./models');
 const Staff = require('../models/Staff');
 const service = require('./service');
 const provider = require('./provider');
@@ -18,14 +18,14 @@ before(async () => {
   process.env.WHATSAPP_GRAPH_VERSION = 'v23.0';
   mongo = await MongoMemoryServer.create();
   await mongoose.connect(mongo.getUri());
-  await Promise.all([Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff].map((model) => model.init()));
+  await Promise.all([Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification].map((model) => model.init()));
   const app = express(); app.use(express.json({ verify: (req, res, raw) => { req.rawBody = raw; } })); app.use('/inbox', require('./routes'));
   server = app.listen(0, '127.0.0.1'); await new Promise((resolve) => server.once('listening', resolve));
   base = `http://127.0.0.1:${server.address().port}/inbox`;
 }, { timeout: 300000 });
 after(async () => { Object.assign(provider, providerOriginal); if (server) await new Promise((resolve) => server.close(resolve)); await mongoose.disconnect(); if (mongo) await mongo.stop(); });
 beforeEach(async () => {
-  await Promise.all([Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff].map((model) => model.deleteMany({})));
+  await Promise.all([Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification].map((model) => model.deleteMany({})));
   agent = await Staff.create({ name: 'Agent One', email: 'one@example.test', password: 'not-a-real-password', role: 'SS' });
   second = await Staff.create({ name: 'Agent Two', email: 'two@example.test', password: 'not-a-real-password', role: 'CSS' });
   const restricted = await Staff.create({ name: 'Restricted', email: 'restricted@example.test', password: 'not-a-real-password', role: 'SES' });
@@ -225,4 +225,82 @@ test('templates can be filtered by category, status and language', async () => {
   await Template.create([{ externalId: 'a', name: 'test_a', category: 'UTILITY', status: 'APPROVED', language: 'en_US', components: [] }, { externalId: 'b', name: 'test_b', category: 'MARKETING', status: 'PENDING', language: 'en', components: [] }]);
   const result = await request('/templates?category=UTILITY&status=APPROVED&language=en_US', { role: 'agent' });
   assert.equal(result.status, 200); assert.equal(result.data.items.length, 1); assert.equal(result.data.items[0].externalId, 'a');
+});
+
+test('history is bounded by 24 hours and 50 messages, skips empty days and targets old notes', async () => {
+  const conversation = await fixture();
+  const old = await Message.create({ conversation: conversation._id, type: 'note', direction: 'internal', text: 'Older mention' });
+  const oldDate = new Date(Date.now() - 8 * 86400000);
+  await Message.collection.updateOne({ _id: old._id }, { $set: { createdAt: oldDate, occurredAt: oldDate } });
+  await Message.insertMany(Array.from({ length: 60 }, (_, i) => ({ conversation: conversation._id, type: 'text', direction: 'inbound', text: `Recent ${i}` })));
+  const first = await request(`/conversations/${conversation._id}/messages`);
+  assert.equal(first.data.items.length, 50); assert.equal(first.data.withinDay, true);
+  assert.ok(!first.data.items.some(m => m._id === String(old._id)));
+  const secondPage = await request(`/conversations/${conversation._id}/messages?page=${first.data.next}`);
+  assert.equal(secondPage.data.items.length, 11); assert.equal(secondPage.data.withinDay, false);
+  const older = await request(`/conversations/${conversation._id}/messages?page=${secondPage.data.next}`);
+  assert.equal(older.data.items[0]._id, String(old._id)); assert.equal(older.data.more, false);
+  const target = await request(`/conversations/${conversation._id}/messages?target=${old._id}`);
+  assert.ok(target.data.items.some(m => m._id === String(old._id)));
+  assert.equal((await request(`/conversations/${conversation._id}/messages?page=garbage`)).status, 400);
+});
+
+test('mentions are idempotent, private and grant read access without sending permission', async () => {
+  const conversation = await fixture();
+  const payload = { type: 'note', text: 'Please review', mentions: [String(second._id)], clientId: crypto.randomUUID() };
+  assert.equal((await request(`/conversations/${conversation._id}`, { role: 'second' })).status, 404);
+  const sent = await request(`/conversations/${conversation._id}/messages`, { method: 'POST', body: payload });
+  assert.equal(sent.status, 201);
+  await request(`/conversations/${conversation._id}/messages`, { method: 'POST', body: payload });
+  assert.equal(await Notification.countDocuments(), 1);
+  const list = await request('/notifications', { role: 'second' });
+  assert.equal(list.data.unread, 1); assert.equal(list.data.items.length, 1);
+  assert.equal((await request('/notifications', { role: 'agent' })).data.items.length, 0);
+  assert.equal((await request(`/conversations/${conversation._id}`, { role: 'second' })).status, 200);
+  assert.equal((await request(`/conversations/${conversation._id}/messages`, { role: 'second', method: 'POST', body: outgoing() })).status, 403);
+  const path = `/notifications/${list.data.items[0]._id}/read`;
+  assert.equal((await request(path, { role: 'agent', method: 'POST', body: {} })).status, 404);
+  const opened = await request(path, { role: 'second', method: 'POST', body: {} });
+  assert.equal(opened.data.message, sent.data._id);
+  assert.equal((await request('/notifications', { role: 'second' })).data.unread, 0);
+});
+
+test('conversation pages contain twenty unique rows', async () => {
+  for (let i = 0; i < 25; i++) { const contact = await service.upsertContact(`23480123${String(i).padStart(5, '0')}`); await service.openConversation(contact); }
+  const first = await request('/conversations'); const secondPage = await request(`/conversations?before=${first.data.next}`);
+  assert.equal(first.data.items.length, 20); assert.equal(secondPage.data.items.length, 5);
+  assert.equal(new Set([...first.data.items, ...secondPage.data.items].map(row => row._id)).size, 25);
+});
+
+test('delta cursor returns status changes without reloading unchanged history', async () => {
+  const conversation = await fixture();
+  const initial = await request(`/conversations/${conversation._id}/messages`);
+  const note = await Message.create({ conversation: conversation._id, type: 'note', direction: 'internal', text: 'New update' });
+  const delta = await request(`/conversations/${conversation._id}/messages?changes=${initial.data.changes}`);
+  assert.ok(delta.data.items.some(m => m._id === String(note._id)));
+  const empty = await request(`/conversations/${conversation._id}/messages?changes=${delta.data.changes}`);
+  assert.equal(empty.data.items.length, 0);
+});
+
+test('stream tickets are scoped, single-use and carry no message contents', async () => {
+  assert.equal((await request('/events-ticket', { method: 'POST', role: null, body: {} })).status, 401);
+  const issued = await request('/events-ticket', { method: 'POST', role: 'agent', body: {} });
+  assert.equal(issued.status, 200);
+  const controller = new AbortController();
+  const stream = await fetch(`${base}/events?ticket=${issued.data.ticket}`, { signal: controller.signal });
+  assert.equal(stream.status, 200);
+  const reader = stream.body.getReader();
+  assert.match(new TextDecoder().decode((await reader.read()).value), /connected/);
+  require('./live').bus.emit('change');
+  assert.equal(new TextDecoder().decode((await reader.read()).value), 'data: change\n\n');
+  controller.abort(); await reader.cancel().catch(() => {});
+  assert.equal((await fetch(`${base}/events?ticket=${issued.data.ticket}`)).status, 401);
+});
+
+test('durable pending mentions repair once after interruption', async () => {
+  const conversation = await fixture();
+  const note = await Message.create({ conversation: conversation._id, direction: 'internal', type: 'note', text: 'Repair', mentions: [second._id], mentionsPending: true, authorName: 'Administrator' });
+  await service.processMentions(); await service.processMentions();
+  assert.equal(await Notification.countDocuments({ message: note._id }), 1);
+  assert.equal((await Message.findById(note._id)).mentionsPending, false);
 });

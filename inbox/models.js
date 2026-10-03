@@ -19,6 +19,8 @@ const conversation = new Schema({
 }, { timestamps: true });
 conversation.index({ contact: 1, channel: 1 }, { unique: true });
 conversation.index({ assignedTo: 1, status: 1, lastMessageAt: -1, _id: -1 });
+conversation.add({ collaborators: [{ type: Schema.Types.ObjectId, ref: 'Staff' }] });
+conversation.index({ collaborators: 1, lastMessageAt: -1, _id: -1 });
 conversation.index({ status: 1, lastMessageAt: -1, _id: -1 });
 conversation.index({ lastMessageAt: -1, _id: -1 });
 conversation.index({ assignedTo: 1, status: 1, followUpAt: 1 });
@@ -32,6 +34,10 @@ const message = new Schema({
   error: String, sentAt: Date, deliveredAt: Date, readAt: Date, attemptedAt: Date, attempts: { type: Number, default: 0 },
   occurredAt: { type: Date, default: Date.now },
 }, { timestamps: true });
+message.add({ mentions: [{ type: Schema.Types.ObjectId, ref: 'Staff' }], mentionsPending: Boolean });
+message.index({ conversation: 1, createdAt: -1, _id: -1 });
+message.index({ conversation: 1, updatedAt: 1, _id: 1 });
+message.index({ mentionsPending: 1 });
 message.index({ conversation: 1, _id: -1 });
 message.index({ conversation: 1, type: 1, _id: -1 });
 message.index({ conversation: 1, direction: 1, occurredAt: -1 });
@@ -43,7 +49,12 @@ job.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 const template = new Schema({ externalId: { type: String, unique: true }, name: String, language: String, category: String, status: String, components: [Schema.Types.Mixed], syncedAt: Date });
 const rate = new Schema({ key: { type: String, unique: true }, count: Number, expiresAt: Date });
 rate.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+const notification = new Schema({ recipient: { type: Schema.Types.ObjectId, required: true }, conversation: { ...ref('InboxConversation'), required: true }, message: { ...ref('InboxMessage'), required: true }, authorName: String, readAt: Date }, { timestamps: true });
+notification.index({ recipient: 1, message: 1 }, { unique: true });
+notification.index({ recipient: 1, _id: -1 });
+notification.index({ recipient: 1, readAt: 1 });
 module.exports = {
+  Notification: mongoose.model('InboxNotification', notification),
   Contact: mongoose.model('InboxContact', contact), Conversation: mongoose.model('InboxConversation', conversation),
   Message: mongoose.model('InboxMessage', message), WebhookJob: mongoose.model('InboxWebhookJob', job),
   Template: mongoose.model('InboxTemplate', template), RateBucket: mongoose.model('InboxRateBucket', rate),

@@ -3,11 +3,13 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const staffAuth = require('../middleware/staffAuth');
 const Staff = require('../models/Staff');
-const { Contact, Conversation, Message, Template, RateBucket, WebhookJob } = require('./models');
+const { Contact, Conversation, Message, Template, RateBucket, WebhookJob, Notification } = require('./models');
 const policy = require('./policy');
 const provider = require('./provider');
 const service = require('./service');
 const router = express.Router();
+const live = require('./live');
+const { history } = require('./history');
 const fail = (status, message) => { throw Object.assign(new Error(message), { status }); };
 const id = (value) => { if (!mongoose.isValidObjectId(value)) fail(400, 'Invalid record identifier.'); return value; };
 const text = (value, max = 120) => { if (typeof value !== 'string' || value.length > max) fail(400, `Enter text no longer than ${max} characters.`); return value.trim(); };
@@ -38,6 +40,24 @@ router.post('/webhook', wrap(async (req, res) => {
   res.sendStatus(200);
 }));
 router.use((req, res, next) => process.env.JWT_SECRET ? next() : res.status(503).json({ message: 'Inbox requires a configured JWT_SECRET.' }));
+// A short-lived, single-use stream ticket never carries the normal login token in a URL.
+const tickets = new Map();
+const connections = new Map();
+router.get('/events', wrap(async (req, res) => {
+  const ticket = tickets.get(req.query.ticket); tickets.delete(req.query.ticket);
+  if (!ticket || ticket.until < Date.now()) return res.sendStatus(401);
+  if (!ticket.actor.admin && !await Staff.exists({ _id: ticket.actor.id, role: { $in: ['SS', 'CSS'] } })) return res.sendStatus(403);
+  const open = connections.get(ticket.actor.id) || new Set();
+  while (open.size >= 3) { const oldest = open.values().next().value; open.delete(oldest); oldest.end(); }
+  open.add(res); connections.set(ticket.actor.id, open);
+  res.set({ 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache, no-store', 'X-Accel-Buffering': 'no' });
+  res.flushHeaders(); res.write('data: connected\n\n');
+  const changed = () => { if (!res.writableEnded && !res.write('data: change\n\n')) res.end(); };
+  live.bus.on('change', changed); live.start();
+  const heartbeat = setInterval(() => res.write(': keepalive\n\n'), 25000);
+  const expiry = setTimeout(() => res.end(), 240000);
+  req.on('close', () => { open.delete(res); if (!open.size) connections.delete(ticket.actor.id); clearInterval(heartbeat); clearTimeout(expiry); live.bus.off('change', changed); });
+}));
 router.use(staffAuth);
 router.use(wrap(async (req, res, next) => {
   if (req.staff.admin) req.actor = { id: 'admin', admin: true, name: 'Administrator', role: 'ADMIN' };
@@ -47,6 +67,31 @@ router.use(wrap(async (req, res, next) => {
     req.actor = { id: String(staff._id), name: staff.name, role: staff.role, admin: false };
   }
   next();
+}));
+router.post('/events-ticket', wrap(async (req, res) => {
+  for (const [key, value] of tickets) if (value.until < Date.now()) tickets.delete(key);
+  if (tickets.size > 1000) fail(429, 'Please retry shortly.');
+  const ticket = require('node:crypto').randomBytes(32).toString('hex');
+  tickets.set(ticket, { actor: req.actor, until: Date.now() + 30000 });
+  res.json({ ticket });
+}));
+router.use((req, res, next) => {
+  res.set('Cache-Control', 'private, no-store');
+  if (req.method !== 'GET') res.on('finish', () => { if (res.statusCode < 400) live.notify(); });
+  next();
+});
+router.get('/notifications', wrap(async (req, res) => {
+  if (req.actor.admin) return res.json({ items: [], unread: 0, next: null });
+  const query = { recipient: req.actor.id, ...(req.query.before ? { _id: { $lt: id(req.query.before) } } : {}) };
+  const rows = await Notification.find(query).sort({ _id: -1 }).limit(21).lean();
+  const unread = await Notification.countDocuments({ recipient: req.actor.id, readAt: null });
+  res.json({ items: rows.slice(0, 20), unread, next: rows.length > 20 ? String(rows[19]._id) : null });
+}));
+router.post('/notifications/:notificationId/read', wrap(async (req, res) => {
+  if (req.actor.admin) fail(404, 'Notification not found.');
+  const item = await Notification.findOneAndUpdate({ _id: id(req.params.notificationId), recipient: req.actor.id }, { $set: { readAt: new Date() } }, { returnDocument: 'after' });
+  if (!item) fail(404, 'Notification not found.');
+  res.json({ conversation: item.conversation, message: item.message });
 }));
 router.get('/session', wrap(async (req, res) => {
   const config = provider.configuration();
@@ -95,15 +140,18 @@ router.get('/conversations', wrap(async (req, res) => {
     if (Number.isNaN(date.getTime())) fail(400, 'Invalid page cursor.');
     filter.$and.push({ $or: [{ lastMessageAt: { $lt: date } }, { lastMessageAt: date, _id: { $lt: cursor.id } }] });
   }
-  const rows = await Conversation.find(filter).sort({ lastMessageAt: -1, _id: -1 }).limit(41).populate('contact').lean();
-  const hasMore = rows.length > 40; const items = rows.slice(0, 40).map((row) => ({ ...row, unread: Boolean(row.lastInboundId && String(row.lastInboundId) > String(row.reads?.[req.actor.id] || '')), reads: undefined }));
+  const rows = await Conversation.find(filter).sort({ lastMessageAt: -1, _id: -1 }).limit(21).populate('contact').lean();
+  const hasMore = rows.length > 20; const items = rows.slice(0, 20).map((row) => ({ ...row, unread: Boolean(row.lastInboundId && String(row.lastInboundId) > String(row.reads?.[req.actor.id] || '')), reads: undefined }));
   const last = items.at(-1);
   res.json({ items, next: hasMore ? Buffer.from(JSON.stringify({ date: last.lastMessageAt, id: last._id })).toString('base64url') : null });
 }));
 router.get('/counts', wrap(async (req, res) => {
-  const base = policy.visible(req.actor);
-  const entries = await Promise.all(Object.entries({ inbox: { status: { $ne: 'resolved' } }, mine: { assignedTo: req.actor.admin ? null : req.actor.id, status: { $ne: 'resolved' } }, unassigned: { assignedTo: null, status: { $ne: 'resolved' } }, unread: { status: { $ne: 'resolved' }, $expr: { $gt: ['$lastInboundId', { $ifNull: [`$reads.${req.actor.id}`, new mongoose.Types.ObjectId('000000000000000000000000')] }] } }, follow_up: { status: 'follow_up' }, resolved: { status: 'resolved' } }).map(async ([key, query]) => [key, await Conversation.countDocuments({ $and: [base, query] })]));
-  res.json(Object.fromEntries(entries));
+  const filters = { inbox: { status: { $ne: 'resolved' } }, mine: { assignedTo: req.actor.admin ? null : req.actor.id, status: { $ne: 'resolved' } }, unassigned: { assignedTo: null, status: { $ne: 'resolved' } }, unread: { status: { $ne: 'resolved' }, $expr: { $gt: ['$lastInboundId', { $ifNull: [`$reads.${req.actor.id}`, new mongoose.Types.ObjectId('000000000000000000000000')] }] } }, follow_up: { status: 'follow_up' }, resolved: { status: 'resolved' } };
+  // One permission-scoped aggregation instead of six independent count queries.
+  const actorScope = policy.visible({ ...req.actor, id: req.actor.admin ? req.actor.id : new mongoose.Types.ObjectId(req.actor.id) });
+  if (!req.actor.admin) filters.mine.assignedTo = new mongoose.Types.ObjectId(req.actor.id);
+  const [counts] = await Conversation.aggregate([{ $match: actorScope }, { $facet: Object.fromEntries(Object.entries(filters).map(([key, query]) => [key, [{ $match: query }, { $count: 'total' }]])) }]);
+  res.json(Object.fromEntries(Object.keys(filters).map(key => [key, counts[key][0]?.total || 0])));
 }));
 router.post('/contacts', wrap(async (req, res) => {
   await rateLimit(req);
@@ -188,6 +236,7 @@ router.put('/conversations/:id/contact', wrap(async (req, res) => {
 }));
 router.get('/conversations/:id/messages', wrap(async (req, res) => {
   const conversation = await conversationFor(req);
+  if (!req.query.kind && !req.query.before && !req.query.after) return res.json(await history(conversation._id, req.query));
   const query = { conversation: conversation._id };
   if (req.query.kind === 'media') query.type = { $in: ['image', 'document', 'audio', 'video', 'sticker'] };
   else if (req.query.kind === 'activity') query.type = { $in: ['note', 'activity'] };
@@ -239,10 +288,17 @@ router.post('/conversations/:id/messages', wrap(async (req, res) => {
     if ((type === 'document') !== (media.mime === 'application/pdf')) fail(400, 'Attachment type mismatch.');
     if (body.length > 1024) fail(400, 'Attachment captions must be at most 1024 characters.');
   } else if (!body) fail(400, 'Write a message first.');
+  let mentions = [];
+  if (req.body.mentions?.length) {
+    if (type !== 'note' || !Array.isArray(req.body.mentions) || req.body.mentions.length > 10) fail(400, 'Mention up to 10 staff in an internal note.');
+    mentions = [...new Set(req.body.mentions.map(id))].filter(value => value !== req.actor.id);
+    if (await Staff.countDocuments({ _id: { $in: mentions }, role: { $in: ['SS', 'CSS'] } }) !== mentions.length) fail(400, 'Choose an available staff member.');
+  }
   let message;
-  try { message = await Message.create({ conversation: conversation._id, clientKey, direction: type === 'note' ? 'internal' : 'outbound', type, text: body, author: req.actor.id, authorName: req.actor.name, status: type === 'note' ? 'internal' : 'queued', providerPayload, media }); }
+  try { message = await Message.create({ conversation: conversation._id, clientKey, direction: type === 'note' ? 'internal' : 'outbound', type, text: body, author: req.actor.id, authorName: req.actor.name, status: type === 'note' ? 'internal' : 'queued', providerPayload, media, mentions, mentionsPending: mentions.length > 0 }); }
   catch (error) { if (error.code !== 11000) throw error; message = await Message.findOne({ clientKey }); }
   await Conversation.updateOne({ _id: conversation._id, $or: [{ lastMessageId: { $lt: message._id } }, { lastMessageId: null }] }, { $set: { lastMessageId: message._id, lastMessageAt: message.createdAt, preview: type === 'note' ? 'Internal note' : body.slice(0, 160) || `[${type}]` } });
+  await service.deliverMentions(message);
   const result = message.toObject(); delete result.providerPayload;
   res.status(201).json(result);
 }));

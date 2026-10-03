@@ -34,6 +34,7 @@ supportAlertTimer.unref();
 
 const allowedOrigins = [
   "http://localhost:3000",
+  "http://localhost:3005",
   "https://joshspot-media.vercel.app",
   "https://joshspotmedia.com",
   "https://www.joshspotmedia.com",
@@ -56,28 +57,7 @@ app.use(
   }),
 );
 
-/* Handle preflight */
-
-app.use((req, res, next) => {
-  res.header(
-    "Access-Control-Allow-Origin",
-    "https://joshspot-media.vercel.app",
-    "https://joshspotmedia.com",
-    "https://www.joshspotmedia.com",
-    "http://localhost:3000",
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization",
-  );
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-
-  next();
-});
+// The cors middleware handles preflight and reflects only approved origins.
 
 /* Middleware */
 

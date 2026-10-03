@@ -1,12 +1,14 @@
 const crypto = require('node:crypto');
 const { EventEmitter } = require('node:events');
-const { Contact, Conversation, Message, WebhookJob, Template } = require('./models');
+const { Contact, Conversation, Message, WebhookJob, Template, Notification } = require('./models');
+const live = require('./live');
 const policy = require('./policy');
 const provider = require('./provider');
 
 // Optional integrations subscribe here. Durable integrations should consume stored messages by cursor.
 const events = new EventEmitter();
 function publish(name, payload) {
+  live.notify();
   for (const listener of events.listeners(name)) Promise.resolve().then(() => listener(payload)).catch(() => console.error(`Inbox extension failed: ${name}`));
 }
 async function upsertContact(number, name = '') {
@@ -19,6 +21,7 @@ async function openConversation(contact) {
   catch (error) { if (error.code === 11000) return Conversation.findOne({ contact: contact._id, channel: 'whatsapp' }); throw error; }
 }
 async function activity(conversation, actor, text) {
+  live.notify();
   return Message.create({ conversation, direction: 'internal', type: 'activity', status: 'internal', author: actor.id, authorName: actor.name, text });
 }
 async function receive(value) {
@@ -53,12 +56,26 @@ async function receive(value) {
     if (item.status !== 'failed') update[`${item.status}At`] = new Date(Number(item.timestamp) * 1000 || Date.now());
     const allowed = ['sending', 'unknown', 'sent', 'delivered', 'failed'].filter((status) => policy.statusCanAdvance(status, item.status));
     await Message.updateOne({ _id: message._id, attempts: message.attempts, status: { $in: allowed } }, { $set: update });
+    live.notify();
   }
 }
 async function enqueueWebhook(raw, payload) {
   const key = crypto.createHash('sha256').update(raw).digest('hex');
   try { await WebhookJob.updateOne({ key }, { $setOnInsert: { key, payload, state: 'pending' } }, { upsert: true }); }
   catch (error) { if (error.code !== 11000) throw error; }
+}
+async function deliverMentions(message) {
+  if (!message.mentionsPending) return;
+  const recipients = message.mentions || [];
+  if (recipients.length) {
+    await Conversation.updateOne({ _id: message.conversation }, { $addToSet: { collaborators: { $each: recipients } } });
+    await Notification.bulkWrite(recipients.map(recipient => ({ updateOne: { filter: { recipient, message: message._id }, update: { $setOnInsert: { recipient, message: message._id, conversation: message.conversation, authorName: message.authorName } }, upsert: true } })));
+  }
+  await Message.updateOne({ _id: message._id }, { $set: { mentionsPending: false } });
+  live.notify();
+}
+async function processMentions() {
+  for (const message of await Message.find({ mentionsPending: true }).limit(25)) await deliverMentions(message);
 }
 async function processWebhooks() {
   for (let count = 0; count < 25; count++) {
@@ -90,6 +107,7 @@ async function processOutbox() {
       await Message.updateOne({ _id: message._id, status: { $in: ['sending', 'unknown'] } }, { $set: { status: 'sent', providerId: id, sentAt: new Date(), error: '' } });
       publish('message.sent', { messageId: String(message._id), conversationId: String(message.conversation) });
     } catch (error) {
+      live.notify();
       const definite = error.safe || (error.response?.status >= 400 && error.response?.status < 500 && error.response.status !== 408);
       const code = Number(error.response?.data?.error?.code);
       await Message.updateOne({ _id: message._id, status: 'sending' }, { $set: { status: definite ? 'failed' : 'unknown', error: error.safe ? error.message : definite ? `WhatsApp rejected this message${code ? ` (code ${code})` : ''}. Check the recipient, template and provider settings before retrying.` : 'Delivery is uncertain. Wait for a WhatsApp status update before sending again.' } });
@@ -100,7 +118,7 @@ let running = false;
 async function tick() {
   if (running) return;
   running = true;
-  try { await processWebhooks(); await processOutbox(); } catch { console.error('Inbox worker temporarily unavailable'); } finally { running = false; }
+  try { live.start(); await processWebhooks(); await processOutbox(); await processMentions(); } catch { console.error('Inbox worker temporarily unavailable'); } finally { running = false; }
 }
 async function syncTemplates() {
   const items = await provider.templates(); const syncedAt = new Date();
@@ -108,4 +126,4 @@ async function syncTemplates() {
   await Template.updateMany({ syncedAt: { $lt: syncedAt } }, { $set: { status: 'UNAVAILABLE' } });
   return items.length;
 }
-module.exports = { events, activity, upsertContact, openConversation, enqueueWebhook, receive, processWebhooks, processOutbox, tick, syncTemplates };
+module.exports = { deliverMentions, processMentions, events, activity, upsertContact, openConversation, enqueueWebhook, receive, processWebhooks, processOutbox, tick, syncTemplates };
