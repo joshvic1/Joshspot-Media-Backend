@@ -587,3 +587,27 @@ test('R2 media links and keep controls enforce conversation access and retention
   assert.equal((await request(`${basePath}/media-keep`, { role: 'agent', method: 'PUT', body: { keep: true } })).status, 409);
  } finally { storage.link = original; storage.configured = originalConfigured; }
 });
+
+ test('Unlimited AI usage counts calls without enforcing global, conversation or turn caps',async()=>{
+ const c=await aiFixture('LIVE');const day=new Date().toISOString().slice(0,10);
+ const config=aiSettings.validateConfig({... (await aiSettings.getConfig()).data,maxDailyCalls:0,maxConversationCalls:0,maxConsecutive:0});
+ for(const key of [`global:${day}`,`${c._id}:${day}`])await aiModels.Usage.create({key,calls:100000});
+ await Promise.all(Array.from({length:5},()=>aiWorker.budget(config,c._id)));
+ assert.equal((await aiModels.Usage.findOne({key:`global:${day}`})).calls,100005);
+ assert.equal((await aiModels.Usage.findOne({key:`${c._id}:${day}`})).calls,100005);
+ await aiModels.Config.updateOne({key:'main'},{$set:{data:config}});
+ await Conversation.updateOne({_id:c._id},{$set:{'ai.consecutive':100000}});
+ await aiWorker.runOne(await aiSettings.getConfig());
+ assert.notEqual((await Conversation.findById(c._id)).ai.handoffReason,'AI_TURN_LIMIT');
+ assert.equal((await aiModels.Usage.findOne({key:`global:${day}`})).calls,100006);
+ });
+
+test('Unlimited migration updates existing settings once and preserves later admin limits',async()=>{
+ await aiFixture('LIVE');
+ await aiModels.Config.updateOne({key:'main'},{$unset:{usageLimitsVersion:1},$set:{'data.maxDailyCalls':500,'data.maxConversationCalls':40,'data.maxConsecutive':8}});
+ const migrated=await aiSettings.getConfig();
+ assert.equal(migrated.data.maxDailyCalls,0);assert.equal(migrated.data.maxConversationCalls,0);assert.equal(migrated.data.maxConsecutive,0);
+ assert.equal(migrated.data.mode,'LIVE');
+ await aiModels.Config.updateOne({key:'main'},{$set:{'data.maxDailyCalls':100}});
+ assert.equal((await aiSettings.getConfig()).data.maxDailyCalls,100);
+});

@@ -13,7 +13,7 @@ function validateConfig(input) {
     else if (typeof fallback === 'number') { if (!Number.isFinite(value)) fail(`Invalid ${key}`); out[key] = value; }
     else out[key] = safeString(value);
   }
-  const ranges = { confidence:[0,1], maxResponseLength:[100,4000], maxHistory:[0,12], debounceSeconds:[1,10], responseDelaySeconds:[0,10], maxConsecutive:[1,30], maxDailyCalls:[1,10000], maxConversationCalls:[1,200], startHour:[0,23], endHour:[1,24] };
+  const ranges = { confidence:[0,1], maxResponseLength:[100,4000], maxHistory:[0,12], debounceSeconds:[1,10], responseDelaySeconds:[0,10], maxConsecutive:[0,30], maxDailyCalls:[0,10000], maxConversationCalls:[0,200], startHour:[0,23], endHour:[1,24] };
   for (const [key,[min,max]] of Object.entries(ranges)) if(out[key]<min || out[key]>max) fail(`${key} must be between ${min} and ${max}.`);
   if (!['OFF','DRAFT','LIVE'].includes(out.mode) || out.provider !== 'openai') fail('Unsupported AI mode/provider.');
   if (!['CSS','SS'].includes(out.handoffTeam) || !['least_loaded','round_robin','fallback'].includes(out.assignment)) fail('Invalid handoff strategy.');
@@ -53,9 +53,17 @@ function validateRecord(input) {
   if (!/^[a-zA-Z0-9_-]{1,80}$/.test(input.key || '')) fail('Use a unique key with letters, numbers, hyphens or underscores.');
   return {kind:input.kind,key:input.key,title,category:safeString(input.category || '',100),enabled:input.enabled !== false,archived:input.archived === true,priority:Math.max(-1000,Math.min(1000,Number(input.priority)||0)),data};
 }
-async function getConfig() { const row = await Config.findOne({key:'main'}).lean(); return row ? {...row,data:{...defaults.config,...row.data}} : {revision:-1,data:{...defaults.config,enabled:false}}; }
+async function getConfig() {
+  let row = await Config.findOne({key:'main'}).lean();
+  // One-time policy migration; preserve later administrator edits.
+  if(row && row.usageLimitsVersion!==1){
+    await Config.updateOne({key:'main',usageLimitsVersion:{$ne:1}},{$set:{usageLimitsVersion:1,'data.maxDailyCalls':0,'data.maxConversationCalls':0,'data.maxConsecutive':0},$inc:{revision:1}});
+    row=await Config.findOne({key:'main'}).lean();
+  }
+  return row ? {...row,data:{...defaults.config,...row.data}} : {revision:-1,data:{...defaults.config,enabled:false}};
+}
 async function seed(actor) {
-  await Config.updateOne({key:'main'},{$setOnInsert:{data:defaults.config,changedBy:actor,revision:0}},{upsert:true});
+  await Config.updateOne({key:'main'},{$setOnInsert:{data:defaults.config,changedBy:actor,revision:0,usageLimitsVersion:1}},{upsert:true});
   for (const item of defaults.records) await Record.updateOne({kind:item.kind,key:item.key},{$setOnInsert:{...item,enabled:true,archived:false,createdBy:actor,changedBy:actor,revision:0}},{upsert:true});
 }
 async function catalogue() { return Record.find({enabled:true,archived:false,kind:{$ne:'knowledge'}}).sort({priority:-1,_id:1}).limit(300).lean(); }

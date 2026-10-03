@@ -68,7 +68,7 @@ async function budget(config,conversationId) {
   const day=new Date().toISOString().slice(0,10);
   const reserve=async(key,limit,code)=>{
     try{await Usage.updateOne({key},{$setOnInsert:{calls:0,expiresAt:new Date(Date.now()+3*86400000)}},{upsert:true});}catch(error){if(error.code!==11000)throw error;}
-    const bucket=await Usage.findOneAndUpdate({key,calls:{$lt:limit}},{$inc:{calls:1}},{returnDocument:'after'});
+    const bucket=await Usage.findOneAndUpdate({key,...(limit>0?{calls:{$lt:limit}}:{})},{$inc:{calls:1}},{returnDocument:'after'});
     if(!bucket)throw Object.assign(new Error(code),{code});
   };
   const conversationKey=`${conversationId}:${day}`;
@@ -96,7 +96,7 @@ async function runOne(configRow) {
     const prior=conversation.ai.state || {};
     let result;
     try {
-      if(conversation.ai.consecutive>=config.maxConsecutive) result={action:'handoff',handoff:'AI_TURN_LIMIT',state:prior};
+      if(config.maxConsecutive>0 && conversation.ai.consecutive>=config.maxConsecutive) result={action:'handoff',handoff:'AI_TURN_LIMIT',state:prior};
       else if(!policy.windowOpen(conversation.lastInboundAt)) result={action:'handoff',handoff:'SERVICE_WINDOW_CLOSED',state:prior};
       else {
         if(!media)await budget(config,conversation._id);

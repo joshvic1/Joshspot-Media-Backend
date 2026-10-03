@@ -3,7 +3,7 @@ const pack = require('./businessPack');
 const config = {
   enabled: true, mode: 'DRAFT', autoReply: true, agentName: 'Joshspot Assistant', displayName: 'Joshspot Assistant', role: 'Customer service and sales', brand: 'Joshspot Media',
   tone: 'Natural, friendly, direct Nigerian-business conversational tone. Avoid corporate filler.', writingStyle: 'Short, helpful sentences. One useful question at a time.', responseLength: 'concise', emojiPreference: 'restrained', language: 'Match the customer language where supported', instructions: pack.instructions, signature: '', greeting: true,
-  provider: 'openai', model: '', confidence: 0.78, maxResponseLength: 1500, maxHistory: 6, debounceSeconds: 3, responseDelaySeconds: 1, maxConsecutive: 8, maxDailyCalls: 500, maxConversationCalls: 40,
+  provider: 'openai', model: '', confidence: 0.78, maxResponseLength: 1500, maxHistory: 6, debounceSeconds: 3, responseDelaySeconds: 1, maxConsecutive: 0, maxDailyCalls: 0, maxConversationCalls: 0,
   handoffTeam: 'CSS', fallbackAgent: '', paymentAgent: '', assignment: 'least_loaded', allowReturn: true, fallbackResponse: 'Let me get someone from the team to help you with this.',
   allowedIntents: ['greeting','advertising','recommendation','requirements','ready_to_pay','request_invoice','request_account_number','payment_question','payment_sent','receipt_sent','payment_problem','human','knowledge','unknown'], disallowedIntents: [],
   businessHoursEnabled: false, timezone: 'Africa/Lagos', startHour: 8, endHour: 18, outsideHours: 'handoff', stickerAction: 'handoff', contactAction: 'handoff',
