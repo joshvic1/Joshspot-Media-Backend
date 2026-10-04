@@ -19,7 +19,7 @@ function reply(record,variables,decision,config) {
   const result = render(text,variables);
   return `${result}${config.signature ? `\n${config.signature}`:''}`.slice(0,config.maxResponseLength);
 }
-async function decide({text,type='text',state={},config,records,knowledge=[],history=[],paymentVerified=false}) {
+async function decideCore({text,type='text',state={},config,records,knowledge=[],history=[],paymentVerified=false}) {
   const next = {...state};
   const handoff = (reason,extra={})=>({action:'handoff',handoff:reason,state:next,response:config.fallbackResponse,intent:'unknown',confidence:1,priority:false,...extra});
   if(type!=='text') {
@@ -39,8 +39,10 @@ async function decide({text,type='text',state={},config,records,knowledge=[],his
   if(decision.intent==='human') return ruled('CUSTOMER_REQUESTED_HUMAN');
   if(['payment_sent','receipt_sent'].includes(decision.intent)) return {...ruled('PAYMENT_VERIFICATION_REQUIRED'),response:paymentVerified?'Payment confirmed. Thank you — I’m passing this to customer support for the next step.':decision.intent==='receipt_sent'?'Thanks, your receipt has been received. Customer support will verify the payment and help with the next step.':'Thanks for letting us know. Customer support will check the payment before confirming it.'};
   if(!config.allowedIntents.includes(decision.intent) || config.disallowedIntents.includes(decision.intent)) return handoff('UNSUPPORTED_REQUEST',meta);
-  if(decision.confidence<config.confidence) return next.clarificationAsked?handoff('NO_KNOWLEDGE',meta):{...meta,action:'reply',response:'Could you clarify what you’d like help with so I can give you the right information?',state:{...next,clarificationAsked:true}};
-  if(decision.intent==='unknown') return ruled('NO_KNOWLEDGE');
+  const masterAnswer=config.masterInstructions && decision.answer?.trim();
+  const grounded=masterAnswer && (decision.answerKind==='clarify' || decision.answerKind==='answer' && decision.answerSupported===true);
+  if(!grounded && decision.confidence<config.confidence) return next.clarificationAsked?handoff('NO_KNOWLEDGE',meta):{...meta,action:'reply',response:'Could you clarify what you’d like help with so I can give you the right information?',state:{...next,clarificationAsked:true}};
+  if(decision.intent==='unknown' && !grounded) return ruled('NO_KNOWLEDGE');
   for(const [from,to] of [['platform','selectedPlatform'],['serviceType','serviceType'],['budget','budget'],['duration','duration']]) if(decision[from]!==null && decision[from]!==undefined) next[to]=decision[from];
   if(next.selectedPlatform!==state.selectedPlatform || next.serviceType!==state.serviceType) { delete next.recommendedPlan; delete next.selectedService; }
   next.currentIntent=decision.intent;
@@ -54,6 +56,18 @@ async function decide({text,type='text',state={},config,records,knowledge=[],his
   if(!amount && service?.data.allowCustomBudget && next.budget>=service.data.minBudget && next.budget<=service.data.maxBudget && next.duration>0) amount=next.budget;
   const variables={customer_name:'there',agent_name:config.displayName,service:service?.title || '',platform:next.selectedPlatform==='meta'?'Meta (Facebook & Instagram)':next.selectedPlatform==='tiktok'?'TikTok':'',amount:amount?money(amount):'',duration:next.duration || '',requirements:service?.data.requirements || '',plans:plans.map(p=>`${p.data.duration} days — ${money(p.data.amount)}`).join('\n')};
   const respond = (key,step=key)=>{const record=records.find(r=>r.kind==='response'&&r.key===key);const response=reply(record,variables,decision,config);return response?{...meta,action:'reply',state:{...next,currentStep:step,awaitingCustomerResponse:true},response,responseKey:key,amount,serviceKey:service?.key}:handoff('MISSING_RESPONSE',meta);};
+  if(decision.asksPrice && amount && service) return respond('quote','quote_presented');
+  // Financial actions keep their verified invoice path; ordinary answers can use
+  // the primary document instead of being forced through a saved response key.
+  const paymentAction=['ready_to_pay','request_invoice','request_account_number'].includes(decision.intent);
+  if(grounded && !(paymentAction && amount && service?.data.paymentEnabled && config.invoicesEnabled)) {
+    const raw=masterAnswer.replace(/\{\{[a-z_]+\}\}/g,'');
+    const unsafeFinance=/[₦$€£]|\b\d[\d,.]*\s*(?:naira|NGN|dollars)\b|https?:|\b\d{5,}\b|\b(?:payment|transfer)\s+(?:is\s+|has been\s+)?(?:confirmed|received|successful|verified)\b/i.test(raw);
+    const validVariables=varsIn(masterAnswer).every(key=>variables[key]!==undefined && variables[key]!=='');
+    if(!unsafeFinance && validVariables && masterAnswer.length<=config.maxResponseLength){
+      return {...meta,action:'reply',response:render(masterAnswer,variables),state:{...next,awaitingCustomerResponse:true},knowledge:['primary_document'],responseKey:'primary_document'};
+    }
+  }
   if(decision.intent==='greeting' && !next.selectedService && config.greeting) return respond('greeting');
   if(decision.intent==='knowledge') {
     const entry=knowledge.find(k=>k.key===decision.knowledgeKey);
@@ -83,5 +97,10 @@ async function decide({text,type='text',state={},config,records,knowledge=[],his
   }
   if(amount && service) return respond('quote','quote_presented');
   return handoff(service ? 'CUSTOM_PLAN_REVIEW' : 'NO_KNOWLEDGE',meta);
+}
+async function decide(args){
+ const result=await decideCore(args);
+ if(result.action==='reply' && require('./responsePolicy').promisesHandoff(result.response,args.config.fallbackResponse))return {...result,action:'handoff',handoff:'RESPONSE_REQUIRES_STAFF',handoffTeam:'CSS'};
+ return result;
 }
 module.exports={decide,render,money,paymentIntents};

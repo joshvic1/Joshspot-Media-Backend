@@ -60,7 +60,7 @@ async function getConfig() {
     await Config.updateOne({key:'main',usageLimitsVersion:{$ne:1}},{$set:{usageLimitsVersion:1,'data.maxDailyCalls':0,'data.maxConversationCalls':0,'data.maxConsecutive':0},$inc:{revision:1}});
     row=await Config.findOne({key:'main'}).lean();
   }
-  return row ? {...row,data:{...defaults.config,...row.data}} : {revision:-1,data:{...defaults.config,enabled:false}};
+  return row ? {...row,data:{...defaults.config,...row.data,masterInstructions:row.masterInstructions ?? require('./masterKnowledge').starter}} : {revision:-1,data:{...defaults.config,enabled:false}};
 }
 async function seed(actor) {
   await Config.updateOne({key:'main'},{$setOnInsert:{data:defaults.config,changedBy:actor,revision:0,usageLimitsVersion:1}},{upsert:true});

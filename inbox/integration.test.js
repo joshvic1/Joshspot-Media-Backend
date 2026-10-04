@@ -24,7 +24,7 @@ before(async () => {
   mongo = await MongoMemoryServer.create();
   await mongoose.connect(mongo.getUri());
   await Promise.all([DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels)].map((model) => model.init()));
-  const app = express(); app.use(express.json({ verify: (req, res, raw) => { req.rawBody = raw; } })); app.use('/inbox', require('./routes'));
+  const app = express(); app.use(express.json({ limit: "10mb", verify: (req, res, raw) => { req.rawBody = raw; } })); app.use('/inbox', require('./routes'));
   server = app.listen(0, '127.0.0.1'); await new Promise((resolve) => server.once('listening', resolve));
   base = `http://127.0.0.1:${server.address().port}/inbox`;
 }, { timeout: 300000 });
@@ -630,4 +630,27 @@ test('Onboarding stays with AI without assignment or notification',async()=>{
  assert.equal(current.assignedTo,null);assert.notEqual(current.ai.active,false);
  assert.equal(await Notification.countDocuments({}),0);
  await service.processOutbox();assert.equal(sent.length,1);assert.match(sent[0].message.text,/email/);
+});
+
+test('Primary document is admin-only, saves long text intact and rejects stale overwrites',async()=>{
+ await aiFixture();
+ assert.equal((await request('/ai/master-knowledge',{role:'agent'})).status,403);
+ const current=await request('/ai/master-knowledge');assert.equal(current.status,200);
+ const text=Array.from({length:2500},(_,i)=>`Instruction ${i}: answer approved questions naturally.`).join('\n');
+ const saved=await request('/ai/master-knowledge',{method:'PUT',body:{text,revision:current.data.revision}});
+ assert.equal(saved.status,200);assert.equal(saved.data.text,text);
+ assert.equal((await aiSettings.getConfig()).data.masterInstructions,text);
+ assert.equal((await request('/ai/master-knowledge',{method:'PUT',body:{text:'stale',revision:current.data.revision}})).status,409);
+ assert.equal((await request('/ai/master-knowledge',{method:'PUT',body:{text:'x'.repeat(200001),revision:saved.data.revision}})).status,400);
+ const cfg=await aiSettings.getConfig();await request('/ai/config',{method:'PUT',body:{revision:cfg.revision,data:cfg.data}});
+ assert.equal((await request('/ai/master-knowledge')).data.text,text);
+});
+test('Waiting response performs real CSS handoff rather than leaving an unassigned chat',async()=>{
+ const c=await aiFixture('LIVE');const original=aiProvider.interpret;
+ await aiModels.Record.updateOne({kind:'service',key:'tiktok_setup'},{$set:{'data.requirements':'Hold on please. You will receive a response shortly..'}});
+ aiProvider.interpret=async args=>({...await original(args),intent:'requirements'});
+ await aiWorker.runOne(await aiSettings.getConfig());const current=await Conversation.findById(c._id);
+ assert.equal(String(current.assignedTo),String(second._id));assert.equal(current.ai.handoffReason,'RESPONSE_REQUIRES_STAFF');
+ assert.equal(await Notification.countDocuments({recipient:second._id}),1);
+ await service.processOutbox();assert.equal(sent.length,1);
 });

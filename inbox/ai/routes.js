@@ -42,6 +42,18 @@ router.post('/conversations/:id/draft',wrap(async(req,res)=>{
   await Log.create({kind:'approval',actor:req.actor.id,conversation:c._id,action:'send',response:redact(response)});live.notify();res.json({ok:true});
 }));
 router.use((req,res,next)=>{if(!req.actor.admin)return res.status(403).json({message:'Only administrators can configure the AI agent'});next();});
+router.get('/master-knowledge',wrap(async(req,res)=>{
+ const config=await settings.getConfig();res.json({text:config.data.masterInstructions ?? require('./masterKnowledge').starter,revision:config.revision,maxLength:require('./masterKnowledge').MAX_LENGTH});
+}));
+router.put('/master-knowledge',wrap(async(req,res)=>{
+ const {MAX_LENGTH}=require('./masterKnowledge');
+ if(typeof req.body.text!=='string'||req.body.text.length>MAX_LENGTH)fail(400,`Use up to ${MAX_LENGTH} characters.`);
+ if(!Number.isInteger(req.body.revision))fail(400,'Reload the document before saving.');
+ const saved=await Config.findOneAndUpdate({key:'main',revision:req.body.revision},{$set:{masterInstructions:req.body.text,changedBy:req.actor.id},$inc:{revision:1}},{returnDocument:'after'});
+ if(!saved)fail(409,'Settings changed. Your draft is preserved; reload the saved version before trying again.');
+ await Log.create({kind:'configuration',actor:req.actor.id,action:'master_knowledge',after:{characters:req.body.text.length},configRevision:saved.revision});
+ res.json({text:saved.masterInstructions,revision:saved.revision,maxLength:MAX_LENGTH});
+}));
 router.get('/config',wrap(async(req,res)=>{const config=await settings.getConfig();res.json({...config,providerReady:Boolean(process.env.OPENAI_API_KEY && (config.data.model || process.env.OPENAI_MODEL)),staff:await Staff.find({role:{$in:['CSS','SS']}}).select('name role').lean()});}));
 router.post('/business-pack',wrap(async(req,res)=>res.json(await require('./installBusinessPack').install(req.actor.id))));
 router.post('/initialize',wrap(async(req,res)=>{await settings.seed(req.actor.id);await Log.create({kind:'configuration',actor:req.actor.id,action:'initialize'});res.json(await settings.getConfig());}));

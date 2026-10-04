@@ -75,3 +75,35 @@ test('Receipts confirm only verified payments; payment troubleshooting can use a
  const answer=await decide('wrong amount',{intent:'knowledge',knowledgeKey:entry.key},{},{knowledge:[entry]});
  assert.equal(answer.action,'reply');assert.equal(answer.response,entry.data.answer);
 });
+
+test('Primary document answer overrides old greeting and onboarding wording without handoff',async()=>{
+ const master='Ask whether they want setup and teaching or management before quoting.';
+ const extra={config:{...defaults.config,masterInstructions:master}};
+ const response='Would you like setup and guidance, or would you prefer us to run the ads?';
+ for(const intent of ['greeting','requirements','unknown']){
+ const answer=await decide('Help me get TikTok sorted',{intent,answer:response,answerKind:'answer',answerSupported:true,sourceQuote:master},{},extra);
+ assert.equal(answer.action,'reply');assert.equal(answer.response,response);assert.equal(answer.responseKey,'primary_document');
+ }
+});
+test('Primary answer cannot invent a price, confirm payment or bypass an explicit human request',async()=>{
+ const master='Explain our services and help the customer.';
+ for(const answer of ['Pay ₦99999 now','Payment confirmed']){
+ const value=await decide('question',{intent:'unknown',answer,answerKind:'answer',answerSupported:true,sourceQuote:master},{},{config:{...defaults.config,masterInstructions:master}});
+ assert.notEqual(value.response,answer);
+ }
+ const human=await decide('Human please',{intent:'human',answer:'Let us keep chatting',answerKind:'clarify'},{},{config:{...defaults.config,masterInstructions:master}});
+ assert.equal(human.handoff,'CUSTOMER_REQUESTED_HUMAN');
+});
+test('Provider receives the complete primary document including its last line with priority instructions',async()=>{
+ process.env.OPENAI_API_KEY='fake';process.env.OPENAI_MODEL='test';let captured;
+ axios.post=async(_,body)=>{captured=body;return{data:{output:[{content:[{type:'output_text',text:JSON.stringify(result({answer:'Hi',sourceQuote:'',answerKind:'clarify'}))}]}]}}};
+ const master='Instruction\n'.repeat(12000)+'FINAL IMPORTANT INSTRUCTION';
+ await original({text:'hi',state:{},history:[],records:[],knowledge:[],config:{...defaults.config,masterInstructions:master}});
+ assert.ok(captured.instructions.includes(master));assert.match(captured.instructions,/takes priority/);
+ delete process.env.OPENAI_API_KEY;delete process.env.OPENAI_MODEL;
+});
+
+test('Price questions use verified catalogue amount rather than stale onboarding text',async()=>{
+ const response=await decide('What will it cost?',{intent:'requirements',asksPrice:true},{selectedPlatform:'tiktok',serviceType:'account_setup'});
+ assert.equal(response.action,'reply');assert.match(response.response,/20,000/);assert.equal(response.responseKey,'quote');
+});
