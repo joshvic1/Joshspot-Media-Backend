@@ -71,6 +71,13 @@ router.use(wrap(async (req, res, next) => {
   }
   next();
 }));
+router.use((req, res, next) => {
+  if (!req.actor.admin) {
+    const json = res.json.bind(res);
+    res.json = data => json(require('./phonePrivacy').maskPhoneFields(JSON.parse(JSON.stringify(data))));
+  }
+  next();
+});
 router.use('/ai', require('./ai/routes'));
 router.post('/events-ticket', wrap(async (req, res) => {
   for (const [key, value] of tickets) if (value.until < Date.now()) tickets.delete(key);
