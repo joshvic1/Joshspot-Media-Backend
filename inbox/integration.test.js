@@ -535,6 +535,15 @@ test('history is bounded by 24 hours and 50 messages, skips empty days and targe
   assert.equal(older.data.items[0]._id, String(old._id)); assert.equal(older.data.more, false);
   const target = await request(`/conversations/${conversation._id}/messages?target=${old._id}`);
   assert.ok(target.data.items.some(m => m._id === String(old._id)));
+  assert.equal(target.data.items.filter(m => m.text.startsWith('Recent ')).length, 50);
+  assert.ok(target.data.newer);
+  const following = await request(`/conversations/${conversation._id}/messages?newer=${encodeURIComponent(target.data.newer)}`);
+  assert.equal(following.data.items.filter(m => m.text.startsWith('Recent ')).length, 10); assert.equal(following.data.newer, null);
+  assert.equal(new Set([...target.data.items, ...following.data.items].map(m => m._id)).size, target.data.items.length + following.data.items.length);
+  const fresh = await Message.create({ conversation: conversation._id, type: 'text', direction: 'inbound', text: 'Arrived after alert opened' });
+  const updates = await request(`/conversations/${conversation._id}/messages?changes=${encodeURIComponent(target.data.changes)}`);
+  assert.ok(updates.data.items.some(m => m._id === String(fresh._id)));
+  assert.equal((await request(`/conversations/${conversation._id}/messages?newer=garbage`)).status, 400);
   assert.equal((await request(`/conversations/${conversation._id}/messages?page=garbage`)).status, 400);
 });
 

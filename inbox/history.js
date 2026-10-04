@@ -11,6 +11,12 @@ const decode = (v) => { try { if (typeof v !== 'string' || v.length > 2000) bad(
 async function history(conversation, params) {
   const syncedAt = new Date().toISOString();
   const base = { conversation };
+  const newer = async after => {
+    const rows = await Message.find({ ...base, _id: { $gt: oid(after) } }).sort({ _id: 1 }).limit(51).lean();
+    const items = rows.slice(0, 50);
+    return { items, newer: rows.length > 50 ? encode({ after: items.at(-1)._id }) : null };
+  };
+  if (params.newer) return newer(decode(params.newer).after);
   if (params.changes) {
     const c = decode(params.changes); const since = date(c.date);
     const query = { ...base, $or: [{ updatedAt: { $gt: since } }, { updatedAt: since, _id: { $gt: oid(c.id) } }] };
@@ -38,7 +44,8 @@ async function history(conversation, params) {
   }
   const items = rows.slice(0, 50); const withinDay = rows.length > 50;
   const older = !withinDay && await Message.exists({ ...base, createdAt: { $lt: start } });
-  return { items: items.reverse(), more: Boolean(withinDay || older), withinDay,
+  const following = target ? await newer(target._id) : { items: [], newer: null };
+  return { items: [...items.reverse(), ...following.items], newer: following.newer, more: Boolean(withinDay || older), withinDay,
     next: withinDay ? encode({ end, before: items[0]._id }) : older ? encode({ end: start }) : null,
     windowStart: start, windowEnd: end, target: target?._id,
     changes: encode({ date: syncedAt, id: '000000000000000000000000' }) };
