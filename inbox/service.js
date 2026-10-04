@@ -50,9 +50,14 @@ async function receive(value) {
     const text = item.text?.body || item[item.type]?.caption || item.interactive?.button_reply?.title || item.interactive?.list_reply?.title || item.button?.text || `[${item.type || 'Unsupported'} message]`;
     const timestamp = Number(item.timestamp) * 1000;
     const occurredAt = new Date(Number.isFinite(timestamp) && timestamp > 0 ? Math.min(timestamp, Date.now()) : Date.now());
+    let replyTo;
+    if (item.context?.id) {
+      const original = await Message.findOne({ conversation: conversation._id, providerId: item.context.id, direction: { $ne: 'internal' } }).lean();
+      replyTo = { providerId: item.context.id, ...(original ? { message: original._id, text: original.text.slice(0, 500), type: original.type, authorName: original.direction === 'inbound' ? contact.name : original.authorName || 'Your team' } : { text: 'Original message unavailable' }) };
+    }
     let result;
     try {
-      result = await Message.updateOne({ providerId: item.id }, { $setOnInsert: { conversation: conversation._id, direction: 'inbound', type, text: text.slice(0, 10000), status: 'received', providerId: item.id, occurredAt, ...(item[item.type]?.id ? { media: { id: item[item.type].id, mime: item[item.type].mime_type, name: item[item.type].filename } } : {}) } }, { upsert: true });
+      result = await Message.updateOne({ providerId: item.id }, { $setOnInsert: { conversation: conversation._id, direction: 'inbound', type, text: text.slice(0, 10000), status: 'received', providerId: item.id, occurredAt, replyTo, ...(item[item.type]?.id ? { media: { id: item[item.type].id, mime: item[item.type].mime_type, name: item[item.type].filename } } : {}) } }, { upsert: true });
     } catch (error) { if (error.code !== 11000) throw error; }
     if(await require('./deleteChat').wasDeleted(contact.phone,item.timestamp) || !await Conversation.exists({_id:conversation._id,deleting:{$ne:true}})){await Message.deleteMany({conversation:conversation._id});continue;}
     const stored = await Message.findOne({ providerId: item.id }).select('_id createdAt');

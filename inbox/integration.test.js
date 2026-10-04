@@ -57,6 +57,21 @@ async function fixture(assigned = true) {
 }
 const outgoing = (text = 'Hello Ada') => ({ type: 'text', text, clientId: crypto.randomUUID() });
 
+test('quoted replies stay in their conversation and incoming reply context is preserved', async () => {
+ const c = await fixture(); const original = await Message.findOne({conversation:c._id,direction:'inbound'});
+ const result = await request(`/conversations/${c._id}/messages`,{role:'agent',method:'POST',body:{...outgoing('Line one\nLine two'),replyTo:String(original._id)}});
+ const axios = require('axios'); const create = axios.create; let sentPayload;
+ try { axios.create = () => ({ post: async (url, data) => { sentPayload = data; return { data: { messages: [{ id: 'wamid.quoted' }] } }; } }); await providerOriginal.send('2348000000000', result.data); assert.equal(sentPayload.context.message_id, original.providerId); }
+ finally { axios.create = create; }
+ assert.equal(result.status,201); assert.equal(result.data.replyTo.providerId,original.providerId);assert.equal(result.data.text,'Line one\nLine two');
+ const other = await Message.create({conversation:new mongoose.Types.ObjectId(),direction:'inbound',type:'text',text:'Private',providerId:'other-chat'});
+ assert.equal((await request(`/conversations/${c._id}/messages`,{method:'POST',body:{...outgoing(),replyTo:String(other._id)}})).status,400);
+ const note = await Message.create({conversation:c._id,direction:'internal',type:'note',text:'Private note'});
+ assert.equal((await request(`/conversations/${c._id}/messages`,{method:'POST',body:{...outgoing(),replyTo:String(note._id)}})).status,400);
+ const payload=inbound('wamid.reply');payload.messages[0].context={id:original.providerId};await service.receive(payload);
+ assert.equal(String((await Message.findOne({providerId:'wamid.reply'})).replyTo.message),String(original._id));
+});
+
 test('Staff shortcuts mask identity, lock CRM identity and restrict admin libraries', async () => {
   const c = await fixture();
   const customer = await request(`/conversations/${c._id}/actions/customer`, { role: 'agent' });

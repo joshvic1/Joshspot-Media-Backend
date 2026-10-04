@@ -310,6 +310,13 @@ router.post('/conversations/:id/messages', wrap(async (req, res) => {
     if (type !== (media.mime === 'application/pdf' ? 'document' : media.mime.split('/')[0])) fail(400, 'Attachment type mismatch.');
     if (body.length > 1024) fail(400, 'Attachment captions must be at most 1024 characters.');
   } else if (!body) fail(400, 'Write a message first.');
+  let replyTo;
+  if (req.body.replyTo) {
+    const original = await Message.findOne({ _id: id(req.body.replyTo), conversation: conversation._id });
+    if (!original || original.direction === 'internal' || !original.providerId || ['failed','queued','sending','unknown'].includes(original.status)) fail(400, 'Choose a delivered WhatsApp message to reply to.');
+    if (type === 'note' || type === 'template') fail(400, 'Quoted replies require a regular WhatsApp message.');
+    replyTo = { message: original._id, providerId: original.providerId, text: original.text.slice(0, 500), type: original.type, authorName: original.direction === 'inbound' ? conversation.contact.name : original.authorName || 'Your team' };
+  }
   let mentions = [];
   if (req.body.mentions?.length) {
     if (type !== 'note' || !Array.isArray(req.body.mentions) || req.body.mentions.length > 10) fail(400, 'Mention up to 10 staff in an internal note.');
@@ -318,7 +325,7 @@ router.post('/conversations/:id/messages', wrap(async (req, res) => {
   }
   if (type !== 'note') await require('./ai/worker').pause(conversation._id, req.actor, 'HUMAN_REPLY');
   let message;
-  try { message = await Message.create({ conversation: conversation._id, clientKey, direction: type === 'note' ? 'internal' : 'outbound', type, text: body, author: req.actor.id, authorName: req.actor.name, status: type === 'note' ? 'internal' : 'queued', providerPayload, media, mentions, mentionsPending: mentions.length > 0, ...(type !== 'note' ? { routingPhoneId: process.env.WHATSAPP_PHONE_NUMBER_ID } : {}) }); }
+  try { message = await Message.create({ conversation: conversation._id, clientKey, direction: type === 'note' ? 'internal' : 'outbound', type, text: body, author: req.actor.id, authorName: req.actor.name, status: type === 'note' ? 'internal' : 'queued', providerPayload, media, replyTo, mentions, mentionsPending: mentions.length > 0, ...(type !== 'note' ? { routingPhoneId: process.env.WHATSAPP_PHONE_NUMBER_ID } : {}) }); }
   catch (error) { if (error.code !== 11000) throw error; message = await Message.findOne({ clientKey }); }
   await Conversation.updateOne({ _id: conversation._id, $or: [{ lastMessageId: { $lt: message._id } }, { lastMessageId: null }] }, { $set: { lastMessageId: message._id, lastMessageAt: message.createdAt, preview: type === 'note' ? 'Internal note' : body.slice(0, 160) || `[${type}]` } });
   await service.deliverMentions(message);

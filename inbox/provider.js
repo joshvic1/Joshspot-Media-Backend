@@ -11,6 +11,7 @@ function api() {
 }
 async function send(to, message) {
   const data = { messaging_product: 'whatsapp', recipient_type: 'individual', to, type: message.type, biz_opaque_callback_data: `${message._id}:${message.attempts}` };
+  if (message.replyTo?.providerId) data.context = { message_id: message.replyTo.providerId };
   if (message.type === 'text') data.text = { body: message.text };
   else if (message.type === 'template') data.template = message.providerPayload;
   else if (['image', 'document', 'audio', 'video'].includes(message.type)) data[message.type] = { id: message.media.id, ...(message.text && message.type !== 'audio' ? { caption: message.text } : {}), ...(message.type === 'document' ? { filename: message.media.name } : {}) };

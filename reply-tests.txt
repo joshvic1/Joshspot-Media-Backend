@@ -1,0 +1,552 @@
+
+> backend@1.0.0 test:inbox
+> node --test inbox/policy.test.js inbox/integration.test.js inbox/media.test.js inbox/ai/engine.test.js inbox/ai/structured.test.js
+
+TAP version 13
+# Subtest: AI diagnostics distinguish quota, authentication and timeouts without exposing raw errors
+ok 1 - AI diagnostics distinguish quota, authentication and timeouts without exposing raw errors
+  ---
+  duration_ms: 34.3952
+  ...
+# Subtest: initial greeting, explicit platform, setup prices and management context use configured records
+ok 2 - initial greeting, explicit platform, setup prices and management context use configured records
+  ---
+  duration_ms: 71.3857
+  ...
+# Subtest: recommendations, selecting plans and payment actions cannot invent amounts
+ok 3 - recommendations, selecting plans and payment actions cannot invent amounts
+  ---
+  duration_ms: 4.0229
+  ...
+# Subtest: media, receipts, human requests, sensitive data and unknown questions stop AI
+ok 4 - media, receipts, human requests, sensitive data and unknown questions stop AI
+  ---
+  duration_ms: 2.3944
+  ...
+# Subtest: knowledge must match retrieved approved entries and template variables must exist
+ok 5 - knowledge must match retrieved approved entries and template variables must exist
+  ---
+  duration_ms: 3.0275
+  ...
+# Subtest: onboarding from requirements, saved workflow responses and knowledge continues with AI
+ok 6 - onboarding from requirements, saved workflow responses and knowledge continues with AI
+  ---
+  duration_ms: 2.2187
+  ...
+# Subtest: payment/human rules supply the approved fallback without bypassing mandatory handoff
+ok 7 - payment/human rules supply the approved fallback without bypassing mandatory handoff
+  ---
+  duration_ms: 2.0049
+  ...
+# Subtest: OpenAI adapter uses structured Responses API, store false and redacted input
+ok 8 - OpenAI adapter uses structured Responses API, store false and redacted input
+  ---
+  duration_ms: 4.9218
+  ...
+# Subtest: Receipts confirm only verified payments; payment troubleshooting can use approved knowledge
+ok 9 - Receipts confirm only verified payments; payment troubleshooting can use approved knowledge
+  ---
+  duration_ms: 1.6362
+  ...
+# Subtest: Primary document answer overrides old greeting and onboarding wording without handoff
+ok 10 - Primary document answer overrides old greeting and onboarding wording without handoff
+  ---
+  duration_ms: 3.07
+  ...
+# Subtest: Primary answer cannot invent a price, confirm payment or bypass an explicit human request
+ok 11 - Primary answer cannot invent a price, confirm payment or bypass an explicit human request
+  ---
+  duration_ms: 1.6931
+  ...
+# Subtest: Provider receives the complete primary document including its last line with priority instructions
+ok 12 - Provider receives the complete primary document including its last line with priority instructions
+  ---
+  duration_ms: 2.3887
+  ...
+# Subtest: Price questions use verified catalogue amount rather than stale onboarding text
+ok 13 - Price questions use verified catalogue amount rather than stale onboarding text
+  ---
+  duration_ms: 0.788
+  ...
+# Subtest: strict generic greeting bypasses provider; intent-bearing greeting retains useful information
+ok 14 - strict generic greeting bypasses provider; intent-bearing greeting retains useful information
+  ---
+  duration_ms: 50.6902
+  ...
+# Subtest: setup progresses quote, consent, payment details without duplicate questions
+ok 15 - setup progresses quote, consent, payment details without duplicate questions
+  ---
+  duration_ms: 27.7919
+  ...
+# Subtest: management custom quote calls the actual calculator and preserves partial information
+ok 16 - management custom quote calls the actual calculator and preserves partial information
+  ---
+  duration_ms: 33.6858
+  ...
+# Subtest: calculator copy has exact parity with existing frontend module
+ok 17 - calculator copy has exact parity with existing frontend module
+  ---
+  duration_ms: 3.6471
+  ...
+# Subtest: recommendations use current records and explicit plan selection
+ok 18 - recommendations use current records and explicit plan selection
+  ---
+  duration_ms: 3.9138
+  ...
+# Subtest: decline stops progression and service changes unlink wrong invoice without deleting it
+ok 19 - decline stops progression and service changes unlink wrong invoice without deleting it
+  ---
+  duration_ms: 2.7113
+  ...
+# Subtest: media, human and claimed payments hand off; only verified payment is confirmed
+ok 20 - media, human and claimed payments hand off; only verified payment is confirmed
+  ---
+  duration_ms: 5.5971
+  ...
+# Subtest: approved multi-entry answers precede progression and financial claims are rejected
+ok 21 - approved multi-entry answers precede progression and financial claims are rejected
+  ---
+  duration_ms: 5.6792
+  ...
+# Subtest: pending payment questions respect cooldown and do not regenerate invoices
+ok 22 - pending payment questions respect cooldown and do not regenerate invoices
+  ---
+  duration_ms: 2.1766
+  ...
+# Subtest: state-aware retrieval excludes inapplicable entries and validation rejects financial writes
+ok 23 - state-aware retrieval excludes inapplicable entries and validation rejects financial writes
+  ---
+  duration_ms: 5.3955
+  ...
+# Subtest: bare agreement cannot invent a new budget, select a plan, or skip the payment-details question
+ok 24 - bare agreement cannot invent a new budget, select a plan, or skip the payment-details question
+  ---
+  duration_ms: 5.6628
+  ...
+# Subtest: explicit payment request survives a mistaken requirements classification
+ok 25 - explicit payment request survives a mistaken requirements classification
+  ---
+  duration_ms: 1.6048
+  ...
+# Subtest: active invoice amount stays authoritative after service price changes
+ok 26 - active invoice amount stays authoritative after service price changes
+  ---
+  duration_ms: 1.9544
+  ...
+# Subtest: low-risk unrelated questions redirect; unknown business information transfers
+ok 27 - low-risk unrelated questions redirect; unknown business information transfers
+  ---
+  duration_ms: 4.0402
+  ...
+# Subtest: STRICT preserves line breaks and disabled records do not control answers
+ok 28 - STRICT preserves line breaks and disabled records do not control answers
+  ---
+  duration_ms: 3.3002
+  ...
+# Subtest: quoted replies stay in their conversation and incoming reply context is preserved
+ok 29 - quoted replies stay in their conversation and incoming reply context is preserved
+  ---
+  duration_ms: 6290.0241
+  ...
+# Subtest: Staff shortcuts mask identity, lock CRM identity and restrict admin libraries
+ok 30 - Staff shortcuts mask identity, lock CRM identity and restrict admin libraries
+  ---
+  duration_ms: 511.9174
+  ...
+# Subtest: CRM shortcuts preserve Ads and Verification fields and CSS amount permissions
+ok 31 - CRM shortcuts preserve Ads and Verification fields and CSS amount permissions
+  ---
+  duration_ms: 297.5485
+  ...
+# (node:42932) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Invoice shortcut queues once and checks payment without sending a message
+ok 32 - Invoice shortcut queues once and checks payment without sending a message
+  ---
+  duration_ms: 466.0396
+  ...
+# Subtest: admin deletion purges Inbox data and saved media but preserves invoices and other customers
+ok 33 - admin deletion purges Inbox data and saved media but preserves invoices and other customers
+  ---
+  duration_ms: 351.1287
+  ...
+# Subtest: AI configuration is admin-only and initialization is idempotent DRAFT
+ok 34 - AI configuration is admin-only and initialization is idempotent DRAFT
+  ---
+  duration_ms: 626.7411
+  ...
+# Subtest: AI DRAFT persists a suggestion, does not send, and duplicate webhooks do not regenerate
+ok 35 - AI DRAFT persists a suggestion, does not send, and duplicate webhooks do not regenerate
+  ---
+  duration_ms: 537.8548
+  ...
+# Subtest: AI LIVE uses existing outbox and takeover cancels queued output
+ok 36 - AI LIVE uses existing outbox and takeover cancels queued output
+  ---
+  duration_ms: 480.7639
+  ...
+# Subtest: AI LIVE delivers normally and human takeover during generation suppresses output
+ok 37 - AI LIVE delivers normally and human takeover during generation suppresses output
+  ---
+  duration_ms: 647.5328
+  ...
+# Subtest: AI batches rapid messages and media/errors hand off without sending content to model
+ok 38 - AI batches rapid messages and media/errors hand off without sending content to model
+  ---
+  duration_ms: 616.5223
+  ...
+# Subtest: AI provider failures and sensitive text preserve input and route to a human
+ok 39 - AI provider failures and sensitive text preserve input and route to a human
+  ---
+  duration_ms: 578.4733
+  ...
+# Subtest: AI test mode performs no invoice or WhatsApp writes; unavailable invoice generation hands off
+ok 40 - AI test mode performs no invoice or WhatsApp writes; unavailable invoice generation hands off
+  ---
+  duration_ms: 493.9708
+  ...
+# Subtest: AI invoice action reuses the existing Invoice and account and never retries uncertain account creation
+ok 41 - AI invoice action reuses the existing Invoice and account and never retries uncertain account creation
+  ---
+  duration_ms: 384.5872
+  ...
+# Subtest: AI worker lease prevents two workers generating for one conversation
+ok 42 - AI worker lease prevents two workers generating for one conversation
+  ---
+  duration_ms: 451.1821
+  ...
+# Subtest: AI limits report their exact reason and blocked attempts do not inflate counters
+ok 43 - AI limits report their exact reason and blocked attempts do not inflate counters
+  ---
+  duration_ms: 453.7333
+  ...
+# Subtest: business pack installs all approved entries once and preserves rollout and prices
+ok 44 - business pack installs all approved entries once and preserves rollout and prices
+  ---
+  duration_ms: 781.4484
+  ...
+# Subtest: LIVE human request assigns CSS immediately, notifies once and sends only one handoff response
+ok 45 - LIVE human request assigns CSS immediately, notifies once and sends only one handoff response
+  ---
+  duration_ms: 393.2435
+  ...
+# Subtest: DRAFT human request is assigned to CSS without automatic sending and CSS can approve it
+ok 46 - DRAFT human request is assigned to CSS without automatic sending and CSS can approve it
+  ---
+  duration_ms: 369.7272
+  ...
+# Subtest: missing fallback chooses CSS and absent CSS remains visible and retries without duplicate notices
+ok 47 - missing fallback chooses CSS and absent CSS remains visible and retries without duplicate notices
+  ---
+  duration_ms: 355.344
+  ...
+# Subtest: interrupted handoff notification is recovered once and manual assignment cancels recovery
+ok 48 - interrupted handoff notification is recovered once and manual assignment cancels recovery
+  ---
+  duration_ms: 409.4678
+  ...
+# Subtest: All includes resolved chats and Mine never treats unassigned chats as admin assignments
+ok 49 - All includes resolved chats and Mine never treats unassigned chats as admin assignments
+  ---
+  duration_ms: 106.102
+  ...
+# Subtest: reactions send to WhatsApp, replace/remove and enforce permissions
+ok 50 - reactions send to WhatsApp, replace/remove and enforce permissions
+  ---
+  duration_ms: 158.5856
+  ...
+# Subtest: note reactions stay internal and customer reaction webhooks update original messages
+ok 51 - note reactions stay internal and customer reaction webhooks update original messages
+  ---
+  duration_ms: 125.9878
+  ...
+# Subtest: authentication and existing restricted roles are enforced
+ok 52 - authentication and existing restricted roles are enforced
+  ---
+  duration_ms: 41.4595
+  ...
+# Subtest: signed webhook is durably acknowledged and duplicate deliveries create one message/contact
+ok 53 - signed webhook is durably acknowledged and duplicate deliveries create one message/contact
+  ---
+  duration_ms: 107.9886
+  ...
+# Subtest: only one representative can win a simultaneous claim
+ok 54 - only one representative can win a simultaneous claim
+  ---
+  duration_ms: 79.3916
+  ...
+# Subtest: other agents cannot read, reply, modify or download an assigned conversation
+ok 55 - other agents cannot read, reply, modify or download an assigned conversation
+  ---
+  duration_ms: 121.3996
+  ...
+# Subtest: internal notes never enter the outbound provider queue
+ok 56 - internal notes never enter the outbound provider queue
+  ---
+  duration_ms: 72.674
+  ...
+# Subtest: repeated send requests share one durable message and one provider send
+ok 57 - repeated send requests share one durable message and one provider send
+  ---
+  duration_ms: 108.3015
+  ...
+# Subtest: closed reply window rejects text but permits approved templates
+ok 58 - closed reply window rejects text but permits approved templates
+  ---
+  duration_ms: 151.445
+  ...
+# Subtest: window and assignment are rechecked at send time
+ok 59 - window and assignment are rechecked at send time
+  ---
+  duration_ms: 109.6755
+  ...
+# Subtest: provider timeouts become uncertain and cannot be blindly retried
+ok 60 - provider timeouts become uncertain and cannot be blindly retried
+  ---
+  duration_ms: 121.3448
+  ...
+# Subtest: out-of-order status webhooks cannot regress a read receipt
+ok 61 - out-of-order status webhooks cannot regress a read receipt
+  ---
+  duration_ms: 133.2729
+  ...
+# Subtest: same-second inbound messages stay unread until the second message is read
+ok 62 - same-second inbound messages stay unread until the second message is read
+  ---
+  duration_ms: 98.1641
+  ...
+# Subtest: new messages reopen resolved conversations even in the same second, duplicates do not
+ok 63 - new messages reopen resolved conversations even in the same second, duplicates do not
+  ---
+  duration_ms: 84.7206
+  ...
+# Subtest: contact edits have revision checks and missing configuration never reports success
+ok 64 - contact edits have revision checks and missing configuration never reports success
+  ---
+  duration_ms: 90.5545
+  ...
+# Subtest: message pagination is bounded and does not repeat rows
+ok 65 - message pagination is bounded and does not repeat rows
+  ---
+  duration_ms: 130.7169
+  ...
+# Subtest: media validation rejects executable content before provider upload
+ok 66 - media validation rejects executable content before provider upload
+  ---
+  duration_ms: 68.7076
+  ...
+# Subtest: concurrent delivery callbacks preserve the highest receipt state
+ok 67 - concurrent delivery callbacks preserve the highest receipt state
+  ---
+  duration_ms: 123.5182
+  ...
+# Subtest: old attempt callbacks cannot alter a retried message
+ok 68 - old attempt callbacks cannot alter a retried message
+  ---
+  duration_ms: 154.0862
+  ...
+# Subtest: invalid signature, verification challenge and wrong phone routing are handled
+ok 69 - invalid signature, verification challenge and wrong phone routing are handled
+  ---
+  duration_ms: 31.0693
+  ...
+# Subtest: CRM lookup exposes service context without credentials or staff-visible payments
+ok 70 - CRM lookup exposes service context without credentials or staff-visible payments
+  ---
+  duration_ms: 103.077
+  ...
+# Subtest: follow-up scheduling validates dates, permissions and revisions
+ok 71 - follow-up scheduling validates dates, permissions and revisions
+  ---
+  duration_ms: 182.937
+  ...
+# Subtest: contact filters remain scoped and media/activity views only return their types
+ok 72 - contact filters remain scoped and media/activity views only return their types
+  ---
+  duration_ms: 120.4363
+  ...
+# Subtest: templates can be filtered by category, status and language
+ok 73 - templates can be filtered by category, status and language
+  ---
+  duration_ms: 44.1003
+  ...
+# Subtest: history is bounded by 24 hours and 50 messages, skips empty days and targets old notes
+ok 74 - history is bounded by 24 hours and 50 messages, skips empty days and targets old notes
+  ---
+  duration_ms: 200.4575
+  ...
+# Subtest: mentions are idempotent, private and grant read access without sending permission
+ok 75 - mentions are idempotent, private and grant read access without sending permission
+  ---
+  duration_ms: 190.9455
+  ...
+# Subtest: conversation pages contain twenty unique rows
+ok 76 - conversation pages contain twenty unique rows
+  ---
+  duration_ms: 188.0949
+  ...
+# Subtest: delta cursor returns status changes without reloading unchanged history
+ok 77 - delta cursor returns status changes without reloading unchanged history
+  ---
+  duration_ms: 80.894
+  ...
+# Subtest: stream tickets are scoped, single-use and carry no message contents
+ok 78 - stream tickets are scoped, single-use and carry no message contents
+  ---
+  duration_ms: 56.7806
+  ...
+# Subtest: durable pending mentions repair once after interruption
+ok 79 - durable pending mentions repair once after interruption
+  ---
+  duration_ms: 71.1414
+  ...
+# Subtest: a mismatched worker cannot claim a routed webhook or erase its payload
+ok 80 - a mismatched worker cannot claim a routed webhook or erase its payload
+  ---
+  duration_ms: 62.4943
+  ...
+# Inbox webhook processing failed 6ac263addfdfdcaa96c0c1f7 PHONE_NUMBER_MISMATCH
+# Subtest: legacy wrong-phone payload is blocked and retained rather than silently completed
+ok 81 - legacy wrong-phone payload is blocked and retained rather than silently completed
+  ---
+  duration_ms: 51.2031
+  ...
+# Subtest: a mismatched outbound worker leaves the message queued for the correct worker
+ok 82 - a mismatched outbound worker leaves the message queued for the correct worker
+  ---
+  duration_ms: 109.9533
+  ...
+# Subtest: connection diagnostics are restricted to administrators
+ok 83 - connection diagnostics are restricted to administrators
+  ---
+  duration_ms: 55.1405
+  ...
+# Subtest: R2 media links and keep controls enforce conversation access and retention state
+ok 84 - R2 media links and keep controls enforce conversation access and retention state
+  ---
+  duration_ms: 168.0387
+  ...
+# Subtest: Unlimited AI usage counts calls without enforcing global, conversation or turn caps
+ok 85 - Unlimited AI usage counts calls without enforcing global, conversation or turn caps
+  ---
+  duration_ms: 360.9968
+  ...
+# Subtest: Unlimited migration updates existing settings once and preserves later admin limits
+ok 86 - Unlimited migration updates existing settings once and preserves later admin limits
+  ---
+  duration_ms: 273.1933
+  ...
+# Subtest: Legacy conversations missing AI version complete pending replies exactly once
+ok 87 - Legacy conversations missing AI version complete pending replies exactly once
+  ---
+  duration_ms: 287.5604
+  ...
+# Subtest: Onboarding stays with AI without assignment or notification
+ok 88 - Onboarding stays with AI without assignment or notification
+  ---
+  duration_ms: 317.8642
+  ...
+# Subtest: Primary document is admin-only, saves long text intact and rejects stale overwrites
+ok 89 - Primary document is admin-only, saves long text intact and rejects stale overwrites
+  ---
+  duration_ms: 352.1867
+  ...
+# Subtest: Waiting response performs real CSS handoff rather than leaving an unassigned chat
+ok 90 - Waiting response performs real CSS handoff rather than leaving an unassigned chat
+  ---
+  duration_ms: 320.4902
+  ...
+# Subtest: Structured migration preserves prices, mode, legacy knowledge and is idempotent
+ok 91 - Structured migration preserves prices, mode, legacy knowledge and is idempotent
+  ---
+  duration_ms: 488.669
+  ...
+# Subtest: Structured DRAFT media handoff is a suggestion with no assignment or notification
+ok 92 - Structured DRAFT media handoff is a suggestion with no assignment or notification
+  ---
+  duration_ms: 293.1466
+  ...
+# Subtest: Structured LIVE missing staff acknowledges once, persists pending assignment and recovers
+ok 93 - Structured LIVE missing staff acknowledges once, persists pending assignment and recovers
+  ---
+  duration_ms: 375.8059
+  ...
+# Subtest: Payment reminders are durable and cancelled at send time after paid or human takeover
+ok 94 - Payment reminders are durable and cancelled at send time after paid or human takeover
+  ---
+  duration_ms: 431.2126
+  ...
+# Subtest: Verified payment reconciliation pauses sales and hands off without new customer input
+ok 95 - Verified payment reconciliation pauses sales and hands off without new customer input
+  ---
+  duration_ms: 386.5051
+  ...
+# Subtest: Structured Test Agent simulates invoice and verified payment without business side effects
+ok 96 - Structured Test Agent simulates invoice and verified payment without business side effects
+  ---
+  duration_ms: 382.3135
+  ...
+# Subtest: Admin corrections invalidate stale quotes and reminders without touching financial records
+ok 97 - Admin corrections invalidate stale quotes and reminders without touching financial records
+  ---
+  duration_ms: 339.1436
+  ...
+# Subtest: automatic cleanup is disabled even for old unkept assets
+ok 98 - automatic cleanup is disabled even for old unkept assets
+  ---
+  duration_ms: 4104.3237
+  ...
+# Subtest: storage rejects keys outside dedicated namespace before contacting R2
+ok 99 - storage rejects keys outside dedicated namespace before contacting R2
+  ---
+  duration_ms: 33.7864
+  ...
+# Subtest: incoming media copies once to R2, metadata contains no binary, duplicate ensures are safe
+ok 100 - incoming media copies once to R2, metadata contains no binary, duplicate ensures are safe
+  ---
+  duration_ms: 172.858
+  ...
+# Subtest: archive failure retains message and retries independently
+ok 101 - archive failure retains message and retries independently
+  ---
+  duration_ms: 88.1863
+  ...
+# Subtest: local development never implicitly consumes production Inbox jobs
+ok 102 - local development never implicitly consumes production Inbox jobs
+  ---
+  duration_ms: 6.2155
+  ...
+# Subtest: normalizes Nigerian local, international and formatted phone numbers
+ok 103 - normalizes Nigerian local, international and formatted phone numbers
+  ---
+  duration_ms: 1.7197
+  ...
+# Subtest: 24-hour window closes at the exact boundary
+ok 104 - 24-hour window closes at the exact boundary
+  ---
+  duration_ms: 0.6899
+  ...
+# Subtest: webhook signature authenticates the exact bytes
+ok 105 - webhook signature authenticates the exact bytes
+  ---
+  duration_ms: 2.5617
+  ...
+# Subtest: template variables must match an approved supported template
+ok 106 - template variables must match an approved supported template
+  ---
+  duration_ms: 4.2071
+  ...
+# Subtest: delivery states do not regress and only assigned agents can reply
+ok 107 - delivery states do not regress and only assigned agents can reply
+  ---
+  duration_ms: 0.5063
+  ...
+1..107
+# tests 107
+# suites 0
+# pass 107
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 28875.0783

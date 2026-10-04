@@ -40,6 +40,7 @@ const message = new Schema({
   text: { type: String, default: '' }, author: String, authorName: String,
   providerId: { type: String, unique: true, sparse: true }, clientKey: { type: String, unique: true, sparse: true },
   status: { type: String, default: 'queued', enum: ['queued', 'sending', 'sent', 'delivered', 'read', 'failed', 'unknown', 'received', 'internal'] },
+  replyTo: new Schema({ message: Schema.Types.ObjectId, providerId: String, text: String, type: String, authorName: String }, { _id: false }),
   providerPayload: { type: Schema.Types.Mixed, select: false }, media: { id: String, mime: String, name: String },
   error: String, sentAt: Date, deliveredAt: Date, readAt: Date, attemptedAt: Date, attempts: { type: Number, default: 0 },
   occurredAt: { type: Date, default: Date.now },
