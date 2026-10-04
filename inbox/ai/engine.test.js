@@ -34,7 +34,8 @@ test('media, receipts, human requests, sensitive data and unknown questions stop
  for(const type of ['image','video','audio','document','unsupported','location']){provider.interpret=()=>{throw Error('must not be called');};assert.equal((await engine.decide({text:'',type,config:defaults.config,records:[],state:{}})).handoff,'MEDIA_RECEIVED');}
  for(const [text,intent,reason]of [["I've paid",'payment_sent','PAYMENT_VERIFICATION_REQUIRED'],['Human please','human','CUSTOMER_REQUESTED_HUMAN'],['Who is the president of France?','unknown','NO_KNOWLEDGE'],['Unknown policy','unknown','NO_KNOWLEDGE']])assert.equal((await decide(text,{intent})).handoff,reason);
  assert.equal((await decide('my password is secret',{})).handoff,'SENSITIVE_CASE');
- assert.equal((await decide('unsure',{confidence:.1})).handoff,'LOW_CONFIDENCE');
+ assert.equal((await decide('unsure',{confidence:.1})).action,'reply');
+ assert.equal((await decide('still unclear',{confidence:.1},{clarificationAsked:true})).handoff,'NO_KNOWLEDGE');
  assert.match((await decide('What details do you need?',{intent:'requirements'},{selectedPlatform:'tiktok',serviceType:'account_setup'})).response,/do not send passwords/i);
 });
 test('knowledge must match retrieved approved entries and template variables must exist',async()=>{
@@ -43,20 +44,20 @@ test('knowledge must match retrieved approved entries and template variables mus
  assert.equal((await decide('hours',{intent:'knowledge',knowledgeKey:entry.key},{},{knowledge:[entry]})).response,entry.data.answer);
  assert.throws(()=>engine.render('Pay {{invented_account}}',{}));
 });
-test('onboarding from requirements, saved workflow responses and knowledge always hands off to CSS',async()=>{
+test('onboarding from requirements, saved workflow responses and knowledge continues with AI',async()=>{
  const state={selectedPlatform:'tiktok',serviceType:'account_setup'};
  const requirements=await decide('What details do you need?',{intent:'requirements'},state);
- assert.equal(requirements.action,'handoff');assert.equal(requirements.handoff,'SERVICE_ONBOARDING');assert.equal(requirements.handoffTeam,'CSS');assert.match(requirements.response,/email/);
+ assert.equal(requirements.action,'reply');assert.match(requirements.response,/email/);
  const entry=defaults.records.find(r=>r.key==='tiktok_management_access');
  const knowledge=await decide('How do I give access?',{intent:'knowledge',knowledgeKey:entry.key},state,{knowledge:[entry]});
- assert.equal(knowledge.action,'handoff');assert.equal(knowledge.handoffTeam,'CSS');
+ assert.equal(knowledge.action,'reply');
  const workflow={kind:'workflow',key:'onboard',data:{intent:'advertising',field:'selectedPlatform',operator:'present',response:'requirements',action:'reply'}};
- assert.equal((await decide('Continue',{},state,{records:[workflow,...defaults.records]})).action,'handoff');
+ assert.equal((await decide('Continue',{},state,{records:[workflow,...defaults.records]})).action,'reply');
 });
 test('payment/human rules supply the approved fallback without bypassing mandatory handoff',async()=>{
- for(const intent of ['human','payment_sent','receipt_sent','payment_problem']){
+ for(const intent of ['human','payment_sent','receipt_sent']){
   const rule=defaults.records.find(r=>r.kind==='handoff'&&r.data.intent===intent);
-  const value=await decide('help',{intent});assert.equal(value.action,'handoff');assert.equal(value.handoffRule,rule.key);assert.equal(value.response,rule.data.customerResponse);
+  const value=await decide('help',{intent});assert.equal(value.action,'handoff');assert.equal(value.handoffRule,rule.key);assert.ok(value.response);if(intent!=='human')assert.doesNotMatch(value.response,/payment confirmed/i);
  }
 });
 test('OpenAI adapter uses structured Responses API, store false and redacted input',async()=>{
@@ -65,4 +66,12 @@ test('OpenAI adapter uses structured Responses API, store false and redacted inp
  await original({text:'hello alice@example.com',state:{},history:[{text:'my password is NEVER_SEND',direction:'inbound'}],records:[],knowledge:[],config:defaults.config});
  assert.match(captured.url,/v1\/responses$/);assert.equal(captured.body.store,false);assert.equal(captured.body.text.format.strict,true);assert.equal(captured.body.input.includes('NEVER_SEND'),false);assert.equal(captured.body.input.includes('alice@example.com'),false);
  delete process.env.OPENAI_API_KEY;delete process.env.OPENAI_MODEL;
+});
+
+test('Receipts confirm only verified payments; payment troubleshooting can use approved knowledge',async()=>{
+ const receipt=await decide('receipt sent',{intent:'receipt_sent'},{},{paymentVerified:true});
+ assert.match(receipt.response,/Payment confirmed/);assert.equal(receipt.action,'handoff');
+ const entry=defaults.records.find(r=>r.key==='incorrect_payment_amount');
+ const answer=await decide('wrong amount',{intent:'knowledge',knowledgeKey:entry.key},{},{knowledge:[entry]});
+ assert.equal(answer.action,'reply');assert.equal(answer.response,entry.data.answer);
 });

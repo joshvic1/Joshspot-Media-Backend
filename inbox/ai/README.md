@@ -65,3 +65,6 @@ Assignment is recorded before the response enters the WhatsApp outbox. DRAFT ass
 
 ### Unlimited usage
 Daily calls, per-conversation calls and consecutive AI turns accept `0` for unlimited. Existing configurations migrate once to zero on first configuration access after deployment; later administrator changes are preserved. Usage continues to be counted. OpenAI billing and provider rate limits still apply. Human takeover and business handoff rules remain active.
+
+### Knowledge-first handoff policy
+Onboarding responses and legacy record/workflow handoff flags no longer force transfer. The model is instructed to select approved knowledge before declaring a request unsupported. Low-confidence requests receive one clarification. Explicit human requests, media and payment claims still transfer; technical errors, sensitive data and unavailable authorized actions remain staff-review cases. Payment confirmation requires a paid invoice linked to this exact conversation; receiving a receipt alone is acknowledged without asserting payment success. No historical chats are automatically reassigned to AI by this policy change.

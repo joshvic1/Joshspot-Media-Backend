@@ -69,7 +69,8 @@ async function seed(actor) {
 async function catalogue() { return Record.find({enabled:true,archived:false,kind:{$ne:'knowledge'}}).sort({priority:-1,_id:1}).limit(300).lean(); }
 async function knowledge(text) {
   const query = String(text).replace(/[^\p{L}\p{N}\s]/gu,' ').split(/\s+/).filter(w=>w.length>2).slice(0,20).join(' ');
-  if (!query) return [];
-  return Record.find({kind:'knowledge',enabled:true,archived:false,$text:{$search:query}},{score:{$meta:'textScore'}}).sort({score:{$meta:'textScore'},priority:-1}).limit(6).lean();
+  if (!query) return Record.find({kind:'knowledge',enabled:true,archived:false}).sort({priority:-1}).limit(12).lean();
+  const matches=await Record.find({kind:'knowledge',enabled:true,archived:false,$text:{$search:query}},{score:{$meta:'textScore'}}).sort({score:{$meta:'textScore'},priority:-1}).limit(12).lean();
+  return matches.length?matches:Record.find({kind:'knowledge',enabled:true,archived:false}).sort({priority:-1}).limit(12).lean();
 }
 module.exports = {validateConfig,validateRecord,getConfig,seed,catalogue,knowledge,stateFields,intents};

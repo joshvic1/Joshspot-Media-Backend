@@ -189,19 +189,19 @@ test('business pack installs all approved entries once and preserves rollout and
  assert.equal((await aiModels.Record.findOne({key:'advertising_services'})).data.answer,'Later admin edit');
  assert.equal((await request('/ai/business-pack',{role:'agent',method:'POST',body:{}})).status,403);
 });
-test('LIVE onboarding assigns CSS immediately, notifies once and sends only one onboarding response',async()=>{
+test('LIVE human request assigns CSS immediately, notifies once and sends only one handoff response',async()=>{
  const c=await aiFixture('LIVE');const original=aiProvider.interpret;
- aiProvider.interpret=async args=>({...await original(args),intent:'requirements'});
+ aiProvider.interpret=async args=>({...await original(args),intent:'human'});
  await aiWorker.runOne(await aiSettings.getConfig());
  let current=await Conversation.findById(c._id);
- assert.equal(String(current.assignedTo),String(second._id));assert.equal(current.ai.active,false);assert.equal(current.ai.handoffReason,'SERVICE_ONBOARDING');
+ assert.equal(String(current.assignedTo),String(second._id));assert.equal(current.ai.active,false);assert.equal(current.ai.handoffReason,'CUSTOMER_REQUESTED_HUMAN');
  assert.equal(await Notification.countDocuments({recipient:second._id}),1);
- await service.processOutbox();assert.equal(sent.length,1);assert.match(sent[0].message.text,/email/);
+ await service.processOutbox();assert.equal(sent.length,1);assert.ok(sent[0].message.text);
  await service.receive(inbound('wamid.followup'));await Conversation.updateOne({_id:c._id},{$set:{'ai.pendingAt':new Date(0)}});
  await aiWorker.runOne(await aiSettings.getConfig());await service.processOutbox();assert.equal(sent.length,1);
 });
-test('DRAFT onboarding is assigned to CSS without automatic sending and CSS can approve it',async()=>{
- const c=await aiFixture();const original=aiProvider.interpret;aiProvider.interpret=async args=>({...await original(args),intent:'requirements'});
+test('DRAFT human request is assigned to CSS without automatic sending and CSS can approve it',async()=>{
+ const c=await aiFixture();const original=aiProvider.interpret;aiProvider.interpret=async args=>({...await original(args),intent:'human'});
  await aiWorker.runOne(await aiSettings.getConfig());const current=await Conversation.findById(c._id);
  assert.equal(String(current.assignedTo),String(second._id));assert.equal(current.ai.draft.mode,'DRAFT');assert.equal(await Message.countDocuments({direction:'outbound'}),0);
  assert.equal((await request(`/ai/conversations/${c._id}/draft`,{role:'second',method:'POST',body:{action:'send'}})).status,200);
@@ -209,7 +209,7 @@ test('DRAFT onboarding is assigned to CSS without automatic sending and CSS can 
 });
 test('missing fallback chooses CSS and absent CSS remains visible and retries without duplicate notices',async()=>{
  const c=await aiFixture();await aiModels.Config.updateOne({key:'main'},{$set:{'data.assignment':'fallback','data.fallbackAgent':String(agent._id)}});
- await Staff.deleteOne({_id:second._id});const original=aiProvider.interpret;aiProvider.interpret=async args=>({...await original(args),intent:'requirements'});
+ await Staff.deleteOne({_id:second._id});const original=aiProvider.interpret;aiProvider.interpret=async args=>({...await original(args),intent:'human'});
  await aiWorker.runOne(await aiSettings.getConfig());let current=await Conversation.findById(c._id);
  assert.equal(current.assignedTo,null);assert.match(current.ai.assignmentError,/No CSS/);assert.ok(current.ai.handoffPending);assert.equal(current.ai.active,false);
  await Staff.create({_id:second._id,name:'Restored CSS',email:'restored@example.test',password:'test',role:'CSS'});
@@ -219,7 +219,7 @@ test('missing fallback chooses CSS and absent CSS remains visible and retries wi
  await aiWorker.recoverHandoffs(await aiSettings.getConfig());assert.equal(await Notification.countDocuments({recipient:second._id}),1);
 });
 test('interrupted handoff notification is recovered once and manual assignment cancels recovery',async()=>{
- const c=await aiFixture('LIVE');const original=aiProvider.interpret;aiProvider.interpret=async args=>({...await original(args),intent:'requirements'});
+ const c=await aiFixture('LIVE');const original=aiProvider.interpret;aiProvider.interpret=async args=>({...await original(args),intent:'human'});
  const notify=Notification.updateOne;
  try{Notification.updateOne=async()=>{throw new Error('Temporary write failure');};await assert.rejects(aiWorker.runOne(await aiSettings.getConfig()));}finally{Notification.updateOne=notify;}
  let current=await Conversation.findById(c._id);assert.equal(String(current.assignedTo),String(second._id));assert.ok(current.ai.handoffPending);
@@ -610,4 +610,24 @@ test('Unlimited migration updates existing settings once and preserves later adm
  assert.equal(migrated.data.mode,'LIVE');
  await aiModels.Config.updateOne({key:'main'},{$set:{'data.maxDailyCalls':100}});
  assert.equal((await aiSettings.getConfig()).data.maxDailyCalls,100);
+});
+
+test('Legacy conversations missing AI version complete pending replies exactly once',async()=>{
+ const c=await aiFixture('LIVE');
+ await Conversation.collection.updateOne({_id:c._id},{$unset:{'ai.version':'','ai.consecutive':'','ai.active':''}});
+ await aiWorker.runOne(await aiSettings.getConfig());
+ const saved=await Conversation.findById(c._id).lean();
+ assert.equal(saved.ai.version,0);assert.equal(saved.ai.pending,false);
+ assert.equal(await Message.countDocuments({conversation:c._id,author:'ai',direction:'outbound',status:'queued'}),1);
+ assert.equal(await aiModels.Log.countDocuments({conversation:c._id,kind:'decision'}),1);
+ assert.equal(await aiWorker.runOne(await aiSettings.getConfig()),false);
+});
+
+test('Onboarding stays with AI without assignment or notification',async()=>{
+ const c=await aiFixture('LIVE');const original=aiProvider.interpret;
+ aiProvider.interpret=async args=>({...await original(args),intent:'requirements'});
+ await aiWorker.runOne(await aiSettings.getConfig());const current=await Conversation.findById(c._id);
+ assert.equal(current.assignedTo,null);assert.notEqual(current.ai.active,false);
+ assert.equal(await Notification.countDocuments({}),0);
+ await service.processOutbox();assert.equal(sent.length,1);assert.match(sent[0].message.text,/email/);
 });

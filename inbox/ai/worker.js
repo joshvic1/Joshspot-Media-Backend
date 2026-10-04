@@ -84,6 +84,9 @@ async function queue(conversation,result,configRow,inputId,key) {
 }
 async function runOne(configRow) {
   const config={...configRow.data,mode:configRow.data.autoReply?configRow.data.mode:'DRAFT'};const token=randomUUID();
+  // Older conversations predate AI state. Persist the version before acquiring
+  // a lease: Mongoose's in-memory default cannot match a missing database field.
+  await Conversation.updateMany({'ai.phoneId':process.env.WHATSAPP_PHONE_NUMBER_ID,'ai.pending':true,'ai.version':{$exists:false}},{$set:{'ai.version':0}});
   const conversation=await Conversation.findOneAndUpdate({'ai.phoneId':process.env.WHATSAPP_PHONE_NUMBER_ID,'ai.pending':true,'ai.pendingAt':{$lte:new Date(Date.now()-config.debounceSeconds*1000)},$or:[{'ai.leaseUntil':null},{'ai.leaseUntil':{$lt:new Date()}}]},{$set:{'ai.leaseUntil':new Date(Date.now()+90000),'ai.leaseToken':token}},{returnDocument:'after',sort:{'ai.priority':-1,'ai.pendingAt':1}}).populate('contact');
   if(!conversation)return false;
   const started=Date.now();const latest=conversation.lastInboundId; const version=conversation.ai.version;
@@ -101,7 +104,8 @@ async function runOne(configRow) {
       else {
         if(!media)await budget(config,conversation._id);
         const [records,knowledge,history]=await Promise.all([settings.catalogue(),media?[]:settings.knowledge(text),Message.find({conversation:conversation._id,direction:{$in:['inbound','outbound']},type:'text',_id:{$lt:inputs[0]._id}}).sort({_id:-1}).limit(config.maxHistory || 1).lean()]);
-        result=await engine.decide({text,type:media?.type || 'text',state:prior,config,records,knowledge,history:history.reverse()});
+        const paymentVerified=Boolean(prior.invoiceId && await require('../../models/Invoice').exists({_id:prior.invoiceId,inboxConversation:conversation._id,status:'paid',deletedAt:null}));
+        result=await engine.decide({text,type:media?.type || 'text',state:prior,config,records,knowledge,history:history.reverse(),paymentVerified});
       }
     } catch(error) { const detail=require('./errors').describe(error);result={action:'handoff',handoff:detail.code,state:prior,error:detail.message}; }
     const currentConfig=await settings.getConfig();
