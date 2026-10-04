@@ -65,4 +65,6 @@ const adsClientSchema = new mongoose.Schema({
   },
 });
 
+adsClientSchema.add({ inboxRequestKey: { type: String, unique: true, sparse: true } });
+
 module.exports = mongoose.model("AdsClient", adsClientSchema);

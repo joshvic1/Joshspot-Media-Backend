@@ -1,0 +1,2 @@
+function summary(state){return [['Service',state.selectedService||state.serviceType],['Platform',state.selectedPlatform],['Budget',state.budget],['Duration',state.duration&&`${state.duration} days`],['Plan',state.recommendedPlan],['Stage',state.currentSalesStage],['Invoice',state.invoiceId],['Payment',state.paymentStatus||'Not verified']].filter(([,v])=>v!==undefined&&v!==null&&v!=='').map(([k,v])=>`${k}: ${v}`).join('\n');}
+module.exports={summary};

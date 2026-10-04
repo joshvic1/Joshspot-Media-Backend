@@ -58,4 +58,6 @@ const clientSchema = new mongoose.Schema({
   },
 });
 
+clientSchema.add({ inboxRequestKey: { type: String, unique: true, sparse: true } });
+
 module.exports = mongoose.model("Client", clientSchema);

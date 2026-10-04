@@ -110,6 +110,7 @@ exports.createAdsClient = async (req, res) => {
 
     if (!/^[+\d][\d\s()-]{6,24}$/.test(String(payload.clientNumber).trim())) return res.status(400).json({message:"Enter a valid client phone number."});
     const client = await AdsClient.create({
+      ...(req.inboxRequestKey ? { inboxRequestKey: req.inboxRequestKey } : {}),
       ...payload,
       createdBy: req.staff.staffId,
       updatedBy: req.staff.staffId,

@@ -44,6 +44,8 @@ async function deleteChat(id){
  const promoted=await Log.find({action:'promote_for_review','after.source':{$in:await Message.find(scope).distinct('_id')}}).lean();
  const recordIds=promoted.map(log=>log.after?.record).filter(Boolean);
  if(recordIds.length){await Record.deleteMany({_id:{$in:recordIds}});await Log.deleteMany({$or:[{_id:{$in:promoted.map(log=>log._id)}},{'before._id':{$in:recordIds}}]});}
+ await require('./ai/models').Followup.deleteMany(scope);
+ await require('./shortcuts').Action.deleteMany(scope);
  await Notification.deleteMany(scope);
  await Log.deleteMany(scope);
  for(const conversation of conversations)await Usage.deleteMany({key:{$regex:`^${conversation}:`}});

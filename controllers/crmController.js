@@ -150,6 +150,7 @@ exports.createClient = async (req, res) => {
     }
 
     const client = await Client.create({
+      ...(req.inboxRequestKey ? { inboxRequestKey: req.inboxRequestKey } : {}),
       ...payload,
       createdBy: req.staff.staffId,
       updatedBy: req.staff.staffId,

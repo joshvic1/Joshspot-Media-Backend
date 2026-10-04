@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test:inbox": "node --test inbox/policy.test.js inbox/integration.test.js inbox/media.test.js inbox/ai/engine.test.js",
+    "test:inbox": "node --test inbox/policy.test.js inbox/integration.test.js inbox/media.test.js inbox/ai/engine.test.js inbox/ai/structured.test.js",
     "inbox:indexes": "node inbox/createIndexes.js",
     "dev": "nodemon server.js",
     "seed:crm": "node scripts/seedCrmUsers.js"

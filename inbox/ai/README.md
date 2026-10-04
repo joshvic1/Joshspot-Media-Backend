@@ -71,3 +71,116 @@ Onboarding responses and legacy record/workflow handoff flags no longer force tr
 
 ### Primary AI knowledge document
 Admin page `/admin-7812er/ai-knowledge` edits one document (up to 200,000 characters) through admin-only GET/PUT `/api/inbox/ai/master-knowledge`. Saves use the shared config revision to prevent lost updates; standard settings saves preserve the document. Existing installations show a starter guide until saved. The complete document is included in model instructions; this is request-time guidance, not model training. Structured knowledge remains supplementary and authoritative invoice pricing/payment checks remain enforced. Structured model answers include a supporting source quote (or a clarification); waiting/staff-follow-up promises enter the real assignment path in both Test Agent and production. Larger documents increase input tokens.
+
+
+## Structured sales redesign (opt-in, October 2026)
+
+The sections above describe the retained legacy engine. With `structuredSales=true`,
+the legacy master document is **not included in model requests**. Its data remains
+available under Settings → Legacy knowledge reference for manual migration.
+
+### Existing systems reused
+
+| Responsibility | Implementation |
+| --- | --- |
+| Knowledge, services, plans and audit | Existing InboxAIRecord / InboxAIConfig / InboxAILog models |
+| Customer messages, staff ownership and delivery receipts | Existing Inbox Conversation, Message, webhook jobs and outbox |
+| Language understanding | Existing OpenAI Responses adapter, with a separate validated structured schema |
+| Financial calculation | Unchanged `frontend/config/adsPricingConfig.mjs`, vendored into the independently deployed backend; parity regression test |
+| Invoice / payment account | Existing Invoice and `invoiceController.generateInvoiceTransfer` |
+| Payment truth | Existing verified Invoice status; no model or customer claim can mark it paid |
+| Handoff and notifications | Existing worker assignment, notification and recovery paths |
+| Scheduled invoice reminders | New bounded InboxAIFollowup jobs using the existing outbox |
+
+### Runtime changes
+
+`structuredEngine.js` interprets language, retains sales state, chooses a safe next
+objective and renders editable knowledge responses. The backend owns prices,
+calculator results, invoice actions and assignment. Bare agreement cannot change
+the budget or skip the separate offer of payment details. Explicit requests for
+account/payment details skip that offer. Service changes detach stale invoice
+context without deleting financial records. Valid existing invoice amounts stay
+fixed even when current service prices change.
+
+Knowledge records support STRICT/GUIDED/KNOWLEDGE, matching examples, meaning,
+required/excluded state, priority, facts, response, next question, payment guidance
+and mandatory handoff. Financial/consent/ownership state cannot be written through
+knowledge rules. Security and commercial prerequisites remain backend checks.
+Retrieval bounds database candidates and supplies relevant facts to semantic
+interpretation; it does not inject the giant legacy document or the full knowledge
+collection. Edited structured response/fact text is mirrored into existing indexed
+fields to retain search compatibility without rebuilding the Mongo text index.
+
+The four primary admin sections are Knowledge Base, Services, Test Agent and Logs.
+Plans are nested under Services. Settings contains global behavior, rollout,
+payments, handoff and legacy reference. Test Agent keeps multi-turn history/state,
+simulates invoice state without creating an invoice, and can simulate verified
+payment. Structured DRAFT handoffs have no assignment or notification side effects.
+Admin state corrections and assignment retry are available in Inbox AI controls.
+
+### Migration and release procedure
+
+No production migration or new LIVE activation was run during implementation.
+No new environment variable is required: existing OpenAI, Meta, MongoDB, Paystack
+and CLIENT_URL configuration is reused. Never put provider secrets in the frontend.
+
+1. Deploy the backend with the existing configuration. `structuredSales` defaults
+   to false; current OFF/DRAFT/LIVE and ownership are preserved.
+2. Run `npm run inbox:indexes` in the backend environment. This creates additive
+   indexes, including reminder idempotency and due-job lookup. No index is dropped.
+3. Deploy the frontend. Open AI Agent → Settings → Migration and legacy reference.
+4. Preview, then prepare structured knowledge. `GET/POST /api/inbox/ai/structured-migration`
+   reports new keys and legacy records needing review. Inserts are idempotent;
+   existing services, prices, plans, rules, document, ownership and mode are untouched.
+   The original records are preserved in place. Export configuration before manual
+   edits; the export deliberately redacts possible credentials/private numbers.
+5. Review entries labeled Legacy and any old service requirement that merely says
+   “Hold on”. Such a promise still requires a real handoff; do not treat it as an
+   approved factual answer. Review existing custom-plan and package-inclusion
+   responses, which may contain older human-review instructions.
+6. Enable structured sales in DRAFT. Test the current configuration in Test Agent
+   and a controlled DRAFT conversation. The API prevents first activation in LIVE
+   and requires successful TEST and DRAFT decision records at the current revision
+   before a later LIVE transition. Review actual replies, not just the mode gate.
+7. Use a designated test WhatsApp recipient to validate incoming persistence,
+   staff-approved outgoing delivery and delivery receipts. Do not create unwanted
+   customer invoices. Only then enable LIVE deliberately.
+8. Review early logs and provider/assignment/outbox errors. No claim about reduced
+   production handoff rate or conversion is made from synthetic tests.
+
+Rollback: turn AI OFF/auto-reply off, then set structuredSales=false. Original
+legacy records and master document are retained. Restoring an edited record can
+use its audit history; do not delete financial records or Inbox collections.
+The additive schema/seed migration does not require destructive downtime.
+
+### Reminder and payment details
+
+Reminders are disabled by default, maximum two per invoice (default 4 and 24 hours).
+The `payment_followup` knowledge entry supplies their text. Each job checks current
+ownership/version/input, invoice identity/status/expiry, opt-out/decline state,
+successful invoice-message send, global mode and the WhatsApp service window,
+again immediately before sending. Catch-up jobs are separated by at least an hour.
+Closed-window reminders are cancelled unless an approved template path is added;
+they do not send arbitrary generated text as a fake template. Existing invoices
+expire after eight hours, so a 24-hour reminder for such an invoice is cancelled.
+
+Paid records are reconciled in bounded pages by the existing worker every 30 seconds
+without a new model call or payment-provider polling. Verified payment cancels
+reminders, stops sales and enters fulfilment handoff when AI still owns the chat.
+No eligible representative leaves a visible pending assignment and a durable retry.
+Staff takeover and resolved/deleted chats invalidate stale automation.
+
+### Validation and external acceptance
+
+Automated regression coverage includes the old Inbox suite, structured sales,
+calculator parity, consent, pricing, invoice simulation, actual handoff vs DRAFT,
+missing staff recovery, reminders, verified payment, state corrections, migration
+and access control. Browser fixtures cover admin CRUD/Test Agent/settings and Inbox
+AI controls on desktop/mobile. `scripts/testStructuredSales.cjs --live-provider`
+(and `--setup`) exercises synthetic conversations with the actual configured model,
+without MongoDB, WhatsApp, invoice or payment writes. These opt-in evaluations incur
+normal OpenAI usage. The deterministic tests do not call external providers.
+
+Production deployment, real WhatsApp validation, DRAFT observation and live business
+content review remain release gates. Local tests are not proof of an 80% production
+resolution rate. No live-customer invoice or message was generated by this work.

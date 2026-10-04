@@ -1,7 +1,7 @@
 // Initial records only. Admin edits are persisted; these values never overwrite edits.
 const pack = require('./businessPack');
 const config = {
-  enabled: true, mode: 'DRAFT', autoReply: true, agentName: 'Joshspot Assistant', displayName: 'Joshspot Assistant', role: 'Customer service and sales', brand: 'Joshspot Media',
+  followupsEnabled: false, followupFirstHours: 4, followupSecondHours: 24, followupMaximum: 2, structuredSales: false, paymentQuestionCooldownMinutes: 60, enabled: true, mode: 'DRAFT', autoReply: true, agentName: 'Joshspot Assistant', displayName: 'Joshspot Assistant', role: 'Customer service and sales', brand: 'Joshspot Media',
   tone: 'Natural, friendly, direct Nigerian-business conversational tone. Avoid corporate filler.', writingStyle: 'Short, helpful sentences. One useful question at a time.', responseLength: 'concise', emojiPreference: 'restrained', language: 'Match the customer language where supported', instructions: pack.instructions, signature: '', greeting: true,
   provider: 'openai', model: '', confidence: 0.78, maxResponseLength: 1500, maxHistory: 6, debounceSeconds: 3, responseDelaySeconds: 1, maxConsecutive: 0, maxDailyCalls: 0, maxConversationCalls: 0,
   handoffTeam: 'CSS', fallbackAgent: '', paymentAgent: '', assignment: 'least_loaded', allowReturn: true, fallbackResponse: 'Let me get someone from the team to help you with this.',

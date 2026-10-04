@@ -116,3 +116,34 @@ Deletion removes all Inbox conversations for that contact, messages/notes, notif
 Active sends, media copies, AI generation or relevant webhook processing return a retryable conflict instead of claiming deletion succeeded. Automatic replies are paused during deletion. Storage failures are retryable; the API does not claim success until the purge finishes. No real chats are deleted during tests.
 
 A keyed phone digest and deletion cutoff (no name, phone text or message content) are retained for eight days solely to reject delayed webhook replays. Its TTL index is included by `npm run inbox:indexes`. New messages sent after deletion can create a fresh conversation. Database/provider backups and data retained independently by Meta are outside this live-database deletion operation.
+
+
+## Staff chat actions and saved replies
+
+The composer sparkle menu reuses the existing invoice transfer generator, strict
+payment verification and the three CRM create controllers. It does not call OpenAI.
+Invoice sends require conversation reply permission and an open WhatsApp reply
+window, and use the existing outbox. Unknown payment-account creation outcomes
+require review rather than silently creating another account. Confirm Payment
+checks the latest invoice for this customer and returns only a private result;
+it does not enqueue a WhatsApp message. Provider failures are shown separately
+from an unpaid result.
+
+CRM forms derive name and phone from the scoped conversation on the server, ignore
+submitted identity overrides, and retain existing role permissions, including CSS
+amount restrictions. Only the administrator receives the full number from the action
+identity endpoint. Durable request keys prevent duplicate CRM records on retries.
+Verification uses the existing ID-card upload flow.
+
+Admin pages `/admin-7812er/inbox-contacts` and `/admin-7812er/quick-replies`
+manage cursor-paginated contacts (20 per page) and saved keyword/response shortcuts.
+Staff may read quick replies, while writes and the contact library are admin-only.
+Typing `/` in replies or internal notes inserts a matching reply without sending it.
+Mobile navigation now contains Inbox, Follow up and Alerts; templates remain in
+composer controls.
+
+Deploy both repositories and run the existing `inbox/createIndexes.js` release step
+for the new InboxQuickReply/InboxStaffAction indexes and sparse CRM request keys.
+No new environment variables are needed. Browser tests use intercepted APIs;
+backend tests use ephemeral MongoDB and mocked Paystack, WhatsApp and ID uploads.
+No real invoice or customer message is created during these tests.

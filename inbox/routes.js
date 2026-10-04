@@ -84,6 +84,7 @@ router.use((req, res, next) => {
   if (req.method !== 'GET') res.on('finish', () => { if (res.statusCode < 400) live.notify(); });
   next();
 });
+router.use(require('./actions')({ wrap, fail, id, conversationFor, rateLimit }));
 router.get('/notifications', wrap(async (req, res) => {
   if (req.actor.admin) return res.json({ items: [], unread: 0, next: null });
   const query = { recipient: req.actor.id, ...(req.query.before ? { _id: { $lt: id(req.query.before) } } : {}) };

@@ -144,6 +144,7 @@ async function processOutbox() {
       const id = await provider.send(conversation.contact.phone, message);
       await Message.updateOne({ _id: message._id, status: { $in: ['sending', 'unknown'] } }, { $set: { status: 'sent', providerId: id, sentAt: new Date(), error: '' } });
       publish('message.sent', { messageId: String(message._id), conversationId: String(message.conversation) });
+      if(message.author!=='ai'&&conversation.ai?.handoffReason)await Conversation.updateOne({_id:conversation._id,'ai.state.firstHumanResponseAt':null},{$set:{'ai.state.firstHumanResponseAt':new Date().toISOString()}}).catch(()=>{});
     } catch (error) {
       live.notify();
       const definite = error.safe || (error.response?.status >= 400 && error.response?.status < 500 && error.response.status !== 408);

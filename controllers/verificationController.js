@@ -53,6 +53,7 @@ exports.createVerificationClient = async (req, res) => {
     const uploadedIdCard = await uploadVerificationIdCard(idCard);
 
     const client = await VerificationClient.create({
+      ...(req.inboxRequestKey ? { inboxRequestKey: req.inboxRequestKey } : {}),
       name,
       businessName,
       clientLoginDetails,

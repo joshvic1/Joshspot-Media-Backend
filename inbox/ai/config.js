@@ -13,8 +13,9 @@ function validateConfig(input) {
     else if (typeof fallback === 'number') { if (!Number.isFinite(value)) fail(`Invalid ${key}`); out[key] = value; }
     else out[key] = safeString(value);
   }
-  const ranges = { confidence:[0,1], maxResponseLength:[100,4000], maxHistory:[0,12], debounceSeconds:[1,10], responseDelaySeconds:[0,10], maxConsecutive:[0,30], maxDailyCalls:[0,10000], maxConversationCalls:[0,200], startHour:[0,23], endHour:[1,24] };
+  const ranges = { followupFirstHours:[1,168],followupSecondHours:[1,168],followupMaximum:[1,2],paymentQuestionCooldownMinutes:[1,1440], confidence:[0,1], maxResponseLength:[100,4000], maxHistory:[0,12], debounceSeconds:[1,10], responseDelaySeconds:[0,10], maxConsecutive:[0,30], maxDailyCalls:[0,10000], maxConversationCalls:[0,200], startHour:[0,23], endHour:[1,24] };
   for (const [key,[min,max]] of Object.entries(ranges)) if(out[key]<min || out[key]>max) fail(`${key} must be between ${min} and ${max}.`);
+  if(!Number.isInteger(out.followupMaximum)||out.followupSecondHours<=out.followupFirstHours)fail('Follow-up count must be 1 or 2 and the second reminder must be later than the first.');
   if (!['OFF','DRAFT','LIVE'].includes(out.mode) || out.provider !== 'openai') fail('Unsupported AI mode/provider.');
   if (!['CSS','SS'].includes(out.handoffTeam) || !['least_loaded','round_robin','fallback'].includes(out.assignment)) fail('Invalid handoff strategy.');
   if (!['handoff','continue'].includes(out.outsideHours) || !['handoff','ignore'].includes(out.stickerAction) || !['handoff','ignore'].includes(out.contactAction)) fail('Invalid handling rule.');
@@ -28,18 +29,21 @@ const fields = {
  knowledge:['question','answer','keywords','handoffAfterReply','handoffReason','handoffTeam'], tone:['customer','response'],
  response:['message','mode','intent','workflow','service','platform','description','variables','handoffAfterReply'],
  workflow:['intent','field','operator','value','response','nextStep','action','stateField','stateValue','options','serviceType'],
- handoff:['intent','reason','agent','team','customerResponse'],
+ handoff:['intent','reason','agent','team','customerResponse','mandatory'],
 };
 function validateRecord(input) {
   if (!fields[input.kind]) fail('Invalid record kind.');
   const data = {}; const source = input.data || {};
+  if(input.kind==='knowledge' && source.schemaVersion===1) Object.assign(data,require('./structuredKnowledge').validate(source));
   for (const key of fields[input.kind]) if (source[key] !== undefined) {
+    if(input.kind==='knowledge'&&source.schemaVersion===1)continue;
     const value = source[key];
     if (['platforms','variables','options'].includes(key)) { if (!Array.isArray(value) || value.length > 20) fail('Invalid options.'); data[key] = value.map(v=>safeString(v,120)); }
     else if (['price','amount','duration','minBudget','maxBudget'].includes(key)) { if (!Number.isFinite(value) || value<0 || value>100000000) fail('Invalid numeric value.'); data[key] = value; }
-    else if (['paymentEnabled','allowCustomBudget','handoffAfterReply'].includes(key)) { if (typeof value !== 'boolean') fail('Invalid checkbox.'); data[key] = value; }
+    else if (['paymentEnabled','allowCustomBudget','handoffAfterReply','mandatory'].includes(key)) { if (typeof value !== 'boolean') fail('Invalid checkbox.'); data[key] = value; }
     else data[key] = safeString(value);
   }
+  if(input.kind==='knowledge'&&data.schemaVersion===1){data.answer=[data.preferredResponse,data.facts].filter(Boolean).join('\n');data.question=[data.triggerExamples,data.semanticTrigger,data.whenToUse].filter(Boolean).join('\n');}
   if (data.handoffTeam && data.handoffTeam!=='CSS') fail('Knowledge handoff uses the customer-service team.');
   if (input.kind === 'response' && !['STRICT','FLEXIBLE','INFORMATION'].includes(data.mode)) fail('Choose a response mode.');
   if (['response','knowledge'].includes(input.kind) && /[₦$€£]\s*\d|\d[\d,]*\s*(?:naira|NGN|dollars)/i.test(data.message || data.answer || '')) fail('Use {{amount}} for prices; edit the amount in Services or Plans.');
@@ -64,13 +68,19 @@ async function getConfig() {
 }
 async function seed(actor) {
   await Config.updateOne({key:'main'},{$setOnInsert:{data:defaults.config,changedBy:actor,revision:0,usageLimitsVersion:1}},{upsert:true});
-  for (const item of defaults.records) await Record.updateOne({kind:item.kind,key:item.key},{$setOnInsert:{...item,enabled:true,archived:false,createdBy:actor,changedBy:actor,revision:0}},{upsert:true});
+  for (const item of [...defaults.records,...require('./structuredKnowledge').seeds]) await Record.updateOne({kind:item.kind,key:item.key},{$setOnInsert:{...item,enabled:true,archived:false,createdBy:actor,changedBy:actor,revision:0}},{upsert:true});
 }
-async function catalogue() { return Record.find({enabled:true,archived:false,kind:{$ne:'knowledge'}}).sort({priority:-1,_id:1}).limit(300).lean(); }
-async function knowledge(text) {
+async function catalogue(structured=false) { return Record.find({enabled:true,archived:false,$or:[{kind:{$ne:'knowledge'}},...(structured?[{kind:'knowledge',key:{$in:require('./structuredKnowledge').seeds.map(s=>s.key)}}]:[])]}).sort({priority:-1,_id:1}).limit(300).lean(); }
+async function knowledge(text,state,structured=false) {
+  if(structured){
+    const base={kind:'knowledge',enabled:true,archived:false};
+    const terms=String(text).replace(/[^\p{L}\p{N}\s]/gu,' ').split(/\s+/).filter(w=>w.length>2).slice(0,20).join(' ');
+    const [priority,matched]=await Promise.all([Record.find(base).sort({priority:-1,_id:1}).limit(40).lean(),terms?Record.find({...base,$text:{$search:terms}},{score:{$meta:'textScore'}}).sort({score:{$meta:'textScore'}}).limit(40).lean():[]]);
+    return require('./structuredKnowledge').rank([...new Map([...matched,...priority].map(r=>[r.key,r])).values()],text,state);
+  }
   const query = String(text).replace(/[^\p{L}\p{N}\s]/gu,' ').split(/\s+/).filter(w=>w.length>2).slice(0,20).join(' ');
-  if (!query) return Record.find({kind:'knowledge',enabled:true,archived:false}).sort({priority:-1}).limit(12).lean();
-  const matches=await Record.find({kind:'knowledge',enabled:true,archived:false,$text:{$search:query}},{score:{$meta:'textScore'}}).sort({score:{$meta:'textScore'},priority:-1}).limit(12).lean();
-  return matches.length?matches:Record.find({kind:'knowledge',enabled:true,archived:false}).sort({priority:-1}).limit(12).lean();
+  if (!query) return Record.find({kind:'knowledge',enabled:true,archived:false,'data.schemaVersion':{$ne:1}}).sort({priority:-1}).limit(12).lean();
+  const matches=await Record.find({kind:'knowledge',enabled:true,archived:false,'data.schemaVersion':{$ne:1},$text:{$search:query}},{score:{$meta:'textScore'}}).sort({score:{$meta:'textScore'},priority:-1}).limit(12).lean();
+  return matches.length?matches:Record.find({kind:'knowledge',enabled:true,archived:false,'data.schemaVersion':{$ne:1}}).sort({priority:-1}).limit(12).lean();
 }
 module.exports = {validateConfig,validateRecord,getConfig,seed,catalogue,knowledge,stateFields,intents};

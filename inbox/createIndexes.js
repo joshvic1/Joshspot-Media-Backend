@@ -1,6 +1,7 @@
 require('dotenv').config({ path: require('node:path').join(__dirname, '../.env') });
 const mongoose = require('mongoose');
-const models = {...require('./models'), ...require('./ai/models'), Invoice:require('../models/Invoice')};
+const { QuickReply, Action } = require('./shortcuts');
+const models = {QuickReply, Action, Client:require('../models/Client'), AdsClient:require('../models/AdsClient'), VerificationClient:require('../models/VerificationClient'), ...require('./models'), ...require('./ai/models'), Invoice:require('../models/Invoice')};
 async function main() {
   if (!process.env.MONGO_URI) throw new Error('MONGO_URI is required');
   await mongoose.connect(process.env.MONGO_URI);

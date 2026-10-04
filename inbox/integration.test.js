@@ -13,6 +13,7 @@ const aiProvider = require('./ai/provider');
 const aiWorker = require('./ai/worker');
 const aiSettings = require('./ai/config');
 const Invoice = require('../models/Invoice');
+const shortcutModels = require('./shortcuts');
 const service = require('./service');
 const provider = require('./provider');
 let mongo, server, base, agent, second, tokens, sent;
@@ -23,14 +24,14 @@ before(async () => {
   process.env.WHATSAPP_GRAPH_VERSION = 'v23.0';
   mongo = await MongoMemoryServer.create();
   await mongoose.connect(mongo.getUri());
-  await Promise.all([DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels)].map((model) => model.init()));
+  await Promise.all([DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.init()));
   const app = express(); app.use(express.json({ limit: "10mb", verify: (req, res, raw) => { req.rawBody = raw; } })); app.use('/inbox', require('./routes'));
   server = app.listen(0, '127.0.0.1'); await new Promise((resolve) => server.once('listening', resolve));
   base = `http://127.0.0.1:${server.address().port}/inbox`;
 }, { timeout: 300000 });
 after(async () => { Object.assign(provider, providerOriginal); if (server) await new Promise((resolve) => server.close(resolve)); await mongoose.disconnect(); if (mongo) await mongo.stop(); });
 beforeEach(async () => {
-  await Promise.all([DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels)].map((model) => model.deleteMany({})));
+  await Promise.all([DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.deleteMany({})));
   agent = await Staff.create({ name: 'Agent One', email: 'one@example.test', password: 'not-a-real-password', role: 'SS' });
   second = await Staff.create({ name: 'Agent Two', email: 'two@example.test', password: 'not-a-real-password', role: 'CSS' });
   const restricted = await Staff.create({ name: 'Restricted', email: 'restricted@example.test', password: 'not-a-real-password', role: 'SES' });
@@ -56,6 +57,71 @@ async function fixture(assigned = true) {
 }
 const outgoing = (text = 'Hello Ada') => ({ type: 'text', text, clientId: crypto.randomUUID() });
 
+test('Staff shortcuts mask identity, lock CRM identity and restrict admin libraries', async () => {
+  const c = await fixture();
+  const customer = await request(`/conversations/${c._id}/actions/customer`, { role: 'agent' });
+  assert.equal(customer.status, 200); assert.ok(customer.data.phone.includes('*'));
+  assert.equal((await request(`/conversations/${c._id}/actions/customer`)).data.phone, '+2348012345678');
+  assert.equal((await request(`/conversations/${c._id}/actions/customer`, { role: 'second' })).status, 404);
+  assert.equal((await request('/quick-replies', { role: 'agent', method: 'POST', body: { keyword: 'hi', response: 'Hello' } })).status, 403);
+  assert.equal((await request('/quick-replies', { method: 'POST', body: { keyword: '/welcome', response: 'Hello!\nHow can we help?' } })).status, 200);
+  assert.equal((await request('/quick-replies', { role: 'agent' })).data.items[0].keyword, 'welcome');
+  assert.equal((await request('/quick-replies', { method: 'POST', body: { keyword: 'welcome', response: 'Duplicate' } })).status, 409);
+  assert.equal((await request('/admin-contacts', { role: 'agent' })).status, 403);
+  await Contact.insertMany(Array.from({ length: 23 }, (_, i) => ({ name: `Person ${i}`, phone: `234900000${String(i).padStart(4,'0')}` })));
+  const first = (await request('/admin-contacts')).data; assert.equal(first.items.length, 20); assert.ok(first.next);
+  assert.equal((await request(`/admin-contacts?before=${first.next}`)).data.items.length, 4);
+  const body = { clientId: crypto.randomUUID(), businessName: 'Forged', clientNumber: '+11111111111', servicePaidFor: 'Meta ads setup', amountPaid: 0 };
+  const saved = await request(`/conversations/${c._id}/actions/crm/setup`, { role: 'agent', method: 'POST', body }); assert.equal(saved.status, 201);
+  const Client = require('../models/Client'); const record = await Client.findById(saved.data.id);
+  assert.equal(record.businessName, 'Ada Customer'); assert.equal(record.clientNumber, '+2348012345678');
+  const retry = await request(`/conversations/${c._id}/actions/crm/setup`, { role: 'agent', method: 'POST', body }); assert.equal(retry.data.id, saved.data.id);
+  await shortcutModels.Action.updateMany({}, { $set: { state: 'processing' } });
+  assert.equal((await request(`/conversations/${c._id}/actions/crm/setup`, { role: 'agent', method: 'POST', body })).data.id, saved.data.id);
+  await Client.deleteMany({});
+});
+
+test('CRM shortcuts preserve Ads and Verification fields and CSS amount permissions', async () => {
+  const c = await fixture(); await Conversation.updateOne({ _id: c._id }, { $set: { assignedTo: second._id } });
+  const ads = await request(`/conversations/${c._id}/actions/crm/ads`, { role: 'second', method: 'POST', body: { clientId: crypto.randomUUID(), servicePaidFor: 'TikTok DM Ads', videoLinks: 'https://example.test/video', amountPaid: 25000, note: 'Customer brief' } });
+  assert.equal(ads.status, 201);
+  const AdsClient = require('../models/AdsClient'); const record = await AdsClient.findById(ads.data.id);
+  assert.equal(record.clientNumber, '+2348012345678'); assert.equal(record.businessName, 'Ada Customer'); assert.equal(record.note, 'Customer brief');
+  const storage = require('../utils/r2Storage'); const originalUpload = storage.uploadVerificationIdCard;
+  storage.uploadVerificationIdCard = async () => ({ key: 'fixture-id', fileName: 'id.png', mimeType: 'image/png', size: 1 });
+  try {
+    const verification = await request(`/conversations/${c._id}/actions/crm/verification`, { role: 'second', method: 'POST', body: { clientId: crypto.randomUUID(), businessName: 'Actual business', name: 'Forged name', clientNumber: '+11111111111', clientLoginDetails: 'Fixture access notes', amountPaid: 90000, idCard: { data: 'fixture' } } });
+    assert.equal(verification.status, 201);
+    const VerificationClient = require('../models/VerificationClient'); const item = await VerificationClient.findById(verification.data.id);
+    assert.equal(item.name, 'Ada Customer'); assert.equal(item.clientNumber, '+2348012345678'); assert.equal(item.businessName, 'Actual business'); assert.equal(item.amountPaid, 0);
+    await VerificationClient.deleteMany({});
+  } finally { storage.uploadVerificationIdCard = originalUpload; delete require.cache[require.resolve('../controllers/verificationController')]; await AdsClient.deleteMany({}); }
+});
+
+test('Invoice shortcut queues once and checks payment without sending a message', async () => {
+  const c = await fixture(); const controller = require('../controllers/invoiceController');
+  const originalGenerate = controller.generateInvoiceTransfer, originalRefresh = controller.refreshInvoiceStatus;
+  const oldSecret = process.env.PAYSTACK_SECRET, oldUrl = process.env.CLIENT_URL;
+  process.env.PAYSTACK_SECRET = 'fixture'; process.env.CLIENT_URL = 'https://example.test';
+  let generates = 0;
+  controller.generateInvoiceTransfer = async invoice => { generates++; invoice.accountNumber = '1234567890'; invoice.accountName = 'Test'; invoice.bankName = 'Test bank'; invoice.status = 'pending'; await invoice.save(); return invoice; };
+  controller.refreshInvoiceStatus = async invoice => invoice;
+  try {
+    const body = { clientId: crypto.randomUUID(), amount: 25000 };
+    const first = await request(`/conversations/${c._id}/actions/invoice`, { role: 'agent', method: 'POST', body }); assert.equal(first.status, 200);
+    const retry = await request(`/conversations/${c._id}/actions/invoice`, { role: 'agent', method: 'POST', body }); assert.equal(retry.data.messageId, first.data.messageId); assert.equal(generates, 1);
+    assert.equal((await request(`/conversations/${c._id}/actions/payment`, { role: 'agent', method: 'POST', body: {} })).data.paid, false);
+    await Invoice.updateMany({}, { $set: { status: 'paid' } });
+    assert.equal((await request(`/conversations/${c._id}/actions/payment`, { role: 'agent', method: 'POST', body: {} })).data.paid, true);
+    assert.equal(await Message.countDocuments({ direction: 'outbound' }), 1);
+    controller.refreshInvoiceStatus = async () => { throw new Error('timeout'); };
+    assert.equal((await request(`/conversations/${c._id}/actions/payment`, { method: 'POST', body: {} })).status, 502);
+    await Conversation.updateOne({ _id: c._id }, { $set: { lastInboundAt: new Date(Date.now() - 25 * 3600000) } });
+    assert.equal((await request(`/conversations/${c._id}/actions/invoice`, { method: 'POST', body: { ...body, clientId: crypto.randomUUID() } })).status, 400);
+    assert.equal(generates, 1);
+  } finally { controller.generateInvoiceTransfer = originalGenerate; controller.refreshInvoiceStatus = originalRefresh; if (oldSecret === undefined) delete process.env.PAYSTACK_SECRET; else process.env.PAYSTACK_SECRET = oldSecret; if (oldUrl === undefined) delete process.env.CLIENT_URL; else process.env.CLIENT_URL = oldUrl; }
+});
+
 test('admin deletion purges Inbox data and saved media but preserves invoices and other customers',async()=>{
  const c=await fixture();const contact=await Contact.findById(c.contact);
  const other=await Contact.create({phone:'2348012345679',name:'Other customer'});const otherChat=await Conversation.create({contact:other._id});
@@ -77,8 +143,8 @@ test('admin deletion purges Inbox data and saved media but preserves invoices an
   assert.equal(await aiModels.Usage.countDocuments({key:`${c._id}:today`}),0);
   assert.ok(await Invoice.exists({_id:invoice._id}));assert.ok(await Message.exists({_id:otherMessage._id}));assert.deepEqual(removed,[asset.key]);
   const retained=JSON.stringify((await WebhookJob.findOne({key:'delete-test'})).payload);assert.equal(retained.includes(contact.phone),false);assert.ok(retained.includes(other.phone));
-  await service.receive(inbound());assert.equal(await Conversation.exists({_id:c._id}),null);assert.equal(await Contact.countDocuments({phone:contact.phone}),0);
-  await service.enqueueWebhook(Buffer.from('late-retry'),{entry:[{changes:[{field:'messages',value:inbound()}]}]});
+  await service.receive(inbound('wamid.inbound',Math.floor(c.lastInboundAt.getTime()/1000)));assert.equal(await Conversation.exists({_id:c._id}),null);assert.equal(await Contact.countDocuments({phone:contact.phone}),0);
+  await service.enqueueWebhook(Buffer.from('late-retry'),{entry:[{changes:[{field:'messages',value:inbound('wamid.inbound',Math.floor(c.lastInboundAt.getTime()/1000))}]}]});
   assert.equal(JSON.stringify((await WebhookJob.findOne({key:crypto.createHash('sha256').update('late-retry').digest('hex')})).payload).includes(contact.phone),false);
   const next=inbound('brand-new',Math.floor(Date.now()/1000)+2);await service.receive(next);assert.equal(await Contact.countDocuments({phone:contact.phone}),1);assert.equal(await Message.countDocuments({providerId:'brand-new'}),1);
   assert.equal((await request(`/conversations/${c._id}`,{method:'DELETE',body:{confirm:true}})).status,200);
@@ -181,7 +247,7 @@ test('business pack installs all approved entries once and preserves rollout and
  await aiModels.Record.updateOne({key:'tiktok_setup'},{$set:{'data.price':22000}});
  const install=require('./ai/installBusinessPack').install;
  assert.equal((await install('admin')).knowledge,34);
- assert.equal(await aiModels.Record.countDocuments({kind:'knowledge'}),34);
+ assert.equal(await aiModels.Record.countDocuments({kind:'knowledge','data.schemaVersion':{$ne:1}}),34);
  assert.equal((await aiSettings.getConfig()).data.mode,'OFF');
  assert.equal((await aiModels.Record.findOne({key:'tiktok_setup'})).data.price,22000);
  await aiModels.Record.updateOne({key:'advertising_services'},{$set:{'data.answer':'Later admin edit'}});
@@ -409,6 +475,7 @@ test('invalid signature, verification challenge and wrong phone routing are hand
 test('CRM lookup exposes service context without credentials or staff-visible payments', async () => {
   const conversation = await fixture();
   const Client = require('../models/Client'); const Invoice = require('../models/Invoice');
+const shortcutModels = require('./shortcuts');
   await Client.create({ businessName: 'Ada Business', servicePaidFor: 'Facebook Ads Account Setup', amountPaid: 45000, clientNumber: '0801 234 5678', clientLoginDetails: 'private-login-value' }).catch(async () => {
     // Existing service enums can differ between CRM deployments; insert a legacy-shaped fixture directly.
     await Client.collection.insertOne({ businessName: 'Ada Business', servicePaidFor: 'Setup', amountPaid: 45000, clientNumber: '0801 234 5678', clientLoginDetails: 'private-login-value' });
@@ -653,4 +720,68 @@ test('Waiting response performs real CSS handoff rather than leaving an unassign
  assert.equal(String(current.assignedTo),String(second._id));assert.equal(current.ai.handoffReason,'RESPONSE_REQUIRES_STAFF');
  assert.equal(await Notification.countDocuments({recipient:second._id}),1);
  await service.processOutbox();assert.equal(sent.length,1);
+});
+
+
+test('Structured migration preserves prices, mode, legacy knowledge and is idempotent',async()=>{
+ await aiFixture('LIVE');await aiModels.Config.updateOne({key:'main'},{$set:{masterInstructions:'Preserve this exact legacy text'}});
+ await aiModels.Record.updateOne({key:'tiktok_setup',kind:'service'},{$set:{'data.price':23000}});
+ const originalRevision=(await aiSettings.getConfig()).revision;
+ const first=await request('/ai/structured-migration',{method:'POST',body:{}});assert.equal(first.status,200);
+ const count=await aiModels.Record.countDocuments();const secondRun=await request('/ai/structured-migration',{method:'POST',body:{}});assert.equal(secondRun.status,200);assert.equal(await aiModels.Record.countDocuments(),count);
+ const cfg=await aiSettings.getConfig();assert.equal(cfg.data.mode,'LIVE');assert.equal(cfg.data.structuredSales,false);assert.equal(cfg.revision,originalRevision);assert.equal(cfg.masterInstructions,'Preserve this exact legacy text');assert.equal((await aiModels.Record.findOne({key:'tiktok_setup',kind:'service'})).data.price,23000);
+ assert.equal((await request('/ai/structured-migration',{role:'agent',method:'POST',body:{}})).status,403);
+ const enable=await request('/ai/config',{method:'PUT',body:{revision:cfg.revision,data:{...cfg.data,structuredSales:true}}});assert.equal(enable.status,400);
+});
+
+test('Structured DRAFT media handoff is a suggestion with no assignment or notification',async()=>{
+ const c=await aiFixture('DRAFT');await aiModels.Config.updateOne({key:'main'},{$set:{'data.structuredSales':true}});
+ await Message.updateOne({_id:c.lastInboundId},{$set:{type:'image'}});
+ await aiWorker.runOne(await aiSettings.getConfig());const row=await Conversation.findById(c._id);
+ assert.equal(row.ai.draft.action,'handoff');assert.equal(row.assignedTo,null);assert.equal(row.ai.active,true);assert.equal(await Notification.countDocuments(),0);assert.equal(await Message.countDocuments({author:'ai',direction:'outbound'}),0);
+});
+
+test('Structured LIVE missing staff acknowledges once, persists pending assignment and recovers',async()=>{
+ const c=await aiFixture('LIVE');await aiModels.Config.updateOne({key:'main'},{$set:{'data.structuredSales':true}});await Staff.deleteMany({role:'CSS'});
+ await Message.updateOne({_id:c.lastInboundId},{$set:{type:'image'}});await aiWorker.runOne(await aiSettings.getConfig());
+ let row=await Conversation.findById(c._id);assert.equal(row.ai.state.assignmentStatus,'PENDING_HUMAN_ASSIGNMENT');assert.equal(row.ai.active,false);assert.equal(await Message.countDocuments({author:'ai',direction:'outbound'}),1);
+ await aiWorker.finishHandoff(row,await aiSettings.getConfig());assert.equal(await Message.countDocuments({author:'ai',direction:'outbound'}),1);
+ const css=await Staff.create({name:'New CSS',email:'new@example.test',password:'fixture',role:'CSS'});await aiWorker.finishHandoff(await Conversation.findById(c._id),await aiSettings.getConfig());
+ row=await Conversation.findById(c._id);assert.equal(String(row.assignedTo),String(css._id));assert.equal(await Notification.countDocuments({recipient:css._id}),1);assert.equal(await Message.countDocuments({author:'ai',direction:'outbound'}),1);
+});
+
+test('Payment reminders are durable and cancelled at send time after paid or human takeover',async()=>{
+ const c=await aiFixture('LIVE');await aiModels.Config.updateOne({key:'main'},{$set:{'data.structuredSales':true,'data.followupsEnabled':true}});
+ const invoice=await Invoice.create({token:crypto.randomUUID(),amount:20000,status:'pending',expiresAt:new Date(Date.now()+3600000),inboxConversation:c._id});
+ await Conversation.updateOne({_id:c._id},{$set:{'ai.state':{invoiceId:String(invoice._id)}}});
+ await Message.create({conversation:c._id,clientKey:`ai:${c._id}:${c.lastInboundId}`,type:'text',direction:'outbound',status:'sent',text:'Invoice fixture'});
+ const f=require('./ai/followups'),cfg=await aiSettings.getConfig();await f.schedule(await Conversation.findById(c._id),invoice._id,cfg.data);await f.schedule(await Conversation.findById(c._id),invoice._id,cfg.data);assert.equal(await aiModels.Followup.countDocuments(),2);
+ await aiModels.Followup.updateOne({sequence:0},{$set:{dueAt:new Date(0)}});await f.tick(cfg);const msg=await Message.findOne({'automation.followup':{$ne:null}});assert.ok(msg);assert.equal(await aiWorker.eligible(msg),true);
+ await Invoice.updateOne({_id:invoice._id},{$set:{status:'paid'}});assert.equal(await aiWorker.eligible(msg),false);await service.processOutbox();assert.equal(sent.length,0);
+ await aiWorker.pause(c._id,{id:String(agent._id)},'HUMAN_TAKEOVER');assert.equal(await aiModels.Followup.countDocuments({state:'pending'}),0);
+});
+
+test('Verified payment reconciliation pauses sales and hands off without new customer input',async()=>{
+ const c=await aiFixture('LIVE');await aiModels.Config.updateOne({key:'main'},{$set:{'data.structuredSales':true}});
+ const invoice=await Invoice.create({token:crypto.randomUUID(),amount:20000,status:'paid',paidAt:new Date(),inboxConversation:c._id});
+ await Conversation.updateOne({_id:c._id},{$set:{'ai.state':{invoiceId:String(invoice._id),selectedPlatform:'tiktok',serviceType:'account_setup'}}});
+ await require('./ai/payments').reconcile(await aiSettings.getConfig());const row=await Conversation.findById(c._id);assert.equal(row.ai.state.paymentStatus,'paid');assert.equal(row.ai.active,false);assert.equal(String(row.assignedTo),String(second._id));
+ await require('./ai/payments').reconcile(await aiSettings.getConfig());assert.equal(await Notification.countDocuments(),1);
+});
+
+
+test('Structured Test Agent simulates invoice and verified payment without business side effects',async()=>{
+ await aiFixture('DRAFT');await aiModels.Config.updateOne({key:'main'},{$set:{'data.invoicesEnabled':true}});aiProvider.interpret=async()=>({intent:'request_account_number',confidence:.99,platform:'tiktok',serviceType:'account_setup',paymentDetailsRequested:true});
+ const result=await request('/ai/test',{method:'POST',body:{structuredSales:true,text:'Send account for TikTok setup'}});assert.equal(result.status,200);assert.equal(result.data.action,'invoice');assert.equal(result.data.state.invoiceId,'simulation-invoice');
+ const paid=await request('/ai/test',{method:'POST',body:{structuredSales:true,text:'Paid',state:result.data.state,verifiedPayment:true}});assert.equal(paid.data.handoff,'PAYMENT_VERIFIED');
+ assert.equal(await Invoice.countDocuments(),0);assert.equal(await Notification.countDocuments(),0);assert.equal(await Message.countDocuments({direction:'outbound'}),0);
+});
+
+test('Admin corrections invalidate stale quotes and reminders without touching financial records',async()=>{
+ const c=await aiFixture('DRAFT');await Conversation.updateOne({_id:c._id},{$set:{'ai.state':{selectedPlatform:'tiktok',invoiceId:'old-invoice',quotedAmount:20000}}});
+ const current=await Conversation.findById(c._id);
+ assert.equal((await request(`/ai/conversations/${c._id}/state`,{role:'agent',method:'PUT',body:{revision:current.revision,state:{selectedPlatform:'meta'}}})).status,403);
+ assert.equal((await request(`/ai/conversations/${c._id}/state`,{method:'PUT',body:{revision:current.revision,state:{paymentStatus:'paid'}}})).status,400);
+ assert.equal((await request(`/ai/conversations/${c._id}/state`,{method:'PUT',body:{revision:current.revision,state:{selectedPlatform:'meta'}}})).status,200);
+ const saved=await Conversation.findById(c._id);assert.equal(saved.ai.state.selectedPlatform,'meta');assert.equal(saved.ai.state.invoiceId,undefined);assert.equal(saved.ai.state.previousInvoiceId,'old-invoice');
 });
