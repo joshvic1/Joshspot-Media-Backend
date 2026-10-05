@@ -8,7 +8,8 @@ const {redact}=require('./privacy');
 const live=require('../live');
 const policy=require('../policy');
 async function pause(conversation,actor,reason='HUMAN_TAKEOVER',assign=false) {
-  await Conversation.updateOne({_id:conversation},{$set:{'ai.active':false,'ai.draft':null,'ai.handoffPending':null,'ai.assignmentError':'','ai.handoffReason':reason,...(assign?{assignedTo:actor.admin?null:actor.id}:{})},$inc:{'ai.version':1}});
+  const previous=await Conversation.findOneAndUpdate({_id:conversation},{$set:{'ai.active':false,'ai.draft':null,'ai.handoffPending':null,'ai.assignmentError':'','ai.handoffReason':reason,...(assign?{assignedTo:actor.admin?null:actor.id}:{})},$inc:{'ai.version':1}});
+  if(previous && previous.ai?.active!==false)await require('../service').activity(conversation,actor,`AI paused: ${reason==='HUMAN_TYPING'?'a staff member started typing':reason==='HUMAN_REPLY'?'a staff member sent a reply':reason==='HUMAN_TAKEOVER'?'a staff member took over':reason}.`);
   await require('./followups').cancel(conversation,reason);
   await Message.updateMany({conversation,author:'ai',status:'queued'},{$set:{status:'failed',error:'AI reply cancelled because a human took over.'}});
   live.notify();

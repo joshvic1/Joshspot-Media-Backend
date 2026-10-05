@@ -823,3 +823,11 @@ test('CSS sees assigned chats only and cannot return to AI even when enabled', a
  assert.equal((await request(`/ai/conversations/${c._id}/control`,{role:'second',method:'POST',body:{action:'return'}})).status,403);
  assert.equal((await request(`/conversations/${c._id}`,{role:'admin'})).status,200);
 });
+test('approving a DRAFT reply keeps unassigned AI conversation active',async()=>{
+ const c=await fixture(false);const cfg=await aiSettings.getConfig();
+ await aiModels.Config.updateOne({_id:cfg._id},{$set:{'data.mode':'DRAFT'}});
+ await Conversation.updateOne({_id:c._id},{$set:{'ai.active':true,'ai.version':0,'ai.draft':{action:'reply',response:'Suggested reply',inputId:String(c.lastInboundId),configRevision:cfg.revision,mode:'DRAFT'}}});
+ const result=await request(`/ai/conversations/${c._id}/draft`,{method:'POST',body:{action:'send'}});
+ assert.equal(result.status,200);const updated=await Conversation.findById(c._id);assert.equal(updated.ai.active,true);assert.equal(updated.assignedTo,null);assert.equal(updated.ai.draft,null);
+ assert.ok(await Message.exists({conversation:c._id,type:'activity',text:/AI remains active/}));
+});

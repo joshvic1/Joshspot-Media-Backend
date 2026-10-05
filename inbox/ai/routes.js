@@ -29,8 +29,10 @@ router.post('/conversations/:id/draft',wrap(async(req,res)=>{
   if(String(c.lastInboundId)!==draft.inputId || config.revision!==draft.configRevision)fail(409,'New input or settings changed. Review the conversation before replying.');
   if(!policy.windowOpen(c.lastInboundAt))fail(400,'The WhatsApp reply window has closed. Use an approved template.');
   if(req.body.text!==undefined && (typeof req.body.text!=='string' || !req.body.text.trim() || req.body.text.length>4096))fail(400,'Write a reply of up to 4096 characters');
-  const claimed=await Conversation.updateOne({_id:c._id,'ai.draft.inputId':draft.inputId},{$set:{'ai.draft':null,'ai.active':false,...(!req.actor.admin?{assignedTo:req.actor.id}:{})},$inc:{'ai.version':1}});
-  if(!claimed.modifiedCount)fail(409,'Suggestion already handled');
+  const continueDrafting=config.data.mode==='DRAFT' && draft.action!=='handoff' && c.ai?.active!==false && !c.assignedTo;
+  const claimed=await Conversation.updateOne({_id:c._id,'ai.draft.inputId':draft.inputId,'ai.version':c.ai.version,lastInboundId:c.lastInboundId},{$set:{'ai.draft':null,...(continueDrafting?{}:{'ai.active':false,'ai.handoffReason':'DRAFT_APPROVED_HUMAN_TAKEOVER',...(!req.actor.admin?{assignedTo:req.actor.id}:{})})},$inc:{'ai.version':1}});
+  if(!claimed.modifiedCount)fail(409,'Suggestion already handled or conversation changed');
+  await require('../service').activity(c._id,req.actor,continueDrafting?'Approved AI draft. AI remains active for the next message.':'Approved AI draft. AI paused for human handling.');
   let response=draft.response;
   if(draft.action==='handoff'&&config.data.structuredSales)await worker.handoff(c,{...draft,response:''},{...config.data,mode:'OFF'});
   if(draft.action==='invoice') {

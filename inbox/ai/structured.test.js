@@ -92,3 +92,9 @@ test('expected-results answer survives a missing optional sales prompt',async()=
 test('missing sales rules do not authorize unsupported answers',async()=>{
  const result=await turn('How many views?',{intent:'knowledge',answerKind:'none',answerSupported:false},{},{records:[],knowledge:[]});assert.equal(result.action,'handoff');
 });
+test('custom quotes and selected plan explanations reuse calculator breakdown copy',async()=>{
+ const custom=await turn('Run TikTok for 100k over 10 days',{platform:'tiktok',serviceType:'ads_management',budget:100000,duration:10});
+ assert.equal(custom.action,'reply');assert.match(custom.response,/Here's a breakdown/);assert.match(custom.response,/10,000 daily/);assert.match(custom.response,/135,000/);
+ const selected=await turn('10 days. How does it work?',{intent:'advertising',duration:10,asksBreakdown:true},{selectedPlatform:'tiktok',serviceType:'ads_management',lastRequiredQuestion:'SELECT_PLAN',budget:20000});
+ assert.equal(selected.action,'reply');assert.equal(selected.amount,135000);assert.match(selected.response,/100,000 advertising budget/);assert.match(selected.response,/35,000/);
+});

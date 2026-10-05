@@ -45,7 +45,7 @@ async function decide({text='',type='text',customerName='there',state={},config,
   next.selectedService=service?.key;next.currentIntent=d.intent;
   const plans=records.filter(r=>r.kind==='plan'&&r.enabled!==false&&!r.archived&&r.data.platforms.includes(next.selectedPlatform)&&r.data.service===service?.key);
   const acceptsPlan=state.lastRequiredQuestion==='SELECT_PLAN'||(!next.budget&&d.budget==null);
-  const selected=plans.find(p=>p.key===(!yes&&acceptsPlan?d.planKey||next.recommendedPlan:next.recommendedPlan));
+  const selected=plans.find(p=>p.key===(!yes&&acceptsPlan?d.planKey||next.recommendedPlan:next.recommendedPlan)) || (state.lastRequiredQuestion==='SELECT_PLAN' && d.budget==null && plans.filter(p=>p.data.duration===d.duration).length===1 ? plans.find(p=>p.data.duration===d.duration) : null);
   if(selected){next.recommendedPlan=selected.key;next.duration=selected.data.duration;next.budget=selected.data.amount;}
   if(oldSelection!==[next.selectedPlatform,next.serviceType,next.budget,next.duration,next.recommendedPlan].join(':')) {
     // Preserve the actual invoice in the financial system; unlink stale sales
@@ -122,6 +122,15 @@ async function decide({text='',type='text',customerName='there',state={},config,
     const e=matched[0];try{result.response=render(e.data.requiredQuestion,vars);}catch{return handoff('INCOMPLETE_KNOWLEDGE_CONTEXT');}
   }
   if(answer&&result.action==='reply'&&result.response!==answer){result.response=answer+'\n\n'+result.response;result.knowledge=[...new Set([...base.knowledge,...result.knowledge])];}
+  const asksBreakdown=d.asksBreakdown===true || /\b(break\s*down|breakdown|how (?:does|will) (?:it|this|that|the .*?plan) work)\b/i.test(text);
+  if(result.action==='reply' && service?.data.serviceType==='ads_management' && amount && !next.invoiceId && (asksBreakdown || next.quoteSource==='ads_calculator' && !answer)) {
+    try {
+      const pricing=base.debug.calculator || await require('./pricing').calculate({platform:next.selectedPlatform,budget:next.budget,duration:next.duration,...(selected?{planAmount:selected.data.amount}:{})});
+      result.response=pricing.breakdown;
+      result.debug={...result.debug,calculator:pricing};
+      if(!next.customerWantsToProceed && !next.salesPaused){const question=entryFor('confirm_proceed');if(question)result.response+='\n\n'+render(question.data.preferredResponse,vars);}
+    }catch{return handoff('CALCULATOR_ERROR');}
+  }
   if(result.response?.length>config.maxResponseLength)return handoff('RESPONSE_TOO_LONG');
   if(result.action==='reply'&&require('./responsePolicy').promisesHandoff(result.response,config.fallbackResponse))return {...result,...handoff('RESPONSE_REQUIRES_STAFF')};
   return result;

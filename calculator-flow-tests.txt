@@ -1,0 +1,100 @@
+TAP version 13
+# Subtest: strict generic greeting bypasses provider; intent-bearing greeting retains useful information
+ok 1 - strict generic greeting bypasses provider; intent-bearing greeting retains useful information
+  ---
+  duration_ms: 84.8695
+  ...
+# Subtest: setup progresses quote, consent, payment details without duplicate questions
+ok 2 - setup progresses quote, consent, payment details without duplicate questions
+  ---
+  duration_ms: 23.1712
+  ...
+# Subtest: management custom quote calls the actual calculator and preserves partial information
+ok 3 - management custom quote calls the actual calculator and preserves partial information
+  ---
+  duration_ms: 66.2224
+  ...
+# Subtest: calculator copy has exact parity with existing frontend module
+ok 4 - calculator copy has exact parity with existing frontend module
+  ---
+  duration_ms: 4.0427
+  ...
+# Subtest: recommendations use current records and explicit plan selection
+ok 5 - recommendations use current records and explicit plan selection
+  ---
+  duration_ms: 3.5046
+  ...
+# Subtest: decline stops progression and service changes unlink wrong invoice without deleting it
+ok 6 - decline stops progression and service changes unlink wrong invoice without deleting it
+  ---
+  duration_ms: 3.0089
+  ...
+# Subtest: media, human and claimed payments hand off; only verified payment is confirmed
+ok 7 - media, human and claimed payments hand off; only verified payment is confirmed
+  ---
+  duration_ms: 9.57
+  ...
+# Subtest: approved multi-entry answers precede progression and financial claims are rejected
+ok 8 - approved multi-entry answers precede progression and financial claims are rejected
+  ---
+  duration_ms: 6.909
+  ...
+# Subtest: pending payment questions respect cooldown and do not regenerate invoices
+ok 9 - pending payment questions respect cooldown and do not regenerate invoices
+  ---
+  duration_ms: 3.7074
+  ...
+# Subtest: state-aware retrieval excludes inapplicable entries and validation rejects financial writes
+ok 10 - state-aware retrieval excludes inapplicable entries and validation rejects financial writes
+  ---
+  duration_ms: 7.3617
+  ...
+# Subtest: bare agreement cannot invent a new budget, select a plan, or skip the payment-details question
+ok 11 - bare agreement cannot invent a new budget, select a plan, or skip the payment-details question
+  ---
+  duration_ms: 11.0348
+  ...
+# Subtest: explicit payment request survives a mistaken requirements classification
+ok 12 - explicit payment request survives a mistaken requirements classification
+  ---
+  duration_ms: 1.4464
+  ...
+# Subtest: active invoice amount stays authoritative after service price changes
+ok 13 - active invoice amount stays authoritative after service price changes
+  ---
+  duration_ms: 1.3612
+  ...
+# Subtest: low-risk unrelated questions redirect; unknown business information transfers
+ok 14 - low-risk unrelated questions redirect; unknown business information transfers
+  ---
+  duration_ms: 1.9775
+  ...
+# Subtest: STRICT preserves line breaks and disabled records do not control answers
+ok 15 - STRICT preserves line breaks and disabled records do not control answers
+  ---
+  duration_ms: 2.3914
+  ...
+# Subtest: expected-results answer survives a missing optional sales prompt
+ok 16 - expected-results answer survives a missing optional sales prompt
+  ---
+  duration_ms: 1.3836
+  ...
+# Subtest: missing sales rules do not authorize unsupported answers
+ok 17 - missing sales rules do not authorize unsupported answers
+  ---
+  duration_ms: 0.6915
+  ...
+# Subtest: custom quotes and selected plan explanations reuse calculator breakdown copy
+ok 18 - custom quotes and selected plan explanations reuse calculator breakdown copy
+  ---
+  duration_ms: 8.2446
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1616.0895
