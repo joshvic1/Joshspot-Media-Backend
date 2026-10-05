@@ -1,6 +1,6 @@
 // Structured business instructions. No financial or ownership fields are writable
 // through a knowledge entry; those belong to verified backend actions.
-const stateFields = ['selectedPlatform','serviceType','budget','duration','selectedService','recommendedPlan','currentSalesStage','currentIntent','customerWantsToProceed','paymentDetailsRequested','lastRequiredQuestion','nextObjective','salesPaused'];
+const stateFields = ['selectedPlatform','serviceType','serviceChoiceConfirmed','budgetBasis','budget','duration','selectedService','recommendedPlan','currentSalesStage','currentIntent','customerWantsToProceed','paymentDetailsRequested','lastRequiredQuestion','nextObjective','salesPaused'];
 const objectives = ['DISCOVER_SERVICE','GET_SERVICE_TYPE','GET_PLATFORM','GET_BUDGET_DURATION','GET_BUDGET','GET_DURATION','SELECT_PLAN','CONFIRM_PROCEED','OFFER_PAYMENT_DETAILS','CHECK_PAYMENT','ANSWER','HANDOFF','COMPLETE'];
 const textFields = ['purpose','intents','triggerExamples','keywords','semanticTrigger','whenToUse','whenNotToUse','preferredResponse','facts','requiredQuestion','notes','paymentBehaviour','handoffReason'];
 function validate(data) {
@@ -49,8 +49,8 @@ const seeds = [
  ['generic_first_contact','Generic first contact','DISCOVER_SERVICE','Hello 👋\n\nWhich of our services are you interested in? Please tell me.'],
  ['ads_service_clarification','Setup or management','GET_SERVICE_TYPE','Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?'],
  ['ads_platform_selection','Choose platform','GET_PLATFORM','Which platform do you want?\n\nTikTok\n\nor\n\nMeta (Facebook & Instagram)?'],
- ['ads_management_details','Budget and duration','GET_BUDGET_DURATION','What is your budget for the ads, and how many days would you like to run the ads for?'],
- ['ads_budget','Missing budget','GET_BUDGET','What is your budget for the ads?'],
+ ['ads_management_details','Budget and duration','GET_BUDGET_DURATION','What is your daily advertising budget, and how many days would you like to run the ads for?'],
+ ['ads_budget','Missing budget','GET_BUDGET','What is your daily advertising budget?'],
  ['ads_duration','Missing duration','GET_DURATION','How many days would you like the ads to run?'],
  ['recommended_ads_plans','Recommended plans','SELECT_PLAN','{{plans}}\n\nWhich one would you like to go with?'],
  ['custom_management_price','Custom ads quote','CONFIRM_PROCEED','The total is {{price}} for {{duration}} days.\n\nThis includes {{ad_budget}} advertising budget and {{management_fee}} management fee.\n\nWould you like to proceed?'],

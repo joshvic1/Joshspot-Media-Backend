@@ -5,7 +5,7 @@ const engine=require('./engine'),provider=require('./provider'),defaults=require
 const original=provider.interpret;afterEach(()=>{provider.interpret=original;});
 const config={...defaults.config,structuredSales:true,invoicesEnabled:true};
 const records=[...defaults.records,...kb.seeds];
-async function turn(text,decision={},state={},extra={}){provider.interpret=async()=>({intent:'advertising',confidence:.99,platform:null,serviceType:null,budget:null,duration:null,answer:'',answerKind:'none',...decision});return engine.decide({text,state,config,records,knowledge:[],...extra});}
+async function turn(text,decision={},state={},extra={}){provider.interpret=async()=>({intent:'advertising',confidence:.99,platform:null,serviceType:null,budget:null,duration:null,answer:'',answerKind:'none',budgetBasis:'total',serviceChoiceExplicit:true,...decision});return engine.decide({text,state:{serviceChoiceConfirmed:true,...state},config,records,knowledge:[],...extra});}
 test('strict generic greeting bypasses provider; intent-bearing greeting retains useful information',async()=>{
  provider.interpret=()=>{throw Error('not called');};const greeting=await engine.decide({text:'Hi',config,records});assert.equal(greeting.state.nextObjective,'DISCOVER_SERVICE');
  const intent=await turn('Hi I need TikTok ads',{platform:'tiktok'});assert.equal(intent.state.nextObjective,'GET_SERVICE_TYPE');assert.doesNotMatch(intent.response,/which of our services/i);
@@ -105,4 +105,19 @@ test('platform reply skips unrelated handoff requirements',async()=>{
 });
 test('counteroffer retains authoritative price',async()=>{
  const r=await turn("Let's do 15k",{intent:'advertising',budget:15000,declines:true},{serviceType:'account_setup',selectedPlatform:'tiktok',quotedAmount:20000});assert.equal(r.action,'reply');assert.match(r.response,/not negotiable/);assert.match(r.response,/20,000/);assert.match(r.response,/Would you like to proceed/);
+});
+
+test('daily custom budget and duration produce 35000 without package fee duplication',async()=>{
+ const a=await turn('5K',{budget:5000,budgetBasis:'unspecified'},{serviceType:'ads_management',selectedPlatform:'tiktok'});
+ const b=await turn('2 days',{duration:2,budgetBasis:'unspecified'},a.state);assert.equal(b.amount,35000);assert.equal(b.debug.calculator.advertisingBudget,10000);
+ const pkg=await turn('a week',{duration:7,budget:60000,planKey:'plan_7'},{serviceType:'ads_management',selectedPlatform:'tiktok',lastRequiredQuestion:'SELECT_PLAN'});assert.equal(pkg.amount,60000);
+});
+test('generic ads request must clarify service before quoting or collecting budget',async()=>{
+ const r=await turn('I want to run ads',{serviceType:'ads_management',serviceChoiceExplicit:false},{serviceChoiceConfirmed:false});assert.equal(r.state.nextObjective,'GET_SERVICE_TYPE');
+ const t=await turn('TikTok',{platform:'tiktok',serviceType:'ads_management',serviceChoiceExplicit:false},r.state);assert.equal(t.state.nextObjective,'GET_SERVICE_TYPE');assert.equal(t.amount,undefined);
+});
+
+test('duration-only request cannot invent a custom advertising budget',async()=>{
+ const r=await turn('I would like to run the ads for a week',{duration:7,budget:60000},{serviceType:'ads_management',selectedPlatform:'tiktok',lastRequiredQuestion:'GET_BUDGET_DURATION'});
+ assert.equal(r.amount,undefined);assert.equal(r.state.budget,undefined);assert.equal(r.state.nextObjective,'GET_BUDGET');
 });
