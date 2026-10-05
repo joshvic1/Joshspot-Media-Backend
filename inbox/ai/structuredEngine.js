@@ -33,6 +33,9 @@ async function decide({text='',type='text',customerName='there',state={},config,
   if(!config.allowedIntents.includes(d.intent)||config.disallowedIntents.includes(d.intent))return handoff('MANUAL_ADMIN_RULE');
   const mandatory=records.find(r=>r.kind==='handoff'&&r.data.mandatory===true&&(r.data.intent===d.intent||r.data.intent==='*'));
   if(mandatory)return {...handoff(mandatory.data.reason||'MANUAL_ADMIN_RULE'),handoffRule:mandatory.key};
+  const negotiating=Boolean(state.quotedAmount && (d.negotiating===true || /\b(discount|negotiab\w*|reduce (?:it|the price)|last price|let'?s do|can (?:you|we) (?:do|take|accept))\b/i.test(text)));
+  if(negotiating){d.budget=null;d.declines=false;}
+  const platformOnly=/^(?:tiktok|tik tok|meta|facebook|instagram)[.!\s]*$/i.test(text.trim()) && state.lastRequiredQuestion==='GET_PLATFORM';
   const selectedKeys=d.knowledgeKeys||[d.knowledgeKey].filter(Boolean);
   const matched=entries.filter(e=>selectedKeys.includes(e.key));
   for(const e of [...matched].reverse())for(const [key,value]of Object.entries(e.data.stateUpdates||{}))if(['selectedPlatform','serviceType','currentIntent'].includes(key)&&!d[{selectedPlatform:'platform',serviceType:'serviceType',currentIntent:'intent'}[key]])next[key]=value;
@@ -71,6 +74,10 @@ async function decide({text='',type='text',customerName='there',state={},config,
     next.lastRequiredQuestion=next.nextObjective;next.lastProgressionQuestionAt=time;next.updatedAt=time;
     return {...base,action:'reply',response,state:next,amount,serviceKey:service?.key,knowledge:[e.key],responseMode:e.data.responseMode,debug:{...base.debug,nextObjective:next.nextObjective,authoritativeQuote:{amount,source:next.quoteSource}}};
   };
+  if(negotiating && amount && service){
+    next.salesPaused=false;
+    return {...base,action:'reply',response:`I'm sorry, the price is not negotiable. ${service.title} costs ${money(amount)}.\n\nWould you like to proceed?`,amount,serviceKey:service.key,state:{...next,currentSalesStage:'PRICE_PRESENTED',nextObjective:'CONFIRM_PROCEED',lastRequiredQuestion:'CONFIRM_PROCEED'},debug:{...base.debug,pricePolicy:'NON_NEGOTIABLE'}};
+  }
   if(d.declines===true){next.salesPaused=true;next.customerWantsToProceed=false;next.paymentDetailsRequested=false;return respond('customer_declines',next.currentSalesStage,'COMPLETE');}
   if(d.unrelated===true)return respond('unrelated_question',next.currentSalesStage,'ANSWER');
   if(d.identityQuestion===true)return respond('ai_identity',next.currentSalesStage,'ANSWER');
@@ -81,7 +88,7 @@ async function decide({text='',type='text',customerName='there',state={},config,
   if(matched.some(e=>e.data.forceHandoff))return handoff(matched.find(e=>e.data.forceHandoff).data.handoffReason||'MANUAL_ADMIN_RULE');
   let answer='';
   const priceOnly=(d.asksPrice||/\b(how much|price|cost|fee)\b/i.test(text))&&!/\b(include|cover|entail|need|require|and|also|views?|engagements?|reach|impressions?|clicks?|results?|expect)\b/i.test(text);
-  if(!priceOnly&&['knowledge','requirements','payment_question','payment_problem'].includes(d.intent)&&d.answerKind==='answer'&&d.answerSupported&&matched.length) {
+  if(!platformOnly&&!priceOnly&&['knowledge','requirements','payment_question','payment_problem'].includes(d.intent)&&d.answerKind==='answer'&&d.answerSupported&&matched.length) {
     const strict=matched.find(e=>e.data.preferredResponse&&(e.data.responseMode==='STRICT'||e.data.responseMode==='GUIDED'&&!e.data.allowContext));
     const raw=strict?strict.data.preferredResponse:d.answer;
     // Dynamic money/payment data must be bound by the server, never generated.

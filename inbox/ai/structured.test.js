@@ -98,3 +98,11 @@ test('custom quotes and selected plan explanations reuse calculator breakdown co
  const selected=await turn('10 days. How does it work?',{intent:'advertising',duration:10,asksBreakdown:true},{selectedPlatform:'tiktok',serviceType:'ads_management',lastRequiredQuestion:'SELECT_PLAN',budget:20000});
  assert.equal(selected.action,'reply');assert.equal(selected.amount,135000);assert.match(selected.response,/100,000 advertising budget/);assert.match(selected.response,/35,000/);
 });
+
+test('platform reply skips unrelated handoff requirements',async()=>{
+ const custom=records.map(r=>r.key==='tiktok_setup'?{...r,data:{...r.data,requirements:'Hold on please. You will receive a response shortly.'}}:r);
+ const r=await turn('TikTok',{intent:'requirements',platform:'tiktok',answerKind:'answer',answerSupported:true,knowledgeKeys:['setup_requirements'],answer:'Hold on please.'},{serviceType:'account_setup',lastRequiredQuestion:'GET_PLATFORM'},{records:custom});assert.equal(r.action,'reply');assert.match(r.response,/20,000/);
+});
+test('counteroffer retains authoritative price',async()=>{
+ const r=await turn("Let's do 15k",{intent:'advertising',budget:15000,declines:true},{serviceType:'account_setup',selectedPlatform:'tiktok',quotedAmount:20000});assert.equal(r.action,'reply');assert.match(r.response,/not negotiable/);assert.match(r.response,/20,000/);assert.match(r.response,/Would you like to proceed/);
+});

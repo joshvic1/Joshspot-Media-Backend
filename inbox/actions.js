@@ -61,7 +61,7 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
     c = await conversationFor(req);
     if (!policy.canReply(req.actor, c) || !policy.windowOpen(c.lastInboundAt)) fail(409, 'Conversation ownership or reply window changed. Invoice retained; no message sent.');
     await require('./ai/worker').pause(c._id, req.actor, 'HUMAN_REPLY');
-    const text = `Hello ${c.contact.name || 'there'},\n\nYour invoice: ₦${invoice.amount.toLocaleString('en-NG')}\n\nBank: ${invoice.bankName}\nAccount: ${invoice.accountNumber}\nName: ${invoice.accountName}\n\n${process.env.CLIENT_URL.replace(/\/$/, '')}/pay-invoice/${invoice.token}`;
+    const text = `Hi ${c.contact.name || 'there'},\nPay ₦${invoice.amount.toLocaleString('en-NG')} to the account below and send your receipt afterward.\n\nAccount number: ${invoice.accountNumber}\nBank: ${invoice.bankName}\nAccount name: ${invoice.accountName}\n\nOr pay through your invoice link below:\n${process.env.CLIENT_URL.replace(/\/$/, '')}/pay-invoice/${invoice.token}`;
     let message; try { message = await Message.create({ conversation: c._id, clientKey, direction: 'outbound', type: 'text', text, author: req.actor.id, authorName: req.actor.name, status: 'queued', routingPhoneId: process.env.WHATSAPP_PHONE_NUMBER_ID }); } catch (e) { if (e.code !== 11000) throw e; message = await Message.findOne({ clientKey }); }
     await Conversation.updateOne({ _id: c._id, $or: [{ lastMessageId: { $lt: message._id } }, { lastMessageId: null }] }, { $set: { lastMessageId: message._id, lastMessageAt: message.createdAt, preview: text.slice(0, 160) } });
     res.json({ queued: true, messageId: message._id });
