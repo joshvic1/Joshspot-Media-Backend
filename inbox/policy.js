@@ -9,7 +9,7 @@ function phone(value) {
   return digits;
 }
 const windowOpen = (lastInboundAt, now = Date.now()) => Boolean(lastInboundAt && now - new Date(lastInboundAt).getTime() < 86400000);
-const visible = (actor) => actor.admin ? {} : { $or: [{ assignedTo: null }, { assignedTo: actor.id }, { collaborators: actor.id }] };
+const visible = (actor) => actor.admin ? {} : actor.role === 'CSS' ? { assignedTo: actor.id } : { $or: [{ assignedTo: null }, { assignedTo: actor.id }, { collaborators: actor.id }] };
 const canReply = (actor, conversation) => actor.admin || String(conversation.assignedTo) === actor.id;
 function signature(raw, header, secret) {
   if (!secret || !Buffer.isBuffer(raw) || !/^sha256=[a-f0-9]{64}$/.test(header || '')) return false;

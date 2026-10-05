@@ -65,7 +65,7 @@ async function decide({text='',type='text',customerName='there',state={},config,
   const vars={customer_name:customerName||'there',service_name:service?.title||'',service:service?.title||'',price:amount?money(amount):'',amount:amount?money(amount):'',platform:next.selectedPlatform==='meta'?'Meta (Facebook & Instagram)':next.selectedPlatform==='tiktok'?'TikTok':'',budget:next.budget?money(next.budget):'',duration:next.duration||'',plan_name:selected?.title||'',plans:plans.map(p=>`${p.data.duration} days — ${money(p.data.amount)}`).join('\n'),ad_budget:base.debug.calculator?money(base.debug.calculator.advertisingBudget):'',management_fee:base.debug.calculator?money(base.debug.calculator.managementFee):'',requirements:service?.data.requirements||''};
   const respond=(key,stage,objective)=>{
     const e=entryFor(key);
-    if(!e)return handoff('MISSING_KNOWLEDGE_RULE');
+    if(!e)return {...handoff('MISSING_KNOWLEDGE_RULE'),debug:{...base.debug,missingKnowledgeKey:key}};
     let response;try{const template=e.data.preferredResponse||e.data.answer;for(const [,key]of String(template).matchAll(/\{\{([a-z_]+)\}\}/g))if(vars[key]===''||vars[key]===undefined)throw Error('Missing variable');response=render(e.data.preferredResponse||e.data.answer,vars);if(/\{\{/.test(response))throw Error('Unresolved variable');}catch{return handoff('INCOMPLETE_KNOWLEDGE_CONTEXT');}
     next.currentSalesStage=stage||next.currentSalesStage||'DISCOVERY';next.nextObjective=objective||e.data.nextObjective;
     next.lastRequiredQuestion=next.nextObjective;next.lastProgressionQuestionAt=time;next.updatedAt=time;
@@ -80,7 +80,7 @@ async function decide({text='',type='text',customerName='there',state={},config,
   if(next.customerWantsToProceed)next.salesPaused=false;
   if(matched.some(e=>e.data.forceHandoff))return handoff(matched.find(e=>e.data.forceHandoff).data.handoffReason||'MANUAL_ADMIN_RULE');
   let answer='';
-  const priceOnly=(d.asksPrice||/\b(how much|price|cost|fee)\b/i.test(text))&&!/\b(include|cover|entail|need|require|and|also)\b/i.test(text);
+  const priceOnly=(d.asksPrice||/\b(how much|price|cost|fee)\b/i.test(text))&&!/\b(include|cover|entail|need|require|and|also|views?|engagements?|reach|impressions?|clicks?|results?|expect)\b/i.test(text);
   if(!priceOnly&&['knowledge','requirements','payment_question','payment_problem'].includes(d.intent)&&d.answerKind==='answer'&&d.answerSupported&&matched.length) {
     const strict=matched.find(e=>e.data.preferredResponse&&(e.data.responseMode==='STRICT'||e.data.responseMode==='GUIDED'&&!e.data.allowContext));
     const raw=strict?strict.data.preferredResponse:d.answer;
@@ -112,6 +112,10 @@ async function decide({text='',type='text',customerName='there',state={},config,
   else if(amount&&answer&&state.quotedAmount===amount&&state.selectedService===service.key)result=respond('confirm_proceed','PRICE_PRESENTED');
   else if(amount)result=respond(next.quoteSource==='ads_calculator'?'custom_management_price':'service_price','PRICE_PRESENTED');
   else return handoff('NO_APPROVED_KNOWLEDGE');
+  // Missing optional sales copy must not discard an approved answer.
+  if(answer && result.action==='handoff' && result.handoff==='MISSING_KNOWLEDGE_RULE') {
+    result={...base,action:'reply',response:answer,state:{...next,nextObjective:'ANSWER_PREPAYMENT_QUESTION',updatedAt:time},debug:{...base.debug,missingKnowledgeKey:result.debug.missingKnowledgeKey,progressionSkipped:true}};
+  }
   if(d.intent==='unknown'&&!answer&&!d.answerKind?.includes('clarify'))return handoff('NO_APPROVED_KNOWLEDGE');
   if(d.intent==='knowledge'&&!answer&&!priceOnly)return handoff('NO_APPROVED_KNOWLEDGE');
   if(answer&&matched[0]?.data.requiredQuestion&&result.action==='reply'&&matched[0].data.nextObjective===result.state.nextObjective){

@@ -10,7 +10,7 @@ router.post('/conversations/:id/control',wrap(async(req,res)=>{
   if(!policy.canReply(req.actor,c) && c.assignedTo)fail(403,'Only the assigned representative or admin can change AI handling');
   if(req.body.action==='takeover') {await worker.pause(c._id,req.actor,'HUMAN_TAKEOVER',true);await require('../service').activity(c._id,req.actor,'Took over from AI');}
   else if(req.body.action==='return') {
-    if(!req.actor.admin && !config.data.allowReturn)fail(403,'Only administrators can return conversations to AI');
+    if(!req.actor.admin && (req.actor.role === 'CSS' || !config.data.allowReturn))fail(403,'Only administrators can return conversations to AI');
     await Conversation.updateOne({_id:c._id},{$set:{assignedTo:null,'ai.active':true,'ai.pending':false,'ai.draft':null,'ai.needsHuman':false,'ai.handoffPending':null,'ai.assignmentError':'','ai.handoffReason':'','ai.state.aiActive':true,'ai.state.humanHandoffReason':'','ai.returnedBy':req.actor.id,'ai.consecutive':0,'ai.lastProcessedId':c.lastInboundId},$inc:{'ai.version':1,revision:1}});
     await require('../service').activity(c._id,req.actor,'Returned future messages to AI');
   } else if(req.body.action==='cancel_followups'){await require('./followups').cancel(c._id,'Cancelled by staff');} else if(req.body.action==='retry_assignment'&&c.ai?.handoffPending){await worker.finishHandoff(c,config);} else fail(400,'Choose takeover, return or retry assignment');

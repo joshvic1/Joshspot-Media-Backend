@@ -66,6 +66,31 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
     await Conversation.updateOne({ _id: c._id, $or: [{ lastMessageId: { $lt: message._id } }, { lastMessageId: null }] }, { $set: { lastMessageId: message._id, lastMessageAt: message.createdAt, preview: text.slice(0, 160) } });
     res.json({ queued: true, messageId: message._id });
   }));
+  const crmKinds = { setup: ['Client', '../controllers/crmController', 'updateClient'], ads: ['AdsClient', '../controllers/adsController', 'updateAdsClient'], verification: ['VerificationClient', '../controllers/verificationController', 'updateVerificationClient'] };
+  const crmMatch = c => {
+    const n = c.contact.phone.replace(/\D/g, '');
+    const variants = [n, '+' + n, ...(n.startsWith('234') ? ['0' + n.slice(3)] : [])];
+    return { clientNumber: new RegExp('^(?:' + variants.map(v => [...v].map(ch => ch === '+' ? '\\+' : ch).join('[\\s().-]*')).join('|') + ')$') };
+  };
+  router.get('/conversations/:id/actions/crm/:kind', wrap(async (req, res) => {
+    const c = await conversationFor(req), spec = crmKinds[req.params.kind];
+    if (!spec) fail(400, 'Choose Setup, Verification or Ads.');
+    const query = crmMatch(c); if (req.query.recordId) query._id = id(req.query.recordId);
+    const row = await require('../models/' + spec[0]).findOne(query).sort({createdAt:-1}).lean();
+    if (row && req.params.kind !== 'ads' && !req.actor.admin && req.actor.role !== 'SS') delete row.amountPaid;
+    res.json({ record: row });
+  }));
+  router.put('/conversations/:id/actions/crm/:kind/:recordId', wrap(async (req, res) => {
+    await rateLimit(req, 20); const c = await conversationFor(req), spec = crmKinds[req.params.kind];
+    if (!spec) fail(400, 'Only Setup, Verification and Ads records can be edited.');
+    if (!policy.canReply(req.actor, c)) fail(403, 'Claim this conversation before editing a client.');
+    const row = await require('../models/' + spec[0]).findOne({...crmMatch(c), _id:id(req.params.recordId)});
+    if (!row) fail(404, 'Linked CRM record not found.');
+    const fields = ['amountPaid','servicePaidFor','clientLoginDetails','landingPageLogins','landingPageLink','videoLinks','note','idCard', ...(req.params.kind === 'verification' ? ['businessName'] : [])];
+    req.body = Object.fromEntries(fields.filter(f => Object.hasOwn(req.body,f)).map(f => [f,req.body[f]]));
+    req.params.id = String(row._id); req.staff = {...req.staff,role:req.actor.role};
+    await require(spec[1])[spec[2]](req,res);
+  }));
   router.post('/conversations/:id/actions/crm/:kind', wrap(async (req, res) => {
     await rateLimit(req, 20); const c = await conversationFor(req);
     if (!policy.canReply(req.actor, c)) fail(403, 'Claim this conversation before adding a client.');
@@ -78,7 +103,9 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
     if (payload.amountPaid !== undefined && (!Number.isFinite(Number(payload.amountPaid)) || Number(payload.amountPaid) < 0)) fail(400, 'Enter a valid amount.');
     payload.clientNumber = `+${c.contact.phone}`;
     if (req.params.kind === 'verification') payload.name = c.contact.name || 'WhatsApp customer'; else payload.businessName = c.contact.name || 'WhatsApp customer';
-    const key = `${c._id}:${req.body.clientId}`; const fingerprint = createHash('sha256').update(JSON.stringify(payload)).digest('hex');
+    const existing = req.params.kind !== 'ads' && await require('../models/' + crmKinds[req.params.kind][0]).findOne(crmMatch(c)).select('_id');
+    if (existing) return res.json({id:existing._id,saved:true,existing:true});
+    const key = req.params.kind === 'ads' ? `${c._id}:${req.body.clientId}` : `inbox-crm:${req.params.kind}:${c.contact.phone}`; const fingerprint = createHash('sha256').update(JSON.stringify(payload)).digest('hex');
     const Model = require('../models/' + ({ setup: 'Client', ads: 'AdsClient', verification: 'VerificationClient' })[req.params.kind]);
     const prior = await Model.findOne({ inboxRequestKey: key }).select('_id');
     let action = await Action.findOne({ key });

@@ -809,3 +809,17 @@ test('Admin corrections invalidate stale quotes and reminders without touching f
  assert.equal((await request(`/ai/conversations/${c._id}/state`,{method:'PUT',body:{revision:current.revision,state:{selectedPlatform:'meta'}}})).status,200);
  const saved=await Conversation.findById(c._id);assert.equal(saved.ai.state.selectedPlatform,'meta');assert.equal(saved.ai.state.invoiceId,undefined);assert.equal(saved.ai.state.previousInvoiceId,'old-invoice');
 });
+test('CSS sees assigned chats only and cannot return to AI even when enabled', async () => {
+ const c=await fixture(false);
+ for(const assignedTo of [null,agent._id]) {
+  await Conversation.updateOne({_id:c._id},{$set:{assignedTo,collaborators:[second._id]}});
+  assert.equal((await request(`/conversations/${c._id}`,{role:'second'})).status,404);
+  assert.equal((await request('/conversations?view=inbox',{role:'second'})).data.items.length,0);
+  assert.equal((await request(`/conversations/${c._id}/messages`,{role:'second'})).status,404);
+ }
+ await Conversation.updateOne({_id:c._id},{$set:{assignedTo:second._id,'ai.active':false}});
+ assert.equal((await request(`/conversations/${c._id}`,{role:'second'})).status,200);
+ await aiSettings.getConfig();await aiModels.Config.updateOne({key:'main'},{$set:{'data.allowReturn':true}});
+ assert.equal((await request(`/ai/conversations/${c._id}/control`,{role:'second',method:'POST',body:{action:'return'}})).status,403);
+ assert.equal((await request(`/conversations/${c._id}`,{role:'admin'})).status,200);
+});

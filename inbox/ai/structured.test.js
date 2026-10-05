@@ -81,3 +81,14 @@ test('STRICT preserves line breaks and disabled records do not control answers',
  const result=await turn('Coverage?',d,{selectedPlatform:'tiktok',serviceType:'account_setup'},{knowledge:[entry]});assert.match(result.response,/^First fact\.\n\nSecond fact\./);assert.doesNotMatch(result.response,/Unapproved/);
  assert.equal((await turn('Coverage?',d,{}, {knowledge:[{...entry,enabled:false}]})).action,'handoff');
 });
+
+test('expected-results answer survives a missing optional sales prompt',async()=>{
+ const entry={kind:'knowledge',key:'expected_views',enabled:true,data:{schemaVersion:1,responseMode:'GUIDED',allowContext:true,preferredResponse:'Exact views cannot be guaranteed.',facts:'Results depend on creative quality.'}};
+ for(const text of ['How many views will the 60K package get me?','How much engagement will I get?','If I do the 10 days package how many views will I get?']) {
+  const result=await turn(text,{intent:'knowledge',answerKind:'answer',answerSupported:true,knowledgeKeys:['expected_views'],answer:'Exact views cannot be guaranteed.'},{},{records:[],knowledge:[entry]});
+  assert.equal(result.action,'reply');assert.equal(result.response,'Exact views cannot be guaranteed.');assert.equal(result.debug.missingKnowledgeKey,'ads_service_clarification');
+ }
+});
+test('missing sales rules do not authorize unsupported answers',async()=>{
+ const result=await turn('How many views?',{intent:'knowledge',answerKind:'none',answerSupported:false},{},{records:[],knowledge:[]});assert.equal(result.action,'handoff');
+});
