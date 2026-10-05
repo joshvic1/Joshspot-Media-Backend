@@ -1,0 +1,135 @@
+TAP version 13
+# Subtest: strict generic greeting bypasses provider; intent-bearing greeting retains useful information
+ok 1 - strict generic greeting bypasses provider; intent-bearing greeting retains useful information
+  ---
+  duration_ms: 221.395
+  ...
+# Subtest: setup progresses quote, consent, payment details without duplicate questions
+ok 2 - setup progresses quote, consent, payment details without duplicate questions
+  ---
+  duration_ms: 95.2444
+  ...
+# Subtest: management custom quote calls the actual calculator and preserves partial information
+ok 3 - management custom quote calls the actual calculator and preserves partial information
+  ---
+  duration_ms: 67.3778
+  ...
+# Subtest: calculator copy has exact parity with existing frontend module
+ok 4 - calculator copy has exact parity with existing frontend module
+  ---
+  duration_ms: 8.047
+  ...
+# Subtest: recommendations use current records and explicit plan selection
+ok 5 - recommendations use current records and explicit plan selection
+  ---
+  duration_ms: 4.9819
+  ...
+# Subtest: decline stops progression and service changes unlink wrong invoice without deleting it
+ok 6 - decline stops progression and service changes unlink wrong invoice without deleting it
+  ---
+  duration_ms: 4.7104
+  ...
+# Subtest: media, human and claimed payments hand off; only verified payment is confirmed
+ok 7 - media, human and claimed payments hand off; only verified payment is confirmed
+  ---
+  duration_ms: 17.0403
+  ...
+# Subtest: approved multi-entry answers precede progression and financial claims are rejected
+ok 8 - approved multi-entry answers precede progression and financial claims are rejected
+  ---
+  duration_ms: 7.0993
+  ...
+# Subtest: pending payment questions respect cooldown and do not regenerate invoices
+ok 9 - pending payment questions respect cooldown and do not regenerate invoices
+  ---
+  duration_ms: 3.4165
+  ...
+# Subtest: state-aware retrieval excludes inapplicable entries and validation rejects financial writes
+ok 10 - state-aware retrieval excludes inapplicable entries and validation rejects financial writes
+  ---
+  duration_ms: 13.51
+  ...
+# Subtest: bare agreement cannot invent a new budget, select a plan, or skip the payment-details question
+ok 11 - bare agreement cannot invent a new budget, select a plan, or skip the payment-details question
+  ---
+  duration_ms: 11.9303
+  ...
+# Subtest: explicit payment request survives a mistaken requirements classification
+ok 12 - explicit payment request survives a mistaken requirements classification
+  ---
+  duration_ms: 2.3161
+  ...
+# Subtest: active invoice amount stays authoritative after service price changes
+ok 13 - active invoice amount stays authoritative after service price changes
+  ---
+  duration_ms: 3.3208
+  ...
+# Subtest: low-risk unrelated questions redirect; unknown business information transfers
+ok 14 - low-risk unrelated questions redirect; unknown business information transfers
+  ---
+  duration_ms: 4.4164
+  ...
+# Subtest: STRICT preserves line breaks and disabled records do not control answers
+ok 15 - STRICT preserves line breaks and disabled records do not control answers
+  ---
+  duration_ms: 3.722
+  ...
+# Subtest: expected-results answer survives a missing optional sales prompt
+ok 16 - expected-results answer survives a missing optional sales prompt
+  ---
+  duration_ms: 2.893
+  ...
+# Subtest: missing sales rules do not authorize unsupported answers
+ok 17 - missing sales rules do not authorize unsupported answers
+  ---
+  duration_ms: 1.1367
+  ...
+# Subtest: custom quotes and selected plan explanations reuse calculator breakdown copy
+ok 18 - custom quotes and selected plan explanations reuse calculator breakdown copy
+  ---
+  duration_ms: 8.2828
+  ...
+# Subtest: platform reply skips unrelated handoff requirements
+ok 19 - platform reply skips unrelated handoff requirements
+  ---
+  duration_ms: 2.6129
+  ...
+# Subtest: counteroffer retains authoritative price
+ok 20 - counteroffer retains authoritative price
+  ---
+  duration_ms: 2.0914
+  ...
+# Subtest: daily custom budget and duration produce 35000 without package fee duplication
+ok 21 - daily custom budget and duration produce 35000 without package fee duplication
+  ---
+  duration_ms: 7.6081
+  ...
+# Subtest: generic ads request must clarify service before quoting or collecting budget
+ok 22 - generic ads request must clarify service before quoting or collecting budget
+  ---
+  duration_ms: 3.8009
+  ...
+# Subtest: duration-only request cannot invent a custom advertising budget
+ok 23 - duration-only request cannot invent a custom advertising budget
+  ---
+  duration_ms: 2.2512
+  ...
+# Subtest: deferred payment and refusal override mistaken readiness flags
+ok 24 - deferred payment and refusal override mistaken readiness flags
+  ---
+  duration_ms: 4.2557
+  ...
+# Subtest: daily-cost followup answers recommended plan spend without repeating discovery
+ok 25 - daily-cost followup answers recommended plan spend without repeating discovery
+  ---
+  duration_ms: 8.0885
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3551.5473

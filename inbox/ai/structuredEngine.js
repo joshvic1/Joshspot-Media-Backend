@@ -33,6 +33,18 @@ async function decide({text='',type='text',customerName='there',state={},config,
   if(!config.allowedIntents.includes(d.intent)||config.disallowedIntents.includes(d.intent))return handoff('MANUAL_ADMIN_RULE');
   const mandatory=records.find(r=>r.kind==='handoff'&&r.data.mandatory===true&&(r.data.intent===d.intent||r.data.intent==='*'));
   if(mandatory)return {...handoff(mandatory.data.reason||'MANUAL_ADMIN_RULE'),handoffRule:mandatory.key};
+  const deferred=d.deferPurchase===true || /\b(?:let me (?:speak|talk|discuss|consult|check)|(?:i[’']?ll|i will) (?:get back|hit you up)|not (?:now|yet|ready)|once i agree|make payments? soon)\b/i.test(text) || /^no(?:[\s,.!]|$)/i.test(text.trim()) && ['CONFIRM_PROCEED','OFFER_PAYMENT_DETAILS','CHECK_PAYMENT'].includes(state.lastRequiredQuestion);
+  if(deferred){return {...base,action:'reply',response:"All right, take your time. We'll be expecting your response.",state:{...next,salesPaused:true,customerWantsToProceed:false,paymentDetailsRequested:false,nextObjective:'WAIT_FOR_CUSTOMER',lastRequiredQuestion:'',updatedAt:time},debug:{...base.debug,deferredPurchase:true}};}
+  const asksDaily=d.asksDailyCost===true || /\b(?:daily.*(?:how much|cost|price)|how much.*(?:daily|per day)|per day.*how much)\b/i.test(text);
+  if(asksDaily && (state.lastRequiredQuestion==='SELECT_PLAN'||state.recommendedPlan)) {
+    const options=records.filter(r=>r.kind==='plan'&&r.enabled!==false&&!r.archived&&r.data.platforms.includes(state.selectedPlatform)&&(!state.recommendedPlan||r.key===state.recommendedPlan));
+    if(options.length){
+      try {
+        const breakdowns=await Promise.all(options.map(p=>require('./pricing').calculate({platform:state.selectedPlatform,budget:p.data.amount,duration:p.data.duration,planAmount:p.data.amount}).catch(()=>({duration:p.data.duration,total:p.data.amount,unavailable:true}))));
+        return {...base,action:'reply',response:breakdowns.map(p=>p.unavailable?`${p.duration} days: ${money(p.total)} total. The daily spend breakdown needs confirmation.`:`${p.duration} days: ${money(p.dailyBudget)} daily ad spend (${money(p.advertisingBudget)} advertising + ${money(p.managementFee)} management = ${money(p.total)} total).`).join('\n\n')+(options.length>1?'\n\nWhich plan would you like?':''),state:{...next,nextObjective:'SELECT_PLAN',lastRequiredQuestion:'SELECT_PLAN'},debug:{...base.debug,planBreakdowns:breakdowns}};
+      }catch{return handoff('CALCULATOR_ERROR');}
+    }
+  }
   const negotiating=Boolean(state.quotedAmount && (d.negotiating===true || /\b(discount|negotiab\w*|reduce (?:it|the price)|last price|let'?s do|can (?:you|we) (?:do|take|accept))\b/i.test(text)));
   if(negotiating){d.budget=null;d.declines=false;}
   const platformOnly=/^(?:tiktok|tik tok|meta|facebook|instagram)[.!\s]*$/i.test(text.trim()) && state.lastRequiredQuestion==='GET_PLATFORM';

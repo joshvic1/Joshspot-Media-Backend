@@ -121,3 +121,14 @@ test('duration-only request cannot invent a custom advertising budget',async()=>
  const r=await turn('I would like to run the ads for a week',{duration:7,budget:60000},{serviceType:'ads_management',selectedPlatform:'tiktok',lastRequiredQuestion:'GET_BUDGET_DURATION'});
  assert.equal(r.amount,undefined);assert.equal(r.state.budget,undefined);assert.equal(r.state.nextObjective,'GET_BUDGET');
 });
+
+test('deferred payment and refusal override mistaken readiness flags',async()=>{
+ for(const text of ['Let me speak with my coach so we can make payments soon','No. Once I agree with him I’ll hit you up asap']){
+ const r=await turn(text,{intent:'ready_to_pay',wantsToProceed:true,paymentDetailsRequested:true},{serviceType:'ads_management',selectedPlatform:'tiktok',quotedAmount:45000,customerWantsToProceed:true,lastRequiredQuestion:'OFFER_PAYMENT_DETAILS'});
+ assert.equal(r.action,'reply');assert.equal(r.state.salesPaused,true);assert.equal(r.state.customerWantsToProceed,false);assert.equal(r.state.paymentDetailsRequested,false);assert.doesNotMatch(r.response,/account details|proceed/i);
+ }
+});
+test('daily-cost followup answers recommended plan spend without repeating discovery',async()=>{
+ const r=await turn('Daily is how much?',{intent:'advertising'},{serviceType:'ads_management',selectedPlatform:'tiktok',lastRequiredQuestion:'SELECT_PLAN'});
+ assert.equal(r.action,'reply');assert.match(r.response,/5,000 daily ad spend/);assert.match(r.response,/60,000 total/);assert.doesNotMatch(r.response,/what is your.*budget/i);
+});
