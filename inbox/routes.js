@@ -166,6 +166,12 @@ router.get('/conversations', wrap(async (req, res) => {
   }
   const rows = await Conversation.find(filter).sort({ lastMessageAt: -1, _id: -1 }).limit(21).populate('contact').lean();
   const hasMore = rows.length > 20; const items = rows.slice(0, 20).map((row) => ({ ...row, unread: Boolean(row.lastInboundId && String(row.lastInboundId) > String(row.reads?.[req.actor.id] || '')), reads: undefined }));
+  const latestMessages = await Message.find({ _id: { $in: items.map(row => row.lastMessageId).filter(Boolean) }, conversation: { $in: items.map(row => row._id) } }).select('conversation direction type status').lean();
+  const latestById = new Map(latestMessages.map(message => [String(message._id), message]));
+  for (const row of items) {
+    const latest = latestById.get(String(row.lastMessageId));
+    row.previewStatus = latest && String(latest.conversation) === String(row._id) && latest.direction === 'outbound' && !['note', 'activity'].includes(latest.type) ? latest.status : null;
+  }
   const last = items.at(-1);
   res.json({ items, next: hasMore ? Buffer.from(JSON.stringify({ date: last.lastMessageAt, id: last._id })).toString('base64url') : null });
 }));

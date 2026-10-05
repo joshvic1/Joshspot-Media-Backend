@@ -842,3 +842,19 @@ test('legacy CRM phone formats link Setup Verification and Ads consistently',asy
   assert.equal(match('2348012345678').test('08012345679'),false);
  }finally{for(const [model]of specs)await require('../models/'+model).deleteMany({});}
 });
+
+test('conversation previews expose current outgoing status only', async () => {
+  const conversation = await fixture();
+  const message = await Message.create({ conversation: conversation._id, direction: 'outbound', type: 'text', text: 'Hello', status: 'queued' });
+  await Conversation.updateOne({ _id: conversation._id }, { $set: { lastMessageId: message._id, preview: 'Hello' } });
+  for (const status of ['queued', 'sending', 'sent', 'delivered', 'read', 'failed', 'unknown']) {
+    await Message.updateOne({ _id: message._id }, { $set: { status } });
+    const result = await request('/conversations');
+    assert.equal(result.data.items.find(row => row._id === String(conversation._id)).previewStatus, status);
+  }
+  for (const [direction, type] of [['inbound','text'], ['internal','note']]) {
+    const newer = await Message.create({ conversation: conversation._id, direction, type, text: 'New preview' });
+    await Conversation.updateOne({ _id: conversation._id }, { $set: { lastMessageId: newer._id } });
+    assert.equal((await request('/conversations')).data.items[0].previewStatus, null);
+  }
+});
