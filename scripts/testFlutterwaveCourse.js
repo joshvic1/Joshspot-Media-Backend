@@ -12,7 +12,7 @@ const Invoice=require('../models/Invoice');
 const flw=require('../utils/flutterwaveCoursePayment');
 const controller=require('../controllers/invoiceController');
 let posts=0, gets=0, verified;
-axios.post=async(url,body)=>{posts++;assert.ok(url.includes('flutterwave.com'));assert.equal(body.is_permanent,false);return {data:{status:'success',data:{account_number:'1234567890',bank_name:'Test bank',note:'Please make a bank transfer to Test Course',amount:body.amount+100,expiry_date:new Date(Date.now()+3600000).toISOString(),order_ref:'order'}}};};
+axios.post=async(url,body)=>{posts++;assert.ok(url.includes('flutterwave.com'));assert.equal(body.is_permanent,false);assert.equal(body.firstname,'Test');assert.equal(body.narration,'Joshspot Media Course - Test');return {data:{status:'success',data:{account_number:'1234567890',bank_name:'Test bank',note:'Please make a bank transfer to Test Course',amount:body.amount+100,expiry_date:new Date(Date.now()+3600000).toISOString(),order_ref:'order'}}};};
 axios.get=async(url)=>{gets++;assert.ok(url.includes('flutterwave.com'));return {data:{data:verified}};};
 const response=()=>({code:200,status(n){this.code=n;return this},json(x){this.body=x;return this},sendStatus(n){this.code=n;return this}});
 (async()=>{

@@ -41,7 +41,8 @@ async function generate(invoice){
   if(!claimed)throw Object.assign(new Error('Payment account generation is processing or needs review.'),{status:409});
   try{
     const parts=(invoice.customerName||'Customer').trim().split(/\s+/);
-    const {data}=await axios.post(`${BASE}/virtual-account-numbers`,{email:invoice.customerEmail||`invoice-${invoice.token}@joshspotmedia.com`,amount:invoice.amount,currency:'NGN',tx_ref:reference,is_permanent:false,phonenumber:invoice.customerPhone,firstname:parts.shift(),lastname:parts.join(' ')||'Customer',narration:'Joshspot Media course',bank_code:process.env.FLUTTERWAVE_BANK_CODE||'090567'},{headers:headers(),timeout:15000});
+    const firstName=parts.shift()||'Customer';
+    const {data}=await axios.post(`${BASE}/virtual-account-numbers`,{email:invoice.customerEmail||`invoice-${invoice.token}@joshspotmedia.com`,amount:invoice.amount,currency:'NGN',tx_ref:reference,is_permanent:false,phonenumber:invoice.customerPhone,firstname:firstName,lastname:parts.join(' ')||'Customer',narration:`Joshspot Media Course - ${firstName}`,bank_code:process.env.FLUTTERWAVE_BANK_CODE||'090567'},{headers:headers(),timeout:15000});
     const a=data.data;
     const expiryText=String(a?.expiry_date||'').replace(' ','T');
     const expiry=new Date(expiryText+(/(?:Z|[+-]\d{2}:?\d{2})$/i.test(expiryText)?'':'Z'));
