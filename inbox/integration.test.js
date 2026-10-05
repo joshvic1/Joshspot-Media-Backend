@@ -831,3 +831,14 @@ test('approving a DRAFT reply keeps unassigned AI conversation active',async()=>
  assert.equal(result.status,200);const updated=await Conversation.findById(c._id);assert.equal(updated.ai.active,true);assert.equal(updated.assignedTo,null);assert.equal(updated.ai.draft,null);
  assert.ok(await Message.exists({conversation:c._id,type:'activity',text:/AI remains active/}));
 });
+test('legacy CRM phone formats link Setup Verification and Ads consistently',async()=>{
+ const c=await fixture();const specs=[['Client','setup',' 2348012345678 '],['VerificationClient','verification','0801-234-5678'],['AdsClient','ads',' 00234 (801) 234 5678 ']];
+ try {
+  for(const [model] of specs)await require('../models/'+model).deleteMany({});
+  for(const [model,kind,number] of specs){await require('../models/'+model).collection.insertOne({businessName:'Legacy '+kind,name:'Legacy '+kind,clientNumber:number});}
+  const listed=await request(`/conversations/${c._id}/crm`);assert.equal(listed.data.length,3);
+  for(const [model,kind] of specs){const found=await request(`/conversations/${c._id}/actions/crm/${kind}`);assert.equal(found.status,200);assert.ok(found.data.record);}
+  const match=require('./crmPhoneMatch');for(const value of ['+2348012345678','2348012345678','08012345678'])assert.ok(match(value).test('0801 234 5678'));
+  assert.equal(match('2348012345678').test('08012345679'),false);
+ }finally{for(const [model]of specs)await require('../models/'+model).deleteMany({});}
+});

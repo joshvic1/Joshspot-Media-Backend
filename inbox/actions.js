@@ -67,11 +67,7 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
     res.json({ queued: true, messageId: message._id });
   }));
   const crmKinds = { setup: ['Client', '../controllers/crmController', 'updateClient'], ads: ['AdsClient', '../controllers/adsController', 'updateAdsClient'], verification: ['VerificationClient', '../controllers/verificationController', 'updateVerificationClient'] };
-  const crmMatch = c => {
-    const n = c.contact.phone.replace(/\D/g, '');
-    const variants = [n, '+' + n, ...(n.startsWith('234') ? ['0' + n.slice(3)] : [])];
-    return { clientNumber: new RegExp('^(?:' + variants.map(v => [...v].map(ch => ch === '+' ? '\\+' : ch).join('[\\s().-]*')).join('|') + ')$') };
-  };
+  const crmMatch = c => ({ clientNumber: require('./crmPhoneMatch')(c.contact.phone) });
   router.get('/conversations/:id/actions/crm/:kind', wrap(async (req, res) => {
     const c = await conversationFor(req), spec = crmKinds[req.params.kind];
     if (!spec) fail(400, 'Choose Setup, Verification or Ads.');

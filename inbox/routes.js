@@ -191,8 +191,7 @@ router.get('/conversations/:id', wrap(async (req, res) => {
 }));
 router.get('/conversations/:id/crm', wrap(async (req, res) => {
   const conversation = await conversationFor(req); const number = conversation.contact.phone;
-  const variants = [number, `+${number}`, ...(number.startsWith('234') ? [`0${number.slice(3)}`] : [])];
-  const pattern = new RegExp(`^(?:${variants.map((v) => [...v].map(escapeRegex).join('[\\s().-]*')).join('|')})$`);
+  const pattern = require('./crmPhoneMatch')(number);
   const records = [];
   for (const [model, route] of [['Client', '/crm-dashboard'], ['AdsClient', '/crm-ads-dashboard'], ['VerificationClient', '/crm-verification-dashboard']]) {
     const rows = await require(`../models/${model}`).find({ clientNumber: pattern }).select('businessName name servicePaidFor service').limit(10).lean();
