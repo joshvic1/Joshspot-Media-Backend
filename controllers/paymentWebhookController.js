@@ -12,7 +12,7 @@ exports.paystackWebhook = async (req, res) => {
   try {
     const transaction = req.body.data;
     if (req.body.event === "charge.success" && transaction?.status === "success" && transaction.currency === "NGN") {
-      const invoice = await Invoice.findOne({ reference: transaction.reference });
+      const invoice = await Invoice.findOne({ reference: transaction.reference, paymentProvider:{$ne:'flutterwave'} });
       if (invoice && transaction.amount === invoice.amount * 100) {
         await Invoice.updateOne({ _id: invoice._id }, { $set: { status: "paid", paystackStatus: "success",
           paidAt: transaction.paid_at || new Date(), paymentCheckedAt: new Date() } });

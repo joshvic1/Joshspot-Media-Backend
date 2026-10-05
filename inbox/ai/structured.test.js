@@ -119,7 +119,7 @@ test('generic ads request must clarify service before quoting or collecting budg
 
 test('duration-only request cannot invent a custom advertising budget',async()=>{
  const r=await turn('I would like to run the ads for a week',{duration:7,budget:60000},{serviceType:'ads_management',selectedPlatform:'tiktok',lastRequiredQuestion:'GET_BUDGET_DURATION'});
- assert.equal(r.amount,undefined);assert.equal(r.state.budget,undefined);assert.equal(r.state.nextObjective,'GET_BUDGET');
+ assert.equal(r.amount,60000);assert.equal(r.state.budgetBasis,'package');assert.equal(r.state.quoteSource,'plan:plan_7');
 });
 
 test('deferred payment and refusal override mistaken readiness flags',async()=>{
@@ -131,4 +131,31 @@ test('deferred payment and refusal override mistaken readiness flags',async()=>{
 test('daily-cost followup answers recommended plan spend without repeating discovery',async()=>{
  const r=await turn('Daily is how much?',{intent:'advertising'},{serviceType:'ads_management',selectedPlatform:'tiktok',lastRequiredQuestion:'SELECT_PLAN'});
  assert.equal(r.action,'reply');assert.match(r.response,/5,000 daily ad spend/);assert.match(r.response,/60,000 total/);assert.doesNotMatch(r.response,/what is your.*budget/i);
+});
+
+
+test('Universe all and all of them select both platforms without asking platform again',async()=>{
+ for(const text of ['All','All of them','Both']){
+  const r=await turn(text,{}, {serviceType:'ads_management',lastRequiredQuestion:'GET_PLATFORM'});
+  assert.deepEqual(r.state.selectedPlatforms,['tiktok','meta']);assert.match(r.response,/TikTok/);assert.match(r.response,/Meta/);assert.match(r.response,/60,000/);assert.doesNotMatch(r.response,/Which platform do you want/);assert.equal(r.action,'reply');
+ }
+ const setup=await turn('All',{}, {serviceType:'account_setup',lastRequiredQuestion:'GET_PLATFORM'});assert.match(setup.response,/20,000/);assert.match(setup.response,/30,000/);
+ const irrelevant=await turn('All',{}, {serviceType:'ads_management',selectedPlatform:'tiktok',lastRequiredQuestion:'SELECT_PLAN'});assert.equal(irrelevant.state.selectedPlatforms,undefined);
+});
+test('Belvia uncertainty persists as recommendation guidance even if intent is advertising',async()=>{
+ const r=await turn("I don't know how much it's always",{}, {serviceType:'ads_management',selectedPlatform:'tiktok',lastRequiredQuestion:'GET_BUDGET_DURATION'});
+ assert.match(r.response,/60,000/);assert.equal(r.state.lastRequiredQuestion,'SELECT_PLAN');assert.equal(r.state.needsBudgetGuidance,true);
+ const next=await turn('What do you advise?',{},r.state);assert.doesNotMatch(next.response,/What is your budget/);
+});
+test('Universe duration without money selects inclusive plan even if model invents budget',async()=>{
+ const r=await turn('A week on the minimum',{duration:7,budget:60000},{serviceType:'ads_management',selectedPlatform:'tiktok',lastRequiredQuestion:'GET_BUDGET_DURATION'});
+ assert.equal(r.amount,60000);assert.equal(r.state.quoteSource,'plan:plan_7');
+ const breakdown=await turn('Give me the breakdown',{asksBreakdown:true},r.state);
+ assert.equal(breakdown.debug.calculator.advertisingBudget,35000);assert.equal(breakdown.debug.calculator.managementFee,25000);assert.equal(breakdown.debug.calculator.total,60000);assert.doesNotMatch(breakdown.response,/85,000/);
+ const longer=await turn('Make it 10 days',{duration:10},r.state);assert.equal(longer.amount,135000);assert.equal(longer.state.budgetBasis,'package');
+});
+test('supported followup in advertising intent answers the concern without repeating platform prompt',async()=>{
+ const knowledge=[{kind:'knowledge',key:'help',data:{responseMode:'KNOWLEDGE',facts:'Account setup includes guidance.'}}];
+ const r=await turn('I have no social account or followers',{intent:'advertising',knowledgeKeys:['help'],answerSupported:true,answerKind:'answer',answer:'We offer account setup with guidance.'},{serviceType:'ads_management',lastRequiredQuestion:'GET_PLATFORM'},{knowledge});
+ assert.equal(r.response,'We offer account setup with guidance.');assert.equal(r.debug.repeatedQuestionSuppressed,true);
 });

@@ -7,7 +7,7 @@ async function decide({text='',type='text',customerName='there',state={},config,
   const next={...state,aiActive:true}, time=new Date(now).toISOString();
   const entries=[...new Map([...records.filter(r=>r.kind==='knowledge'),...knowledge].map(e=>[e.key,e])).values()].filter(e=>knowledgePolicy.eligible(e,next)).sort((a,b)=>(b.priority||0)-(a.priority||0)||Object.keys(b.data.requiredState||{}).length-Object.keys(a.data.requiredState||{}).length||new Date(b.updatedAt||0)-new Date(a.updatedAt||0)||a.key.localeCompare(b.key));
   const entryFor=key=>entries.find(e=>e.key===key&&knowledgePolicy.eligible(e,next));
-  const base={state:next,knowledge:[],debug:{stateBefore:state,retrieval:entries.map(e=>({key:e.key,reason:e.match?.reason||'state/flow candidate'}))}};
+  const base={state:next,knowledge:[],debug:{engineVersion:2,stateBefore:state,retrieval:entries.map(e=>({key:e.key,reason:e.match?.reason||'state/flow candidate'}))}};
   const handoff=(reason,key='media_handoff')=>{
     let response=entryFor(key)?.data.preferredResponse||config.fallbackResponse,error;
     try{response=render(response,{customer_name:customerName||'there'});if(/\{\{/.test(response))throw Error('Missing variable');}
@@ -35,6 +35,13 @@ async function decide({text='',type='text',customerName='there',state={},config,
   if(mandatory)return {...handoff(mandatory.data.reason||'MANUAL_ADMIN_RULE'),handoffRule:mandatory.key};
   const deferred=d.deferPurchase===true || /\b(?:let me (?:speak|talk|discuss|consult|check)|(?:i[â€™']?ll|i will) (?:get back|hit you up)|not (?:now|yet|ready)|once i agree|make payments? soon)\b/i.test(text) || /^no(?:[\s,.!]|$)/i.test(text.trim()) && ['CONFIRM_PROCEED','OFFER_PAYMENT_DETAILS','CHECK_PAYMENT'].includes(state.lastRequiredQuestion);
   if(deferred){return {...base,action:'reply',response:"All right, take your time. We'll be expecting your response.",state:{...next,salesPaused:true,customerWantsToProceed:false,paymentDetailsRequested:false,nextObjective:'WAIT_FOR_CUSTOMER',lastRequiredQuestion:'',updatedAt:time},debug:{...base.debug,deferredPurchase:true}};}
+  const unsureBudget=d.needsRecommendation===true || (['GET_BUDGET','GET_BUDGET_DURATION','GET_DURATION','SELECT_PLAN'].includes(state.lastRequiredQuestion) && /\b(?:don[’']?t know|do not know|not sure|no idea|you (?:suggest|recommend)|what.*(?:budget|recommend))\b/i.test(text));
+  if(unsureBudget){next.needsBudgetGuidance=true;d.needsRecommendation=true;}
+  const allPlatforms=state.lastRequiredQuestion==='GET_PLATFORM' && /^(?:all(?: of them)?|both(?: of them)?)(?: please)?[.!\s]*$/i.test(text.trim());
+  const chosenPlatforms=allPlatforms?['tiktok','meta']:(d.platforms||[]).filter(p=>['tiktok','meta'].includes(p));
+  if(chosenPlatforms.length && !(chosenPlatforms.length===1&&state.selectedPlatforms?.length>1&&/\bfirst\b/i.test(text)))next.selectedPlatforms=[...new Set(chosenPlatforms)];
+  if(chosenPlatforms.length===1)d.platform=chosenPlatforms[0];
+  if(chosenPlatforms.length>1){d.platform=null;delete next.selectedPlatform;}
   const asksDaily=d.asksDailyCost===true || /\b(?:daily.*(?:how much|cost|price)|how much.*(?:daily|per day)|per day.*how much)\b/i.test(text);
   if(asksDaily && (state.lastRequiredQuestion==='SELECT_PLAN'||state.recommendedPlan)) {
     const options=records.filter(r=>r.kind==='plan'&&r.enabled!==false&&!r.archived&&r.data.platforms.includes(state.selectedPlatform)&&(!state.recommendedPlan||r.key===state.recommendedPlan));
@@ -60,16 +67,30 @@ async function decide({text='',type='text',customerName='there',state={},config,
   const statedAmounts=[...text.matchAll(/(?:â‚¦|NGN\s*)?(\d[\d,]*(?:\.\d+)?)\s*(k|thousand|m|million)?(?![a-z])/gi)].filter(m=>!/^\s*(?:days?|weeks?|months?)\b/i.test(text.slice(m.index+m[0].length))).map(m=>Number(m[1].replace(/,/g,''))*(/^(k|thousand)$/i.test(m[2]||'')?1000:/^(m|million)$/i.test(m[2]||'')?1000000:1));
   if(d.budget!=null&&!statedAmounts.includes(d.budget))d.budget=null;
   if(d.budget!=null)next.budgetBasis=d.budgetBasis==='total'||/\b(?:total|overall|entire)\s*(?:ad(?:vertising)?\s*)?budget\b/i.test(text)?'total':d.budgetBasis==='daily'?'daily':next.budgetBasis||'daily';
+  if(d.budget!=null){next.budgetSource='customer';next.needsBudgetGuidance=false;}
   const oldSelection=[next.selectedPlatform,next.serviceType,next.budget,next.duration,next.recommendedPlan].join(':');
   for(const [source,target]of [['platform','selectedPlatform'],['serviceType','serviceType'],['budget','budget'],['duration','duration']])if(!yes&&d[source]!==null&&d[source]!==undefined)next[target]=d[source];
   if(!yes&&(d.platform&&d.platform!==state.selectedPlatform||d.serviceType&&d.serviceType!==state.serviceType||d.budget!=null&&d.budget!==state.budget||d.duration!=null&&d.duration!==state.duration))delete next.recommendedPlan;
+  // A stored package amount must never become custom ad spend when duration changes.
+  if(next.budgetBasis==='package'&&!next.recommendedPlan){delete next.budget;delete next.budgetBasis;}
   const services=records.filter(r=>r.kind==='service'&&r.enabled!==false&&!r.archived);
+  if(next.selectedPlatforms?.length>1 && !next.selectedPlatform && next.serviceType){
+    const labels={tiktok:'TikTok',meta:'Meta (Facebook & Instagram)'};
+    const quotes=next.selectedPlatforms.map(platform=>{
+      const svc=services.find(r=>r.data.serviceType===next.serviceType&&r.data.platforms.includes(platform));
+      if(!svc)return `${labels[platform]}: pricing needs confirmation.`;
+      if(next.serviceType==='account_setup')return `${labels[platform]} account setup: ${money(svc.data.price)}.`;
+      const options=records.filter(r=>r.kind==='plan'&&r.enabled!==false&&!r.archived&&r.data.service===svc.key&&r.data.platforms.includes(platform)&&(!next.duration||r.data.duration===next.duration));
+      return `${labels[platform]} management:\n`+(options.length?options.map(p=>`${p.data.duration} days — ${money(p.data.amount)} total, including management.`).join('\n'):'A custom quote needs your daily ad budget and duration.');
+    });
+    return {...base,action:'reply',response:`Both platforms — understood.\n\n${quotes.join('\n\n')}\n\nThese are separate platform prices. Which campaign should we arrange first?`,state:{...next,nextObjective:'SELECT_PLATFORM_ORDER',lastRequiredQuestion:'SELECT_PLATFORM_ORDER',updatedAt:time},debug:{...base.debug,platforms:next.selectedPlatforms}};
+  }
   const service=services.find(r=>r.data.serviceType===next.serviceType&&r.data.platforms.includes(next.selectedPlatform));
   next.selectedService=service?.key;next.currentIntent=d.intent;
   const plans=records.filter(r=>r.kind==='plan'&&r.enabled!==false&&!r.archived&&r.data.platforms.includes(next.selectedPlatform)&&r.data.service===service?.key);
   const acceptsPlan=state.lastRequiredQuestion==='SELECT_PLAN'||(!next.budget&&d.budget==null);
-  const selected=plans.find(p=>p.key===(!yes&&acceptsPlan?d.planKey||next.recommendedPlan:next.recommendedPlan)) || (state.lastRequiredQuestion==='SELECT_PLAN' && (d.budget==null || plans.some(p=>p.data.duration===d.duration&&p.data.amount===d.budget)) && plans.filter(p=>p.data.duration===d.duration).length===1 ? plans.find(p=>p.data.duration===d.duration) : null);
-  if(selected){next.budgetBasis='package';next.recommendedPlan=selected.key;next.duration=selected.data.duration;next.budget=selected.data.amount;}
+  const selected=plans.find(p=>p.key===(!yes&&acceptsPlan?d.planKey||next.recommendedPlan:next.recommendedPlan)) || ((state.lastRequiredQuestion==='SELECT_PLAN'||!next.budget) && (d.budget==null || plans.some(p=>p.data.duration===d.duration&&p.data.amount===d.budget)) && plans.filter(p=>p.data.duration===d.duration).length===1 ? plans.find(p=>p.data.duration===d.duration) : null);
+  if(selected){next.budgetSource='plan';next.needsBudgetGuidance=false;next.budgetBasis='package';next.recommendedPlan=selected.key;next.duration=selected.data.duration;next.budget=selected.data.amount;}
   if(oldSelection!==[next.selectedPlatform,next.serviceType,next.budget,next.duration,next.recommendedPlan].join(':')) {
     // Preserve the actual invoice in the financial system; unlink stale sales
     // context rather than silently repurposing its payment account.
@@ -113,7 +134,7 @@ async function decide({text='',type='text',customerName='there',state={},config,
   if(matched.some(e=>e.data.forceHandoff))return handoff(matched.find(e=>e.data.forceHandoff).data.handoffReason||'MANUAL_ADMIN_RULE');
   let answer='';
   const priceOnly=(d.asksPrice||/\b(how much|price|cost|fee)\b/i.test(text))&&!/\b(include|cover|entail|need|require|and|also|views?|engagements?|reach|impressions?|clicks?|results?|expect)\b/i.test(text);
-  if(!platformOnly&&!priceOnly&&['knowledge','requirements','payment_question','payment_problem'].includes(d.intent)&&d.answerKind==='answer'&&d.answerSupported&&matched.length) {
+  if(!platformOnly&&!priceOnly&&d.answerKind==='answer'&&d.answerSupported&&matched.length) {
     const strict=matched.find(e=>e.data.preferredResponse&&(e.data.responseMode==='STRICT'||e.data.responseMode==='GUIDED'&&!e.data.allowContext));
     const raw=strict?strict.data.preferredResponse:d.answer;
     // Dynamic money/payment data must be bound by the server, never generated.
@@ -130,7 +151,7 @@ async function decide({text='',type='text',customerName='there',state={},config,
   else if(!next.serviceType)result=respond('ads_service_clarification','SERVICE_CLARIFICATION');
   else if(!next.selectedPlatform)result=respond('ads_platform_selection','PLATFORM_SELECTION');
   else if(!service)return handoff('NO_APPROVED_SERVICE');
-  else if(d.intent==='recommendation'&&d.needsRecommendation===true&&plans.length)result=respond('recommended_ads_plans','QUALIFIED');
+  else if((d.needsRecommendation===true||next.needsBudgetGuidance)&&!amount&&plans.length)result=respond('recommended_ads_plans','QUALIFIED');
   else if(next.serviceType==='ads_management'&&!amount)result=respond(next.budget?'ads_duration':next.duration?'ads_budget':'ads_management_details','QUALIFIED');
   else if(next.paymentDetailsRequested&&next.customerWantsToProceed&&amount) {
     if(!config.invoicesEnabled||!service.data.paymentEnabled)return handoff('PAYMENT_REVIEW_REQUIRED');
@@ -153,6 +174,7 @@ async function decide({text='',type='text',customerName='there',state={},config,
   if(answer&&matched[0]?.data.requiredQuestion&&result.action==='reply'&&matched[0].data.nextObjective===result.state.nextObjective){
     const e=matched[0];try{result.response=render(e.data.requiredQuestion,vars);}catch{return handoff('INCOMPLETE_KNOWLEDGE_CONTEXT');}
   }
+  if(answer&&result.action==='reply'&&result.state.nextObjective===state.lastRequiredQuestion){result.response=answer;result.debug={...result.debug,repeatedQuestionSuppressed:true};}
   if(answer&&result.action==='reply'&&result.response!==answer){result.response=answer+'\n\n'+result.response;result.knowledge=[...new Set([...base.knowledge,...result.knowledge])];}
   const asksBreakdown=d.asksBreakdown===true || /\b(break\s*down|breakdown|how (?:does|will) (?:it|this|that|the .*?plan) work)\b/i.test(text);
   if(result.action==='reply' && service?.data.serviceType==='ads_management' && amount && !next.invoiceId && (asksBreakdown || next.quoteSource==='ads_calculator' && !answer)) {
@@ -162,6 +184,16 @@ async function decide({text='',type='text',customerName='there',state={},config,
       result.debug={...result.debug,calculator:pricing};
       if(!next.customerWantsToProceed && !next.salesPaused){const question=entryFor('confirm_proceed');if(question)result.response+='\n\n'+render(question.data.preferredResponse,vars);}
     }catch{return handoff('CALCULATOR_ERROR');}
+  }
+  // Do not send the identical discovery question again when no new field was supplied.
+  if(result.action==='reply'&&!answer&&result.state.nextObjective===state.lastRequiredQuestion){
+    if(['GET_BUDGET','GET_BUDGET_DURATION','GET_DURATION'].includes(state.lastRequiredQuestion)&&plans.length&&!amount){
+      next.needsBudgetGuidance=true;result=respond('recommended_ads_plans','QUALIFIED');
+      result.debug={...result.debug,repeatedQuestionSuppressed:true};
+    }else if(state.lastRequiredQuestion==='GET_PLATFORM'){
+      result.response='You can choose TikTok, Meta (Facebook & Instagram), or both. If you’re unsure, what would you like help deciding?';
+      result.debug={...result.debug,repeatedQuestionSuppressed:true};
+    }
   }
   if(result.response?.length>config.maxResponseLength)return handoff('RESPONSE_TOO_LONG');
   if(result.action==='reply'&&require('./responsePolicy').promisesHandoff(result.response,config.fallbackResponse))return {...result,...handoff('RESPONSE_REQUIRES_STAFF')};

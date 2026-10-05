@@ -16,6 +16,7 @@ const paystackHeaders = () => ({
 const getPublicInvoice = (invoice) => ({
   token: invoice.token,
   amount: invoice.amount,
+  transferAmount: invoice.transferAmount || invoice.amount,
   customerName: invoice.customerName,
   note: invoice.note,
   status: invoice.status,
@@ -29,6 +30,7 @@ const getPublicInvoice = (invoice) => ({
 });
 
 const refreshInvoiceStatus = async (invoice, strict = false) => {
+  if(invoice.paymentProvider==='flutterwave')return require('../utils/flutterwaveCoursePayment').refresh(invoice,strict);
   if (invoice.status === "paid") { await queueCourseEmail(invoice); return invoice; }
 
   if (!invoice.reference && invoice.expiresAt && new Date(invoice.expiresAt) < new Date()) {
@@ -74,6 +76,7 @@ const refreshInvoiceStatus = async (invoice, strict = false) => {
 };
 
 const generateInvoiceTransfer = async (invoice) => {
+  if(invoice.paymentProvider==='flutterwave')return require('../utils/flutterwaveCoursePayment').generate(invoice);
   const refreshedInvoice = await refreshInvoiceStatus(invoice);
 
   if (refreshedInvoice.status === "paid" || refreshedInvoice.status === "expired") {
@@ -150,7 +153,9 @@ exports.createInvoice = async (req, res) => {
       return res.status(400).json({ message: "Please enter a valid amount." });
     }
 
+    if(coursePurchase && (!process.env.FLUTTERWAVE_SECRET_KEY || !process.env.FLUTTERWAVE_WEBHOOK_SECRET)) return res.status(503).json({message:'Course payments are temporarily unavailable. Please try again shortly.'});
     invoice = await Invoice.create({
+      paymentProvider:coursePurchase?'flutterwave':'paystack',
       token: uuidv4(),
       amount,
       customerName,
@@ -173,10 +178,9 @@ exports.createInvoice = async (req, res) => {
     });
   } catch (error) {
     if (invoice) {
-      invoice.status = "failed";
-      await invoice.save().catch(() => {});
+      if(invoice.paymentProvider!=='flutterwave'){invoice.status = 'failed';await invoice.save().catch(() => {});}
     }
-    console.log("CREATE INVOICE ERROR:", error.response?.data || error);
+    console.log("CREATE INVOICE ERROR:", {code:error.code,status:error.response?.status,message:error.message});
     res.status(500).json({ message: "Unable to create invoice" });
   }
 };
@@ -201,7 +205,7 @@ exports.getInvoice = async (req, res) => {
 
     res.json(getPublicInvoice(refreshedInvoice));
   } catch (error) {
-    console.log("GET INVOICE ERROR:", error.response?.data || error);
+    console.log("GET INVOICE ERROR:", {code:error.code,status:error.response?.status,message:error.message});
     res.status(500).json({ message: "Unable to fetch invoice" });
   }
 };
@@ -222,7 +226,7 @@ exports.startInvoiceTransfer = async (req, res) => {
 
     res.json(getPublicInvoice(invoiceWithTransfer));
   } catch (error) {
-    console.log("START INVOICE TRANSFER ERROR:", error.response?.data || error);
+    console.log("START INVOICE TRANSFER ERROR:", {code:error.code,status:error.response?.status,message:error.message});
     res.status(500).json({ message: "Unable to generate payment account" });
   }
 };
