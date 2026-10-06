@@ -12,6 +12,59 @@ const config={...defaults.config,structuredSales:true,invoicesEnabled:true};
 
 const records=[...defaults.records,...kb.seeds];
 
+test('negotiation safeguards refuse counteroffers without changing prices or advancing payment',async()=>{
+ const state={serviceType:'account_setup',selectedPlatform:'tiktok',quotedAmount:20000,lastRequiredQuestion:'CONFIRM_PROCEED'};
+ for(const text of ['Negotiable?','Any discount?','What is your last price?','Can you reduce the price?','Too expensive','Can you accept 15k?','Let’s do 15k','Bring it down','Meet me halfway']){
+  const r=await turn(text,{budget:15000,declines:true},state);
+  assert.match(r.response,/Sorry boss, it's not negotiable\. That's the last price\./,text);assert.match(r.response,/20,000/);assert.equal(r.amount,20000);assert.equal(r.state.budget,undefined);assert.match(r.response,/Would you like to proceed/);
+ }
+ const early=await turn('Negotiable?',{}, {serviceChoiceConfirmed:false});assert.match(early.response,/not negotiable/);assert.equal(early.state.lastRequiredQuestion,'GET_SERVICE_TYPE');assert.doesNotMatch(early.response,/Would you like to proceed/);
+ const ready=await turn('Any discount?',{}, {...state,customerWantsToProceed:true});assert.match(ready.response,/account details/);
+ const pending=await turn('Reduce it',{}, {...state,selectedService:'tiktok_setup',invoiceId:'existing',paymentDetailsSentAt:new Date().toISOString()});assert.match(pending.response,/invoice remains unchanged/);assert.equal(pending.action,'reply');assert.doesNotMatch(pending.response,/Would you like to proceed|Have you made payment/);
+ const paused=await turn('Best price?',{}, {...state,salesPaused:true});assert.equal(paused.state.salesPaused,true);assert.doesNotMatch(paused.response,/Would you like to proceed/);
+ const payment=await turn('Can you accept bank transfer?',{},state);assert.notEqual(payment.debug.pricePolicy,'NON_NEGOTIABLE');
+});
+
+test('Pricelessworth: option choices advance despite an irrelevant setup explanation',async()=>{
+ const stale={serviceChoiceConfirmed:false,selectedPlatform:'tiktok',lastRequiredQuestion:'GET_SERVICE_TYPE'};
+ const wrongAnswer={serviceType:'account_setup',knowledgeKeys:['setup_budget_separate'],answerKind:'answer',answerSupported:true,answer:'The setup fee covers account setup and guidance. Your advertising budget is separate.'};
+ for(const text of ['Option 1','Option one','First option','I choose option one','I like the set up then I can run the ad at my own pace']){
+  const r=await turn(text,wrongAnswer,stale);
+  assert.equal(r.state.serviceChoiceConfirmed,true,text);assert.equal(r.state.serviceType,'account_setup');assert.equal(r.amount,20000);
+  assert.match(r.response,/20,000/);assert.match(r.response,/Would you like to proceed/);assert.doesNotMatch(r.response,/fee covers/);
+ }
+ for(const text of ['Option 2','Option two','Second option']){
+  const r=await turn(text,wrongAnswer,stale);assert.equal(r.state.serviceType,'ads_management');assert.equal(r.state.lastRequiredQuestion,'GET_BUDGET_DURATION');assert.doesNotMatch(r.response,/fee covers/);
+ }
+ const unknownPlatform=await turn('Option one',wrongAnswer,{serviceChoiceConfirmed:false,lastRequiredQuestion:'GET_SERVICE_TYPE'});
+ assert.equal(unknownPlatform.state.lastRequiredQuestion,'GET_PLATFORM');assert.equal(unknownPlatform.amount,undefined);
+ const unrelatedOption=await turn('Option one',wrongAnswer,{serviceChoiceConfirmed:false,lastRequiredQuestion:'SELECT_PLAN'});
+ assert.equal(unrelatedOption.state.serviceChoiceConfirmed,false);
+});
+
+test('Pricelessworth: repetition complaint recovers missed customer choice, never assistant inference',async()=>{
+ const stale={serviceChoiceConfirmed:false,selectedPlatform:'tiktok',lastRequiredQuestion:'GET_SERVICE_TYPE'};
+ const answer='The setup fee covers account setup and guidance. Your advertising budget is separate.';
+ const decision={intent:'knowledge',knowledgeKeys:['setup_budget_separate'],answerKind:'answer',answerSupported:true,answer};
+ const history=[{direction:'inbound',text:'Option 1'},{direction:'outbound',text:answer,status:'sent'}];
+ const r=await turn('You said so',decision,stale,{history});
+ assert.equal(r.amount,20000);assert.match(r.response,/20,000/);assert.equal(r.debug.recoveredServiceChoice,true);assert.doesNotMatch(r.response,/fee covers/);
+ const next=await turn('You already said that',decision,r.state,{history:[...history,{direction:'outbound',text:r.response,status:'sent'}]});
+ assert.equal(next.response,'Would you like to proceed?');assert.equal(next.action,'reply');
+ const noEvidence=await turn('You said so',{...decision,intent:'advertising'},stale,{history:[{direction:'outbound',text:'Option 1'}]});
+ assert.equal(noEvidence.state.serviceChoiceConfirmed,false);assert.equal(noEvidence.amount,undefined);
+ const negotiate=await turn('Negotiable?',{negotiating:true},r.state);assert.match(negotiate.response,/not negotiable/);assert.match(negotiate.response,/20,000/);
+});
+
+test('repeated factual copy yields to progression, but a request to explain again is respected',async()=>{
+ const answer=kb.seeds.find(e=>e.key==='setup_budget_separate').data.preferredResponse;
+ const decision={intent:'knowledge',knowledgeKeys:['setup_budget_separate'],answerKind:'answer',answerSupported:true,answer};
+ const state={selectedPlatform:'tiktok',serviceType:'account_setup',lastRequiredQuestion:'CONFIRM_PROCEED'};
+ const history=[{direction:'outbound',text:answer,status:'sent'}];
+ const next=await turn('Okay then',decision,state,{history});assert.equal(next.action,'reply');assert.match(next.response,/20,000/);assert.doesNotMatch(next.response,/fee covers/);assert.equal(next.debug.repeatedAnswerSuppressed,true);
+ const repeat=await turn('Explain again what the fee covers',decision,state,{history});assert.match(repeat.response,/fee covers/);
+});
+
 async function turn(text,decision={},state={},extra={}){provider.interpret=async()=>({intent:'advertising',confidence:.99,platform:null,serviceType:null,budget:null,duration:null,answer:'',answerKind:'none',budgetBasis:'total',serviceChoiceExplicit:true,...decision});return engine.decide({text,state:{serviceChoiceConfirmed:true,...state},config,records,knowledge:[],...extra});}
 
 test('strict generic greeting bypasses provider; intent-bearing greeting retains useful information',async()=>{

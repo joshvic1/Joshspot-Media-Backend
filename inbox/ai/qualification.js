@@ -15,12 +15,14 @@ function platforms(text, state, decision) {
 function serviceChoice(text,state) {
   const t=text.trim();
   if(state.lastRequiredQuestion==='GET_SERVICE_TYPE') {
+    const option=t.match(/^(?:(?:i(?:'ll| will)?\s+(?:choose|pick|take|prefer)|let'?s (?:do|go with))\s+)?(?:the\s+)?(?:(?:option|number|no\.?)\s*(one|two|1|2)|(first|second|one|two|1|2)(?:\s+(?:one|option))?)(?:\s+please)?[.!\s]*$/i);
+    if(option)return /^(?:one|1|first)$/i.test(option[1]||option[2])?'account_setup':'ads_management';
     if(/^(?:the )?(?:first|1)(?: one| option)?[.!\s]*$/i.test(t)||/^(?:setup|account setup|set\s*up|teach me|run (?:it|them|ads) myself)[.!\s]*$/i.test(t))return 'account_setup';
     if(/^(?:the )?(?:second|2)(?: one| option)?[.!\s]*$/i.test(t)||/^(?:management|ads management|manage it|run (?:it|them|ads) for me)[.!\s]*$/i.test(t))return 'ads_management';
   }
   if(/^actually\s+(?:manage|run)\b/i.test(t))return 'ads_management';
   if(/\b(?:don't|do not|not sure|what is|what does|difference|both|compare)\b/i.test(t))return null;
-  if(/\b(?:set\s*up|setup)\b/i.test(t) && /\b(?:i (?:want|need|would like)|(?:can|could) you|please|how much|price|cost|send (?:the )?account)\b/i.test(t))return 'account_setup';
+  if(/\b(?:set\s*up|setup)\b/i.test(t) && /\b(?:i (?:want|need|would like|like|prefer|choose)|(?:can|could) you|please|how much|price|cost|send (?:the )?account)\b/i.test(t))return 'account_setup';
   if(/\b(?:you|your team)\b.{0,40}\b(?:run|manage|handle)\b.{0,50}\b(?:for me|for us|my (?:ads|campaign))\b/i.test(t)||/\b(?:i (?:want|need|would like)|please)\b.{0,35}\b(?:ads management|manage my (?:ads|campaign))\b/i.test(t))return 'ads_management';
   return null;
 }

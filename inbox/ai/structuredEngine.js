@@ -115,9 +115,10 @@ async function decide({text='',type='text',customerName='there',state={},config,
 
   }
 
-  const negotiating=Boolean(state.quotedAmount && (d.negotiating===true || /\b(discount|negotiab\w*|reduce (?:it|the price)|last price|let'?s do|can (?:you|we) (?:do|take|accept))\b/i.test(text)));
+  const negotiating=d.negotiating===true || /\b(?:negotiab\w*|discount|last price|best price|final price|too (?:expensive|costly)|price (?:is )?too (?:high|much)|reduce (?:it|that|the (?:price|fee|amount))|bring (?:it|the price) down|make it cheaper|cheaper price|small reduction|price reduction|meet me halfway|(?:can|could) (?:you|we) (?:do|take|accept)\s+(?:₦|ngn\s*)?\d[\d,.]*(?:k|m)?|let[’']?s do\s+(?:₦|ngn\s*)?\d[\d,.]*(?:k|m)?)\b/i.test(text);
 
-  if(negotiating){d.budget=null;d.declines=false;}
+  // A counteroffer is not a new advertising budget or a change of package.
+  if(negotiating){d.budget=null;d.duration=null;d.planKey=null;d.declines=false;}
 
   const platformOnly=/^(?:tiktok|tik tok|meta|facebook|instagram)[.!\s]*$/i.test(text.trim()) && state.lastRequiredQuestion==='GET_PLATFORM';
 
@@ -129,7 +130,17 @@ async function decide({text='',type='text',customerName='there',state={},config,
 
   const yes=/^(?:yes|yes please|okay|ok|sure|please do|go ahead)[.!\s]*$/i.test(text.trim());
 
-  const explicitService=qualification.serviceChoice(text,state);
+  const repetitionComplaint=/\b(?:you (?:already )?said (?:so|that|this)|you(?:'ve| have) already (?:said|told)|already (?:told|answered)|stop repeating)\b/i.test(text);
+  let explicitService=qualification.serviceChoice(text,state);
+  // Recover a choice missed by older validation only from the latest customer
+  // turn, while still waiting for that choice. Never infer it from assistant copy.
+  if(!explicitService&&repetitionComplaint&&!state.serviceChoiceConfirmed&&state.lastRequiredQuestion==='GET_SERVICE_TYPE'){
+    const previousCustomer=[...history].reverse().find(m=>m.direction==='inbound');
+    explicitService=qualification.serviceChoice(previousCustomer?.text||'',state);
+    if(explicitService)base.debug.recoveredServiceChoice=true;
+  }
+  const selectionOnly=Boolean(explicitService&&!/[?]|\b(?:what|how|why|include|cover|entail|requirements)\b/i.test(text));
+  if(selectionOnly||repetitionComplaint&&(state.serviceType||explicitService)){d.intent='advertising';base.intent=d.intent;d.compareServices=false;}
   if(explicitService){next.serviceChoiceConfirmed=true;d.serviceType=explicitService;}
   else if(!state.serviceChoiceConfirmed){next.serviceChoiceConfirmed=false;delete next.serviceType;delete next.needsBudgetGuidance;d.serviceType=null;}
   else if(state.serviceType && d.serviceType!==state.serviceType)d.serviceType=state.serviceType;
@@ -248,12 +259,17 @@ async function decide({text='',type='text',customerName='there',state={},config,
 
   }
 
-  if(negotiating && amount && service){
-
-    next.salesPaused=false;
-
-    return {...base,action:'reply',response:`I'm sorry, the price is not negotiable. ${service.title} costs ${money(amount)}.\n\nWould you like to proceed?`,amount,serviceKey:service.key,state:{...next,currentSalesStage:'PRICE_PRESENTED',nextObjective:'CONFIRM_PROCEED',lastRequiredQuestion:'CONFIRM_PROCEED'},debug:{...base.debug,pricePolicy:'NON_NEGOTIABLE'}};
-
+  if(negotiating){
+    const refusal="Sorry boss, it's not negotiable. That's the last price.";
+    let progression;
+    if(next.salesPaused)progression={...base,action:'reply',response:'Take your time and let us know when you are ready.',state:next};
+    else if(next.invoiceId&&next.paymentDetailsSentAt)progression={...base,action:'reply',response:'The amount on your invoice remains unchanged.',state:{...next,currentSalesStage:'PAYMENT_PENDING',nextObjective:'CHECK_PAYMENT'}};
+    else if(!next.serviceType)progression=respond('ads_service_clarification','SERVICE_CLARIFICATION');
+    else if(!next.selectedPlatform)progression=respond('ads_platform_selection','PLATFORM_SELECTION');
+    else if(amount&&service)progression=respond(next.customerWantsToProceed?'ready_to_proceed':'service_price',next.customerWantsToProceed?'READY_TO_PROCEED':'PRICE_PRESENTED');
+    else progression=respond(next.budget?'ads_duration':next.duration?'ads_budget':'ads_management_details','QUALIFIED');
+    if(progression.action==='reply')progression.response=refusal+'\n\n'+progression.response;
+    return {...progression,debug:{...progression.debug,pricePolicy:'NON_NEGOTIABLE'}};
   }
 
   if(d.declines===true){next.salesPaused=true;next.customerWantsToProceed=false;next.paymentDetailsRequested=false;return respond('customer_declines',next.currentSalesStage,'COMPLETE');}
@@ -274,9 +290,9 @@ async function decide({text='',type='text',customerName='there',state={},config,
 
   let answer='';
 
-  const priceOnly=(d.asksPrice||/\b(how much|price|cost|fee)\b/i.test(text))&&!/\b(include|cover|entail|need|require|and|also|views?|engagements?|reach|impressions?|clicks?|results?|expect)\b/i.test(text);
+  const priceOnly=(d.asksPrice||/\b(how much|price|cost|fee)\b/i.test(text))&&!/\b(includes?|covers?|entails?|needs?|requires?|and|also|views?|engagements?|reach|impressions?|clicks?|results?|expect)\b/i.test(text);
 
-  if(!platformOnly&&!priceOnly&&d.answerKind==='answer'&&d.answerSupported&&matched.length) {
+  if(!selectionOnly&&!repetitionComplaint&&!platformOnly&&!priceOnly&&d.answerKind==='answer'&&d.answerSupported&&matched.length) {
 
     const strict=matched.find(e=>e.data.preferredResponse&&(e.data.responseMode==='STRICT'||e.data.responseMode==='GUIDED'&&!e.data.allowContext));
 
@@ -298,6 +314,11 @@ async function decide({text='',type='text',customerName='there',state={},config,
 
   }
 
+  const normalized=value=>String(value||'').toLowerCase().replace(/\s+/g,' ').trim();
+  const previousReply=[...history].reverse().find(m=>m.direction==='outbound'&&m.status!=='failed');
+  if(answer&&normalized(previousReply?.text).startsWith(normalized(answer))&&!/\b(?:repeat|explain again|say (?:it|that) again)\b/i.test(text)){
+    answer='';base.debug.repeatedAnswerSuppressed=true;
+  }
   let result;
 
   if(next.salesPaused)result=respond('customer_declines',next.currentSalesStage,'COMPLETE');
@@ -332,7 +353,7 @@ async function decide({text='',type='text',customerName='there',state={},config,
 
   } else if(next.customerWantsToProceed&&amount)result=respond('ready_to_proceed','READY_TO_PROCEED');
 
-  else if(amount&&answer&&state.quotedAmount===amount&&state.selectedService===service.key)result=respond('confirm_proceed','PRICE_PRESENTED');
+  else if(amount&&(answer||repetitionComplaint)&&state.quotedAmount===amount&&state.selectedService===service.key)result=respond('confirm_proceed','PRICE_PRESENTED');
 
   else if(amount)result=respond(next.quoteSource==='ads_calculator'?'custom_management_price':'service_price','PRICE_PRESENTED');
 
@@ -348,7 +369,7 @@ async function decide({text='',type='text',customerName='there',state={},config,
 
   if(d.intent==='unknown'&&!answer&&!d.answerKind?.includes('clarify'))return handoff('NO_APPROVED_KNOWLEDGE');
 
-  if(d.intent==='knowledge'&&!answer&&!priceOnly)return handoff('NO_APPROVED_KNOWLEDGE');
+  if(d.intent==='knowledge'&&!answer&&!priceOnly&&!base.debug.repeatedAnswerSuppressed)return handoff('NO_APPROVED_KNOWLEDGE');
 
   if(answer&&matched[0]?.data.requiredQuestion&&result.action==='reply'&&matched[0].data.nextObjective===result.state.nextObjective){
 

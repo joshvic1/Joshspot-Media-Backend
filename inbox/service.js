@@ -64,6 +64,7 @@ async function receive(value) {
     // Repairable after a crash between storing the message and updating its conversation.
     await Conversation.updateOne({ _id: conversation._id, $or: [{ lastInboundId: { $lt: stored._id } }, { lastInboundId: null }] }, { $set: { lastInboundId: stored._id, status: 'open', resolvedAt: null, 'ai.pending': true, 'ai.pendingAt': new Date(Date.now() - (type !== 'text' || /\b(pay|paid|payment|receipt|invoice|account number)\b/i.test(text) ? 10000 : 0)), ...(/\b(pay|paid|payment|receipt|invoice|account number)\b/i.test(text) ? {'ai.priority':true} : {}), 'ai.phoneId': process.env.WHATSAPP_PHONE_NUMBER_ID }, $max: { lastInboundAt: occurredAt }, $inc: { revision: 1 } });
     await Conversation.updateOne({ _id: conversation._id, $or: [{ lastMessageId: { $lt: stored._id } }, { lastMessageId: null }] }, { $set: { lastMessageId: stored._id, lastMessageAt: stored.createdAt, preview: text.slice(0, 160) } });
+    await require('./push').record(`message:${stored._id}`,'messages',conversation._id,undefined,stored._id);
     if (result?.upsertedCount) publish('message.received', { conversationId: String(conversation._id), providerId: item.id });
   }
   for (const item of value.statuses || []) {
@@ -103,6 +104,7 @@ async function deliverMentions(message) {
     await Conversation.updateOne({ _id: message.conversation }, { $addToSet: { collaborators: { $each: recipients } } });
     await Notification.bulkWrite(recipients.map(recipient => ({ updateOne: { filter: { recipient, message: message._id }, update: { $setOnInsert: { recipient, message: message._id, conversation: message.conversation, authorName: message.authorName } }, upsert: true } })));
   }
+  for(const recipient of recipients)await require('./push').record(`mention:${message._id}:${recipient}`,'mentions',message.conversation,recipient,message._id);
   await Message.updateOne({ _id: message._id }, { $set: { mentionsPending: false } });
   live.notify();
 }
@@ -162,6 +164,7 @@ let running = false;
 async function tick() {
   if (!require('./workerPolicy').workerEnabled()) return;
   // Media transfers have their own lease/concurrency guard and never block message delivery.
+  void require('./push').tick();
   void require('./media').tick();
   void require('./ai/worker').tick();
   if (running) return;

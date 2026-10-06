@@ -55,6 +55,7 @@ async function finishHandoff(conversation,configRow) {
   const key=`ai-handoff:${conversation._id}:${pending.inputId}:${conversation.ai.version}`;
   const note=await Message.findOneAndUpdate({clientKey:`${key}:activity`},{$setOnInsert:{conversation:conversation._id,type:'activity',direction:'internal',status:'internal',author:'ai',authorName:config.displayName,text:`AI assigned this conversation to customer support. Reason: ${result.handoff}\n${require('./salesSummary').summary(result.state || conversation.ai?.state || {})}`}},{upsert:true,returnDocument:'after'});
   await Notification.updateOne({recipient:assigned,message:note._id},{$setOnInsert:{conversation:conversation._id,authorName:config.displayName,kind:'handoff'}},{upsert:true});
+  await require('../push').record(`${key}:assignment`,'assignments',conversation._id,assigned,note._id);
   const fresh=String(claimed.lastInboundId)===String(pending.inputId) && pending.configRevision===configRow.revision;
   const response=result.response || config.fallbackResponse;
   if(fresh && response && pending.mode==='LIVE' && config.mode==='LIVE' && config.enabled && config.autoReply && policy.windowOpen(claimed.lastInboundAt)) {

@@ -1,3 +1,4 @@
+const push = require('./push');
 // Ephemeral database and stubbed provider only. Never loads .env or contacts Meta.
 const { test, before, after, beforeEach } = require('node:test');
 const assert = require('node:assert/strict');
@@ -24,14 +25,14 @@ before(async () => {
   process.env.WHATSAPP_GRAPH_VERSION = 'v23.0';
   mongo = await MongoMemoryServer.create();
   await mongoose.connect(mongo.getUri());
-  await Promise.all([DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.init()));
+  await Promise.all([push.Subscription, push.Event, DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.init()));
   const app = express(); app.use(express.json({ limit: "10mb", verify: (req, res, raw) => { req.rawBody = raw; } })); app.use('/inbox', require('./routes'));
   server = app.listen(0, '127.0.0.1'); await new Promise((resolve) => server.once('listening', resolve));
   base = `http://127.0.0.1:${server.address().port}/inbox`;
 }, { timeout: 300000 });
 after(async () => { Object.assign(provider, providerOriginal); if (server) await new Promise((resolve) => server.close(resolve)); await mongoose.disconnect(); if (mongo) await mongo.stop(); });
 beforeEach(async () => {
-  await Promise.all([DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.deleteMany({})));
+  await Promise.all([push.Subscription, push.Event, DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.deleteMany({})));
   agent = await Staff.create({ name: 'Agent One', email: 'one@example.test', password: 'not-a-real-password', role: 'SS' });
   second = await Staff.create({ name: 'Agent Two', email: 'two@example.test', password: 'not-a-real-password', role: 'CSS' });
   const restricted = await Staff.create({ name: 'Restricted', email: 'restricted@example.test', password: 'not-a-real-password', role: 'SES' });
@@ -857,4 +858,25 @@ test('conversation previews expose current outgoing status only', async () => {
     await Conversation.updateOne({ _id: conversation._id }, { $set: { lastMessageId: newer._id } });
     assert.equal((await request('/conversations')).data.items[0].previewStatus, null);
   }
+});
+
+
+test('push preferences default off, validate endpoints and protect recipient access',async()=>{
+ const webpush=require('web-push');const keys=webpush.generateVAPIDKeys();process.env.INBOX_PUSH_PUBLIC_KEY=keys.publicKey;process.env.INBOX_PUSH_PRIVATE_KEY=keys.privateKey;process.env.INBOX_PUSH_SUBJECT='mailto:test@example.com';
+ const subscription={endpoint:'https://fcm.googleapis.com/fcm/send/test',keys:{p256dh:'a'.repeat(87),auth:'b'.repeat(22)}};
+ assert.equal(push.validateSubscription({...subscription,endpoint:'https://localhost/internal'}),false);
+ assert.equal(push.validateSubscription({...subscription,endpoint:'https://fcm.googleapis.com.evil.test/send'}),false);
+ assert.equal(push.validateSubscription(subscription),true);
+ let r=await request('/push/preferences',{role:'agent',method:'POST',body:{endpoint:subscription.endpoint}});assert.deepEqual(r.data.preferences,{assignments:false,messages:false,mentions:false,followups:false});
+ const preferences={assignments:true,messages:true,mentions:false,followups:false};
+ r=await request('/push/subscription',{role:'agent',method:'PUT',body:{subscription,preferences}});assert.equal(r.status,200);
+ const other=await request('/push/preferences',{role:'second',method:'POST',body:{endpoint:subscription.endpoint}});assert.equal(other.data.preferences.messages,false);
+ const c=await fixture();await Conversation.updateOne({_id:c._id},{$set:{assignedTo:agent._id}});
+ assert.equal(await push.eligible({id:String(second._id),role:'CSS',admin:false},{kind:'messages',conversation:c._id}),false);
+ assert.equal(await push.eligible({id:String(agent._id),role:'CSS',admin:false},{kind:'messages',conversation:c._id}),true);
+ await push.Event.deleteMany({});
+ await push.record('push-test','messages',c._id);await push.record('push-test','messages',c._id);assert.equal(await push.Event.countDocuments({key:'push-test'}),1);
+ const send=webpush.sendNotification;let calls=0;webpush.sendNotification=async(sub,payload)=>{calls++;const body=JSON.parse(payload);assert.equal(body.body,'A new customer message is available.');assert.ok(body.url.includes(String(c._id)));};
+ try{await push.tick();assert.equal(calls,1)}finally{webpush.sendNotification=send;delete process.env.INBOX_PUSH_PUBLIC_KEY;delete process.env.INBOX_PUSH_PRIVATE_KEY;delete process.env.INBOX_PUSH_SUBJECT;}
+ await request('/push/subscription',{role:'agent',method:'DELETE',body:{endpoint:subscription.endpoint}});assert.equal(await push.Subscription.countDocuments(),0);
 });

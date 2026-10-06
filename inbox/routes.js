@@ -78,6 +78,7 @@ router.use((req, res, next) => {
   }
   next();
 });
+require('./push').routes(router,wrap,rateLimit);
 router.use('/ai', require('./ai/routes'));
 router.post('/events-ticket', wrap(async (req, res) => {
   for (const [key, value] of tickets) if (value.until < Date.now()) tickets.delete(key);
@@ -252,6 +253,7 @@ router.put('/conversations/:id', wrap(async (req, res) => {
   if (!Object.keys(changes).length) fail(400, 'No changes supplied.');
   const updated = await Conversation.findOneAndUpdate(scoped(req, { _id: current._id, revision: req.body.revision }), { $set: changes, $inc: { revision: 1 } }, { returnDocument: 'after' });
   if (!updated) fail(409, 'This conversation changed. Refresh and try again.');
+  if(changes.assignedTo && String(current.assignedTo)!==String(changes.assignedTo))await require('./push').record(`assignment:${current._id}:${updated.revision}`,'assignments',current._id,changes.assignedTo).catch(()=>{});
   await service.activity(current._id, req.actor, descriptions.join(' · '));
   res.json({ revision: updated.revision });
 }));
