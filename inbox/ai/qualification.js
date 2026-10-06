@@ -1,5 +1,6 @@
 // Require customer language/context, not a model's confidence flag, for sales choices.
 function platforms(text, state, decision) {
+  if(/\b(?:all|both) (?:the )?platforms\b/i.test(text)&&! /\b(?:not|don't|do not)\b/i.test(text))return ['tiktok','meta'];
   const hasTikTok=/\btik\s*tok\b/i.test(text), hasMeta=/\b(?:meta|facebook|instagram|fb|ig)\b/i.test(text);
   const options=[];
   if(hasTikTok&&!/\b(?:not|no|don't want|do not want)\s+(?:on\s+)?tik\s*tok\b/i.test(text))options.push('tiktok');
@@ -11,6 +12,12 @@ function platforms(text, state, decision) {
   }
   if(options.length===1)return options;
   return (decision.platforms||[decision.platform]).filter(p=>options.includes(p));
+}
+function combinedChoice(text,state) {
+  const t=text.toLowerCase().replace(/\bnd\b/g,'and').replace(/\bd\b/g,'the');
+  if(/\b(?:not|don't|do not|difference|compare)\b/.test(t))return false;
+  if(state.lastRequiredQuestion==='GET_SERVICE_TYPE'&&/^(?:yes[, ]+)?(?:i (?:want|need) )?(?:the )?both(?: services| options)?[.!\s]*$/.test(t))return true;
+  return /\b(?:setup|set (?:it |the account |my account )?up)\b/.test(t)&&/\b(?:run|manage)\b.{0,35}\b(?:ads|campaign)\b/.test(t)&&/\b(?:and|also|aswell|as well)\b/.test(t)&&! /\b(?:myself|yourself|teach|learn)\b/.test(t);
 }
 function serviceChoice(text,state) {
   const t=text.trim();
@@ -26,4 +33,4 @@ function serviceChoice(text,state) {
   if(/\b(?:you|your team)\b.{0,40}\b(?:run|manage|handle)\b.{0,50}\b(?:for me|for us|my (?:ads|campaign))\b/i.test(t)||/\b(?:i (?:want|need|would like)|please)\b.{0,35}\b(?:ads management|manage my (?:ads|campaign))\b/i.test(t))return 'ads_management';
   return null;
 }
-module.exports={platforms,serviceChoice};
+module.exports={platforms,serviceChoice,combinedChoice};

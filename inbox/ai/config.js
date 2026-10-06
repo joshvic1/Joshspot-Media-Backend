@@ -24,7 +24,7 @@ function validateConfig(input) {
   return out;
 }
 const fields = {
- service:['platforms','serviceType','price','currency','description','requirements','paymentEnabled','workflow','allowCustomBudget','minBudget','maxBudget'],
+ service:['checkoutUrl','platforms','serviceType','price','currency','description','requirements','paymentEnabled','workflow','allowCustomBudget','minBudget','maxBudget'],
  plan:['duration','amount','currency','platforms','service','description'],
  knowledge:['question','answer','keywords','handoffAfterReply','handoffReason','handoffTeam'], tone:['customer','response'],
  response:['message','mode','intent','workflow','service','platform','description','variables','handoffAfterReply'],
@@ -49,7 +49,7 @@ function validateRecord(input) {
   if (['response','knowledge'].includes(input.kind) && /[₦$€£]\s*\d|\d[\d,]*\s*(?:naira|NGN|dollars)/i.test(data.message || data.answer || '')) fail('Use {{amount}} for prices; edit the amount in Services or Plans.');
   if (input.kind === 'service' && data.allowCustomBudget && (!(data.minBudget>=100) || !(data.maxBudget>=data.minBudget))) fail('Set valid minimum and maximum custom budgets.');
   if (['service','plan'].includes(input.kind) && (data.currency !== 'NGN' || !data.platforms?.length)) fail('Choose platforms and NGN currency.');
-  if (input.kind==='service' && !['account_setup','ads_management'].includes(data.serviceType)) fail('Choose a service type.');
+  if (input.kind==='service' && !['account_setup','ads_management','course'].includes(data.serviceType)) fail('Choose a service type.');
   if (input.kind==='plan' && (!(data.amount >= 100) || !(data.duration >= 1))) fail('Set a plan amount and duration.');
   if (input.kind==='workflow' && (!['reply','handoff'].includes(data.action) || !stateFields.includes(data.field) || !['missing','equals','present'].includes(data.operator) || data.stateField && !stateFields.includes(data.stateField))) fail('Invalid workflow action or state field.');
   if (data.intent && ![...intents,'*'].includes(data.intent) && input.kind !== 'response') fail('Invalid intent.');
@@ -70,7 +70,7 @@ async function seed(actor) {
   await Config.updateOne({key:'main'},{$setOnInsert:{data:defaults.config,changedBy:actor,revision:0,usageLimitsVersion:1}},{upsert:true});
   for (const item of [...defaults.records,...require('./structuredKnowledge').seeds]) await Record.updateOne({kind:item.kind,key:item.key},{$setOnInsert:{...item,enabled:true,archived:false,createdBy:actor,changedBy:actor,revision:0}},{upsert:true});
 }
-async function catalogue(structured=false) { return Record.find({enabled:true,archived:false,$or:[{kind:{$ne:'knowledge'}},...(structured?[{kind:'knowledge',key:{$in:require('./structuredKnowledge').seeds.map(s=>s.key)}}]:[])]}).sort({priority:-1,_id:1}).limit(300).lean(); }
+async function catalogue(structured=false) { const course=defaults.records.find(r=>r.key==='ads_video_course');await Record.updateOne({kind:'service',key:course.key},{$setOnInsert:{...course,enabled:true,archived:false,createdBy:'system',revision:0}},{upsert:true}); return Record.find({enabled:true,archived:false,$or:[{kind:{$ne:'knowledge'}},...(structured?[{kind:'knowledge',key:{$in:require('./structuredKnowledge').seeds.map(s=>s.key)}}]:[])]}).sort({priority:-1,_id:1}).limit(300).lean(); }
 async function knowledge(text,state,structured=false) {
   if(structured){
     const base={kind:'knowledge',enabled:true,archived:false};

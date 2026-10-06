@@ -69,6 +69,17 @@ async function decide({text='',type='text',customerName='there',state={},config,
 
   if(mandatory)return {...handoff(mandatory.data.reason||'MANUAL_ADMIN_RULE'),handoffRule:mandatory.key};
 
+  const courseRequest=require('./course').classify(text,state,d);
+  if(courseRequest){
+    if(courseRequest.kind==='clarify')return {...base,action:'reply',response:'Do you mean the video training course, or your advertising budget?',state:next};
+    const course=records.find(r=>r.kind==='service'&&r.key==='ads_video_course'&&r.enabled!==false&&!r.archived);
+    if(!course||!(course.data.price>0))return handoff('NO_APPROVED_SERVICE');
+    let link;try{link=new URL(course.data.checkoutUrl);if(link.protocol!=='https:')throw Error();}catch{return handoff('INCOMPLETE_KNOWLEDGE_CONTEXT');}
+    const distinction=state.serviceType||courseRequest.kind==='reference'?' Account setup and ads management are separate services.':'';
+    if(courseRequest.select){next.purchasePath='course';next.salesPaused=true;next.nextObjective='COURSE_CHECKOUT';next.lastRequiredQuestion='';next.customerWantsToProceed=false;next.paymentDetailsRequested=false;}
+    return {...base,action:'reply',response:`We have a video training course on how to run TikTok, Facebook and Instagram ads yourself, all for ${money(course.data.price)} only.${distinction}\n\nGet the course here:\n${link.href}`,state:next,knowledge:['ads_video_course'],debug:{...base.debug,courseRequest:courseRequest.kind,invoicePreserved:Boolean(state.invoiceId)}};
+  }
+
   const groundedPlatforms=qualification.platforms(text,state,d);
   const inferredPlatform=Boolean((d.platform||d.platforms?.length)&&!groundedPlatforms.length&&!state.selectedPlatform);
   d.platforms=groundedPlatforms;
@@ -131,7 +142,11 @@ async function decide({text='',type='text',customerName='there',state={},config,
   const yes=/^(?:yes|yes please|okay|ok|sure|please do|go ahead)[.!\s]*$/i.test(text.trim());
 
   const repetitionComplaint=/\b(?:you (?:already )?said (?:so|that|this)|you(?:'ve| have) already (?:said|told)|already (?:told|answered)|stop repeating)\b/i.test(text);
-  let explicitService=qualification.serviceChoice(text,state);
+  const combined=qualification.combinedChoice(text,state);
+  let explicitService=combined?'ads_management':qualification.serviceChoice(text,state);
+  if(combined){next.includeSetup=true;d.compareServices=false;d.intent='advertising';if(!state.budget&&!state.duration&&d.budget==null&&d.duration==null)d.needsRecommendation=true;}
+  else if(explicitService==='account_setup')next.includeSetup=false;
+  else if(explicitService&&/\b(?:only|just|instead|no setup|without setup)\b/i.test(text))next.includeSetup=false;
   // Recover a choice missed by older validation only from the latest customer
   // turn, while still waiting for that choice. Never infer it from assistant copy.
   if(!explicitService&&repetitionComplaint&&!state.serviceChoiceConfirmed&&state.lastRequiredQuestion==='GET_SERVICE_TYPE'){
@@ -141,7 +156,7 @@ async function decide({text='',type='text',customerName='there',state={},config,
   }
   const selectionOnly=Boolean(explicitService&&!/[?]|\b(?:what|how|why|include|cover|entail|requirements)\b/i.test(text));
   if(selectionOnly||repetitionComplaint&&(state.serviceType||explicitService)){d.intent='advertising';base.intent=d.intent;d.compareServices=false;}
-  if(explicitService){next.serviceChoiceConfirmed=true;d.serviceType=explicitService;}
+  if(explicitService){if(next.purchasePath==='course'){delete next.purchasePath;next.salesPaused=false;}next.serviceChoiceConfirmed=true;d.serviceType=explicitService;}
   else if(!state.serviceChoiceConfirmed){next.serviceChoiceConfirmed=false;delete next.serviceType;delete next.needsBudgetGuidance;d.serviceType=null;}
   else if(state.serviceType && d.serviceType!==state.serviceType)d.serviceType=state.serviceType;
   base.debug.qualification.serviceChoice=explicitService;
@@ -171,7 +186,7 @@ async function decide({text='',type='text',customerName='there',state={},config,
 
     const labels={tiktok:'TikTok',meta:'Meta (Facebook & Instagram)'};
 
-    const quotes=next.selectedPlatforms.map(platform=>{
+    const quotes=await Promise.all(next.selectedPlatforms.map(async platform=>{
 
       const svc=services.find(r=>r.data.serviceType===next.serviceType&&r.data.platforms.includes(platform));
 
@@ -181,27 +196,37 @@ async function decide({text='',type='text',customerName='there',state={},config,
 
       const options=records.filter(r=>r.kind==='plan'&&r.enabled!==false&&!r.archived&&r.data.service===svc.key&&r.data.platforms.includes(platform)&&(!next.duration||r.data.duration===next.duration));
 
-      return `${labels[platform]} management:\n`+(options.length?options.map(p=>`${p.data.duration} days — ${money(p.data.amount)} total, including management.`).join('\n'):'A custom quote needs your daily ad budget and duration.');
+      const setup=next.includeSetup?services.find(r=>r.data.serviceType==='account_setup'&&r.data.platforms.includes(platform)):null;
+      if(next.includeSetup&&!setup)return `${labels[platform]} setup pricing needs confirmation.`;
+      const fee=setup?.data.price||0;
+      const prefix=`${labels[platform]}${setup?` setup: ${money(fee)}. Management options`: ' management'}:\n`;
+      if(next.budget>0&&next.duration>0&&next.budgetBasis!=='package'){
+        try{const p=await require('./pricing').calculate({platform,budget:next.budget,duration:next.duration,budgetBasis:next.budgetBasis==='total'?'total':'daily'});return prefix+`${money(p.advertisingBudget)} advertising + ${money(p.managementFee)} management${fee?` + ${money(fee)} setup`:''} = ${money(p.total+fee)} total for ${p.duration} days.`;}catch{return `${labels[platform]} custom pricing needs confirmation.`;}
+      }
+      return prefix+(next.budget&&!next.duration?'How many days would you like to run?':options.length?options.map(p=>`${p.data.duration} days — ${money(p.data.amount)} management${fee?` + ${money(fee)} setup`:''} = ${money(p.data.amount+fee)} total.`).join('\n'):'A custom quote needs your daily ad budget and duration.');
 
-    });
+    }));
 
-    return {...base,action:'reply',response:`Both platforms — understood.\n\n${quotes.join('\n\n')}\n\nThese are separate platform prices. Which campaign should we arrange first?`,state:{...next,nextObjective:'SELECT_PLATFORM_ORDER',lastRequiredQuestion:'SELECT_PLATFORM_ORDER',updatedAt:time},debug:{...base.debug,platforms:next.selectedPlatforms}};
+    return {...base,action:'reply',response:`Both platforms — understood.\n\n${quotes.join('\n\n')}\n\nThese are separate platform prices; any budget shown applies to each platform. Which campaign should we arrange first?`,state:{...next,nextObjective:'SELECT_PLATFORM_ORDER',lastRequiredQuestion:'SELECT_PLATFORM_ORDER',updatedAt:time},debug:{...base.debug,platforms:next.selectedPlatforms}};
 
   }
 
   const service=services.find(r=>r.data.serviceType===next.serviceType&&r.data.platforms.includes(next.selectedPlatform));
 
+  const setupService=next.includeSetup?services.find(r=>r.data.serviceType==='account_setup'&&r.data.platforms.includes(next.selectedPlatform)):null;
+  if(next.includeSetup&&next.selectedPlatform&&!setupService)return handoff('NO_APPROVED_SERVICE');
+  const setupFee=setupService?.data.price||0;
   next.selectedService=service?.key;next.currentIntent=d.intent;
 
   const plans=records.filter(r=>r.kind==='plan'&&r.enabled!==false&&!r.archived&&r.data.platforms.includes(next.selectedPlatform)&&r.data.service===service?.key);
 
   const acceptsPlan=state.lastRequiredQuestion==='SELECT_PLAN'||(!next.budget&&d.budget==null);
 
-  const selected=plans.find(p=>p.key===(!yes&&acceptsPlan?d.planKey||next.recommendedPlan:next.recommendedPlan)) || ((state.lastRequiredQuestion==='SELECT_PLAN'||!next.budget) && (d.budget==null || plans.some(p=>p.data.duration===d.duration&&p.data.amount===d.budget)) && plans.filter(p=>p.data.duration===d.duration).length===1 ? plans.find(p=>p.data.duration===d.duration) : null);
+  const selected=plans.find(p=>p.key===(!yes&&acceptsPlan?d.planKey||next.recommendedPlan:next.recommendedPlan)) || ((state.lastRequiredQuestion==='SELECT_PLAN'||!next.budget) && (d.budget==null || plans.some(p=>p.data.duration===(d.duration??next.duration)&&p.data.amount===d.budget)) && plans.filter(p=>p.data.duration===(d.duration??next.duration)).length===1 ? plans.find(p=>p.data.duration===(d.duration??next.duration)) : null);
 
   if(selected){next.budgetSource='plan';next.needsBudgetGuidance=false;next.budgetBasis='package';next.recommendedPlan=selected.key;next.duration=selected.data.duration;next.budget=selected.data.amount;}
 
-  if(oldSelection!==[next.selectedPlatform,next.serviceType,next.budget,next.duration,next.recommendedPlan].join(':')) {
+  if(state.includeSetup!==next.includeSetup||oldSelection!==[next.selectedPlatform,next.serviceType,next.budget,next.duration,next.recommendedPlan].join(':')) {
 
     // Preserve the actual invoice in the financial system; unlink stale sales
 
@@ -227,11 +252,13 @@ async function decide({text='',type='text',customerName='there',state={},config,
 
   } else if(amount)next.quoteSource=selected?`plan:${selected.key}`:`service:${service.key}`;
 
+  const managementAmount=amount;
+  if(amount&&setupFee){amount+=setupFee;next.quoteSource='combined:'+next.quoteSource;}
   if(next.invoiceId&&invoiceRecord?.status==='pending'&&new Date(invoiceRecord.expiresAt)>new Date(now)){amount=invoiceRecord.amount;next.quoteSource='existing_invoice';}
 
   if(amount){next.quotedAmount=amount;next.quotedAt=time;}
 
-  const vars={customer_name:customerName||'there',service_name:service?.title||'',service:service?.title||'',price:amount?money(amount):'',amount:amount?money(amount):'',platform:next.selectedPlatform==='meta'?'Meta (Facebook & Instagram)':next.selectedPlatform==='tiktok'?'TikTok':'',budget:next.budget?money(next.budget):'',duration:next.duration||'',plan_name:selected?.title||'',plans:plans.map(p=>`${p.data.duration} days — ${money(p.data.amount)}`).join('\n'),ad_budget:base.debug.calculator?money(base.debug.calculator.advertisingBudget):'',management_fee:base.debug.calculator?money(base.debug.calculator.managementFee):'',requirements:service?.data.requirements||''};
+  const vars={customer_name:customerName||'there',service_name:next.includeSetup?`${setupService?.title} + Ads Management`:service?.title||'',service:service?.title||'',price:amount?money(amount):'',amount:amount?money(amount):'',platform:next.selectedPlatform==='meta'?'Meta (Facebook & Instagram)':next.selectedPlatform==='tiktok'?'TikTok':'',budget:next.budget?money(next.budget):'',duration:next.duration||'',plan_name:selected?.title||'',plans:plans.map(p=>`${p.data.duration} days — ${money(p.data.amount)} management${setupFee?` + ${money(setupFee)} setup = ${money(p.data.amount+setupFee)} total`:''}`).join('\n'),ad_budget:base.debug.calculator?money(base.debug.calculator.advertisingBudget):'',management_fee:base.debug.calculator?money(base.debug.calculator.managementFee):'',requirements:service?.data.requirements||''};
 
   const respond=(key,stage,objective)=>{
 
@@ -245,7 +272,7 @@ async function decide({text='',type='text',customerName='there',state={},config,
 
     next.lastRequiredQuestion=next.nextObjective;next.lastProgressionQuestionAt=time;next.updatedAt=time;
 
-    return {...base,action:'reply',response,state:next,amount,serviceKey:service?.key,knowledge:[e.key],responseMode:e.data.responseMode,debug:{...base.debug,nextObjective:next.nextObjective,authoritativeQuote:{amount,source:next.quoteSource}}};
+    return {...base,action:'reply',response,state:next,amount,serviceKey:next.includeSetup&&setupService&&service?`${setupService.key}+${service.key}`:service?.key,knowledge:[e.key],responseMode:e.data.responseMode,debug:{...base.debug,nextObjective:next.nextObjective,authoritativeQuote:{amount,source:next.quoteSource}}};
 
   };
 
@@ -341,7 +368,7 @@ async function decide({text='',type='text',customerName='there',state={},config,
 
     next.currentSalesStage='PAYMENT_DETAILS_REQUESTED';next.nextObjective='SEND_INVOICE';
 
-    result={...base,action:'invoice',response:'',state:next,amount,serviceKey:service.key};
+    result={...base,action:'invoice',response:'',state:next,amount,serviceKey:next.includeSetup?`${setupService.key}+${service.key}`:service.key};
 
   } else if(next.invoiceId&&next.paymentDetailsSentAt) {
 
@@ -397,6 +424,11 @@ async function decide({text='',type='text',customerName='there',state={},config,
 
     }catch{return handoff('CALCULATOR_ERROR');}
 
+  }
+
+  if(next.includeSetup&&result.action==='reply'&&!negotiating){
+    if(amount&&managementAmount&&!next.invoiceId&&!next.customerWantsToProceed)result.response=(answer?answer+'\n\n':'')+`${setupService.title}: ${money(setupFee)}.\nAds management (${next.duration} days): ${money(managementAmount)}, including advertising spend and management fee.\nTotal: ${money(amount)}.\n\nWould you like to proceed?`;
+    else if(!amount&&setupFee)result.response=`${setupService.title}: ${money(setupFee)}.\n\n`+result.response;
   }
 
   // Do not send the identical discovery question again when no new field was supplied.

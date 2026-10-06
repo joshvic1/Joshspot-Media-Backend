@@ -12,6 +12,38 @@ const config={...defaults.config,structuredSales:true,invoicesEnabled:true};
 
 const records=[...defaults.records,...kb.seeds];
 
+test('Elora combined setup and management preserves choice and adds setup once',async()=>{
+ const initial={serviceChoiceConfirmed:false,selectedPlatform:'tiktok',lastRequiredQuestion:'GET_SERVICE_TYPE'};
+ for(const text of ['Yes set it up Nd also run ads for me','I want you to setup my ads acct and also run d ads aswell']){
+  const r=await turn(text,{serviceType:'account_setup'},initial);assert.equal(r.state.includeSetup,true);assert.equal(r.state.serviceType,'ads_management');assert.match(r.response,/20,000/);assert.match(r.response,/80,000/);assert.doesNotMatch(r.response,/Do you want us to set up/);
+  const chosen=await turn('7 days',{duration:7},r.state);assert.equal(chosen.amount,80000);assert.match(chosen.response,/60,000/);assert.match(chosen.response,/80,000/);
+  const agreed=await turn('Yes',{},chosen.state);assert.equal(agreed.amount,80000);assert.match(agreed.response,/account details/);
+  const invoice=await turn('Yes',{},agreed.state);assert.equal(invoice.action,'invoice');assert.equal(invoice.amount,80000);assert.equal(invoice.serviceKey,'tiktok_setup+ads_management');
+ }
+ const meta=await turn('Please setup and also run the ads for me',{budget:5000,duration:2},{...initial,selectedPlatform:'meta',budget:5000,duration:2,budgetBasis:'daily'});assert.equal(meta.amount,65000);assert.match(meta.response,/30,000/);assert.match(meta.response,/35,000/);
+ const missing=await turn('I want both',{}, {serviceChoiceConfirmed:false,lastRequiredQuestion:'GET_SERVICE_TYPE'});assert.equal(missing.state.includeSetup,true);assert.equal(missing.state.lastRequiredQuestion,'GET_PLATFORM');
+ const partial=await turn('Setup and also run ads for me',{}, {...initial,budget:5000});assert.equal(partial.state.lastRequiredQuestion,'GET_DURATION');assert.equal(partial.state.budget,5000);
+ const duration=await turn('Setup and also run ads for me',{}, {...initial,duration:7});assert.equal(duration.amount,80000);
+ const both=await turn('Setup and also run ads for me',{}, {...initial,selectedPlatform:undefined,selectedPlatforms:['tiktok','meta']});assert.match(both.response,/80,000/);assert.match(both.response,/90,000/);
+ const self=await turn('Set up my account and teach me to run ads myself',{serviceType:'account_setup'},initial);assert.notEqual(self.state.includeSetup,true);
+});
+
+test('course interest and advertised 8k are separate from services, budgets and invoices',async()=>{
+ for(const text of ['I want to learn TikTok ads','Teach me Facebook ads','I want to learn Instagram and Facebook ads','What about the 8K?','Your advert said 8,000 only']){
+  const r=await turn(text,{});assert.match(r.response,/8,000/);assert.match(r.response,/https:\/\/joshspotmedia.com\/course/);assert.equal(r.action,'reply');
+ }
+ const state={serviceType:'account_setup',selectedPlatform:'tiktok',invoiceId:'original',quotedAmount:20000,paymentDetailsSentAt:'2026-10-06',lastRequiredQuestion:'CONFIRM_PROCEED'};
+ const reference=await turn('What about the 8k?',{},state);assert.equal(reference.state.invoiceId,'original');assert.equal(reference.state.quotedAmount,20000);assert.equal(reference.state.purchasePath,undefined);
+ const switchCourse=await turn('I want the course instead',{},state);assert.equal(switchCourse.state.purchasePath,'course');assert.equal(switchCourse.state.invoiceId,'original');
+ const pay=await turn('How do I pay?',{intent:'request_invoice'},switchCourse.state);assert.equal(pay.action,'reply');assert.match(pay.response,/\/course/);
+ for(const text of ['I want to run ads','My advertising budget is 8000','Can you do setup for 8k?','Teach me to run ads after the setup']){
+  const r=await turn(text,{},state);assert.doesNotMatch(r.response,/https:\/\/joshspotmedia.com\/course/);
+ }
+ const ambiguous=await turn('8000',{});assert.match(ambiguous.response,/course, or your advertising budget/);
+ const changed=records.map(r=>r.key==='ads_video_course'?{...r,data:{...r.data,price:9000}}:r);
+ const price=await turn('I want the course',{}, {},{records:changed});assert.match(price.response,/9,000/);
+});
+
 test('negotiation safeguards refuse counteroffers without changing prices or advancing payment',async()=>{
  const state={serviceType:'account_setup',selectedPlatform:'tiktok',quotedAmount:20000,lastRequiredQuestion:'CONFIRM_PROCEED'};
  for(const text of ['Negotiable?','Any discount?','What is your last price?','Can you reduce the price?','Too expensive','Can you accept 15k?','Let’s do 15k','Bring it down','Meet me halfway']){
