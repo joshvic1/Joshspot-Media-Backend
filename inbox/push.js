@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const webpush = require('web-push');
-const {Conversation} = require('./models');
+const {Conversation,Message} = require('./models');
 const Staff = require('../models/Staff');
 const policy = require('./policy');
 const kinds = ['assignments','messages','mentions','followups'];
@@ -26,13 +26,14 @@ function routes(router,wrap,rateLimit){
     const endpoint=req.body.endpoint;
     if(typeof endpoint!=='string'||endpoint.length>2048)return res.status(400).json({message:'Invalid browser subscription.'});
     const row=await Subscription.findOne({endpoint,actor:req.actor.id}).lean();
-    res.json({preferences:Object.fromEntries(kinds.map(k=>[k,row?.preferences?.[k]===true]))});
+    res.json({preferences:{...Object.fromEntries(kinds.map(k=>[k,row?.preferences?.[k]===true])),previews:row?.preferences?.previews!==false}});
   }));
   router.put('/push/subscription',wrap(async(req,res)=>{
     await rateLimit(req);
     if(!configured())return res.status(503).json({message:'Browser notifications have not been configured by the administrator yet.'});
     if(!validateSubscription(req.body.subscription)||!req.body.preferences||kinds.some(k=>typeof req.body.preferences[k]!=='boolean'))return res.status(400).json({message:'Invalid notification settings.'});
-    const subscription=req.body.subscription;const preferences=Object.fromEntries(kinds.map(k=>[k,req.body.preferences[k]]));
+    if(req.body.preferences.previews!==undefined&&typeof req.body.preferences.previews!=='boolean')return res.status(400).json({message:'Invalid preview setting.'});
+    const subscription=req.body.subscription;const preferences={...Object.fromEntries(kinds.map(k=>[k,req.body.preferences[k]])),previews:req.body.preferences.previews!==false};
     // Each browser endpoint belongs to one signed-in account. Reset the cursor on
     // preference changes so enabling an alert never replays older conversations.
     await Subscription.findOneAndUpdate({endpoint:subscription.endpoint},{$set:{actor:req.actor.id,subscription:{endpoint:subscription.endpoint,keys:subscription.keys},preferences,enabledAt:new Date()},$unset:{cursor:1}},{upsert:true});
@@ -55,6 +56,19 @@ async function eligible(actor,event){
  return true;
 }
 const bodies={assignments:'A conversation has been assigned to you.',messages:'A new customer message is available.',mentions:'A teammate mentioned you in an internal note.',followups:'A scheduled follow-up is due.'};
+async function preview(event,preferences){
+ const result={title:'Joshspot Inbox',body:bodies[event.kind]};
+ if(preferences?.previews===false)return result;
+ const conversation=await Conversation.findById(event.conversation).populate('contact','name').lean();
+ const name=String(conversation?.contact?.name||'').replace(/[\r\n]+/g,' ').slice(0,70);
+ if(name)result.title+=' · '+name;
+ if(event.kind==='messages'&&event.message){
+  const message=await Message.findOne({_id:event.message,conversation:event.conversation,direction:'inbound'}).select('type text').lean();
+  const labels={image:'Sent a photo',video:'Sent a video',audio:'Sent a voice message',document:'Sent a document',sticker:'Sent a sticker',location:'Shared a location',contacts:'Shared a contact'};
+  if(message)result.body=message.type==='text'?String(message.text||'New message').replace(/\s+/g,' ').slice(0,180):labels[message.type]||'Sent an attachment';
+ }
+ return result;
+}
 let running=false,lastRun=0;
 async function tick(){
  if(running||!configured()||Date.now()-lastRun<15000)return;
@@ -75,7 +89,7 @@ async function tick(){
     for(const event of events){
      const current=await Subscription.findOne({_id:sub._id,enabledAt:sub.enabledAt,leaseUntil:lease}).lean();if(!current)break;
      if(current.preferences?.[event.kind]&&(!event.dueAt||event.dueAt>=sub.enabledAt)&&await eligible(actor,event)){
-      try{await webpush.sendNotification(sub.subscription,JSON.stringify({title:'Joshspot Inbox',body:bodies[event.kind],tag:String(event._id),url:`/crm-inbox?conversation=${event.conversation}${event.message?'&message='+event.message:''}`}),{TTL:300,timeout:3000,vapidDetails:{subject:process.env.INBOX_PUSH_SUBJECT,publicKey:process.env.INBOX_PUSH_PUBLIC_KEY,privateKey:process.env.INBOX_PUSH_PRIVATE_KEY}})}
+      try{await webpush.sendNotification(sub.subscription,JSON.stringify({...await preview(event,current.preferences),tag:String(event._id),url:`/crm-inbox?conversation=${event.conversation}${event.message?'&message='+event.message:''}`}),{TTL:300,timeout:3000,vapidDetails:{subject:process.env.INBOX_PUSH_SUBJECT,publicKey:process.env.INBOX_PUSH_PUBLIC_KEY,privateKey:process.env.INBOX_PUSH_PRIVATE_KEY}})}
       catch(error){if([404,410].includes(error.statusCode))await Subscription.deleteOne({_id:sub._id});break}
      }
      await Subscription.updateOne({_id:sub._id,enabledAt:sub.enabledAt,leaseUntil:lease},{$set:{cursor:event._id}});
@@ -84,4 +98,4 @@ async function tick(){
   }
  }catch{console.error('Inbox push delivery needs attention');}finally{running=false}
 }
-module.exports={Subscription,Event,validateSubscription,routes,record,tick,eligible};
+module.exports={Subscription,Event,validateSubscription,routes,record,tick,eligible,preview};

@@ -867,7 +867,7 @@ test('push preferences default off, validate endpoints and protect recipient acc
  assert.equal(push.validateSubscription({...subscription,endpoint:'https://localhost/internal'}),false);
  assert.equal(push.validateSubscription({...subscription,endpoint:'https://fcm.googleapis.com.evil.test/send'}),false);
  assert.equal(push.validateSubscription(subscription),true);
- let r=await request('/push/preferences',{role:'agent',method:'POST',body:{endpoint:subscription.endpoint}});assert.deepEqual(r.data.preferences,{assignments:false,messages:false,mentions:false,followups:false});
+ let r=await request('/push/preferences',{role:'agent',method:'POST',body:{endpoint:subscription.endpoint}});assert.deepEqual(r.data.preferences,{assignments:false,messages:false,mentions:false,followups:false,previews:true});
  const preferences={assignments:true,messages:true,mentions:false,followups:false};
  r=await request('/push/subscription',{role:'agent',method:'PUT',body:{subscription,preferences}});assert.equal(r.status,200);
  const other=await request('/push/preferences',{role:'second',method:'POST',body:{endpoint:subscription.endpoint}});assert.equal(other.data.preferences.messages,false);
@@ -880,3 +880,14 @@ test('push preferences default off, validate endpoints and protect recipient acc
  try{await push.tick();assert.equal(calls,1)}finally{webpush.sendNotification=send;delete process.env.INBOX_PUSH_PUBLIC_KEY;delete process.env.INBOX_PUSH_PRIVATE_KEY;delete process.env.INBOX_PUSH_SUBJECT;}
  await request('/push/subscription',{role:'agent',method:'DELETE',body:{endpoint:subscription.endpoint}});assert.equal(await push.Subscription.countDocuments(),0);
 });
+
+ test('push message previews default on and can be hidden',async()=>{
+ const c=await fixture();
+ const m=await Message.create({conversation:c._id,direction:'inbound',type:'text',text:'Hello, I want TikTok ads'});
+ const event={kind:'messages',conversation:c._id,message:m._id};
+ assert.equal((await push.preview(event,{})).body,m.text);
+ assert.equal((await push.preview(event,{previews:false})).body,'A new customer message is available.');
+ await Message.updateOne({_id:m._id},{$set:{type:'audio'}});
+ assert.equal((await push.preview(event,{})).body,'Sent a voice message');
+ assert.equal((await push.preview({...event,conversation:new mongoose.Types.ObjectId()},{})).body,'A new customer message is available.');
+ });

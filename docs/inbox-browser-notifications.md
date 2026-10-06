@@ -1,8 +1,8 @@
 # Inbox browser notifications
 
-Settings is available in the bottom menu and desktop navigation. Browser permission is requested only after pressing Enable. All categories default off, including after permission is granted. Preferences belong to the signed-in account and browser endpoint. Existing in-app Alerts are unaffected.
+Settings is available in the bottom menu and desktop navigation. Browser permission is requested only after pressing Enable. All alert categories default off, including after permission is granted. Names and message previews default on, with an independent opt-out switch. Preferences belong to the signed-in account and browser endpoint. Existing in-app Alerts are unaffected.
 
-Categories: assigned conversations (manual/AI handoff), incoming customer messages visible to the user, staff mentions, and due follow-ups. Staff permissions are rechecked at delivery. Follow-ups notify the assigned person, or the administrator for unassigned chats. Rescheduled/resolved follow-ups are suppressed. Notifications show no contact names, numbers or message bodies. Clicks open the chat through the normal authenticated route.
+Categories: assigned conversations (manual/AI handoff), incoming customer messages visible to the user, staff mentions, and due follow-ups. Staff permissions are rechecked at delivery. Follow-ups notify the assigned person, or the administrator for unassigned chats. Rescheduled/resolved follow-ups are suppressed. Notifications include customer names and a short incoming-message preview by default. Media uses a type label. Turning previews off restores generic notifications. These details can appear on the lock screen. Clicks open the chat through the normal authenticated route.
 
 ## Deployment
 
