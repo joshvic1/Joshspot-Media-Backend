@@ -87,7 +87,7 @@ async function budget(config,conversationId) {
   catch(error){await Usage.updateOne({key:conversationKey},{$inc:{calls:-1}});throw error;}
 }
 async function queue(conversation,result,configRow,inputId,key) {
-  const message=await Message.findOneAndUpdate({clientKey:key},{$setOnInsert:{conversation:conversation._id,type:'text',direction:'outbound',status:'queued',text:result.response,author:'ai',authorName:configRow.data.displayName,routingPhoneId:process.env.WHATSAPP_PHONE_NUMBER_ID,automation:{version:conversation.ai.version,inputId,configRevision:configRow.revision,handoff:Boolean(result.handoff),engineVersion:result.engineVersion||(result.engineVersion||result.debug?.engineVersion||'v1'),...(result.question?{question:result.question}:{}),...(result.delivery?{delivery:result.delivery}:{})}}},{upsert:true,returnDocument:'after'});
+  const message=await Message.findOneAndUpdate({clientKey:key},{$setOnInsert:{conversation:conversation._id,type:'text',direction:'outbound',status:'queued',text:result.response,author:'ai',authorName:configRow.data.displayName,routingPhoneId:process.env.WHATSAPP_PHONE_NUMBER_ID,automation:{version:conversation.ai.version,inputId,configRevision:configRow.revision,handoff:Boolean(result.handoff),engineVersion:(require('./runtime').version(configRow.data)==='shadow'?'v1':require('./runtime').version(configRow.data)),...(result.question?{question:result.question}:{}),...(result.delivery?{delivery:result.delivery}:{})}}},{upsert:true,returnDocument:'after'});
   await Conversation.updateOne({_id:conversation._id},{$set:{lastMessageId:message._id,lastMessageAt:message.createdAt,preview:result.response.slice(0,160)}});
   live.notify();return message;
 }
