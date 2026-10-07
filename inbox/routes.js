@@ -98,7 +98,15 @@ router.get('/notifications', wrap(async (req, res) => {
   const query = { recipient: req.actor.id, ...(req.query.before ? { _id: { $lt: id(req.query.before) } } : {}) };
   const rows = await Notification.find(query).sort({ _id: -1 }).limit(21).lean();
   const unread = await Notification.countDocuments({ recipient: req.actor.id, readAt: null });
-  res.json({ items: rows.slice(0, 20), unread, next: rows.length > 20 ? String(rows[19]._id) : null });
+  const conversations = await Conversation.find({ _id: { $in: rows.slice(0, 20).map(row => row.conversation) }, deleting: { $ne: true } }).select('contact').populate({ path: 'contact', select: 'name', match: { deleting: { $ne: true } } }).lean();
+  const names = new Map(conversations.map(row => [String(row._id), row.contact?.name?.trim() || 'Unnamed contact']));
+  const items = rows.slice(0, 20).map(row => ({ ...row, contactName: names.get(String(row.conversation)) || 'Unavailable contact' }));
+  res.json({ items, unread, next: rows.length > 20 ? String(rows[19]._id) : null });
+}));
+router.post('/notifications/read-all', wrap(async (req, res) => {
+  if (req.actor.admin) return res.json({ updated: 0 });
+  const result = await Notification.updateMany({ recipient: req.actor.id, readAt: null }, { $set: { readAt: new Date() } });
+  res.json({ updated: result.modifiedCount });
 }));
 router.post('/notifications/:notificationId/read', wrap(async (req, res) => {
   if (req.actor.admin) fail(404, 'Notification not found.');

@@ -966,3 +966,15 @@ test('training quick reply sends course link once without AI and preserves staff
  const typed=inbound('wamid.training-text');typed.messages[0].text.body='get the training';await service.receive(typed);assert.equal(await Message.countDocuments({clientKey:'course-link:wamid.training-text'}),1);
  const other=inbound('wamid.other');other.messages[0].text.body='Does the training include setup?';await service.receive(other);assert.equal(await Message.countDocuments({clientKey:'course-link:wamid.other'}),0);assert.equal((await Conversation.findById(c._id)).ai.pending,true);
 });
+test('mark all notifications read is recipient scoped and includes unloaded pages',async()=>{
+ const c=await fixture();
+ await Notification.insertMany(Array.from({length:25},()=>({recipient:agent._id,conversation:c._id,message:new mongoose.Types.ObjectId(),authorName:'Team'})));
+ const other=await Notification.create({recipient:second._id,conversation:c._id,message:new mongoose.Types.ObjectId(),authorName:'Team'});
+ assert.equal((await request(`/notifications/${other._id}/read`,{role:'agent',method:'POST',body:{}})).status,404);
+ assert.equal((await request(`/notifications/${other._id}/read`,{role:'second',method:'POST',body:{}})).status,200);
+ await Notification.updateOne({_id:other._id},{$unset:{readAt:1}});
+ assert.equal((await request('/notifications',{role:'agent'})).data.items.length,20);
+ const result=await request('/notifications/read-all',{role:'agent',method:'POST',body:{}});assert.equal(result.status,200);assert.equal(result.data.updated,25);
+ assert.equal(await Notification.countDocuments({recipient:agent._id,readAt:null}),0);assert.ok(!(await Notification.findById(other._id)).readAt);
+ assert.equal((await request('/notifications/read-all',{role:'agent',method:'POST',body:{}})).data.updated,0);
+});
