@@ -47,7 +47,8 @@ async function receive(value) {
       }
       continue;
     }
-    const type = ['text', 'image', 'document', 'audio', 'video', 'sticker'].includes(item.type) ? item.type : 'unsupported';
+    const courseLinkRequested=/^get the training[.!]?$/i.test(String(item.text?.body||item.button?.text||item.interactive?.button_reply?.title||'').trim());
+    const type = courseLinkRequested ? 'text' : ['text', 'image', 'document', 'audio', 'video', 'sticker'].includes(item.type) ? item.type : 'unsupported';
     const text = item.text?.body || item[item.type]?.caption || item.interactive?.button_reply?.title || item.interactive?.list_reply?.title || item.button?.text || `[${item.type || 'Unsupported'} message]`;
     const timestamp = Number(item.timestamp) * 1000;
     const occurredAt = new Date(Number.isFinite(timestamp) && timestamp > 0 ? Math.min(timestamp, Date.now()) : Date.now());
@@ -63,8 +64,14 @@ async function receive(value) {
     if(await require('./deleteChat').wasDeleted(contact.phone,item.timestamp) || !await Conversation.exists({_id:conversation._id,deleting:{$ne:true}})){await Message.deleteMany({conversation:conversation._id});continue;}
     const stored = await Message.findOne({ providerId: item.id }).select('_id createdAt');
     // Repairable after a crash between storing the message and updating its conversation.
-    await Conversation.updateOne({ _id: conversation._id, $or: [{ lastInboundId: { $lt: stored._id } }, { lastInboundId: null }] }, { $set: { lastInboundId: stored._id, status: 'open', resolvedAt: null, 'ai.pending': true, 'ai.pendingAt': new Date(Date.now() - (type !== 'text' || /\b(pay|paid|payment|receipt|invoice|account number)\b/i.test(text) ? 10000 : 0)), ...(/\b(pay|paid|payment|receipt|invoice|account number)\b/i.test(text) ? {'ai.priority':true} : {}), 'ai.phoneId': process.env.WHATSAPP_PHONE_NUMBER_ID }, $max: { lastInboundAt: occurredAt }, $inc: { revision: 1 } });
+    await Conversation.updateOne({ _id: conversation._id, $or: [{ lastInboundId: { $lt: stored._id } }, { lastInboundId: null }] }, { $set: { lastInboundId: stored._id, status: 'open', resolvedAt: null, 'ai.pending': !courseLinkRequested, 'ai.pendingAt': new Date(Date.now() - (type !== 'text' || /\b(pay|paid|payment|receipt|invoice|account number)\b/i.test(text) ? 10000 : 0)), ...(/\b(pay|paid|payment|receipt|invoice|account number)\b/i.test(text) ? {'ai.priority':true} : {}), 'ai.phoneId': process.env.WHATSAPP_PHONE_NUMBER_ID }, $max: { lastInboundAt: occurredAt }, $inc: { revision: 1 } });
     await Conversation.updateOne({ _id: conversation._id, $or: [{ lastMessageId: { $lt: stored._id } }, { lastMessageId: null }] }, { $set: { lastMessageId: stored._id, lastMessageAt: stored.createdAt, preview: text.slice(0, 160) } });
+    if(courseLinkRequested){
+      const response='Here is the link to get the TikTok + Facebook + Instagram tutorial:\n\nhttps://joshspotmedia.com/course';
+      const reply=await Message.findOneAndUpdate({clientKey:`course-link:${item.id}`},{$setOnInsert:{conversation:conversation._id,direction:'outbound',type:'text',status:'queued',author:'admin',authorName:'Course assistant',text:response,routingPhoneId:process.env.WHATSAPP_PHONE_NUMBER_ID}},{upsert:true,returnDocument:'after'});
+      await Conversation.updateOne({_id:conversation._id,deleting:{$ne:true},$or:[{lastMessageId:{$lt:reply._id}},{lastMessageId:null}]},{$set:{lastMessageId:reply._id,lastMessageAt:reply.createdAt,preview:response.slice(0,160)}});
+      live.notify();
+    }
     await require('./push').record(`message:${stored._id}`,'messages',conversation._id,undefined,stored._id);
     if (result?.upsertedCount) publish('message.received', { conversationId: String(conversation._id), providerId: item.id });
   }

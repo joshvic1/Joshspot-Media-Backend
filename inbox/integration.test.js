@@ -917,7 +917,7 @@ test('course WhatsApp reminder queues once without AI and cancels when payment a
  await Template.create({name:'course',language:'en',status:'APPROVED',components:[{type:'HEADER',format:'IMAGE'},{type:'BODY',text:'Hi {{1}}, your payment for {{2}} was not completed.'},{type:'BUTTONS',buttons:[{type:'QUICK_REPLY',text:'Get the training'}]}]});
  const reminder=require('./courseReminder'),old=process.env.INBOX_WORKER_ENABLED;process.env.INBOX_WORKER_ENABLED='true';
  try{
-  await reminder.tick();const msg=await Message.findOne({'courseReminder.invoice':invoice._id}).select('+providerPayload');assert.ok(msg);assert.equal(msg.status,'queued');assert.equal(msg.providerPayload.name,'course');assert.equal(msg.providerPayload.components[0].parameters[0].image.link,'https://joshspotmedia.com/images/ads-course.jpg');assert.equal(msg.providerPayload.components[1].parameters[1].text,'TikTok, Facebook and Instagram Ads training');await reminder.beforeSend(msg);
+  await reminder.tick();const msg=await Message.findOne({'courseReminder.invoice':invoice._id}).select('+providerPayload');assert.ok(msg);assert.equal(msg.status,'queued');assert.equal(msg.providerPayload.name,'course');assert.equal(msg.providerPayload.components[0].parameters[0].image.link,'https://joshspotmedia.com/images/ads-course.jpg');assert.equal(msg.providerPayload.components[1].parameters[1].text,'TikTok, Facebook and Instagram Ads training');assert.deepEqual(msg.providerPayload.components[2],{type:'button',sub_type:'quick_reply',index:'0',parameters:[{type:'payload',payload:'course_reminder:0'}]});await reminder.beforeSend(msg);
   await reminder.tick();assert.equal(await Message.countDocuments({'courseReminder.invoice':invoice._id}),1);
   await Invoice.updateOne({_id:invoice._id},{$set:{status:'paid'}});await assert.rejects(reminder.beforeSend(msg),/cancelled/);
  }finally{if(old===undefined)delete process.env.INBOX_WORKER_ENABLED;else process.env.INBOX_WORKER_ENABLED=old;}
@@ -955,4 +955,14 @@ test('manual invoice follow-ups work with human ownership and cancel after payme
  await Message.updateOne({_id:source._id},{$set:{sentAt:new Date()}});assert.equal(await f.canSend(msg,cfg.data),false);
  await Message.updateOne({_id:source._id},{$set:{sentAt:source.sentAt}});
  await Invoice.updateOne({_id:invoice._id},{$set:{status:'paid'}});assert.equal(await f.canSend(msg,cfg.data),false);
+});
+test('training quick reply sends course link once without AI and preserves staff assignment',async()=>{
+ const c=await fixture();const owner=c.assignedTo;
+ const value=inbound('wamid.training');value.messages[0].type='button';delete value.messages[0].text;value.messages[0].button={text:'Get the training',payload:'course_reminder:0'};
+ await service.receive(value);await service.receive(value);
+ const replies=await Message.find({clientKey:'course-link:wamid.training'});assert.equal(replies.length,1);assert.equal(replies[0].text,'Here is the link to get the TikTok + Facebook + Instagram tutorial:\n\nhttps://joshspotmedia.com/course');
+ const current=await Conversation.findById(c._id);assert.equal(current.ai.pending,false);assert.equal(String(current.assignedTo),String(owner));
+ await service.processOutbox();assert.equal(sent.length,1);
+ const typed=inbound('wamid.training-text');typed.messages[0].text.body='get the training';await service.receive(typed);assert.equal(await Message.countDocuments({clientKey:'course-link:wamid.training-text'}),1);
+ const other=inbound('wamid.other');other.messages[0].text.body='Does the training include setup?';await service.receive(other);assert.equal(await Message.countDocuments({clientKey:'course-link:wamid.other'}),0);assert.equal((await Conversation.findById(c._id)).ai.pending,true);
 });

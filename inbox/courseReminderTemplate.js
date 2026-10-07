@@ -18,5 +18,10 @@ module.exports=function courseReminderTemplate(template,invoice){
   if(url.protocol!=='https:'||url.username||url.password)fail('Course reminder image must use a public HTTPS URL.');
   result.payload.components.unshift({type:'header',parameters:[{type:'image',image:{link}}]});
  }
+ for(const group of components.filter(c=>c.type==='BUTTONS')){
+  group.buttons.forEach((button,index)=>{
+   if(button.type==='QUICK_REPLY')result.payload.components.push({type:'button',sub_type:'quick_reply',index:String(index),parameters:[{type:'payload',payload:`course_reminder:${index}`}]});
+  });
+ }
  return result;
 };
