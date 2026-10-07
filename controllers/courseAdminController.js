@@ -4,6 +4,18 @@ const { refreshInvoiceStatus } = require("./invoiceController");
 const { isCourse } = require("../utils/courseAccess");
 const courseQuery = { deletedAt: null, $or: [{ product: { $in: ["ads-course", "whatsapp-course"] } }, { note: /^Course purchase - WhatsApp:/ }] };
 const phoneOf = (record) => record.customerPhone || (record.note || "").split("WhatsApp:")[1]?.trim() || "";
+async function checkPayment(invoice) {
+  try { return await refreshInvoiceStatus(invoice, true) || invoice; }
+  catch (error) {
+    // An unused Flutterwave transfer reference has no transaction yet. This is
+    // different from an authentication failure, outage or mismatched payment.
+    if (invoice.paymentProvider !== 'flutterwave' || error.response?.status !== 400 ||
+        !/not found|no transaction/i.test(error.response?.data?.message || '')) throw error;
+    const fresh = await Invoice.findById(invoice._id);
+    if (!fresh || fresh.deletedAt) throw new Error('Checkout unavailable');
+    return fresh;
+  }
+}
 exports.sourceAnalytics = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
   const { course = "all", from = "", to = "" } = req.query;
@@ -66,21 +78,23 @@ exports.listCoursePayments = async (req, res) => {
 
 exports.checkCoursePayment = async (req, res) => {
   try {
-    const invoice = await Invoice.findById(req.params.id);
+    let invoice = await Invoice.findById(req.params.id);
     if (!invoice || invoice.deletedAt || !isCourse(invoice)) return res.status(404).json({ message: "Course payment not found." });
-    await refreshInvoiceStatus(invoice, true);
+    invoice = await checkPayment(invoice);
     return res.json({ record: publicRecord(invoice), message: "Payment status checked." });
   } catch {
-    return res.status(502).json({ message: "We could not verify this payment with Paystack. Please try again." });
+    return res.status(502).json({ message: "We could not verify this payment with its payment provider. Please try again." });
   }
 };
 
 exports.remindCoursePayment = async (req, res) => {
   let claimed;
+  let verified = false;
   try {
-    const invoice = await Invoice.findById(req.params.id);
+    let invoice = await Invoice.findById(req.params.id);
     if (!invoice || invoice.deletedAt || !isCourse(invoice)) return res.status(404).json({ message: "Course payment not found." });
-    await refreshInvoiceStatus(invoice, true);
+    invoice = await checkPayment(invoice);
+    verified = true;
     if (invoice.status === "paid") return res.status(409).json({ message: "This customer has already paid. No reminder was sent." });
     if (!invoice.customerEmail) return res.status(400).json({ message: "No email address was provided for this checkout." });
     const matches = [{ customerEmail: invoice.customerEmail }];
@@ -109,7 +123,7 @@ exports.remindCoursePayment = async (req, res) => {
     return res.json({ message: "Reminder email sent." });
   } catch {
     if (claimed) await Invoice.updateOne({ _id: claimed._id, reminderClaimedAt: claimed.reminderClaimedAt }, { $unset: { reminderClaimedAt: 1 } }).catch(() => {});
-    return res.status(502).json({ message: "Unable to verify payment or send the reminder. Please try again." });
+    return res.status(502).json({ message: verified ? "Payment checked, but the reminder email could not be sent. Please try again." : "Unable to verify payment with the payment provider. No reminder was sent. Please try again." });
   }
 };
 
