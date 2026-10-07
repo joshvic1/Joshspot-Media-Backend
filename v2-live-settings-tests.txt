@@ -1,0 +1,110 @@
+TAP version 13
+# Subtest: whole turn retains all slots and uses daily calculator, never model arithmetic
+ok 1 - whole turn retains all slots and uses daily calculator, never model arithmetic
+  ---
+  duration_ms: 97.2427
+  ...
+# Subtest: combined setup and management sums each service once
+ok 2 - combined setup and management sums each service once
+  ---
+  duration_ms: 8.4953
+  ...
+# Subtest: evidence and contradiction validation never requires matching phrases
+ok 3 - evidence and contradiction validation never requires matching phrases
+  ---
+  duration_ms: 1.6415
+  ...
+# Subtest: sent questions anchor answers; failed and queued drafts do not
+ok 4 - sent questions anchor answers; failed and queued drafts do not
+  ---
+  duration_ms: 1.2951
+  ...
+# Subtest: knowledge becomes eligible in the same turn after extraction
+ok 5 - knowledge becomes eligible in the same turn after extraction
+  ---
+  duration_ms: 31.2378
+  ...
+# Subtest: course exploration does not erase advertising purchase
+ok 6 - course exploration does not erase advertising purchase
+  ---
+  duration_ms: 5.1822
+  ...
+# Subtest: deferral pauses pressure but allows daily recommendations
+ok 7 - deferral pauses pressure but allows daily recommendations
+  ---
+  duration_ms: 13.4903
+  ...
+# Subtest: explicit correction supersedes evidence and detaches an obsolete invoice
+ok 8 - explicit correction supersedes evidence and detaches an obsolete invoice
+  ---
+  duration_ms: 5.4814
+  ...
+# Subtest: unconfirmed budget basis is clarified, not guessed
+ok 9 - unconfirmed budget basis is clarified, not guessed
+  ---
+  duration_ms: 2.1466
+  ...
+# Subtest: multi-platform shared budget is not silently doubled
+ok 10 - multi-platform shared budget is not silently doubled
+  ---
+  duration_ms: 2.2057
+  ...
+# Subtest: invoices require consent AND payment request and stay deterministic
+ok 11 - invoices require consent AND payment request and stay deterministic
+  ---
+  duration_ms: 6.4814
+  ...
+# Subtest: missing account does not silently consent to buying setup
+ok 12 - missing account does not silently consent to buying setup
+  ---
+  duration_ms: 3.4033
+  ...
+# Subtest: negotiation cannot lower a quote
+ok 13 - negotiation cannot lower a quote
+  ---
+  duration_ms: 2.9732
+  ...
+# Subtest: financial and question content cannot bypass the final composer
+ok 14 - financial and question content cannot bypass the final composer
+  ---
+  duration_ms: 0.4678
+  ...
+# Subtest: media, verified payments and explicit humans use actual handoff action
+ok 15 - media, verified payments and explicit humans use actual handoff action
+  ---
+  duration_ms: 1.8161
+  ...
+# Subtest: live V2 can be selected without backend approval
+ok 16 - live V2 can be selected without backend approval
+  ---
+  duration_ms: 767.854
+  ...
+# Subtest: selecting course and resuming ads restores purchase facts, not old consent
+ok 17 - selecting course and resuming ads restores purchase facts, not old consent
+  ---
+  duration_ms: 6.8683
+  ...
+# Subtest: a verified existing invoice amount beats newly edited service pricing
+ok 18 - a verified existing invoice amount beats newly edited service pricing
+  ---
+  duration_ms: 3.902
+  ...
+# Subtest: admin corrections update provenance instead of fighting the projected legacy state
+ok 19 - admin corrections update provenance instead of fighting the projected legacy state
+  ---
+  duration_ms: 1.9397
+  ...
+# Subtest: unapproved knowledge and forbidden financial state writes fail closed
+ok 20 - unapproved knowledge and forbidden financial state writes fail closed
+  ---
+  duration_ms: 0.9337
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1597.0809

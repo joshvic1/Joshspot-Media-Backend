@@ -78,20 +78,20 @@ router.put('/master-knowledge',wrap(async(req,res)=>{
  await Log.create({kind:'configuration',actor:req.actor.id,action:'master_knowledge',after:{characters:req.body.text.length},configRevision:saved.revision});
  res.json({text:saved.masterInstructions,revision:saved.revision,maxLength:MAX_LENGTH});
 }));
-router.get('/config',wrap(async(req,res)=>{const config=await settings.getConfig();res.json({...config,providerReady:Boolean(process.env.OPENAI_API_KEY && ((config.data.engineVersion==='v4'&&config.data.v4InterpreterModel&&config.data.v4ComposerModel)||(config.data.engineVersion==='v3'&&config.data.v3Model)||config.data.model || process.env.OPENAI_MODEL)),staff:await Staff.find({role:{$in:['CSS','SS']}}).select('name role').lean()});}));
+router.get('/config',wrap(async(req,res)=>{const config=await settings.getConfig();res.json({...config,providerReady:Boolean(process.env.OPENAI_API_KEY && ((config.data.engineVersion==='v4'&&config.data.v4InterpreterModel&&config.data.v4ComposerModel)||(config.data.engineVersion==='v2'&&(config.data.v2Model||process.env.OPENAI_V2_MODEL))||(config.data.engineVersion==='v3'&&config.data.v3Model)||config.data.model || process.env.OPENAI_MODEL)),staff:await Staff.find({role:{$in:['CSS','SS']}}).select('name role').lean()});}));
 router.post('/business-pack',wrap(async(req,res)=>res.json(await require('./installBusinessPack').install(req.actor.id))));
 router.post('/initialize',wrap(async(req,res)=>{await settings.seed(req.actor.id);await Log.create({kind:'configuration',actor:req.actor.id,action:'initialize'});res.json(await settings.getConfig());}));
 router.put('/config',wrap(async(req,res)=>{
   const before=await settings.getConfig();if(req.body.revision!==before.revision)fail(409,'Settings changed. Reload before saving');
   const data=settings.validateConfig(req.body.data || {});
-  if(!['v3','v4'].includes(data.engineVersion)&&data.structuredSales&&data.mode==='LIVE'&&before.data.mode!=='LIVE'){
+  if(!['v2','v3','v4'].includes(data.engineVersion)&&data.structuredSales&&data.mode==='LIVE'&&before.data.mode!=='LIVE'){
     const tested=await Log.exists({kind:'test',configRevision:before.revision,action:{$in:['reply','invoice']}});
     const drafted=await Log.exists({kind:'decision',mode:'DRAFT',configRevision:before.revision,action:{$in:['reply','invoice']}});
     if(!tested||!drafted)fail(400,'Validate the current configuration in Test Agent and a DRAFT conversation before LIVE.');
   }
-  if(!['v3','v4'].includes(data.engineVersion)&&data.structuredSales&&!before.data.structuredSales&&data.mode==='LIVE')fail(400,'Enable structured sales in DRAFT and validate it before switching to LIVE.');
+  if(!['v2','v3','v4'].includes(data.engineVersion)&&data.structuredSales&&!before.data.structuredSales&&data.mode==='LIVE')fail(400,'Enable structured sales in DRAFT and validate it before switching to LIVE.');
   if(!['v3','v4'].includes(data.engineVersion)&&data.structuredSales&&!await Record.exists({kind:'knowledge',key:'generic_first_contact','data.schemaVersion':1}))fail(400,'Prepare structured knowledge before enabling this engine.');
-  if(data.mode==='LIVE' && (!process.env.OPENAI_API_KEY || !((data.engineVersion==='v4'&&data.v4InterpreterModel&&data.v4ComposerModel)||(data.engineVersion==='v3'&&data.v3Model)||data.model || process.env.OPENAI_MODEL)))fail(400,'Configure OpenAI before enabling LIVE mode');
+  if(data.mode==='LIVE' && (!process.env.OPENAI_API_KEY || !((data.engineVersion==='v4'&&data.v4InterpreterModel&&data.v4ComposerModel)||(data.engineVersion==='v2'&&(data.v2Model||process.env.OPENAI_V2_MODEL))||(data.engineVersion==='v3'&&data.v3Model)||data.model || process.env.OPENAI_MODEL)))fail(400,'Configure OpenAI before enabling LIVE mode');
   for(const key of ['fallbackAgent','paymentAgent'])if(data[key]&&!await Staff.exists({_id:data[key],role:{$in:['CSS','SS']}}))fail(400,'Choose an available staff member');
   const saved=await Config.findOneAndUpdate({key:'main',revision:before.revision},{$set:{data,changedBy:req.actor.id},$inc:{revision:1}},{returnDocument:'after'});
   if(!saved)fail(409,'Initialize or reload settings first');

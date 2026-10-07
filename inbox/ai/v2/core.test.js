@@ -87,9 +87,9 @@ test('media, verified payments and explicit humans use actual handoff action',as
  r=await turn('paid',interpretation(),{}, {paymentVerified:true});assert.equal(r.handoff,'PAYMENT_VERIFIED');
  const text='Get me someone';r=await turn(text,interpretation({humanRequest:{value:true,evidence:{messageId:'input',text}}}));assert.equal(r.handoff,'CUSTOMER_REQUESTED_HUMAN');
 });
-test('live V2 is gated separately from tests and shadow',()=>{
+test('live V2 can be selected without backend approval',()=>{
  const env=process.env.AI_ENGINE_VERSION,gate=process.env.AI_V2_LIVE_APPROVED;delete process.env.AI_ENGINE_VERSION;delete process.env.AI_V2_LIVE_APPROVED;
- try{assert.throws(()=>require('./runtime').version({engineVersion:'v2',mode:'LIVE'}));assert.equal(require('./runtime').version({engineVersion:'shadow',mode:'LIVE'}),'shadow');}finally{if(env!==undefined)process.env.AI_ENGINE_VERSION=env;if(gate!==undefined)process.env.AI_V2_LIVE_APPROVED=gate;}
+ try{assert.equal(require('./runtime').version({engineVersion:'v2',mode:'LIVE'}),'v2');assert.equal(require('../runtime').version({engineVersion:'v2',mode:'LIVE'},{}),'v2');assert.equal(require('../config').validateConfig({engineVersion:'v2',mode:'LIVE'}).engineVersion,'v2');assert.equal(require('./runtime').version({engineVersion:'shadow',mode:'LIVE'}),'shadow');}finally{if(env!==undefined)process.env.AI_ENGINE_VERSION=env;if(gate!==undefined)process.env.AI_V2_LIVE_APPROVED=gate;}
 });
 test('selecting course and resuming ads restores purchase facts, not old consent',async()=>{
  const text='TikTok setup';let r=await turn(text,interpretation({facts:[fact('services','account_setup',text),fact('platforms','tiktok',text)]}));
