@@ -914,10 +914,10 @@ test('paid invoice contact correction validates fields and preserves financial d
 test('course WhatsApp reminder queues once without AI and cancels when payment arrives',async()=>{
  const c=await fixture();const contact=await Contact.findById(c.contact);const createdAt=new Date(Date.now()-21*60000);
  const invoice=await Invoice.create({token:crypto.randomUUID(),amount:8000,product:'ads-course',paymentProvider:'flutterwave',status:'pending',customerPhone:contact.phone,createdAt,courseWhatsappDueAt:new Date(Date.now()-60000)});
- await Template.create({name:'course',language:'en',status:'APPROVED',components:[{type:'BODY',text:'Complete your course purchase.'},{type:'BUTTONS',buttons:[{type:'URL',text:'Get course',url:'https://joshspotmedia.com/course'}]}]});
+ await Template.create({name:'course',language:'en',status:'APPROVED',components:[{type:'HEADER',format:'IMAGE'},{type:'BODY',text:'Hi {{1}}, your payment for {{2}} was not completed.'},{type:'BUTTONS',buttons:[{type:'QUICK_REPLY',text:'Get the training'}]}]});
  const reminder=require('./courseReminder'),old=process.env.INBOX_WORKER_ENABLED;process.env.INBOX_WORKER_ENABLED='true';
  try{
-  await reminder.tick();const msg=await Message.findOne({'courseReminder.invoice':invoice._id}).select('+providerPayload');assert.ok(msg);assert.equal(msg.status,'queued');assert.equal(msg.providerPayload.name,'course');
+  await reminder.tick();const msg=await Message.findOne({'courseReminder.invoice':invoice._id}).select('+providerPayload');assert.ok(msg);assert.equal(msg.status,'queued');assert.equal(msg.providerPayload.name,'course');assert.equal(msg.providerPayload.components[0].parameters[0].image.link,'https://joshspotmedia.com/images/ads-course.jpg');assert.equal(msg.providerPayload.components[1].parameters[1].text,'TikTok, Facebook and Instagram Ads training');await reminder.beforeSend(msg);
   await reminder.tick();assert.equal(await Message.countDocuments({'courseReminder.invoice':invoice._id}),1);
   await Invoice.updateOne({_id:invoice._id},{$set:{status:'paid'}});await assert.rejects(reminder.beforeSend(msg),/cancelled/);
  }finally{if(old===undefined)delete process.env.INBOX_WORKER_ENABLED;else process.env.INBOX_WORKER_ENABLED=old;}

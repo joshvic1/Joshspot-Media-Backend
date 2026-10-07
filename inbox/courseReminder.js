@@ -3,6 +3,7 @@ const Invoice=require('../models/Invoice');
 const {Contact,Conversation,Message,Template}=require('./models');
 const policy=require('./policy');
 const provider=require('./provider');
+const reminderTemplate=require('./courseReminderTemplate');
 const phoneMatch=require('./crmPhoneMatch');
 const fail=message=>{throw Object.assign(new Error(message),{safe:true});};
 // This automation is independent of the conversational AI engine. No model calls.
@@ -34,7 +35,8 @@ async function beforeSend(message){
  const fresh=await Invoice.findById(invoice._id);
  if(!await eligible(fresh))fail('Course reminder cancelled: payment or checkout eligibility changed.');
  const template=await Template.findOne({name:message.providerPayload?.name,language:message.providerPayload?.language?.code,status:'APPROVED'}).lean();
- if(!template||policy.templateFields(template)?.length!==0)fail('Course reminder template is unavailable or requires configuration.');
+ const expected=reminderTemplate(template,fresh);
+ if(JSON.stringify(expected.payload)!==JSON.stringify(message.providerPayload))fail('Course reminder cancelled: template or customer details changed.');
 }
 let running=false,lastRun=0;
 async function tick(){
@@ -47,7 +49,7 @@ async function tick(){
   for(const invoice of invoices){
    try{
     if(!await eligible(invoice)){await Invoice.updateOne({_id:invoice._id},{$unset:{courseWhatsappDueAt:1},$set:{courseWhatsappError:'Skipped: paid, opted out, deleted or superseded checkout.'}});continue;}
-    if(!template||policy.templateFields(template)?.length!==0)throw new Error('Sync one approved course template without variables, or configure its language.');
+    const {payload,preview}=reminderTemplate(template,invoice);
     if(!await verifyUnpaid(invoice))continue;
     const phone=policy.phone(invoice.customerPhone);
     const contact=await require('./service').upsertContact(phone,invoice.customerName);
@@ -57,7 +59,6 @@ async function tick(){
     const recent=await Message.exists({conversation:conversation._id,'courseReminder.invoice':{$exists:true},createdAt:{$gte:new Date(Date.now()-86400000)}});
     const key=`course-reminder:${crypto.createHash('sha256').update(phone).digest('hex')}:${new Date().toISOString().slice(0,10)}`;
     if(!recent){
-     const {payload,preview}=policy.templatePayload(template,{});
      const msg=await Message.findOneAndUpdate({clientKey:key},{$setOnInsert:{conversation:conversation._id,direction:'outbound',type:'template',status:'queued',author:'admin',authorName:'Course reminder',text:preview,providerPayload:payload,routingPhoneId:process.env.WHATSAPP_PHONE_NUMBER_ID,courseReminder:{invoice:invoice._id}}},{upsert:true,returnDocument:'after'});
      await Conversation.updateOne({_id:conversation._id,deleting:{$ne:true}},{$set:{lastMessageId:msg._id,lastMessageAt:msg.createdAt,preview:preview.slice(0,160)}});
      require('./live').notify();
