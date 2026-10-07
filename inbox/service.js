@@ -36,6 +36,7 @@ async function receive(value) {
     if(contact.deleting)throw new Error('Contact deletion in progress');
     const conversation = await openConversation(contact);
     if(conversation.deleting)throw new Error('Conversation deletion in progress');
+    if(item.type==='text'&&/^(stop|unsubscribe|stop reminders)$/i.test(String(item.text?.body||'').trim()))await Contact.updateOne({_id:contact._id},{$set:{whatsappReminderOptOut:true}});
     if (item.type === 'reaction') {
       const timestamp = Number(item.timestamp) * 1000;
       if (typeof item.reaction?.message_id === 'string' && Number.isFinite(timestamp)) {
@@ -145,6 +146,7 @@ async function processOutbox() {
     try {
       const conversation = await Conversation.findById(message.conversation).populate('contact');
       if (!conversation || conversation.deleting || !conversation.contact || conversation.contact.deleting) throw Object.assign(new Error('Chat deleted or deletion in progress.'),{safe:true});
+      if(message.courseReminder?.invoice)await require('./courseReminder').beforeSend(message);
       if (message.author === 'ai' && !await require('./ai/worker').eligible(message)) throw Object.assign(new Error('AI reply cancelled: ownership, input or settings changed.'), { safe: true });
       if (!['admin','ai'].includes(message.author) && !await require('../models/Staff').exists({ _id: message.author, role: { $in: ['SS', 'CSS'] } })) throw Object.assign(new Error('The sending representative no longer has messaging access.'), { safe: true });
       if (!conversation || (!['admin','ai'].includes(message.author) && String(conversation.assignedTo) !== message.author)) throw Object.assign(new Error('Assignment changed. Claim the conversation and try again.'), { safe: true });
@@ -168,6 +170,8 @@ async function tick() {
   // Media transfers have their own lease/concurrency guard and never block message delivery.
   void require('./push').tick();
   void require('./media').tick();
+  void require('./courseReminder').tick().catch(()=>console.error('Course WhatsApp reminder worker deferred'));
+  void require('./deleteChat').recover().catch(()=>console.error('Inbox deletion recovery unavailable'));
   void require('./ai/worker').tick();
   if (running) return;
   running = true;

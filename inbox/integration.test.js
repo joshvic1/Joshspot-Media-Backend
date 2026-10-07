@@ -891,3 +891,42 @@ test('push preferences default off, validate endpoints and protect recipient acc
  assert.equal((await push.preview(event,{})).body,'Sent a voice message');
  assert.equal((await push.preview({...event,conversation:new mongoose.Types.ObjectId()},{})).body,'A new customer message is available.');
  });
+
+test('interrupted deletion stays hidden and recovery completes after a worker releases it',async()=>{
+ const c=await fixture();await Conversation.updateOne({_id:c._id},{$set:{'ai.leaseUntil':new Date(Date.now()+60000)}});
+ const deletion=require('./deleteChat');await assert.rejects(deletion.deleteChat(c._id),e=>e.status===409);
+ const list=await request('/conversations');assert.equal(list.data.items.some(row=>String(row._id)===String(c._id)),false);
+ await Conversation.collection.updateOne({_id:c._id},{$set:{'ai.leaseUntil':new Date(0),updatedAt:new Date(Date.now()-180000)}});
+ await deletion.recover();assert.equal(await Conversation.exists({_id:c._id}),null);
+});
+
+test('paid invoice contact correction validates fields and preserves financial data',async()=>{
+ const invoice=await Invoice.create({token:crypto.randomUUID(),amount:8000,status:'paid',reference:'trusted-reference',customerEmail:'old@example.test'});
+ const handler=require('../controllers/invoiceContactController').update;
+ const call=async body=>{const r={code:200,status(n){this.code=n;return this;},json(v){this.data=v;return this;}};await handler({params:{id:String(invoice._id)},body},r);return r;};
+ assert.equal((await call({email:'bad',phone:''})).code,400);
+ assert.equal((await call({email:'new@example.test',phone:'08012345678',amount:1,status:'failed'})).code,200);
+ const saved=await Invoice.findById(invoice._id);assert.equal(saved.customerEmail,'new@example.test');assert.equal(saved.customerPhone,'+2348012345678');assert.equal(saved.amount,8000);assert.equal(saved.status,'paid');assert.equal(saved.reference,'trusted-reference');
+ await Invoice.updateOne({_id:invoice._id},{$set:{receiptClaimedAt:new Date()}});assert.equal((await call({email:'other@example.test'})).code,409);
+ await Invoice.updateOne({_id:invoice._id},{$unset:{receiptClaimedAt:1},$set:{status:'pending'}});assert.equal((await call({email:'other@example.test'})).code,409);
+});
+
+test('course WhatsApp reminder queues once without AI and cancels when payment arrives',async()=>{
+ const c=await fixture();const contact=await Contact.findById(c.contact);const createdAt=new Date(Date.now()-21*60000);
+ const invoice=await Invoice.create({token:crypto.randomUUID(),amount:8000,product:'ads-course',paymentProvider:'flutterwave',status:'pending',customerPhone:contact.phone,createdAt,courseWhatsappConsentAt:createdAt,courseWhatsappDueAt:new Date(Date.now()-60000)});
+ await Template.create({name:'course',language:'en',status:'APPROVED',components:[{type:'BODY',text:'Complete your course purchase.'},{type:'BUTTONS',buttons:[{type:'URL',text:'Get course',url:'https://joshspotmedia.com/course'}]}]});
+ const reminder=require('./courseReminder'),old=process.env.INBOX_WORKER_ENABLED;process.env.INBOX_WORKER_ENABLED='true';
+ try{
+  await reminder.tick();const msg=await Message.findOne({'courseReminder.invoice':invoice._id}).select('+providerPayload');assert.ok(msg);assert.equal(msg.status,'queued');assert.equal(msg.providerPayload.name,'course');
+  await reminder.tick();assert.equal(await Message.countDocuments({'courseReminder.invoice':invoice._id}),1);
+  await Invoice.updateOne({_id:invoice._id},{$set:{status:'paid'}});await assert.rejects(reminder.beforeSend(msg),/cancelled/);
+ }finally{if(old===undefined)delete process.env.INBOX_WORKER_ENABLED;else process.env.INBOX_WORKER_ENABLED=old;}
+});
+test('course reminders require consent, wait twenty minutes and respect newer checkouts and opt-outs',async()=>{
+ const c=await fixture();const contact=await Contact.findById(c.contact),r=require('./courseReminder');
+ const invoice=await Invoice.create({token:crypto.randomUUID(),amount:8000,product:'ads-course',status:'pending',customerPhone:contact.phone,createdAt:new Date(Date.now()-21*60000),courseWhatsappDueAt:new Date(Date.now()-60000)});
+ assert.equal(await r.eligible(invoice),false);invoice.courseWhatsappConsentAt=new Date();await invoice.save();assert.equal(await r.eligible(invoice),true);
+ invoice.courseWhatsappDueAt=new Date(Date.now()+60000);assert.equal(await r.eligible(invoice),false);invoice.courseWhatsappDueAt=new Date(Date.now()-60000);
+ await Contact.updateOne({_id:contact._id},{$set:{whatsappReminderOptOut:true}});assert.equal(await r.eligible(invoice),false);await Contact.updateOne({_id:contact._id},{$set:{whatsappReminderOptOut:false}});
+ await Invoice.create({token:crypto.randomUUID(),amount:8000,product:'ads-course',status:'pending',customerPhone:'+'+contact.phone});assert.equal(await r.eligible(invoice),false);
+});

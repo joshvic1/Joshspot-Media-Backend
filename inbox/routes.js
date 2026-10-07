@@ -131,7 +131,7 @@ router.post('/webhooks/retry', wrap(async (req, res) => {
   res.json({ retried: result.modifiedCount });
 }));
 router.get('/conversations', wrap(async (req, res) => {
-  const filter = { $and: [policy.visible(req.actor)] };
+  const filter = { $and: [policy.visible(req.actor), { deleting: { $ne: true } }] };
   const view = String(req.query.view || 'inbox');
   if (view === 'mine') filter.$and.push(req.actor.admin ? { _id: null } : { assignedTo: req.actor.id });
   if (view === 'unassigned') filter.$and.push({ assignedTo: null });

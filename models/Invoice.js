@@ -39,6 +39,10 @@ const invoiceSchema = new mongoose.Schema({
   },
   product: { type: String, default: "", index: true },
   reminderSentAt: Date,
+  courseWhatsappConsentAt: Date,
+  courseWhatsappDueAt: Date,
+  courseWhatsappQueuedAt: Date,
+  courseWhatsappError: String,
   reminderClaimedAt: Date,
   reminderCount: { type: Number, default: 0 },
   paymentCheckedAt: Date,
@@ -98,4 +102,5 @@ const invoiceSchema = new mongoose.Schema({
   },
 });
 
+invoiceSchema.index({courseWhatsappDueAt:1,courseWhatsappQueuedAt:1});
 module.exports = mongoose.model("Invoice", invoiceSchema);

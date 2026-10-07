@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 const ref = (model) => ({ type: Schema.Types.ObjectId, ref: model });
 const contact = new Schema({
   deleting: Boolean,
+  whatsappReminderOptOut: Boolean,
   phone: { type: String, required: true, unique: true }, name: { type: String, default: '' },
   email: { type: String, default: '' }, source: { type: String, default: 'WhatsApp' }, service: { type: String, default: '' },
   status: { type: String, default: 'lead', enum: ['lead', 'customer', 'inactive'] },
@@ -48,6 +49,7 @@ const message = new Schema({
 message.add({ mentions: [{ type: Schema.Types.ObjectId, ref: 'Staff' }], mentionsPending: Boolean, routingPhoneId: String, 'media.asset': ref('InboxMedia'), reactions: { type: Map, of: new Schema({ emoji: String, name: String, timestamp: Number, providerId: String, status: String }, { _id: false }) }, reactionLease: Date });
 message.index({ 'media.id': 1, 'media.asset': 1 });
 message.add({ automation: {version:Number, inputId:Schema.Types.ObjectId, configRevision:Number, handoff:Boolean, followup:Schema.Types.ObjectId, question:Schema.Types.Mixed, delivery:Schema.Types.Mixed, engineVersion:String} });
+message.add({ courseReminder: { invoice: Schema.Types.ObjectId } });
 message.index({ conversation: 1, createdAt: -1, _id: -1 });
 message.index({ conversation: 1, updatedAt: 1, _id: 1 });
 message.index({ mentionsPending: 1 });

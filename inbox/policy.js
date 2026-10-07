@@ -19,6 +19,11 @@ function signature(raw, header, secret) {
 function templateFields(template) {
   const fields = [];
   for (const component of template.components || []) {
+    // Fixed buttons are already defined in Meta's approved template and need no send parameters.
+    if(component.type==='BUTTONS'){
+      if(!Array.isArray(component.buttons)||!component.buttons.length||component.buttons.some(button=>!['URL','PHONE_NUMBER','QUICK_REPLY'].includes(button.type)||/\{\{/.test(JSON.stringify(button))))return null;
+      continue;
+    }
     if (!['HEADER', 'BODY', 'FOOTER'].includes(component.type) || (component.type === 'HEADER' && component.format !== 'TEXT')) return null;
     const variables = [...new Set([...String(component.text || '').matchAll(/\{\{([^}]+)\}\}/g)].map((match) => match[1]))];
     if (variables.some((v, i) => v !== String(i + 1))) return null;

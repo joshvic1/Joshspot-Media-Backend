@@ -34,6 +34,7 @@ const publicRecord = (record) => ({
   courseEmailSentAt: record.courseEmailSentAt,
   courseEmailStatus: record.courseEmailQueuedAt ? "Queued for delivery" : record.courseEmailSentAt ? "Sent" : "Not sent",
   createdAt: record.createdAt, paidAt: record.paidAt, reminderSentAt: record.reminderSentAt,
+  whatsappReminder: {consented:Boolean(record.courseWhatsappConsentAt),dueAt:record.courseWhatsappDueAt,queuedAt:record.courseWhatsappQueuedAt,error:record.courseWhatsappError},
   reminderCount: record.reminderCount || 0, paymentCheckedAt: record.paymentCheckedAt,
 });
 

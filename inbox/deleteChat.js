@@ -71,4 +71,13 @@ async function scrubDeleted(payload){
  }
  return copy;
 }
-module.exports={deleteChat,wasDeleted,redactPayload,scrubDeleted};
+let recovering=false,lastRecovery=0;
+async function recover(){
+ if(recovering||Date.now()-lastRecovery<30000)return;
+ recovering=true;lastRecovery=Date.now();
+ try{
+  const rows=await Conversation.find({deleting:true,updatedAt:{$lt:new Date(Date.now()-120000)}}).select('_id').limit(10).lean();
+  for(const row of rows)try{await deleteChat(row._id);}catch(error){if(error.status!==409)console.error('Inbox deletion retry deferred',String(row._id),error.name);}
+ }finally{recovering=false;}
+}
+module.exports={deleteChat,wasDeleted,redactPayload,scrubDeleted,recover};
