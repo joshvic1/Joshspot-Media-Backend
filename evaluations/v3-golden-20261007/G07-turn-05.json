@@ -1,0 +1,219 @@
+{
+  "customer": [
+    {
+      "_id": "G07-in-4",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "split equally then, 7 days",
+      "createdAt": "2026-10-07T09:17:35.745Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G07-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok and Facebook for me",
+      "createdAt": "2026-10-07T09:17:14.242Z"
+    },
+    {
+      "_id": "G07-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing Joshspot to manage both TikTok and Facebook ads for you! To get started, could you please let me know your total budget for running ads on these platforms and how long you want the campaigns to run? This will help me prepare a tailored quote that covers setup and management for both TikTok and Meta (Facebook & Instagram).",
+      "createdAt": "2026-10-07T09:17:20.369Z"
+    },
+    {
+      "_id": "G07-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "100k",
+      "createdAt": "2026-10-07T09:17:20.372Z"
+    },
+    {
+      "_id": "G07-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for sharing your budget of 100k. Could you please confirm the currency and specify the duration you want the TikTok and Facebook ads to run? This is important to prepare an accurate quote including setup and management for both platforms.",
+      "createdAt": "2026-10-07T09:17:25.258Z"
+    },
+    {
+      "_id": "G07-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "for everything both platforms including fees",
+      "createdAt": "2026-10-07T09:17:25.260Z"
+    },
+    {
+      "_id": "G07-out-2",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for confirming you want management for both TikTok and Facebook within a total budget of 100k including all fees. \n\nCould you please specify the duration you want the ads to run? For example, number of days or weeks. This helps me create an accurate quote covering setup and ad management on both platforms.",
+      "createdAt": "2026-10-07T09:17:30.368Z"
+    },
+    {
+      "_id": "G07-in-3",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "what would you suggest",
+      "createdAt": "2026-10-07T09:17:30.370Z"
+    },
+    {
+      "_id": "G07-out-3",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "For a total budget of 100k including all fees for managing both TikTok and Facebook ads, a practical recommendation would depend on how long you plan to run the campaigns.\n\nTypically, a balanced approach might be to allocate your budget over a few weeks—often 1 to 3 months—allowing enough time for us to test, optimize, and improve your ads' performance across both platforms.\n\nCould you tell me your preferred campaign duration or if you want me to suggest a specific time frame based on common effective periods? This will help me prepare a tailored quote including setup and management for TikTok and Meta (Facebook & Instagram).",
+      "createdAt": "2026-10-07T09:17:35.741Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517",
+    "seenMessageIds": [
+      "G07-in-0",
+      "G07-out-0",
+      "G07-in-1",
+      "G07-out-1",
+      "G07-in-2",
+      "G07-out-2",
+      "G07-in-3"
+    ],
+    "contextCharacters": 1927,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3997,
+    "output_tokens": 84,
+    "total_tokens": 4081,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0017332
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517/items?limit=100&order=asc&after=msg_6ac60e31b84081948ff132c6e6027c7f06deda3a70743517"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517/items/msg_06deda3a70743517006ac60e332e8881949ac1bef04adefd39"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517/items/msg_06deda3a70743517006ac60e33b0e48194ad54c107709c1d8c"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517/items?limit=100&order=asc&after=msg_6ac60e31b84081948ff132c6e6027c7f06deda3a70743517"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_06deda3a70743517006ac60e3301a48194a90ccd37eb595ab4",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3997,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 84,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 4081
+      },
+      "output": [
+        {
+          "id": "msg_06deda3a70743517006ac60e33b0e48194ad54c107709c1d8c",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for confirming. You want us to manage both TikTok and Facebook ads with a total budget of 100k split equally between the two platforms over 7 days, all inclusive of fees.\n\nI’ll prepare a detailed quote covering setup and management for TikTok and Meta (Facebook & Instagram) with this allocation. Just to confirm, is the currency Nigerian Naira (NGN) or a different one?"
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3405,
+      "openaiConversationId": "conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517"
+    },
+    "action": "reply",
+    "response": "Thanks for confirming. You want us to manage both TikTok and Facebook ads with a total budget of 100k split equally between the two platforms over 7 days, all inclusive of fees.\n\nI’ll prepare a detailed quote covering setup and management for TikTok and Meta (Facebook & Instagram) with this allocation. Just to confirm, is the currency Nigerian Naira (NGN) or a different one?",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 5174,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517",
+    "seenMessageIds": [
+      "G07-in-0",
+      "G07-out-0",
+      "G07-in-1",
+      "G07-out-1",
+      "G07-in-2",
+      "G07-out-2",
+      "G07-in-3",
+      "G07-out-3",
+      "G07-in-4"
+    ],
+    "contextCharacters": 2857,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

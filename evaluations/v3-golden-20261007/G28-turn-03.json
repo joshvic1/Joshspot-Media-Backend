@@ -1,0 +1,179 @@
+{
+  "customer": [
+    {
+      "_id": "G28-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "TikTok",
+      "createdAt": "2026-10-07T09:22:23.114Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G28-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "hi I need ads",
+      "createdAt": "2026-10-07T09:22:12.335Z"
+    },
+    {
+      "_id": "G28-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Hi! Great to hear you need ads. To get started, could you please tell me if you want us to set up your ad account so you can run ads yourself, or would you like us to fully manage and run the ad campaigns for you? Also, which platform are you interested in advertising on—TikTok, Facebook, Instagram, or Meta (Facebook + Instagram)?",
+      "createdAt": "2026-10-07T09:22:17.371Z"
+    },
+    {
+      "_id": "G28-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "run it for me",
+      "createdAt": "2026-10-07T09:22:17.376Z"
+    },
+    {
+      "_id": "G28-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for confirming you want us to run your ads for you. \n\nWhich platform would you like us to advertise on? Is it TikTok, Meta (Facebook and Instagram), or another platform? Also, could you please share your ad budget and how long you'd like the ads to run? This will help me provide you with a detailed quote.",
+      "createdAt": "2026-10-07T09:22:23.110Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60f45efdc8196bc79ed20e31118cd083116ce2ba3dc2d",
+    "seenMessageIds": [
+      "G28-in-0",
+      "G28-out-0",
+      "G28-in-1"
+    ],
+    "contextCharacters": 750,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3673,
+    "output_tokens": 52,
+    "total_tokens": 3725,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0015524
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f45efdc8196bc79ed20e31118cd083116ce2ba3dc2d"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60f45efdc8196bc79ed20e31118cd083116ce2ba3dc2d/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f45efdc8196bc79ed20e31118cd083116ce2ba3dc2d/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f45efdc8196bc79ed20e31118cd083116ce2ba3dc2d/items?limit=100&order=asc&after=msg_6ac60f5119588196aafe37b88ea675ac083116ce2ba3dc2d"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f45efdc8196bc79ed20e31118cd083116ce2ba3dc2d/items/msg_083116ce2ba3dc2d006ac60f5282e48196b99d8217092b8014"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f45efdc8196bc79ed20e31118cd083116ce2ba3dc2d/items/msg_083116ce2ba3dc2d006ac60f52dee4819682e3ab9ad86b3cea"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f45efdc8196bc79ed20e31118cd083116ce2ba3dc2d/items?limit=100&order=asc&after=msg_6ac60f5119588196aafe37b88ea675ac083116ce2ba3dc2d"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_083116ce2ba3dc2d006ac60f5238d08196bfb89fb8ad7b1e93",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3673,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 52,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3725
+      },
+      "output": [
+        {
+          "id": "msg_083116ce2ba3dc2d006ac60f52dee4819682e3ab9ad86b3cea",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for letting me know you want ads managed on TikTok.\n\nTo prepare a quote, could you please tell me your total ad budget and how many days you want the ads to run? This helps me suggest the right plan and pricing for you."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3097,
+      "openaiConversationId": "conv_6ac60f45efdc8196bc79ed20e31118cd083116ce2ba3dc2d"
+    },
+    "action": "reply",
+    "response": "Thanks for letting me know you want ads managed on TikTok.\n\nTo prepare a quote, could you please tell me your total ad budget and how many days you want the ads to run? This helps me suggest the right plan and pricing for you.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4890,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60f45efdc8196bc79ed20e31118cd083116ce2ba3dc2d",
+    "seenMessageIds": [
+      "G28-in-0",
+      "G28-out-0",
+      "G28-in-1",
+      "G28-out-1",
+      "G28-in-2"
+    ],
+    "contextCharacters": 1336,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

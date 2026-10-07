@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G15-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok for me",
+      "createdAt": "2026-10-07T09:19:12.974Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3378,
+    "output_tokens": 80,
+    "total_tokens": 3458,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0014792
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27/items?limit=100&order=asc&after=msg_6ac60e92f3bc819095237c0ab29547c50f3564c69b4c1d27"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27/items/msg_0f3564c69b4c1d27006ac60e9416248190b43d590bf7970e1f"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27/items/msg_0f3564c69b4c1d27006ac60e9461ec8190a9dc7d424b5f13a8"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27/items?limit=100&order=asc&after=msg_6ac60e92f3bc819095237c0ab29547c50f3564c69b4c1d27"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0f3564c69b4c1d27006ac60e93d72c8190b5f9a7bad5148d08",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3378,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 80,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3458
+      },
+      "output": [
+        {
+          "id": "msg_0f3564c69b4c1d27006ac60e9461ec8190a9dc7d424b5f13a8",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for choosing us to manage your TikTok ads!\n\nTo get started with TikTok ads management for you, could you please share your intended advertising budget and how long you'd like the campaign to run? This will help me provide you with a precise quote. \n\nAlso, do you already have a TikTok Ads account set up, or would you need us to handle that setup as well?"
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3188,
+      "openaiConversationId": "conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27"
+    },
+    "action": "reply",
+    "response": "Thanks for choosing us to manage your TikTok ads!\n\nTo get started with TikTok ads management for you, could you please share your intended advertising budget and how long you'd like the campaign to run? This will help me provide you with a precise quote. \n\nAlso, do you already have a TikTok Ads account set up, or would you need us to handle that setup as well?",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4886,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27",
+    "seenMessageIds": [
+      "G15-in-0"
+    ],
+    "contextCharacters": 149,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

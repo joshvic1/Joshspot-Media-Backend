@@ -1,0 +1,357 @@
+{
+  "customer": [
+    {
+      "_id": "G06-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "5k everyday",
+      "createdAt": "2026-10-07T09:16:56.539Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G06-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I need TikTok setup and you should still run it",
+      "createdAt": "2026-10-07T09:16:51.891Z"
+    },
+    {
+      "_id": "G06-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for confirming you want TikTok setup and for us to run the ads.\n\nTo prepare an accurate quote, could you please tell me:\n\n- Your total budget or daily ad spend you have in mind for TikTok ads?\n- The duration you want the ads to run (in days)?\n\nThis will help me present the best plan and pricing for you.",
+      "createdAt": "2026-10-07T09:16:56.538Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60e057d5481909df472165e128584076cf7ab00d7dbcf",
+    "seenMessageIds": [
+      "G06-in-0"
+    ],
+    "contextCharacters": 176,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 2,
+    "input_tokens": 7807,
+    "output_tokens": 59,
+    "total_tokens": 7866,
+    "cached_input_tokens": 3328,
+    "estimated_cost_usd": 0.0022188000000000004
+  },
+  "httpCalls": 11,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e057d5481909df472165e128584076cf7ab00d7dbcf"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60e057d5481909df472165e128584076cf7ab00d7dbcf/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e057d5481909df472165e128584076cf7ab00d7dbcf/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e057d5481909df472165e128584076cf7ab00d7dbcf/items?limit=100&order=asc&after=msg_6ac60e0a8ae48190a0359864223405fc076cf7ab00d7dbcf"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e057d5481909df472165e128584076cf7ab00d7dbcf/items/msg_076cf7ab00d7dbcf006ac60e0bada88190a2ed15fa54784755"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e057d5481909df472165e128584076cf7ab00d7dbcf/items/fc_076cf7ab00d7dbcf006ac60e0c0abc8190a8a21d9e7ffee857"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e057d5481909df472165e128584076cf7ab00d7dbcf/items/fc_076cf7ab00d7dbcf006ac60e0d234481908278b12c5b27f300"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e057d5481909df472165e128584076cf7ab00d7dbcf/items/msg_076cf7ab00d7dbcf006ac60e0de2148190890c2bbae125f6a7"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e057d5481909df472165e128584076cf7ab00d7dbcf/items?limit=100&order=asc&after=msg_6ac60e0a8ae48190a0359864223405fc076cf7ab00d7dbcf"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_076cf7ab00d7dbcf006ac60e0b673881909d0303fedf4c5d11",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3537,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 15,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3552
+      },
+      "output": [
+        {
+          "id": "fc_076cf7ab00d7dbcf006ac60e0c0abc8190a8a21d9e7ffee857",
+          "type": "function_call",
+          "status": "completed",
+          "arguments": "{}",
+          "call_id": "call_BzCoUORNWOGryWQaUzSMnjq5",
+          "name": "get_recommended_ads_plans"
+        }
+      ]
+    },
+    {
+      "id": "resp_076cf7ab00d7dbcf006ac60e0ce1dc8190b27515c42ee113aa",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 4270,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3328
+        },
+        "output_tokens": 44,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 4314
+      },
+      "output": [
+        {
+          "id": "msg_076cf7ab00d7dbcf006ac60e0de2148190890c2bbae125f6a7",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "You mentioned a daily ad spend of 5,000. Could you please confirm the number of days you want this TikTok ad campaign to run? That way, I can provide you with a precise quote."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [
+        {
+          "tool": "get_recommended_ads_plans",
+          "args": {},
+          "result": [
+            {
+              "key": "plan_10",
+              "title": "10 Days",
+              "duration": 10,
+              "amount": 135000,
+              "currency": "NGN",
+              "platforms": [
+                "tiktok",
+                "meta"
+              ],
+              "service": "ads_management",
+              "description": "",
+              "breakdown": {
+                "valid": true,
+                "errors": {},
+                "mode": "recommend",
+                "creativeMode": "testing",
+                "baseAdBudget": 100000,
+                "advertisingBudget": 100000,
+                "duration": 10,
+                "creativeCount": 2,
+                "baseManagementFee": 30000,
+                "durationMultiplier": 1.15,
+                "calculatedManagementFee": 35000,
+                "managementFee": 35000,
+                "creativeFee": 0,
+                "serviceFee": 35000,
+                "scriptSupportFee": 0,
+                "setupServiceFee": 0,
+                "addOnsTotal": 0,
+                "total": 135000,
+                "dailyBudget": 10000,
+                "dailyBudgetPerCreative": 10000,
+                "manualAdjustment": false,
+                "warnings": []
+              },
+              "quotable": true
+            },
+            {
+              "key": "plan_15",
+              "title": "15 Days",
+              "duration": 15,
+              "amount": 265000,
+              "currency": "NGN",
+              "platforms": [
+                "tiktok",
+                "meta"
+              ],
+              "service": "ads_management",
+              "description": "",
+              "breakdown": {
+                "valid": true,
+                "errors": {},
+                "mode": "recommend",
+                "creativeMode": "testing",
+                "baseAdBudget": 200000,
+                "advertisingBudget": 200000,
+                "duration": 15,
+                "creativeCount": 2,
+                "baseManagementFee": 50000,
+                "durationMultiplier": 1.3,
+                "calculatedManagementFee": 65000,
+                "managementFee": 65000,
+                "creativeFee": 0,
+                "serviceFee": 65000,
+                "scriptSupportFee": 0,
+                "setupServiceFee": 0,
+                "addOnsTotal": 0,
+                "total": 265000,
+                "dailyBudget": 13333.333333333334,
+                "dailyBudgetPerCreative": 13333.333333333334,
+                "manualAdjustment": false,
+                "warnings": []
+              },
+              "quotable": true
+            },
+            {
+              "key": "plan_30",
+              "title": "30 Days",
+              "duration": 30,
+              "amount": 415000,
+              "currency": "NGN",
+              "platforms": [
+                "tiktok",
+                "meta"
+              ],
+              "service": "ads_management",
+              "description": "",
+              "breakdown": {
+                "valid": true,
+                "errors": {},
+                "mode": "recommend",
+                "creativeMode": "testing",
+                "baseAdBudget": 300000,
+                "advertisingBudget": 300000,
+                "duration": 30,
+                "creativeCount": 2,
+                "baseManagementFee": 65000,
+                "durationMultiplier": 1.75,
+                "calculatedManagementFee": 115000,
+                "managementFee": 115000,
+                "creativeFee": 0,
+                "serviceFee": 115000,
+                "scriptSupportFee": 0,
+                "setupServiceFee": 0,
+                "addOnsTotal": 0,
+                "total": 415000,
+                "dailyBudget": 10000,
+                "dailyBudgetPerCreative": 10000,
+                "manualAdjustment": false,
+                "warnings": []
+              },
+              "quotable": true
+            },
+            {
+              "key": "plan_7",
+              "title": "7 Days",
+              "duration": 7,
+              "amount": 60000,
+              "currency": "NGN",
+              "platforms": [
+                "tiktok",
+                "meta"
+              ],
+              "service": "ads_management",
+              "description": "",
+              "breakdown": {
+                "valid": true,
+                "errors": {},
+                "mode": "recommend",
+                "creativeMode": "testing",
+                "baseAdBudget": 35000,
+                "advertisingBudget": 35000,
+                "duration": 7,
+                "creativeCount": 2,
+                "baseManagementFee": 25000,
+                "durationMultiplier": 1,
+                "calculatedManagementFee": 25000,
+                "managementFee": 25000,
+                "creativeFee": 0,
+                "serviceFee": 25000,
+                "scriptSupportFee": 0,
+                "setupServiceFee": 0,
+                "addOnsTotal": 0,
+                "total": 60000,
+                "dailyBudget": 5000,
+                "dailyBudgetPerCreative": 5000,
+                "manualAdjustment": false,
+                "warnings": []
+              },
+              "quotable": true
+            }
+          ]
+        }
+      ],
+      "latency": 4713,
+      "openaiConversationId": "conv_6ac60e057d5481909df472165e128584076cf7ab00d7dbcf"
+    },
+    "action": "reply",
+    "response": "You mentioned a daily ad spend of 5,000. Could you please confirm the number of days you want this TikTok ad campaign to run? That way, I can provide you with a precise quote.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 7215,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60e057d5481909df472165e128584076cf7ab00d7dbcf",
+    "seenMessageIds": [
+      "G06-in-0",
+      "G06-out-0",
+      "G06-in-1"
+    ],
+    "contextCharacters": 775,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

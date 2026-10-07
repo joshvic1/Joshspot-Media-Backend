@@ -1,0 +1,163 @@
+{
+  "at": "2026-10-06T20:43:57.869Z",
+  "baseCommit": "b5d818af1122ed67cdab42f355d83cd49eb7d13d",
+  "workingTreeHash": "42822e841c970fa1a2b0c121934f3b9556ee4013cb58589faeafebf865261d69",
+  "hashes": {
+    "inbox/ai/businessPack.js": "0cba1e8bfa132b4b2f1075809cff669d214d9120414f2cc21659169f30a226be",
+    "inbox/ai/config.js": "ada3d80671037965beb3d43dde2edf83d67ddcf780a892fe0be72959446e9f17",
+    "inbox/ai/course.js": "b0bad61b7a3a09bc96836f468cac671bf8dd99cfa6f9574f44649d10fda4b648",
+    "inbox/ai/defaults.js": "c3ff99788e0c871b3e4cb868fe45629a3c81f40e6a489d3d9db94da81a54f76c",
+    "inbox/ai/engine.js": "b2ab8bc6d7119f22fd9baef0936bdc2370f28ec954e62ca212dd378b805a5b5f",
+    "inbox/ai/engine.test.js": "d82b06cfdbc147c0c12fd7a70f386ec0210cdee7e38b87ab0359b466deacfc39",
+    "inbox/ai/errors.js": "45f7d718105ae712f892ddcc2ef80d3970e180f0e76a61177084e91ac55c263d",
+    "inbox/ai/followups.js": "8a3a33b9c9d79ab6e911ea20b357033129aa72d10f91736f2f7201b49e520ff9",
+    "inbox/ai/installBusinessPack.js": "88f4cb47176a4ecd6d4fd991095f6c2487ee0c9807c9d6895f8278689001464e",
+    "inbox/ai/invoices.js": "777636f86ff81efa0f98fa85e96fd44d845966d2ea75708f30e491657af3f06a",
+    "inbox/ai/masterKnowledge.js": "15cd9d88c2eb57e3ae57f7d24a58a91e78fb992837dd0f609c5a2f12278c6f06",
+    "inbox/ai/models.js": "2d5d4b884a7456f7aa13d22265e41f35551600e33a631c30b8198fc771ca231e",
+    "inbox/ai/payments.js": "c369df7bb24c7754aacf8f7a6886df2b643338700087517cd1c1ac5d03e80a7d",
+    "inbox/ai/pricing.js": "67a7ee4c9d1e43af16aef981f0a08944fae987b67926e437b31196433ec94d44",
+    "inbox/ai/privacy.js": "4defc24dd16e0de9815012032ec7218bd1ab1f923bc537232f5fd297336c7526",
+    "inbox/ai/provider.js": "ac5f364aabbd0c3eb4c48905db07b9bd3b463c29bfc73e9da8ae4b01fbd6352a",
+    "inbox/ai/qualification.js": "44e94d9152cb9a0747d5f5825038058f6f7b8198becac07e94428e7cc156319d",
+    "inbox/ai/README.md": "d91862c333bdde145561b15bf7baf2ba87f8c7c3c4fd263569bee0afc4644b8c",
+    "inbox/ai/responsePolicy.js": "db9b4de6cf2ce5fe81d75d9182b144151d0366993d9fd3a53f6330d7539bdf96",
+    "inbox/ai/routes.js": "559ef3efe0e5578617855b0377354a1c9352784b9bfb256df888e7be33a88fe9",
+    "inbox/ai/salesSummary.js": "d84d1e274961e1d271d7644d3706edd2b96f17083ecdd58286416098daa131c9",
+    "inbox/ai/structured.test.js": "a4024d6b3ee94229bea3f560111472f3de98efa9457a124333a5f45fc658d15d",
+    "inbox/ai/structuredEngine.js": "4c710e87b86a4ceae9aa3ce36936454269cc18c21bad4940ddfee27d42b1c1b7",
+    "inbox/ai/structuredKnowledge.js": "eeda899f2254412a2b9cac49cb9b64d62535cbf2f70dfc6696edfd6b28a3b522",
+    "inbox/ai/structuredMigration.js": "39e608f5a7d9f292413d1abb03217890b822a7ae0841506a2469e8e89180332a",
+    "inbox/ai/v2/architecture.test.js": "84ebcbd73c4fd382583f031428c7f95896a49cb743f283e740bb99c32f7d2094",
+    "inbox/ai/v2/authority.js": "ef4a60cb763cda3a067c59765d5fbffc34deeab7f2bd682e042e885e86846b03",
+    "inbox/ai/v2/budget.js": "fd9280cb8f709a2f1f8d733ca3848b2c8c663053bc20b8d8dc74f6a5d8f32d84",
+    "inbox/ai/v2/compose.js": "2359cbc43d34cc7affb77503427a3368d1697fa09095ece335152f04881231d3",
+    "inbox/ai/v2/consent.js": "0a9325acd5a09369409d6a4e51f270c22bb47e7b8b2b6082b21572690f240215",
+    "inbox/ai/v2/context.js": "0155adc6774f96bae1473e256d2d0ac0a4d8868dec32ded0a0f51029a7aae6f7",
+    "inbox/ai/v2/contracts.js": "ce2f6f1a3eac4a1d50c1c378684005ab38d6948a6f90dd4fdef30bcaf91d820f",
+    "inbox/ai/v2/core.test.js": "40ac885f1260d20d5f8ae0dace0d7167b82e6d1eba1806ec2248bcdf26786509",
+    "inbox/ai/v2/delivery.js": "54d86c74b06ab0b5ac31ce8b539d1fc6912b6880af7ffcafc1dd3b166b1a4997",
+    "inbox/ai/v2/fixtures.js": "15b450988a44572cbb46fd70a1c1ff7e2f8bc5548ab2a629824e77421ead83bf",
+    "inbox/ai/v2/index.js": "3a7366e9d6e1ecc8255a53f7478645d181802653f6dd88d6735baac52e3f9644",
+    "inbox/ai/v2/integration.test.js": "1f0ce6a28669c414ca7948d00aec182e81b4e3a009647db67d6848dc9b7c05ff",
+    "inbox/ai/v2/knowledge.js": "31584d2e809f09704d667f3157dfc39beefd6ac7ccfda56839db065acd66b92f",
+    "inbox/ai/v2/ledger.js": "b0a470aef7080ffcc7d9de1cd9ef6272eb90c4425c281305927a5565ae68fc6e",
+    "inbox/ai/v2/model.js": "8a946ac833c2a3f8ba1bff2f94daf93b67bb64cb93b6d4f3f3a22b33bb967e4a",
+    "inbox/ai/v2/planner.js": "baff0ca9d1965d52ec667529cf44f229bb23a5ad27c96926d93c8711d544aca5",
+    "inbox/ai/v2/privacy.js": "4092417b4b2bf83650c71d1001c2a2c861c58ba85cf1c6e33baf1b02c7d8cd45",
+    "inbox/ai/v2/README.md": "0324c04287c9943ce2abfec3ab71571ea03d71b71206a90682cad0a7ed3f4e9b",
+    "inbox/ai/v2/runtime.js": "9a566a1b7d482c4fb857d4fad00cfc50e69e83ad2219035d326a5631884fd094",
+    "inbox/ai/v2/shadow.js": "3043eff4d58e4ca1d253d00db85fe2925fd280d776f576880f4262d9db92e2ad",
+    "inbox/ai/v2/state.js": "cd617fca0ce4a20801776c116ed135a0cce1ff10c2d2ae1d56bac84bca927d98",
+    "inbox/ai/vendor/adsPricingConfig.mjs": "75f07e07a7b9d58fa9fb14547aed26d7aebaee1b2da2bc52284df2bba12736e8",
+    "inbox/ai/worker.js": "f70d575773d936825b67349e62217b1cbf391eba9d0f10bd1415e29b4e1fe00f",
+    "inbox/service.js": "68a697d442a0ed09d3cecf3d98103c76edbce028f987bb553492b06a41fc2eec",
+    "inbox/models.js": "0cd4d7a3d0c83513ce08a0115c573267996a25ae7c41b562e87f1f4466947e9c",
+    "inbox/createIndexes.js": "7682ce2466a3cc0bd153dca96a1a1f6380d3221b4eb8383e7bd2a3b91de49817",
+    "inbox/deleteChat.js": "fd3b7c54f283537e4e76b31a6475c603a7dd5f26897e4f9d61e4e39c7a340021",
+    "package.json": "936995eb9d3ddf29674382c11ebfb6a7249bc2f39bedbade2d3a7b23088deda4",
+    "evaluations/v2-adversarial/adjudicated-results.json": "191fa3faf60a5c45a380b2f6bb7860c55ebe723db401b76a56c7a19636ac0175",
+    "evaluations/v2-adversarial/AUDIT.txt": "b9ab9c41b501420e24c6eabf22100c96b4d736516d18f9aae6d877304a0d1830",
+    "evaluations/v2-adversarial/dataset.cjs": "40c08574c817f8a2d080afdfa8d58255dc971838d0a787d148e1384e5b5edd6d",
+    "evaluations/v2-adversarial/dataset.json": "04518828cf851aeddfb1ba077354bb0e0fc549acdafab4a98ec7fa237412051e",
+    "evaluations/v2-adversarial/EVALUATION-SUMMARY.txt": "5485203ce6278f7c2d174a50ba7ab1e1998da91275ec9b062b4f236d2953024a",
+    "evaluations/v2-adversarial/grade.cjs": "83516111b55ac5a3893f1c1e97ae88c387c21bf676eb0257e0d0482f89146932",
+    "evaluations/v2-adversarial/offline-results.json": "7b9706055cf82b73a12d66f5c1d8d64023ae11d8dccba6d80a4183cc2b4f9add",
+    "evaluations/v2-adversarial/offline.cjs": "d054f2a40def41fa7e3b863085c212ad528da597a3b96ef0b5d82184970710fb",
+    "evaluations/v2-adversarial/results-gpt-4.1-mini-comparison.json": "a3bbf5e5343c3289295b59b827ee60f4e388e826aaf911296e25284f60b94741",
+    "evaluations/v2-adversarial/results-gpt-4.1-paced.json": "32d90df8ad182591fc0df7b48825f1946dbd0fbe35ae1dd06bee3184bde16839",
+    "evaluations/v2-adversarial/results-gpt-4.1-serial.json": "0326a6a3fbc422b5986457c4765559a20f2a1bf76a750535d7e8af7a4ffe9de0",
+    "evaluations/v2-adversarial/results-gpt-4.1.json": "b15cd90e2a17a4f46e810340eb242f8fb6f0b8249a213e821d8a536eaefdfcfc",
+    "evaluations/v2-adversarial/run.cjs": "57b89faf46da39d6b9ae74fe9c28e7d6c62088fcd9ce25881c1ec6aa5da61dcc",
+    "evaluations/v2-adversarial/summarize.cjs": "ce13b7b8523d7c21ea2559d86110c2e679672e7b7c1fe34da998c5aa990157f7"
+  },
+  "catalogueHash": "72a273156d0ce856810184a4133a826ae9a4f57534038ad62c60f447dcdae8bf",
+  "configRevision": 30,
+  "catalogueCount": 84,
+  "modelSettings": {
+    "database": "",
+    "localEnv": "gpt-4.1-mini"
+  },
+  "modelEvidence": [
+    {
+      "mode": "LIVE",
+      "model": "gpt-4.1-mini",
+      "configRevision": 30,
+      "createdAt": "2026-10-06T19:44:26.730Z"
+    },
+    {
+      "mode": "LIVE",
+      "model": "gpt-4.1-mini",
+      "configRevision": 30,
+      "createdAt": "2026-10-06T19:44:02.168Z"
+    },
+    {
+      "mode": "LIVE",
+      "model": "gpt-4.1-mini",
+      "configRevision": 30,
+      "createdAt": "2026-10-06T19:42:36.803Z"
+    },
+    {
+      "mode": "LIVE",
+      "model": "gpt-4.1-mini",
+      "configRevision": 30,
+      "createdAt": "2026-10-06T19:42:05.025Z"
+    },
+    {
+      "mode": "LIVE",
+      "model": "gpt-4.1-mini",
+      "configRevision": 30,
+      "createdAt": "2026-10-06T19:42:02.277Z"
+    },
+    {
+      "mode": "LIVE",
+      "model": "gpt-4.1-mini",
+      "configRevision": 30,
+      "createdAt": "2026-10-06T19:41:36.791Z"
+    },
+    {
+      "mode": "LIVE",
+      "model": "gpt-4.1-mini",
+      "configRevision": 30,
+      "createdAt": "2026-10-06T19:41:26.342Z"
+    },
+    {
+      "mode": "LIVE",
+      "model": "gpt-4.1-mini",
+      "configRevision": 30,
+      "createdAt": "2026-10-06T19:40:47.064Z"
+    },
+    {
+      "mode": "LIVE",
+      "model": "gpt-4.1-mini",
+      "configRevision": 30,
+      "createdAt": "2026-10-06T19:37:52.224Z"
+    },
+    {
+      "mode": "LIVE",
+      "model": "gpt-4.1-mini",
+      "configRevision": 30,
+      "createdAt": "2026-10-06T19:34:01.863Z"
+    }
+  ],
+  "limits": {
+    "history": 6,
+    "responseCharacters": 1500,
+    "modelOutputTokens": 6000,
+    "turnCharacters": 24000,
+    "modelTimeoutMs": 22000,
+    "totalDeadlineMs": 65000
+  },
+  "live": {
+    "databaseMode": "LIVE",
+    "localV2LiveGate": "unset"
+  },
+  "readCommands": [
+    "find",
+    "find",
+    "find",
+    "endSessions"
+  ],
+  "isolation": "Runner uses saved snapshot, loads only OpenAI key; no MongoDB connection or side-effect executors. Financial actions and deliveries simulated.",
+  "oldResults": "All old evidence included in hash manifest; new output directory only."
+}

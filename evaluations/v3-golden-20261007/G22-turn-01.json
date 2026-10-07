@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G22-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok 5k daily for 7 days",
+      "createdAt": "2026-10-07T09:20:54.314Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3384,
+    "output_tokens": 96,
+    "total_tokens": 3480,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0015072
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad/items?limit=100&order=asc&after=msg_6ac60ef8572c81969cb2d64f6752c46502654f4b06bd94ad"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad/items/msg_02654f4b06bd94ad006ac60ef991e881969e6c76e4abec9afd"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad/items/msg_02654f4b06bd94ad006ac60ef9f4608196966c1680a66c05fd"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad/items?limit=100&order=asc&after=msg_6ac60ef8572c81969cb2d64f6752c46502654f4b06bd94ad"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_02654f4b06bd94ad006ac60ef96d1881968b4d98e69d53d8b4",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3384,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 96,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3480
+      },
+      "output": [
+        {
+          "id": "msg_02654f4b06bd94ad006ac60ef9f4608196966c1680a66c05fd",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for choosing TikTok ads management with a daily budget of 5,000 for 7 days.\n\nI will prepare a quote for TikTok ads management for that budget and duration. Just to confirm, is this amount the total daily ad spend you want allocated, excluding setup fees? Also, do you already have a TikTok ad account, or do you need us to set that up for you? \n\nLet me know so I can provide the most accurate quote."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3268,
+      "openaiConversationId": "conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad"
+    },
+    "action": "reply",
+    "response": "Thanks for choosing TikTok ads management with a daily budget of 5,000 for 7 days.\n\nI will prepare a quote for TikTok ads management for that budget and duration. Just to confirm, is this amount the total daily ad spend you want allocated, excluding setup fees? Also, do you already have a TikTok ad account, or do you need us to set that up for you? \n\nLet me know so I can provide the most accurate quote.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 5055,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad",
+    "seenMessageIds": [
+      "G22-in-0"
+    ],
+    "contextCharacters": 162,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

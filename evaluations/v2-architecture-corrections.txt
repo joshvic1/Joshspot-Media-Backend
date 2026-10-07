@@ -1,0 +1,62 @@
+V2 ARCHITECTURAL CORRECTIONS — LOCAL IMPLEMENTATION
+Date: 2026-10-06
+
+Scope
+Implemented the supplied corrections through the available portion of Fix 13.
+No deployment, production database writes, model API calls, LIVE-mode change or price
+changes. V1 and its rollback path remain. Frozen v2-adversarial evidence is unchanged.
+
+Requirement mapping
+1. consent.js: scoped, ordered, evidenced events; negative decisions persist; current
+   effective consent checked again by the trusted invoice executor.
+2. state.js: explicit item relationships; no many-by-many expansion; legacy ambiguity
+   remains unresolved; independent item facts and quotes.
+3. budget.js/planner.js: typed daily/total/cap/package/counteroffer; existing calculator
+   remains authoritative; caps cannot authorize an invoice exceeding the cap.
+4–6. ledger.js/index.js/planner.js: full request ledger, semantic retrieval every text
+   turn after state merge, answer composition before invoice execution, complete coverage
+   validation with bounded repair and explicit handoff on validation failure.
+7–9. authority.js/compose.js/model.js: backend-issued financial facts; scoped policy
+   defaults/validated KB overrides; segment-level STRICT; independent typed grounding.
+   Invoice destinations come from the existing invoice/payment executor, never the model.
+10. state.js: dependency invalidation, aggregate invalidation, one compatibility
+    projection; advertising/course budgets remain attached to their purchase path.
+11. context.js/state.js: actually sent question anchors, options, answer evidence and
+    active/answered state; typed item and budget answers also close the sent question.
+12. delivery.js + minimal shared worker/outbox hooks: prepared versus sent stages;
+    stale-selection effects ignored; failed effects withdrawn; paid truth preserved.
+13. privacy.js: span redaction, no whole-message password-keyword wiping; complete
+    stored inbound text and explicit oversized-turn handling instead of clipping.
+
+Verification
+node --test inbox/ai/v2/core.test.js inbox/ai/v2/architecture.test.js
+  inbox/ai/v2/integration.test.js inbox/ai/engine.test.js inbox/ai/structured.test.js
+Result: 122 passed, 0 failed (70 V2, 52 V1).
+
+Focused inbox/integration.test.js selection:
+AI LIVE delivers normally; invoice reuse; worker lease; out-of-order status;
+concurrent callbacks; old attempt callbacks; approving a DRAFT reply.
+Result: 7 passed, 0 failed.
+
+Tests use deterministic interpretation/grounding doubles and ephemeral MongoDB.
+They verify architectural invariants, not real-model paraphrase accuracy. No frozen
+evaluation score was rewritten and no new model performance percentage is asserted.
+
+Remaining validation / limitations
+- Real-model replay is outstanding; the last evaluation exhausted API credit.
+- Grounding is independent model-based semantic classification, followed by deterministic
+  type/source/coverage enforcement. Incorrect semantic classification remains possible.
+- Credential-shaped redaction is not guaranteed to detect arbitrary unlabeled secrets.
+- The existing 15-day catalogue/calculator mismatch is not silently repriced. Selection
+  cannot generate an invoice with a fabricated breakdown; commercial data needs review.
+- Full Inbox suite was not rerun; the targeted integration checks cover touched paths.
+  The earlier audit recorded an unrelated CSS mention-access expectation mismatch.
+- The supplied attachment stops at "Do not silently truncate" in Fix 13. Any missing
+  continuation has not been implemented or certified.
+
+Operational note
+Do not enable V2 LIVE on the strength of these deterministic tests alone. Run the frozen
+adversarial scenarios into NEW result files after API availability is restored, review
+the resulting natural responses, then validate DRAFT. Deployment remains unauthorized.
+
+File-by-file operational documentation: inbox/ai/v2/README.md

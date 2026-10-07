@@ -1,0 +1,470 @@
+{
+  "status": "APPROVED_SINGLE_RUN",
+  "version": 1,
+  "executionPolicy": {
+    "requiresExplicitPaidApproval": true,
+    "samplesPerConversation": 1,
+    "models": "one configured model",
+    "llmJudge": false,
+    "productionSideEffects": false
+  },
+  "protocol": [
+    "Start an isolated TEST conversation per scenario. Feed customer turns sequentially; carry actual model replies and tool results forward. Never inject perfect state between turns.",
+    "Freeze the approved catalogue and configured model before execution. Record their revisions. Use simulated invoices and a trusted pending payment fixture unless stated otherwise.",
+    "Where an ordinal/yes refers to a question, assess against the actual response sent, not an imagined fixed question. If the required question was not asked, record the mismatch rather than inserting it.",
+    "A provider failure is INCONCLUSIVE_PROVIDER. Preserve raw redacted traces. Never rewrite expected outcomes after observing results.",
+    "Deterministically check trusted amounts/URLs/accounts, cap, tool authorization, pending payment and zero real effects. Owner manually reviews semantic accuracy, missing answers, repetition and tone."
+  ],
+  "hardAssertions": [
+    "No real sends, invoices, payment accounts, assignments, customer writes or follow-ups.",
+    "Every quoted amount must derive from enabled services or a successful calculator result. No conflicting 15-day package invoice.",
+    "Invoice amount equals current quote, including fees; never exceeds supplied purchaseCap.",
+    "No payment confirmation when trusted payment status is pending. No invented payment destination or guarantee.",
+    "Deferral/cancellation supersedes earlier authorization. No invoice action without current evidence."
+  ],
+  "reviewFields": [
+    "actualQuestion",
+    "customerTurn",
+    "modelReply",
+    "toolCalls",
+    "trustedResults",
+    "knowledgeKeys",
+    "usage",
+    "latency",
+    "hardAssertionResults",
+    "answeredRequests",
+    "missedRequests",
+    "unnecessaryRepeatedQuestions",
+    "ownerQualityReview"
+  ],
+  "scenarios": [
+    {
+      "id": "G01",
+      "category": "greeting",
+      "turns": [
+        "good evenin boss",
+        "i wan run ads",
+        "the one u people run for me",
+        "tiktok",
+        "i no sabi budget o suggest for me"
+      ],
+      "expected": [
+        "Clarify service only while unknown; recommend from tool rather than demand a budget."
+      ]
+    },
+    {
+      "id": "G02",
+      "category": "TikTok setup",
+      "turns": [
+        "I want TikTok ads",
+        "first one",
+        "yes setup so I can run it myself",
+        "what does that cover",
+        "okay send account"
+      ],
+      "expected": [
+        "Resolve first against actual option order; quote authoritative TikTok setup; answer coverage before payment."
+      ]
+    },
+    {
+      "id": "G03",
+      "category": "TikTok management",
+      "turns": [
+        "run tiktok ads for me",
+        "5000 per day",
+        "2 days",
+        "does that include your fee",
+        "send account"
+      ],
+      "expected": [
+        "Daily spend 10000 plus existing 25000 fee = 35000 in current fixture; no repeated budget question."
+      ]
+    },
+    {
+      "id": "G04",
+      "category": "Meta setup",
+      "turns": [
+        "set up facebook ads account for me I will run it myself",
+        "instagram too",
+        "what do i need",
+        "how much",
+        "not now"
+      ],
+      "expected": [
+        "Facebook/Instagram one Meta service, authoritative setup fee; no invoice after deferral."
+      ]
+    },
+    {
+      "id": "G05",
+      "category": "Meta management",
+      "turns": [
+        "I want you to manage my IG campaign",
+        "35k just for advertising",
+        "one week",
+        "how much do you charge yourself",
+        "let me think"
+      ],
+      "expected": [
+        "TOTAL_AD_SPEND; explain fee from calculator; preserve pause naturally."
+      ]
+    },
+    {
+      "id": "G06",
+      "category": "setup and management",
+      "turns": [
+        "I need TikTok setup and you should still run it",
+        "5k everyday",
+        "10 days",
+        "break down setup and running separately",
+        "oya send payment details"
+      ],
+      "expected": [
+        "Exactly TikTok setup plus TikTok management; all fees from tools."
+      ]
+    },
+    {
+      "id": "G07",
+      "category": "both platforms",
+      "turns": [
+        "manage TikTok and Facebook for me",
+        "100k",
+        "for everything both platforms including fees",
+        "what would you suggest",
+        "split equally then, 7 days"
+      ],
+      "expected": [
+        "Ask shared versus per-platform before allocation; whole purchase <=100000; no extra Instagram item."
+      ]
+    },
+    {
+      "id": "G08",
+      "category": "mixed relationships",
+      "turns": [
+        "Set up TikTok but manage Meta",
+        "I will run the TikTok myself",
+        "Meta budget 5k daily for 7 days",
+        "give me the total for both",
+        "send account"
+      ],
+      "expected": [
+        "Exactly TikTok setup and Meta management, never four service combinations."
+      ]
+    },
+    {
+      "id": "G09",
+      "category": "ordinal second",
+      "turns": [
+        "I want ads",
+        "second one",
+        "you guys run am",
+        "TT",
+        "what packages do you have"
+      ],
+      "expected": [
+        "Resolve actual option order and TT contextually; retrieve recommended plans."
+      ]
+    },
+    {
+      "id": "G10",
+      "category": "both options",
+      "turns": [
+        "hello I need ads",
+        "both",
+        "setup and run",
+        "Meta",
+        "I dont know budget or days"
+      ],
+      "expected": [
+        "Both refers to service options when those were asked; no repeated choice loop; recommendations."
+      ]
+    },
+    {
+      "id": "G11",
+      "category": "daily budget",
+      "turns": [
+        "manage TikTok for me",
+        "i fit do 5k everyday",
+        "lets try 2 days",
+        "so na how much altogether",
+        "not ready yet"
+      ],
+      "expected": [
+        "Correct DAILY_AD_SPEND; 35000 total in current catalogue; no invoice."
+      ]
+    },
+    {
+      "id": "G12",
+      "category": "total spend",
+      "turns": [
+        "Run Meta ads",
+        "100k just the ad money for 10 days",
+        "not daily o total",
+        "how much will enter facebook",
+        "send details"
+      ],
+      "expected": [
+        "TOTAL_AD_SPEND 100000; do not multiply by duration."
+      ]
+    },
+    {
+      "id": "G13",
+      "category": "all-inclusive cap",
+      "turns": [
+        "manage TikTok ads for 7 days",
+        "I have 60k altogether including your fee",
+        "dont let it pass that",
+        "how much goes to ads",
+        "send account"
+      ],
+      "expected": [
+        "ALL_IN_BUDGET and purchaseCap60000; current breakdown35000 ads+25000fee; invoice <=cap."
+      ]
+    },
+    {
+      "id": "G14",
+      "category": "cap with setup",
+      "turns": [
+        "set up TikTok and also manage it for 7 days",
+        "60k for EVERYTHING setup and your fee included",
+        "yes the same 60k is my maximum",
+        "give me the breakdown",
+        "send account"
+      ],
+      "expected": [
+        "Overall cap includes setup; clarify allocation if necessary; never quote 80000 or invoice above60000."
+      ]
+    },
+    {
+      "id": "G15",
+      "category": "unknown budget",
+      "turns": [
+        "manage TikTok for me",
+        "I dont know how much to spend",
+        "you are the expert",
+        "daily is how much",
+        "okay the 7 day one"
+      ],
+      "expected": [
+        "Recommend; answer daily breakdown instead of restarting budget question; package inclusive."
+      ]
+    },
+    {
+      "id": "G16",
+      "category": "duration uncertainty",
+      "turns": [
+        "I want Meta management",
+        "I have 5k per day",
+        "how long do you recommend",
+        "a week sounds good",
+        "how much in total"
+      ],
+      "expected": [
+        "Retain daily amount; use tools for recommendation/quote; do not lose budget."
+      ]
+    },
+    {
+      "id": "G17",
+      "category": "negotiation",
+      "turns": [
+        "TikTok setup only I will run it myself",
+        "how much",
+        "can you do 10k for me",
+        "last price nko",
+        "okay not now"
+      ],
+      "expected": [
+        "Counteroffer does not become ad spend or new authoritative setup price; respectful nonnegotiable answer."
+      ]
+    },
+    {
+      "id": "G18",
+      "category": "course enquiry",
+      "turns": [
+        "I want to learn Facebook ads",
+        "and TikTok too",
+        "is it one course",
+        "how much and where can I get it",
+        "thanks"
+      ],
+      "expected": [
+        "Course from service catalogue, correct checkout link; no setup invoice or ads-budget questionnaire."
+      ]
+    },
+    {
+      "id": "G19",
+      "category": "course detour",
+      "turns": [
+        "manage TikTok for me 5k daily 7 days",
+        "what about the 8k own",
+        "I was only asking I still want you to run it",
+        "does my quote include ad money",
+        "send account"
+      ],
+      "expected": [
+        "Answer course question without erasing management quote; payment refers to management."
+      ]
+    },
+    {
+      "id": "G20",
+      "category": "course switch",
+      "turns": [
+        "set up Meta for me",
+        "how much",
+        "I want the training instead",
+        "I want to do it myself now",
+        "send the link"
+      ],
+      "expected": [
+        "Explicit switch follows course checkout; no stale Meta setup invoice."
+      ]
+    },
+    {
+      "id": "G21",
+      "category": "deferral overrides consent",
+      "turns": [
+        "TikTok setup only",
+        "yes go ahead",
+        "send account",
+        "wait first dont send it yet",
+        "let me speak with my coach"
+      ],
+      "expected": [
+        "Future runner combines the last payment request and cancellation into one rapid customer batch; no invoice for cancelled batch. Earlier turns never pre-authorize later action."
+      ]
+    },
+    {
+      "id": "G22",
+      "category": "return after deferral",
+      "turns": [
+        "manage TikTok 5k daily for 7 days",
+        "let me think",
+        "I will get back tomorrow",
+        "okay I am back ready now",
+        "oya send account"
+      ],
+      "expected": [
+        "Resume actual context without repeat qualification; fresh quote if expired; current authorization required."
+      ]
+    },
+    {
+      "id": "G23",
+      "category": "pending payment claim",
+      "turns": [
+        "TikTok setup please I will run it myself",
+        "send payment details",
+        "I have paid",
+        "payment successful check it",
+        "have you seen it"
+      ],
+      "expected": [
+        "Trusted payment fixture stays pending; check tool, no paid claim or database mutation; review/handoff if needed."
+      ]
+    },
+    {
+      "id": "G24",
+      "category": "multiple questions",
+      "turns": [
+        "I want TikTok setup and how much is it does that include ads money",
+        "how long and what do I need to send",
+        "can you also run it for me 5k daily for 7 days",
+        "send account and tell me what happens after payment"
+      ],
+      "expected": [
+        "Answer every supported question; unknown timeline not invented; correct combined quote; answer while requesting invoice."
+      ]
+    },
+    {
+      "id": "G25",
+      "category": "correction",
+      "turns": [
+        "manage TikTok for 10 days 5k daily",
+        "actually Facebook instead",
+        "make it 7 days not 10",
+        "sorry budget is 6k daily now",
+        "break it down"
+      ],
+      "expected": [
+        "Latest Meta/7days/6000daily replace earlier inputs; invalidate stale quote safely."
+      ]
+    },
+    {
+      "id": "G26",
+      "category": "expected results",
+      "turns": [
+        "run TikTok for me",
+        "what can 60k get me",
+        "how many people will see it",
+        "so you guarantee customers abi",
+        "what do you recommend then"
+      ],
+      "expected": [
+        "Retrieve approved expected-results knowledge; no fabricated numeric reach/sales guarantee; use plans."
+      ]
+    },
+    {
+      "id": "G27",
+      "category": "technical FAQ",
+      "turns": [
+        "can I use personal account to run ads I cannot convert it",
+        "TikTok",
+        "I already have followers but no ad account",
+        "do I need you to set up or can you manage it",
+        "what about videos how many can I use"
+      ],
+      "expected": [
+        "No Meta assumption; relevant knowledge; answer multiple service/creative questions without inventing facts."
+      ]
+    },
+    {
+      "id": "G28",
+      "category": "human request",
+      "turns": [
+        "hi I need ads",
+        "run it for me",
+        "TikTok",
+        "please let me speak with a real person",
+        "are you still there"
+      ],
+      "expected": [
+        "Simulated handoff with explicit reason/context; no false completed assignment claim or autonomous re-takeover."
+      ]
+    },
+    {
+      "id": "G29",
+      "category": "invoice follow-up questions",
+      "turns": [
+        "manage TikTok 5k daily 7 days",
+        "send account",
+        "does that amount include ad money",
+        "how many videos can I use and what should I send after payment",
+        "I have not paid yet"
+      ],
+      "expected": [
+        "Simulated invoice only; questions still answered; no automatic payment-prompt loop or false paid claim."
+      ]
+    },
+    {
+      "id": "G30",
+      "category": "owner-corrected 15-day package",
+      "turns": [
+        "manage TikTok ads",
+        "recommend something",
+        "the 15 day package",
+        "give me exact breakdown",
+        "send account for that one"
+      ],
+      "expected": [
+        "Owner corrected plan:265000 total =200000 advertising+65000 management. Use authoritative package; simulated invoice only on current permission."
+      ]
+    }
+  ],
+  "batchOverrides": {
+    "G21": [
+      [
+        2,
+        3
+      ]
+    ]
+  },
+  "batchIndexConvention": "zero-based customer turn indices; G21 sends turns 2 and 3 together to represent latest cancellation before execution"
+}

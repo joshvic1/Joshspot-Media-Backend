@@ -1,0 +1,199 @@
+{
+  "customer": [
+    {
+      "_id": "G10-in-3",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "Meta",
+      "createdAt": "2026-10-07T09:18:23.457Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G10-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "hello I need ads",
+      "createdAt": "2026-10-07T09:17:59.643Z"
+    },
+    {
+      "_id": "G10-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Hello! Thanks for reaching out about ads. To help you best, would you like us to set up your ad accounts and guide you to run ads yourself, or do you want Joshspot Media to manage and run the ad campaigns for you? Also, which platform(s) are you interested in? TikTok, Meta (Facebook & Instagram), or both?",
+      "createdAt": "2026-10-07T09:18:13.041Z"
+    },
+    {
+      "_id": "G10-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "both",
+      "createdAt": "2026-10-07T09:18:13.043Z"
+    },
+    {
+      "_id": "G10-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for confirming you want ads on both TikTok and Meta (Facebook & Instagram).\n\nNext, do you want Joshspot Media to handle running and managing the ad campaigns for you, or do you prefer we set up your accounts and guide you so you can run the ads yourself?\n\nAlso, could you share your budget and how long you want the ads to run? This helps me provide the right quote or recommendation.",
+      "createdAt": "2026-10-07T09:18:17.873Z"
+    },
+    {
+      "_id": "G10-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "setup and run",
+      "createdAt": "2026-10-07T09:18:17.875Z"
+    },
+    {
+      "_id": "G10-out-2",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for confirming you want us to set up your accounts and also run the ads on both TikTok and Meta.\n\nCould you please share your advertising budget and the duration you want the ads to run? This will help me provide you with an accurate quote and plan.",
+      "createdAt": "2026-10-07T09:18:23.455Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60e4986408190b7d9761c4fe1205a0588915b31d2b4d8",
+    "seenMessageIds": [
+      "G10-in-0",
+      "G10-out-0",
+      "G10-in-1",
+      "G10-out-1",
+      "G10-in-2"
+    ],
+    "contextCharacters": 1393,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3810,
+    "output_tokens": 44,
+    "total_tokens": 3854,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0015944000000000002
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e4986408190b7d9761c4fe1205a0588915b31d2b4d8"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60e4986408190b7d9761c4fe1205a0588915b31d2b4d8/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e4986408190b7d9761c4fe1205a0588915b31d2b4d8/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e4986408190b7d9761c4fe1205a0588915b31d2b4d8/items?limit=100&order=asc&after=msg_6ac60e6165988190b9ba489c11dd16b20588915b31d2b4d8"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e4986408190b7d9761c4fe1205a0588915b31d2b4d8/items/msg_0588915b31d2b4d8006ac60e628de08190a058e2c39b9159cd"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e4986408190b7d9761c4fe1205a0588915b31d2b4d8/items/msg_0588915b31d2b4d8006ac60e62f3908190957c6bc62c007f2d"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e4986408190b7d9761c4fe1205a0588915b31d2b4d8/items?limit=100&order=asc&after=msg_6ac60e6165988190b9ba489c11dd16b20588915b31d2b4d8"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0588915b31d2b4d8006ac60e6244708190b4c248eded5b30b2",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3810,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 44,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3854
+      },
+      "output": [
+        {
+          "id": "msg_0588915b31d2b4d8006ac60e62f3908190957c6bc62c007f2d",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for clarifying you want us to set up and run ads on Meta only.\n\nTo provide a proper quote and plan, could you please share your advertising budget and how long you want the campaign to run?"
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3013,
+      "openaiConversationId": "conv_6ac60e4986408190b7d9761c4fe1205a0588915b31d2b4d8"
+    },
+    "action": "reply",
+    "response": "Thanks for clarifying you want us to set up and run ads on Meta only.\n\nTo provide a proper quote and plan, could you please share your advertising budget and how long you want the campaign to run?",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4483,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60e4986408190b7d9761c4fe1205a0588915b31d2b4d8",
+    "seenMessageIds": [
+      "G10-in-0",
+      "G10-out-0",
+      "G10-in-1",
+      "G10-out-1",
+      "G10-in-2",
+      "G10-out-2",
+      "G10-in-3"
+    ],
+    "contextCharacters": 1920,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

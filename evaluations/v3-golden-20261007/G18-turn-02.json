@@ -1,0 +1,159 @@
+{
+  "customer": [
+    {
+      "_id": "G18-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "and TikTok too",
+      "createdAt": "2026-10-07T09:20:10.193Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G18-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I want to learn Facebook ads",
+      "createdAt": "2026-10-07T09:20:05.420Z"
+    },
+    {
+      "_id": "G18-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Great! To help you learn Facebook ads, could you please clarify if you want to:\n\n1. Learn how to run and manage Facebook ads yourself with guidance and setup support, or\n2. Have Joshspot Media run and manage the Facebook ad campaigns for you?\n\nThis will help me recommend the right service or course for you.",
+      "createdAt": "2026-10-07T09:20:10.190Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e",
+    "seenMessageIds": [
+      "G18-in-0"
+    ],
+    "contextCharacters": 157,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3524,
+    "output_tokens": 93,
+    "total_tokens": 3617,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0015584000000000001
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e/items?limit=100&order=asc&after=msg_6ac60ecc2bd48194b335bc6b9b70c2cc0c6ef5b5f2cf1f0e"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e/items/msg_0c6ef5b5f2cf1f0e006ac60ecd8ea08194864a25c60ed90fb8"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e/items/msg_0c6ef5b5f2cf1f0e006ac60ecde1748194a2eeffe915a3e78f"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e/items?limit=100&order=asc&after=msg_6ac60ecc2bd48194b335bc6b9b70c2cc0c6ef5b5f2cf1f0e"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0c6ef5b5f2cf1f0e006ac60ecd4b188194b06066ac4b88c854",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3524,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 93,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3617
+      },
+      "output": [
+        {
+          "id": "msg_0c6ef5b5f2cf1f0e006ac60ecde1748194a2eeffe915a3e78f",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for letting me know you want to learn ads for both Facebook (Meta) and TikTok.\n\nTo assist you best, do you want help with just the account setup and learning to run ads yourself on both platforms, or would you prefer Joshspot Media to run and manage the ad campaigns for you on Facebook and TikTok? You can also choose both services if you want setup plus management.\n\nLet me know your preference so I can guide you accordingly."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3189,
+      "openaiConversationId": "conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e"
+    },
+    "action": "reply",
+    "response": "Thanks for letting me know you want to learn ads for both Facebook (Meta) and TikTok.\n\nTo assist you best, do you want help with just the account setup and learning to run ads yourself on both platforms, or would you prefer Joshspot Media to run and manage the ad campaigns for you on Facebook and TikTok? You can also choose both services if you want setup plus management.\n\nLet me know your preference so I can guide you accordingly.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4976,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e",
+    "seenMessageIds": [
+      "G18-in-0",
+      "G18-out-0",
+      "G18-in-1"
+    ],
+    "contextCharacters": 752,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

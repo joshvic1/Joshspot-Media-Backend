@@ -1,0 +1,10 @@
+Owner decision 2026-10-07: plan_15 total NGN265000 = NGN200000 advertising + NGN65000 management.
+Updated local defaults and pricing test. Calculator unchanged. Evaluation uses a fresh read-only
+enabled business snapshot with ONLY plan_15.data.amount locally corrected from285000 to265000.
+Original production snapshot, previous reports and frozen golden source retained unchanged.
+G30 customer turns unchanged; expected outcome updated solely for the owner's corrected price.
+Six relevant deterministic pricing/cap tests passed before model calls. No model calls in tests.
+Production read-only finding: collection inboxairecords, _id6ac17d26f2f0297bebf4a75a,
+kind plan, key plan_15, revision0, field data.amount=285000. Later authorized Admin update must
+set data.amount265000 and use the existing revision/audit workflow; no calculator change.
+No production record changed. Full database name and evidence: production-price-findings.json.

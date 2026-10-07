@@ -1,0 +1,219 @@
+{
+  "customer": [
+    {
+      "_id": "G02-in-4",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "okay send account",
+      "createdAt": "2026-10-07T09:16:15.172Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G02-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I want TikTok ads",
+      "createdAt": "2026-10-07T09:15:51.156Z"
+    },
+    {
+      "_id": "G02-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing TikTok ads! \n\nTo assist you better, do you want us to set up your TikTok ad account so you can run ads yourself, or would you prefer Joshspot to manage and run the TikTok ad campaigns for you? Or both? \n\nAlso, could you share your planned budget and campaign duration? This will help me give you an accurate quote.",
+      "createdAt": "2026-10-07T09:15:58.977Z"
+    },
+    {
+      "_id": "G02-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "first one",
+      "createdAt": "2026-10-07T09:15:58.980Z"
+    },
+    {
+      "_id": "G02-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for confirming that you want TikTok account setup so you can run ads yourself.\n\nCould you please share your planned budget and campaign duration? This will help me provide an accurate quote for the account setup service.",
+      "createdAt": "2026-10-07T09:16:04.096Z"
+    },
+    {
+      "_id": "G02-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "yes setup so I can run it myself",
+      "createdAt": "2026-10-07T09:16:04.098Z"
+    },
+    {
+      "_id": "G02-out-2",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for confirming you want TikTok account setup so you can run ads yourself.\n\nCould you please provide your planned budget and how long you want the campaign to run? This will help me give you an accurate quote for the setup service.",
+      "createdAt": "2026-10-07T09:16:09.019Z"
+    },
+    {
+      "_id": "G02-in-3",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "what does that cover",
+      "createdAt": "2026-10-07T09:16:09.021Z"
+    },
+    {
+      "_id": "G02-out-3",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "{\"messageId\":\"G02-out-3\",\"text\":\"The TikTok account setup service covers everything needed to get your TikTok ads account ready so you can run ads yourself. This typically includes guidance on creating and configuring your account, linking payment methods, setting up basic campaign structures, and ensuring your account compliance with TikTok's policies.\\n\\nIt does not include ongoing campaign management or ad optimization. You'll handle running and managing your ads after setup.\\n\\nDo you have a budget and campaign duration in mind so I can provide a price for the setup service?\",\"sentAt\":\"2026-10-07T09:16:14.177Z\"}",
+      "createdAt": "2026-10-07T09:16:15.170Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18",
+    "seenMessageIds": [
+      "G02-in-0",
+      "G02-out-0",
+      "G02-in-1",
+      "G02-out-1",
+      "G02-in-2",
+      "G02-out-2",
+      "G02-in-3"
+    ],
+    "contextCharacters": 1810,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3992,
+    "output_tokens": 55,
+    "total_tokens": 4047,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0016848
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18/items?limit=100&order=asc&after=msg_6ac60de131588193a7133bc52bd74701030c8836abd53b18"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18/items/msg_030c8836abd53b18006ac60de28c6c8193825019af2e2f22cd"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18/items/msg_030c8836abd53b18006ac60de2ea508193a6626c90dd4928c2"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18/items?limit=100&order=asc&after=msg_6ac60de131588193a7133bc52bd74701030c8836abd53b18"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_030c8836abd53b18006ac60de264548193aef0e7a70dac7133",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3992,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 55,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 4047
+      },
+      "output": [
+        {
+          "id": "msg_030c8836abd53b18006ac60de2ea508193a6626c90dd4928c2",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for confirming you want the TikTok account setup service.\n\nTo send you the exact account setup service details and a quote, could you please provide your planned budget and the duration you expect the campaign or your use period to last? This helps tailor the offer accurately."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3169,
+      "openaiConversationId": "conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18"
+    },
+    "action": "reply",
+    "response": "Thanks for confirming you want the TikTok account setup service.\n\nTo send you the exact account setup service details and a quote, could you please provide your planned budget and the duration you expect the campaign or your use period to last? This helps tailor the offer accurately.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 5016,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18",
+    "seenMessageIds": [
+      "G02-in-0",
+      "G02-out-0",
+      "G02-in-1",
+      "G02-out-1",
+      "G02-in-2",
+      "G02-out-2",
+      "G02-in-3",
+      "G02-out-3",
+      "G02-in-4"
+    ],
+    "contextCharacters": 2761,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

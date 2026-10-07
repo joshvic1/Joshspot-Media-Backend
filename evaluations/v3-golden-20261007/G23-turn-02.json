@@ -1,0 +1,159 @@
+{
+  "customer": [
+    {
+      "_id": "G23-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "send payment details",
+      "createdAt": "2026-10-07T09:21:04.135Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G23-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "TikTok setup please I will run it myself",
+      "createdAt": "2026-10-07T09:20:59.504Z"
+    },
+    {
+      "_id": "G23-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for confirming TikTok account setup only, where you'll manage the ads yourself.\n\nTo provide you the setup details and pricing, could you please share the expected duration you want the account setup service for? Also, do you have a specific budget in mind for this setup, or should I provide the standard price for TikTok account setup alone?",
+      "createdAt": "2026-10-07T09:21:04.132Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8",
+    "seenMessageIds": [
+      "G23-in-0"
+    ],
+    "contextCharacters": 169,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3527,
+    "output_tokens": 73,
+    "total_tokens": 3600,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0015275999999999998
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8/items?limit=100&order=asc&after=msg_6ac60f0219108190853e5bd31adfa2f20972999b3c8789f8"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8/items/msg_0972999b3c8789f8006ac60f033314819082ad832e15f8297e"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8/items/msg_0972999b3c8789f8006ac60f03b6f48190b2a3938c7f59a181"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8/items?limit=100&order=asc&after=msg_6ac60f0219108190853e5bd31adfa2f20972999b3c8789f8"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0972999b3c8789f8006ac60f02f1c0819099e985d8169cbed1",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3527,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 73,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3600
+      },
+      "output": [
+        {
+          "id": "msg_0972999b3c8789f8006ac60f03b6f48190b2a3938c7f59a181",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "I noticed you asked for payment details before sharing the setup duration or budget for the TikTok account setup service.\n\nTo proceed accurately, could you please let me know for how long you want the setup service? Also, if you have a budget in mind for this setup, please share it. This will help me provide the correct payment details and service information."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3524,
+      "openaiConversationId": "conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8"
+    },
+    "action": "reply",
+    "response": "I noticed you asked for payment details before sharing the setup duration or budget for the TikTok account setup service.\n\nTo proceed accurately, could you please let me know for how long you want the setup service? Also, if you have a budget in mind for this setup, please share it. This will help me provide the correct payment details and service information.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4986,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8",
+    "seenMessageIds": [
+      "G23-in-0",
+      "G23-out-0",
+      "G23-in-1"
+    ],
+    "contextCharacters": 805,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

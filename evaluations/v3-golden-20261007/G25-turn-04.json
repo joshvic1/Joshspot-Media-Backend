@@ -1,0 +1,365 @@
+{
+  "customer": [
+    {
+      "_id": "G25-in-3",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "sorry budget is 6k daily now",
+      "createdAt": "2026-10-07T09:21:48.504Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G25-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok for 10 days 5k daily",
+      "createdAt": "2026-10-07T09:21:32.564Z"
+    },
+    {
+      "_id": "G25-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "You want me to manage TikTok ads for 10 days with a daily ad spend of 5,000. Just to confirm, you want Joshspot Media to handle the full TikTok ads management service for that period and budget, correct?\n\nAlso, would you like me to prepare a quote for this service now?",
+      "createdAt": "2026-10-07T09:21:37.490Z"
+    },
+    {
+      "_id": "G25-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "actually Facebook instead",
+      "createdAt": "2026-10-07T09:21:37.493Z"
+    },
+    {
+      "_id": "G25-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "You want Joshspot Media to manage Facebook ads for 10 days with a daily ad spend of 5,000. Just to confirm, you want the full Facebook (Meta) ads management service for that period and budget, correct?\n\nShall I prepare a quote for this service now?",
+      "createdAt": "2026-10-07T09:21:43.679Z"
+    },
+    {
+      "_id": "G25-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "make it 7 days not 10",
+      "createdAt": "2026-10-07T09:21:43.682Z"
+    },
+    {
+      "_id": "G25-out-2",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "You want Joshspot Media to manage Facebook (Meta) ads for 7 days with a daily ad spend of 5,000. I will prepare a quote for the full Facebook ads management service for that period and budget.\n\nIs that correct? Should I proceed with the quote now?",
+      "createdAt": "2026-10-07T09:21:48.501Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba",
+    "seenMessageIds": [
+      "G25-in-0",
+      "G25-out-0",
+      "G25-in-1",
+      "G25-out-1",
+      "G25-in-2"
+    ],
+    "contextCharacters": 1260,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 2,
+    "input_tokens": 8161,
+    "output_tokens": 170,
+    "total_tokens": 8331,
+    "cached_input_tokens": 3712,
+    "estimated_cost_usd": 0.0024228
+  },
+  "httpCalls": 11,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items?limit=100&order=asc&after=msg_6ac60f2e7b54819693fc71e7c1deaaf20390d396ad4cc9ba"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items/msg_0390d396ad4cc9ba006ac60f2fb5b481969ac8cf238882fb90"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items/fc_0390d396ad4cc9ba006ac60f306ce88196ace407b74c69fe89"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items/fc_0390d396ad4cc9ba006ac60f32177c8196b3dec43e0c51a6a0"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items/msg_0390d396ad4cc9ba006ac60f32a6a4819698de43802b7c6ba8"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items?limit=100&order=asc&after=msg_6ac60f2e7b54819693fc71e7c1deaaf20390d396ad4cc9ba"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0390d396ad4cc9ba006ac60f2f8d3881968769c5441fc0bcd8",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3804,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 63,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3867
+      },
+      "output": [
+        {
+          "id": "fc_0390d396ad4cc9ba006ac60f306ce88196ace407b74c69fe89",
+          "type": "function_call",
+          "status": "completed",
+          "arguments": "{\"items\":[{\"platform\":\"meta\",\"service\":\"ads_management\",\"budgetBasis\":\"DAILY_AD_SPEND\",\"budget\":6000,\"duration\":7,\"planKey\":null,\"creativeMode\":\"individual\",\"creatives\":1}],\"purchaseCap\":null}",
+          "call_id": "call_uCEjxYw95ZrbgWqitDEHs0nt",
+          "name": "calculate_ads_quote"
+        }
+      ]
+    },
+    {
+      "id": "resp_0390d396ad4cc9ba006ac60f31e9688196afeac7db8836ddac",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 4357,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3712
+        },
+        "output_tokens": 107,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 4464
+      },
+      "output": [
+        {
+          "id": "msg_0390d396ad4cc9ba006ac60f32a6a4819698de43802b7c6ba8",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "You want Joshspot Media to manage Facebook ads for 7 days with a daily ad spend of ₦6,000.\n\nHere's the quote breakdown:\n- Advertising budget: ₦42,000 total over 7 days (1 video)\n- Service fee for running and managing your ads: ₦30,000\n- Total amount: ₦72,000\n\nThis includes ad creation, management, monitoring, targeting adjustments, and retargeting.\n\nWould you like me to proceed with sending payment details for this service?"
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [
+        {
+          "tool": "calculate_ads_quote",
+          "args": {
+            "items": [
+              {
+                "platform": "meta",
+                "service": "ads_management",
+                "budgetBasis": "DAILY_AD_SPEND",
+                "budget": 6000,
+                "duration": 7,
+                "planKey": null,
+                "creativeMode": "individual",
+                "creatives": 1
+              }
+            ],
+            "purchaseCap": null
+          },
+          "result": {
+            "id": "q_f8adfba24466cb9ccd55f8ff",
+            "fingerprint": "f8adfba24466cb9ccd55f8ffd766c0a4006363956901b63580d0344b772e39e5",
+            "currency": "NGN",
+            "total": 72000,
+            "items": [
+              {
+                "platform": "meta",
+                "service": "ads_management",
+                "budgetBasis": "DAILY_AD_SPEND",
+                "budget": 6000,
+                "duration": 7,
+                "planKey": null,
+                "creativeMode": "individual",
+                "creatives": 1
+              }
+            ],
+            "lines": [
+              {
+                "key": "meta:ads_management",
+                "serviceKey": "ads_management",
+                "title": "Ads Management",
+                "platform": "meta",
+                "budgetBasis": "DAILY_AD_SPEND",
+                "valid": true,
+                "errors": {},
+                "mode": "custom",
+                "creativeMode": "individual",
+                "baseAdBudget": 42000,
+                "advertisingBudget": 42000,
+                "duration": 7,
+                "creativeCount": 1,
+                "baseManagementFee": 25000,
+                "durationMultiplier": 1,
+                "calculatedManagementFee": 25000,
+                "managementFee": 25000,
+                "creativeFee": 5000,
+                "serviceFee": 30000,
+                "scriptSupportFee": 0,
+                "setupServiceFee": 0,
+                "addOnsTotal": 0,
+                "total": 72000,
+                "dailyBudget": 6000,
+                "dailyBudgetPerCreative": 6000,
+                "manualAdjustment": false,
+                "warnings": [],
+                "breakdownText": "Here's a breakdown:\n\nEach video will have an advertising budget of ₦42,000 for 7 days, making the total advertising budget ₦42,000 for 1 video.\n\nOur service fee for helping you run and manage the ads is ₦30,000.\n\nWe will advertise 1 video individually, each with its own advertising budget.\n\nTotal amount: ₦72,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+              }
+            ],
+            "purchaseCap": null,
+            "createdAt": "2026-10-07T09:21:52.203Z",
+            "expiresAt": "2026-10-07T09:51:52.203Z",
+            "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18"
+          }
+        }
+      ],
+      "latency": 6196,
+      "openaiConversationId": "conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba"
+    },
+    "action": "reply",
+    "response": "You want Joshspot Media to manage Facebook ads for 7 days with a daily ad spend of ₦6,000.\n\nHere's the quote breakdown:\n- Advertising budget: ₦42,000 total over 7 days (1 video)\n- Service fee for running and managing your ads: ₦30,000\n- Total amount: ₦72,000\n\nThis includes ad creation, management, monitoring, targeting adjustments, and retargeting.\n\nWould you like me to proceed with sending payment details for this service?",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 9106,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba",
+    "seenMessageIds": [
+      "G25-in-0",
+      "G25-out-0",
+      "G25-in-1",
+      "G25-out-1",
+      "G25-in-2",
+      "G25-out-2",
+      "G25-in-3"
+    ],
+    "contextCharacters": 1802,
+    "dirty": false,
+    "quote": {
+      "id": "q_f8adfba24466cb9ccd55f8ff",
+      "fingerprint": "f8adfba24466cb9ccd55f8ffd766c0a4006363956901b63580d0344b772e39e5",
+      "currency": "NGN",
+      "total": 72000,
+      "items": [
+        {
+          "platform": "meta",
+          "service": "ads_management",
+          "budgetBasis": "DAILY_AD_SPEND",
+          "budget": 6000,
+          "duration": 7,
+          "planKey": null,
+          "creativeMode": "individual",
+          "creatives": 1
+        }
+      ],
+      "lines": [
+        {
+          "key": "meta:ads_management",
+          "serviceKey": "ads_management",
+          "title": "Ads Management",
+          "platform": "meta",
+          "budgetBasis": "DAILY_AD_SPEND",
+          "valid": true,
+          "errors": {},
+          "mode": "custom",
+          "creativeMode": "individual",
+          "baseAdBudget": 42000,
+          "advertisingBudget": 42000,
+          "duration": 7,
+          "creativeCount": 1,
+          "baseManagementFee": 25000,
+          "durationMultiplier": 1,
+          "calculatedManagementFee": 25000,
+          "managementFee": 25000,
+          "creativeFee": 5000,
+          "serviceFee": 30000,
+          "scriptSupportFee": 0,
+          "setupServiceFee": 0,
+          "addOnsTotal": 0,
+          "total": 72000,
+          "dailyBudget": 6000,
+          "dailyBudgetPerCreative": 6000,
+          "manualAdjustment": false,
+          "warnings": [],
+          "breakdownText": "Here's a breakdown:\n\nEach video will have an advertising budget of ₦42,000 for 7 days, making the total advertising budget ₦42,000 for 1 video.\n\nOur service fee for helping you run and manage the ads is ₦30,000.\n\nWe will advertise 1 video individually, each with its own advertising budget.\n\nTotal amount: ₦72,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+        }
+      ],
+      "purchaseCap": null,
+      "createdAt": "2026-10-07T09:21:52.203Z",
+      "expiresAt": "2026-10-07T09:51:52.203Z",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18"
+    }
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

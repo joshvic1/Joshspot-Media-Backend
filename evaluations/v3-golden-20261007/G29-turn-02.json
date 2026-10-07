@@ -1,0 +1,159 @@
+{
+  "customer": [
+    {
+      "_id": "G29-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "send account",
+      "createdAt": "2026-10-07T09:22:33.855Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G29-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok 5k daily 7 days",
+      "createdAt": "2026-10-07T09:22:28.679Z"
+    },
+    {
+      "_id": "G29-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing TikTok ads management with a 5,000 daily budget for 7 days.\n\nJust to confirm, you want Joshspot Media to run and manage the TikTok ad campaigns for you, right? Also, do you have any preference for the number of creatives (ad variations) you want us to test or run? This helps me prepare an accurate quote for you.",
+      "createdAt": "2026-10-07T09:22:33.852Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60f564c088193a58895d002813ce803d67e6624e5154b",
+    "seenMessageIds": [
+      "G29-in-0"
+    ],
+    "contextCharacters": 158,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3535,
+    "output_tokens": 63,
+    "total_tokens": 3598,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0015148
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f564c088193a58895d002813ce803d67e6624e5154b"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60f564c088193a58895d002813ce803d67e6624e5154b/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f564c088193a58895d002813ce803d67e6624e5154b/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f564c088193a58895d002813ce803d67e6624e5154b/items?limit=100&order=asc&after=msg_6ac60f5bdd3c8193aed5205dde1b9fef03d67e6624e5154b"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f564c088193a58895d002813ce803d67e6624e5154b/items/msg_03d67e6624e5154b006ac60f5d21548193afe0b129f274062b"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f564c088193a58895d002813ce803d67e6624e5154b/items/msg_03d67e6624e5154b006ac60f5d7c408193845b555ad7ea6d14"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f564c088193a58895d002813ce803d67e6624e5154b/items?limit=100&order=asc&after=msg_6ac60f5bdd3c8193aed5205dde1b9fef03d67e6624e5154b"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_03d67e6624e5154b006ac60f5cf5708193a0eeacca002dcd18",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3535,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 63,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3598
+      },
+      "output": [
+        {
+          "id": "msg_03d67e6624e5154b006ac60f5d7c408193845b555ad7ea6d14",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "You mentioned \"send account.\" Just to clarify, do you want us to set up a new TikTok ad account for managing your campaigns, or do you have an existing TikTok ad account that you want us to manage? \n\nThis will help me provide the right next steps or prepare your quote accordingly."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3020,
+      "openaiConversationId": "conv_6ac60f564c088193a58895d002813ce803d67e6624e5154b"
+    },
+    "action": "reply",
+    "response": "You mentioned \"send account.\" Just to clarify, do you want us to set up a new TikTok ad account for managing your campaigns, or do you have an existing TikTok ad account that you want us to manage? \n\nThis will help me provide the right next steps or prepare your quote accordingly.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4824,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60f564c088193a58895d002813ce803d67e6624e5154b",
+    "seenMessageIds": [
+      "G29-in-0",
+      "G29-out-0",
+      "G29-in-1"
+    ],
+    "contextCharacters": 770,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

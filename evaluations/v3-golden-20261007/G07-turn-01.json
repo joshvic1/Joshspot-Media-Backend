@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G07-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok and Facebook for me",
+      "createdAt": "2026-10-07T09:17:14.242Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3380,
+    "output_tokens": 71,
+    "total_tokens": 3451,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0014655999999999998
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517/items?limit=100&order=asc&after=msg_6ac60e1c41348194b90d2db7af71e50906deda3a70743517"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517/items/msg_06deda3a70743517006ac60e1d78848194ac5c911c3a169bfe"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517/items/msg_06deda3a70743517006ac60e1de66c8194bc2a8c0a710e45ec"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517/items?limit=100&order=asc&after=msg_6ac60e1c41348194b90d2db7af71e50906deda3a70743517"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_06deda3a70743517006ac60e1d4c748194988cb77e15e4835e",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3380,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 71,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3451
+      },
+      "output": [
+        {
+          "id": "msg_06deda3a70743517006ac60e1de66c8194bc2a8c0a710e45ec",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for choosing Joshspot to manage both TikTok and Facebook ads for you! To get started, could you please let me know your total budget for running ads on these platforms and how long you want the campaigns to run? This will help me prepare a tailored quote that covers setup and management for both TikTok and Meta (Facebook & Instagram)."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3076,
+      "openaiConversationId": "conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517"
+    },
+    "action": "reply",
+    "response": "Thanks for choosing Joshspot to manage both TikTok and Facebook ads for you! To get started, could you please let me know your total budget for running ads on these platforms and how long you want the campaigns to run? This will help me prepare a tailored quote that covers setup and management for both TikTok and Meta (Facebook & Instagram).",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 6127,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60e1bdd3c81949f48d6dad03a145a06deda3a70743517",
+    "seenMessageIds": [
+      "G07-in-0"
+    ],
+    "contextCharacters": 162,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

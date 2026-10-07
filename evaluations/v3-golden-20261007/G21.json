@@ -1,0 +1,787 @@
+{
+  "id": "G21",
+  "category": "deferral overrides consent",
+  "expected": [
+    "Future runner combines the last payment request and cancellation into one rapid customer batch; no invoice for cancelled batch. Earlier turns never pre-authorize later action."
+  ],
+  "plannedCustomerTurns": [
+    "TikTok setup only",
+    "yes go ahead",
+    "send account",
+    "wait first dont send it yet",
+    "let me speak with my coach"
+  ],
+  "turns": [
+    {
+      "customer": [
+        {
+          "_id": "G21-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "TikTok setup only",
+          "createdAt": "2026-10-07T09:20:36.149Z"
+        }
+      ],
+      "historyBefore": [],
+      "stateBefore": {},
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3377,
+        "output_tokens": 57,
+        "total_tokens": 3434,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.001442
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "post",
+          "path": "/conversations"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items?limit=100&order=asc&after=msg_6ac60ee61dac8195a70a20086c3723ca050246199a725542"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items/msg_050246199a725542006ac60ee76b8081958f6cc426b694be8d"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items/msg_050246199a725542006ac60ee7c664819582a6d63ad04a9ef2"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items?limit=100&order=asc&after=msg_6ac60ee61dac8195a70a20086c3723ca050246199a725542"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_050246199a725542006ac60ee730808195b66c0625197f5a92",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3377,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 57,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3434
+          },
+          "output": [
+            {
+              "id": "msg_050246199a725542006ac60ee7c664819582a6d63ad04a9ef2",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Thanks for confirming TikTok setup only.\n\nTo proceed, could you please tell me how long you'd like the setup support to cover? Also, do you have any specific budget in mind for this TikTok account setup service? This will help me provide you with an accurate quote."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 3009,
+          "openaiConversationId": "conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542"
+        },
+        "action": "reply",
+        "response": "Thanks for confirming TikTok setup only.\n\nTo proceed, could you please tell me how long you'd like the setup support to cover? Also, do you have any specific budget in mind for this TikTok account setup service? This will help me provide you with an accurate quote.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 4738,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542",
+        "seenMessageIds": [
+          "G21-in-0"
+        ],
+        "contextCharacters": 146,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G21-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "yes go ahead",
+          "createdAt": "2026-10-07T09:20:40.890Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G21-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "TikTok setup only",
+          "createdAt": "2026-10-07T09:20:36.149Z"
+        },
+        {
+          "_id": "G21-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for confirming TikTok setup only.\n\nTo proceed, could you please tell me how long you'd like the setup support to cover? Also, do you have any specific budget in mind for this TikTok account setup service? This will help me provide you with an accurate quote.",
+          "createdAt": "2026-10-07T09:20:40.888Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542",
+        "seenMessageIds": [
+          "G21-in-0"
+        ],
+        "contextCharacters": 146,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3508,
+        "output_tokens": 48,
+        "total_tokens": 3556,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.00148
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items?limit=100&order=asc&after=msg_6ac60eead6d48195a5888de5467cc705050246199a725542"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items/msg_050246199a725542006ac60eebf3f08195806dbfbfb8a10d83"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items/msg_050246199a725542006ac60eec56b48195811b63761c38072b"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items?limit=100&order=asc&after=msg_6ac60eead6d48195a5888de5467cc705050246199a725542"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_050246199a725542006ac60eebcb5c81959b95ee1f531ea7de",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3508,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 48,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3556
+          },
+          "output": [
+            {
+              "id": "msg_050246199a725542006ac60eec56b48195811b63761c38072b",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "For TikTok account setup only, could you please share how long you'd like the setup support to last? Also, do you have a budget in mind for this service? This info will help me provide an accurate quote for you."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 3080,
+          "openaiConversationId": "conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542"
+        },
+        "action": "reply",
+        "response": "For TikTok account setup only, could you please share how long you'd like the setup support to last? Also, do you have a budget in mind for this service? This info will help me provide an accurate quote for you.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 4719,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542",
+        "seenMessageIds": [
+          "G21-in-0",
+          "G21-out-0",
+          "G21-in-1"
+        ],
+        "contextCharacters": 690,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G21-in-2",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "send account",
+          "createdAt": "2026-10-07T09:20:45.612Z"
+        },
+        {
+          "_id": "G21-in-3",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "wait first dont send it yet",
+          "createdAt": "2026-10-07T09:20:45.612Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G21-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "TikTok setup only",
+          "createdAt": "2026-10-07T09:20:36.149Z"
+        },
+        {
+          "_id": "G21-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for confirming TikTok setup only.\n\nTo proceed, could you please tell me how long you'd like the setup support to cover? Also, do you have any specific budget in mind for this TikTok account setup service? This will help me provide you with an accurate quote.",
+          "createdAt": "2026-10-07T09:20:40.888Z"
+        },
+        {
+          "_id": "G21-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "yes go ahead",
+          "createdAt": "2026-10-07T09:20:40.890Z"
+        },
+        {
+          "_id": "G21-out-1",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "For TikTok account setup only, could you please share how long you'd like the setup support to last? Also, do you have a budget in mind for this service? This info will help me provide an accurate quote for you.",
+          "createdAt": "2026-10-07T09:20:45.609Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542",
+        "seenMessageIds": [
+          "G21-in-0",
+          "G21-out-0",
+          "G21-in-1"
+        ],
+        "contextCharacters": 690,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3675,
+        "output_tokens": 51,
+        "total_tokens": 3726,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0015516
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items?limit=100&order=asc&after=msg_6ac60eef90a88195a41e773836aef2c2050246199a725542"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items/msg_050246199a725542006ac60ef0aad08195b333a44f48053725"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items/msg_050246199a725542006ac60ef10b5881958ce22004b63a2e0d"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items?limit=100&order=asc&after=msg_6ac60eef90a88195a41e773836aef2c2050246199a725542"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_050246199a725542006ac60ef081a08195992c81515bd4eb9f",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3675,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 51,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3726
+          },
+          "output": [
+            {
+              "id": "msg_050246199a725542006ac60ef10b5881958ce22004b63a2e0d",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Thanks for your patience. Before I send the quote for TikTok account setup only, could you please confirm the duration you'd like for the setup support and if you have a budget in mind? This will help me prepare an accurate quote for you."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 2676,
+          "openaiConversationId": "conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542"
+        },
+        "action": "reply",
+        "response": "Thanks for your patience. Before I send the quote for TikTok account setup only, could you please confirm the duration you'd like for the setup support and if you have a budget in mind? This will help me prepare an accurate quote for you.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 4329,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542",
+        "seenMessageIds": [
+          "G21-in-0",
+          "G21-out-0",
+          "G21-in-1",
+          "G21-out-1",
+          "G21-in-2",
+          "G21-in-3"
+        ],
+        "contextCharacters": 1331,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G21-in-4",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "let me speak with my coach",
+          "createdAt": "2026-10-07T09:20:49.945Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G21-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "TikTok setup only",
+          "createdAt": "2026-10-07T09:20:36.149Z"
+        },
+        {
+          "_id": "G21-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for confirming TikTok setup only.\n\nTo proceed, could you please tell me how long you'd like the setup support to cover? Also, do you have any specific budget in mind for this TikTok account setup service? This will help me provide you with an accurate quote.",
+          "createdAt": "2026-10-07T09:20:40.888Z"
+        },
+        {
+          "_id": "G21-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "yes go ahead",
+          "createdAt": "2026-10-07T09:20:40.890Z"
+        },
+        {
+          "_id": "G21-out-1",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "For TikTok account setup only, could you please share how long you'd like the setup support to last? Also, do you have a budget in mind for this service? This info will help me provide an accurate quote for you.",
+          "createdAt": "2026-10-07T09:20:45.609Z"
+        },
+        {
+          "_id": "G21-in-2",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "send account",
+          "createdAt": "2026-10-07T09:20:45.612Z"
+        },
+        {
+          "_id": "G21-in-3",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "wait first dont send it yet",
+          "createdAt": "2026-10-07T09:20:45.612Z"
+        },
+        {
+          "_id": "G21-out-3",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for your patience. Before I send the quote for TikTok account setup only, could you please confirm the duration you'd like for the setup support and if you have a budget in mind? This will help me prepare an accurate quote for you.",
+          "createdAt": "2026-10-07T09:20:49.941Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542",
+        "seenMessageIds": [
+          "G21-in-0",
+          "G21-out-0",
+          "G21-in-1",
+          "G21-out-1",
+          "G21-in-2",
+          "G21-in-3"
+        ],
+        "contextCharacters": 1331,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3795,
+        "output_tokens": 38,
+        "total_tokens": 3833,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0015788
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items?limit=100&order=asc&after=msg_6ac60ef3faac8195b8825b2ec805f242050246199a725542"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items/msg_050246199a725542006ac60ef515c48195ae674f5b08ff5263"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items/msg_050246199a725542006ac60ef56db08195945c47458610c56d"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542/items?limit=100&order=asc&after=msg_6ac60ef3faac8195b8825b2ec805f242050246199a725542"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_050246199a725542006ac60ef4ed588195afd489fab94ff980",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3795,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 38,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3833
+          },
+          "output": [
+            {
+              "id": "msg_050246199a725542006ac60ef56db08195945c47458610c56d",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "No problem, take your time to discuss with your coach. Whenever you're ready to proceed or if you have any questions, just let me know. I'll be here to assist you."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 2644,
+          "openaiConversationId": "conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542"
+        },
+        "action": "reply",
+        "response": "No problem, take your time to discuss with your coach. Whenever you're ready to proceed or if you have any questions, just let me know. I'll be here to assist you.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 4364,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60ee5c1348195a20eb9bc3a01a9cb050246199a725542",
+        "seenMessageIds": [
+          "G21-in-0",
+          "G21-out-0",
+          "G21-in-1",
+          "G21-out-1",
+          "G21-in-2",
+          "G21-in-3",
+          "G21-out-3",
+          "G21-in-4"
+        ],
+        "contextCharacters": 1858,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    }
+  ],
+  "completeHistory": [
+    {
+      "_id": "G21-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "TikTok setup only",
+      "createdAt": "2026-10-07T09:20:36.149Z"
+    },
+    {
+      "_id": "G21-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for confirming TikTok setup only.\n\nTo proceed, could you please tell me how long you'd like the setup support to cover? Also, do you have any specific budget in mind for this TikTok account setup service? This will help me provide you with an accurate quote.",
+      "createdAt": "2026-10-07T09:20:40.888Z"
+    },
+    {
+      "_id": "G21-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "yes go ahead",
+      "createdAt": "2026-10-07T09:20:40.890Z"
+    },
+    {
+      "_id": "G21-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "For TikTok account setup only, could you please share how long you'd like the setup support to last? Also, do you have a budget in mind for this service? This info will help me provide an accurate quote for you.",
+      "createdAt": "2026-10-07T09:20:45.609Z"
+    },
+    {
+      "_id": "G21-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "send account",
+      "createdAt": "2026-10-07T09:20:45.612Z"
+    },
+    {
+      "_id": "G21-in-3",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "wait first dont send it yet",
+      "createdAt": "2026-10-07T09:20:45.612Z"
+    },
+    {
+      "_id": "G21-out-3",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for your patience. Before I send the quote for TikTok account setup only, could you please confirm the duration you'd like for the setup support and if you have a budget in mind? This will help me prepare an accurate quote for you.",
+      "createdAt": "2026-10-07T09:20:49.941Z"
+    },
+    {
+      "_id": "G21-in-4",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "let me speak with my coach",
+      "createdAt": "2026-10-07T09:20:49.945Z"
+    },
+    {
+      "_id": "G21-out-4",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "No problem, take your time to discuss with your coach. Whenever you're ready to proceed or if you have any questions, just let me know. I'll be here to assist you.",
+      "createdAt": "2026-10-07T09:20:54.309Z"
+    }
+  ],
+  "usage": {
+    "calls": 4,
+    "input_tokens": 14355,
+    "output_tokens": 194,
+    "total_tokens": 14549,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0060524
+  }
+}

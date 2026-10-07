@@ -57,7 +57,7 @@ async function receive(value) {
     }
     let result;
     try {
-      result = await Message.updateOne({ providerId: item.id }, { $setOnInsert: { conversation: conversation._id, direction: 'inbound', type, text: text.slice(0, 10000), status: 'received', providerId: item.id, occurredAt, replyTo, ...(item[item.type]?.id ? { media: { id: item[item.type].id, mime: item[item.type].mime_type, name: item[item.type].filename } } : {}) } }, { upsert: true });
+      result = await Message.updateOne({ providerId: item.id }, { $setOnInsert: { conversation: conversation._id, direction: 'inbound', type, text, status: 'received', providerId: item.id, occurredAt, replyTo, ...(item[item.type]?.id ? { media: { id: item[item.type].id, mime: item[item.type].mime_type, name: item[item.type].filename } } : {}) } }, { upsert: true });
     } catch (error) { if (error.code !== 11000) throw error; }
     if(await require('./deleteChat').wasDeleted(contact.phone,item.timestamp) || !await Conversation.exists({_id:conversation._id,deleting:{$ne:true}})){await Message.deleteMany({conversation:conversation._id});continue;}
     const stored = await Message.findOne({ providerId: item.id }).select('_id createdAt');
@@ -85,7 +85,8 @@ async function receive(value) {
     const update = { status: item.status, providerId: item.id, error: item.status === 'failed' ? `WhatsApp could not deliver this message (code ${Number(item.errors?.[0]?.code) || 'unknown'}).` : '' };
     if (item.status !== 'failed') update[`${item.status}At`] = new Date(Number(item.timestamp) * 1000 || Date.now());
     const allowed = ['sending', 'unknown', 'sent', 'delivered', 'failed'].filter((status) => policy.statusCanAdvance(status, item.status));
-    await Message.updateOne({ _id: message._id, attempts: message.attempts, status: { $in: allowed } }, { $set: update });
+    const receiptUpdate=await Message.updateOne({ _id: message._id, attempts: message.attempts, status: { $in: allowed } }, { $set: update });
+    if(receiptUpdate.matchedCount&&message.automation?.delivery&&['sent','delivered','read','failed'].includes(item.status))await require('./ai/v2/delivery').record({...message.toObject(),...update,sentAt:message.sentAt?.toISOString()||update[`${item.status}At`]?.toISOString()}).catch(()=>{});
     live.notify();
   }
 }
@@ -150,6 +151,7 @@ async function processOutbox() {
       if (message.type !== 'template' && !policy.windowOpen(conversation.lastInboundAt)) throw Object.assign(new Error('The 24-hour reply window closed. Send an approved template.'), { safe: true });
       const id = await provider.send(conversation.contact.phone, message);
       await Message.updateOne({ _id: message._id, status: { $in: ['sending', 'unknown'] } }, { $set: { status: 'sent', providerId: id, sentAt: new Date(), error: '' } });
+      if(message.automation?.delivery)await require('./ai/v2/delivery').record({...message.toObject(),status:'sent',sentAt:new Date().toISOString()}).catch(()=>{});
       publish('message.sent', { messageId: String(message._id), conversationId: String(message.conversation) });
       if(message.author!=='ai'&&conversation.ai?.handoffReason)await Conversation.updateOne({_id:conversation._id,'ai.state.firstHumanResponseAt':null},{$set:{'ai.state.firstHumanResponseAt':new Date().toISOString()}}).catch(()=>{});
     } catch (error) {

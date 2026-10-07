@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G20-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "set up Meta for me",
+      "createdAt": "2026-10-07T09:20:34.870Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3378,
+    "output_tokens": 72,
+    "total_tokens": 3450,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0014664
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c/items?limit=100&order=asc&after=msg_6ac60ee4dc9c81978883271739c805e60fd3a84995528f2c"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c/items/msg_0fd3a84995528f2c006ac60ee6804c8197aee4aa99bdf83b1a"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c/items/msg_0fd3a84995528f2c006ac60ee6c9bc8197a3c48b22d550f875"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c/items?limit=100&order=asc&after=msg_6ac60ee4dc9c81978883271739c805e60fd3a84995528f2c"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0fd3a84995528f2c006ac60ee5e70c819788fd5aa97594d8c9",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3378,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 72,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3450
+      },
+      "output": [
+        {
+          "id": "msg_0fd3a84995528f2c006ac60ee6c9bc8197a3c48b22d550f875",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "I can help set up your Meta advertising account for you. To get started, could you please share your budget and the duration you want the setup to cover? This helps me prepare an accurate plan and cost for you. Also, do you already have a Meta (Facebook and Instagram) business account, or do you need help creating one from scratch?"
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3402,
+      "openaiConversationId": "conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c"
+    },
+    "action": "reply",
+    "response": "I can help set up your Meta advertising account for you. To get started, could you please share your budget and the duration you want the setup to cover? This helps me prepare an accurate plan and cost for you. Also, do you already have a Meta (Facebook and Instagram) business account, or do you need help creating one from scratch?",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 5200,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c",
+    "seenMessageIds": [
+      "G20-in-0"
+    ],
+    "contextCharacters": 147,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

@@ -1,0 +1,19 @@
+// Read-only evidence capture. Native MongoDB client: no Mongoose initialization,
+// seeding, index creation, config migration, or customer-record reads.
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),cp=require('node:child_process');
+const root=path.resolve(__dirname,'../..'),hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+function files(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?files(path.join(dir,e.name)):[path.join(dir,e.name)]);}
+function manifest(){const targets=[...files(path.join(root,'inbox/ai')),...['inbox/service.js','inbox/models.js','inbox/createIndexes.js','inbox/deleteChat.js','package.json'].map(f=>path.join(root,f)),...files(path.join(root,'evaluations/v2-adversarial'))];return Object.fromEntries(targets.map(f=>[path.relative(root,f).replaceAll('\\','/'),hash(fs.readFileSync(f))]));}
+module.exports={manifest,hash,root};
+if(require.main===module)(async()=>{
+ const out=path.join(__dirname,'preflight.json');if(fs.existsSync(out))throw new Error('Preflight is frozen; refusing overwrite');
+ const env=require('dotenv').parse(fs.readFileSync(path.join(root,'.env'))),uri=env.MONGO_URI||env.MONGODB_URI||env.MONGO_URL;
+ if(!uri)throw new Error('No configured database URI; available variable names: '+Object.keys(env).filter(k=>/MONGO|DATABASE/.test(k)).join(','));
+ const {MongoClient}=require('mongodb'),client=new MongoClient(uri,{serverSelectionTimeoutMS:12000,monitorCommands:true});
+ const commands=[];client.on('commandStarted',e=>{commands.push(e.commandName);if(!['find','aggregate','getMore','killCursors','endSessions','ping'].includes(e.commandName))throw new Error('Unexpected database command: '+e.commandName);});
+ let config,records,modelEvidence;
+ try{await client.connect();const db=client.db();config=await db.collection('inboxaiconfigs').findOne({key:'main'},{projection:{changedBy:0}});records=await db.collection('inboxairecords').find({enabled:true,archived:{$ne:true}},{projection:{createdBy:0,changedBy:0}}).sort({priority:-1,key:1}).toArray();modelEvidence=await db.collection('inboxailogs').find({kind:{$ne:'test'},model:{$type:'string'}},{projection:{_id:0,model:1,createdAt:1,mode:1,configRevision:1}}).sort({createdAt:-1}).limit(10).toArray();}finally{await client.close();}
+ if(!config||!records.length)throw new Error('Actual enabled catalogue/configuration unavailable');
+ const snapshot={config,records,modelEvidence};fs.writeFileSync(path.join(__dirname,'catalogue-snapshot.json'),JSON.stringify(snapshot,null,2),{flag:'wx'});
+ const hashes=manifest();const report={at:new Date().toISOString(),baseCommit:cp.execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),workingTreeHash:hash(JSON.stringify(hashes)),hashes,catalogueHash:hash(JSON.stringify(snapshot)),configRevision:config.revision,catalogueCount:records.length,modelSettings:{database:config.data.model,v2:config.data.v2Model,localEnv:env.OPENAI_MODEL,localV2Env:env.OPENAI_V2_MODEL},modelEvidence,limits:{history:config.data.maxHistory,responseCharacters:config.data.maxResponseLength,modelOutputTokens:6000,turnCharacters:24000,modelTimeoutMs:22000,totalDeadlineMs:65000},live:{databaseEngine:config.data.engineVersion,databaseMode:config.data.mode,localEngineOverride:env.AI_ENGINE_VERSION,localV2LiveGate:env.AI_V2_LIVE_APPROVED||'unset'},readCommands:commands,isolation:'Runner uses saved snapshot, loads only OpenAI key; no MongoDB connection or side-effect executors. Financial actions and deliveries simulated.',oldResults:'All old evidence included in hash manifest; new output directory only.'};fs.writeFileSync(out,JSON.stringify(report,null,2),{flag:'wx'});console.log(JSON.stringify({...report,hashes:undefined},null,2));
+})().catch(e=>{console.error(e.name+': '+e.message.replace(/mongodb[^\s]+/g,'[database URI removed]'));process.exitCode=1;});

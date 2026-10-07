@@ -1,6 +1,8 @@
 // Initial records only. Admin edits are persisted; these values never overwrite edits.
 const pack = require('./businessPack');
 const config = {
+  engineVersion: 'v1', v2Model: '', v3Model: '', v3MaxOutputTokens: 1800,
+  v4InterpreterModel:'gpt-6.1-sol', v4ComposerModel:'gpt-6-luna', v4InterpreterReasoning:'medium', v4ComposerReasoning:'medium', v4HistoryMessages:40, v4MaxOutputTokens:4000,
   followupsEnabled: false, followupFirstHours: 4, followupSecondHours: 24, followupMaximum: 2, structuredSales: false, paymentQuestionCooldownMinutes: 60, enabled: true, mode: 'DRAFT', autoReply: true, agentName: 'Joshspot Assistant', displayName: 'Joshspot Assistant', role: 'Customer service and sales', brand: 'Joshspot Media',
   tone: 'Natural, friendly, direct Nigerian-business conversational tone. Avoid corporate filler.', writingStyle: 'Short, helpful sentences. One useful question at a time.', responseLength: 'concise', emojiPreference: 'restrained', language: 'Match the customer language where supported', instructions: pack.instructions, signature: '', greeting: true,
   provider: 'openai', model: '', confidence: 0.78, maxResponseLength: 1500, maxHistory: 6, debounceSeconds: 3, responseDelaySeconds: 1, maxConsecutive: 0, maxDailyCalls: 0, maxConversationCalls: 0,
@@ -14,7 +16,7 @@ const records = [
   {kind:'service',key:'ads_video_course',title:'TikTok, Facebook and Instagram Ads Video Course',data:{platforms:['tiktok','meta'],serviceType:'course',price:8000,currency:'NGN',description:'Video training for customers who want to learn to run ads themselves.',requirements:'Purchase through the course page.',paymentEnabled:false,workflow:'course',checkoutUrl:'https://joshspotmedia.com/course'}},
   ...[['tiktok_setup','TikTok Ads Account Setup','tiktok',20000],['meta_setup','Meta Ads Account Setup','meta',30000]].map(([key,title,platform,price])=>({kind:'service',key,title,data:{platforms:[platform],serviceType:'account_setup',price,currency:'NGN',description:'Advertising account setup and guidance.',requirements:'Provide your email address. A team member will arrange secure access; do not send passwords in this chat.',paymentEnabled:true,workflow:'ads',allowCustomBudget:false}})),
   {kind:'service',key:'ads_management',title:'Ads Management',data:{platforms:['tiktok','meta'],serviceType:'ads_management',price:0,currency:'NGN',description:'We run and manage your campaign.',requirements:'A team member will guide you through delegated business/ad-account access. Do not share your personal password.',paymentEnabled:true,workflow:'ads',allowCustomBudget:false}},
-  ...[[7,60000],[10,135000],[15,285000],[30,415000]].map(([duration,amount],i)=>({kind:'plan',key:`plan_${duration}`,title:`${duration} Days`,priority:10-i,data:{duration,amount,currency:'NGN',platforms:['tiktok','meta'],service:'ads_management',description:''}})),
+  ...[[7,60000],[10,135000],[15,265000],[30,415000]].map(([duration,amount],i)=>({kind:'plan',key:`plan_${duration}`,title:`${duration} Days`,priority:10-i,data:{duration,amount,currency:'NGN',platforms:['tiktok','meta'],service:'ads_management',description:''}})),
   ...[
     ['greeting','Greeting','Hello 👋 Please let us know which of our services you’re interested in.'],
     ['platform','Ask platform','Which platform would you like to run ads on: TikTok or Meta (Facebook & Instagram)?'],

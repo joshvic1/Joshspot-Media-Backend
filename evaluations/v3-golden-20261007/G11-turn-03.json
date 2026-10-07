@@ -1,0 +1,351 @@
+{
+  "customer": [
+    {
+      "_id": "G11-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "lets try 2 days",
+      "createdAt": "2026-10-07T09:18:15.831Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G11-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok for me",
+      "createdAt": "2026-10-07T09:18:06.444Z"
+    },
+    {
+      "_id": "G11-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Great! You want us to manage TikTok ads for you.\n\nTo proceed, please tell me your total budget for TikTok ads and how long you want the campaign to run. This helps us create the right management plan and quote for you.",
+      "createdAt": "2026-10-07T09:18:11.199Z"
+    },
+    {
+      "_id": "G11-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "i fit do 5k everyday",
+      "createdAt": "2026-10-07T09:18:11.201Z"
+    },
+    {
+      "_id": "G11-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "You’re ready to spend 5,000 daily on TikTok ads with managed service.\n\nHow many days do you want the campaign to run? This helps me prepare an accurate management quote for you.",
+      "createdAt": "2026-10-07T09:18:15.829Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31",
+    "seenMessageIds": [
+      "G11-in-0",
+      "G11-out-0",
+      "G11-in-1"
+    ],
+    "contextCharacters": 654,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 2,
+    "input_tokens": 7825,
+    "output_tokens": 163,
+    "total_tokens": 7988,
+    "cached_input_tokens": 3456,
+    "estimated_cost_usd": 0.002354
+  },
+  "httpCalls": 11,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31/items?limit=100&order=asc&after=msg_6ac60e59cc248193af475c364dd6ba2a077e4b17328c1a31"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31/items/msg_077e4b17328c1a31006ac60e5b42248193b5e086976b2efe43"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31/items/fc_077e4b17328c1a31006ac60e5beba081938ff8a0bf89b967b4"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31/items/fc_077e4b17328c1a31006ac60e5d029881939033c4b174b9fcf4"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31/items/msg_077e4b17328c1a31006ac60e5dc62081938bd2ebc0aa8e6509"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31/items?limit=100&order=asc&after=msg_6ac60e59cc248193af475c364dd6ba2a077e4b17328c1a31"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_077e4b17328c1a31006ac60e5b199c8193bf579e7973dc0f4c",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3625,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 64,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3689
+      },
+      "output": [
+        {
+          "id": "fc_077e4b17328c1a31006ac60e5beba081938ff8a0bf89b967b4",
+          "type": "function_call",
+          "status": "completed",
+          "arguments": "{\"items\":[{\"platform\":\"tiktok\",\"service\":\"ads_management\",\"budgetBasis\":\"DAILY_AD_SPEND\",\"budget\":5000,\"duration\":2,\"planKey\":null,\"creativeMode\":\"testing\",\"creatives\":1}],\"purchaseCap\":null}",
+          "call_id": "call_HmRUIfALWVOGbSHl4J7d2t7a",
+          "name": "calculate_ads_quote"
+        }
+      ]
+    },
+    {
+      "id": "resp_077e4b17328c1a31006ac60e5cbd9c8193b06401d37e2316fa",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 4200,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3456
+        },
+        "output_tokens": 99,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 4299
+      },
+      "output": [
+        {
+          "id": "msg_077e4b17328c1a31006ac60e5dc62081938bd2ebc0aa8e6509",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "For managing your TikTok ads with a daily spend of ₦5,000 over 2 days, the total cost will be ₦35,000. This includes ₦10,000 for the advertising budget and ₦25,000 as our service fee to run and manage your ads.\n\nWe will create and manage your ads, monitor their performance, and make adjustments during the campaign.\n\nWould you like to proceed with this quote? If yes, I can provide payment details."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [
+        {
+          "tool": "calculate_ads_quote",
+          "args": {
+            "items": [
+              {
+                "platform": "tiktok",
+                "service": "ads_management",
+                "budgetBasis": "DAILY_AD_SPEND",
+                "budget": 5000,
+                "duration": 2,
+                "planKey": null,
+                "creativeMode": "testing",
+                "creatives": 1
+              }
+            ],
+            "purchaseCap": null
+          },
+          "result": {
+            "id": "q_fe8fbc65a2f318bf6755f418",
+            "fingerprint": "fe8fbc65a2f318bf6755f41872753b7c05cdde5b56cd3c0b22639fab56c9193a",
+            "currency": "NGN",
+            "total": 35000,
+            "items": [
+              {
+                "platform": "tiktok",
+                "service": "ads_management",
+                "budgetBasis": "DAILY_AD_SPEND",
+                "budget": 5000,
+                "duration": 2,
+                "planKey": null,
+                "creativeMode": "testing",
+                "creatives": 1
+              }
+            ],
+            "lines": [
+              {
+                "key": "tiktok:ads_management",
+                "serviceKey": "ads_management",
+                "title": "Ads Management",
+                "platform": "tiktok",
+                "budgetBasis": "DAILY_AD_SPEND",
+                "valid": true,
+                "errors": {},
+                "mode": "custom",
+                "creativeMode": "testing",
+                "baseAdBudget": 10000,
+                "advertisingBudget": 10000,
+                "duration": 2,
+                "creativeCount": 1,
+                "baseManagementFee": 25000,
+                "durationMultiplier": 1,
+                "calculatedManagementFee": 25000,
+                "managementFee": 25000,
+                "creativeFee": 0,
+                "serviceFee": 25000,
+                "scriptSupportFee": 0,
+                "setupServiceFee": 0,
+                "addOnsTotal": 0,
+                "total": 35000,
+                "dailyBudget": 5000,
+                "dailyBudgetPerCreative": 5000,
+                "manualAdjustment": false,
+                "warnings": [
+                  "This budget is below the usual ₦35,000 starting point.",
+                  "Campaigns under 7 days use the 7-day minimum management pricing."
+                ],
+                "breakdownText": "Here's a breakdown:\n\nWe will run approximately ₦5,000 daily for 2 days (₦10,000 advertising budget).\n\nOur service fee for helping you run and manage the ads is ₦25,000.\n\nYou can use up to 1 video for the ads.\n\nTotal amount: ₦35,000\n\nThroughout the 2 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+              }
+            ],
+            "purchaseCap": null,
+            "createdAt": "2026-10-07T09:18:19.045Z",
+            "expiresAt": "2026-10-07T09:48:19.045Z",
+            "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18"
+          }
+        }
+      ],
+      "latency": 5530,
+      "openaiConversationId": "conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31"
+    },
+    "action": "reply",
+    "response": "For managing your TikTok ads with a daily spend of ₦5,000 over 2 days, the total cost will be ₦35,000. This includes ₦10,000 for the advertising budget and ₦25,000 as our service fee to run and manage your ads.\n\nWe will create and manage your ads, monitor their performance, and make adjustments during the campaign.\n\nWould you like to proceed with this quote? If yes, I can provide payment details.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 8323,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31",
+    "seenMessageIds": [
+      "G11-in-0",
+      "G11-out-0",
+      "G11-in-1",
+      "G11-out-1",
+      "G11-in-2"
+    ],
+    "contextCharacters": 1113,
+    "dirty": false,
+    "quote": {
+      "id": "q_fe8fbc65a2f318bf6755f418",
+      "fingerprint": "fe8fbc65a2f318bf6755f41872753b7c05cdde5b56cd3c0b22639fab56c9193a",
+      "currency": "NGN",
+      "total": 35000,
+      "items": [
+        {
+          "platform": "tiktok",
+          "service": "ads_management",
+          "budgetBasis": "DAILY_AD_SPEND",
+          "budget": 5000,
+          "duration": 2,
+          "planKey": null,
+          "creativeMode": "testing",
+          "creatives": 1
+        }
+      ],
+      "lines": [
+        {
+          "key": "tiktok:ads_management",
+          "serviceKey": "ads_management",
+          "title": "Ads Management",
+          "platform": "tiktok",
+          "budgetBasis": "DAILY_AD_SPEND",
+          "valid": true,
+          "errors": {},
+          "mode": "custom",
+          "creativeMode": "testing",
+          "baseAdBudget": 10000,
+          "advertisingBudget": 10000,
+          "duration": 2,
+          "creativeCount": 1,
+          "baseManagementFee": 25000,
+          "durationMultiplier": 1,
+          "calculatedManagementFee": 25000,
+          "managementFee": 25000,
+          "creativeFee": 0,
+          "serviceFee": 25000,
+          "scriptSupportFee": 0,
+          "setupServiceFee": 0,
+          "addOnsTotal": 0,
+          "total": 35000,
+          "dailyBudget": 5000,
+          "dailyBudgetPerCreative": 5000,
+          "manualAdjustment": false,
+          "warnings": [
+            "This budget is below the usual ₦35,000 starting point.",
+            "Campaigns under 7 days use the 7-day minimum management pricing."
+          ],
+          "breakdownText": "Here's a breakdown:\n\nWe will run approximately ₦5,000 daily for 2 days (₦10,000 advertising budget).\n\nOur service fee for helping you run and manage the ads is ₦25,000.\n\nYou can use up to 1 video for the ads.\n\nTotal amount: ₦35,000\n\nThroughout the 2 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+        }
+      ],
+      "purchaseCap": null,
+      "createdAt": "2026-10-07T09:18:19.045Z",
+      "expiresAt": "2026-10-07T09:48:19.045Z",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18"
+    }
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

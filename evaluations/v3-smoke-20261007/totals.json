@@ -1,0 +1,22 @@
+{
+  "model": "gpt-4.1-mini",
+  "scenarios": 6,
+  "customerTurns": 9,
+  "plannedTurns": 19,
+  "totals": {
+    "calls": 24,
+    "input_tokens": 190514,
+    "output_tokens": 4688,
+    "total_tokens": 195202,
+    "cached_input_tokens": 59904,
+    "estimated_cost_usd": 0.06573520000000001
+  },
+  "httpCalls": 127,
+  "averageLatencyMs": 14881.888888888889,
+  "averageCost": 0.007303911111111112,
+  "averageModelCalls": 2.6666666666666665,
+  "slowest": "S4.1",
+  "highestToken": "S4.1",
+  "integrityUnchanged": true,
+  "finishedAt": "2026-10-07T10:25:54.065Z"
+}

@@ -1,0 +1,334 @@
+JOSHSPOT V3 — LOCAL ROOT-CAUSE REPAIRS
+7 October 2026
+
+STATUS
+Local implementation complete. 188/188 deterministic tests pass. These tests
+use mocked model responses: they prove enforcement of the supplied contracts,
+not real-model interpretation accuracy or natural conversation quality.
+No paid calls, golden reruns, deployment, real-customer DRAFT/LIVE activation,
+production writes or calculator changes were performed in this repair task.
+193 original golden-evaluation files retain their original SHA-256 hashes.
+The calculator hash is unchanged. See integrity-check.json.
+
+1. ROOT CAUSES FOUND
+
+Retrieval: index.js previously allowed automatic tool choice followed by raw
+prose. The catalogue index and working retrieval tool were available, but
+business answers were not required to obtain approved sources. The frozen
+evaluation recorded zero knowledge calls and eleven other tool calls. This
+shows the loop was not universally broken; it allowed the model to skip
+retrieval. It does not reveal the model's private reason for doing so.
+
+Conversation: the runtime lacked an explicit current-turn request contract
+and evidence-backed selection of platform/service pairs. Optional tools and
+instructions alone did not enforce that a course detour preserved management,
+or that setup-only pricing did not require campaign inputs.
+
+Tools: setup and management shared campaign fields. Service discovery was
+optional, allowing guessed internal IDs. Creative mode required a choice,
+making individual mode possible without evidence of a paid-option request.
+Invalid calls did not have the new per-tool bounded correction contract.
+
+Money: the legacy amount extractor recognized some currency prefixes and
+'naira' suffixes, but an amount such as '15,000 NGN' escaped extraction.
+Checking extracted numbers could not reject a number it never extracted.
+Raw model prose was therefore an unsafe financial output boundary.
+
+Payment/handoff: a model could write another reply without invoking these
+optional tools even when the customer wanted an action. No current-turn
+action obligation connected an interpreted payment/human request to execution.
+
+Output: context.js stored assistant content as a JSON string containing
+messageId, text and sentAt. This exposed an inappropriate response pattern;
+the runtime also accepted raw output without a dedicated final-text contract.
+
+Coverage: no explicit per-request accounting prevented the model from answering
+only part of a multi-question message.
+
+2. FILES CHANGED IN THIS REPAIR TASK
+
+All code paths below are relative to backend/:
+
+inbox/ai/v3/contracts.js — plan_turn/finish_response schemas, semantic service
+  resolver, separate setup/management inputs, nullable creative defaults.
+inbox/ai/v3/turn.js (new) — validate evidence and chosen catalogue IDs, retrieve
+  selected facts, preserve/change purchase pairs, invalidate changed quotes,
+  enforce declared-question and action obligations.
+inbox/ai/v3/provenance.js (new) — trusted source/value ledger, request coverage,
+  numeric/link placeholders, output-envelope rejection and rendering.
+inbox/ai/v3/index.js — required interpretation/retrieval/finalization protocol,
+  bounded repair, invoice progression, provenance and coverage diagnostics.
+inbox/ai/v3/tools.js — service resolver, structured errors, bounded correction,
+  scope/evidence checks, approved creative defaults and current-payment gate.
+inbox/ai/v3/context.js — plain role/text history; context-format revision causes
+  bounded rebuilding of older JSON-envelope context.
+inbox/ai/v3/instructions.js — model responsibilities, retrieval, course/service
+  distinction, question coverage, corrections and trusted-value protocol.
+inbox/ai/v3/validation.js — recognize resolver results as trusted commercial
+  data in the existing secondary validation layer.
+inbox/ai/v3/testAgent.js — simulated handoff ends that test conversation; reset
+  is required before continuing, rather than silently resuming AI ownership.
+inbox/ai/v3/fakeOpenai.test-helper.js — adapt old mock fixtures to explicit
+  structured contracts. This helper does not implement real interpretation.
+inbox/ai/v3/core.test.js — updated tool argument fixtures.
+inbox/ai/v3/conversation.test.js — account for mandatory planning and loop bound.
+inbox/ai/v3/integration.test.js — handoff termination regression.
+inbox/ai/v3/repairs.test.js (new) — root-cause regression cases described below.
+package.json — include repair tests in test:ai-v3.
+
+New task artifacts in evaluations/v3-repairs-20261007/: hash baselines,
+integrity-check.json, tests.txt (failed intermediate run), tests-final.txt
+(successful full run), and this report. Existing unrelated working-tree edits
+are not claimed as work done in this task. V1/V2 implementation was not edited.
+
+3. ARCHITECTURE NOW
+
+Actual sent/received history + small discovery catalogue + trusted local facts
+  -> OpenAI plan_turn
+  -> backend checks evidence/IDs and retrieves model-selected records
+  -> OpenAI business-tool loop
+  -> OpenAI finish_response with sources, request coverage and questions
+  -> backend renders trusted numeric/link values and validates final output
+  -> existing worker ownership/delivery safeguards.
+
+OpenAI still interprets language, identifies requests, chooses relevant
+knowledge, distinguishes detours from purchase changes, and composes prose.
+No customer-phrase dictionary, golden-case IDs or fixed sales funnel was added.
+
+The small purchase record contains selected platform/service pairs and their
+message evidence. It is not a replacement for actual conversation history.
+The model explicitly keeps/replaces/clears that selection and keeps/invalidates
+a quote. Backend tools retain financial authority and permission checks.
+
+The first Responses call must use plan_turn. Subsequent calls use tools and
+finish_response. There are at most eight model-loop iterations and sixteen
+function calls, one final-contract repair, and one correction per failed tool.
+The existing overall deadline still applies. A normal turn now needs at least
+two model responses; actual cost/latency has NOT been measured after repairs.
+The existing narrow invoice authorization check remains; no general LLM judge
+was introduced.
+
+4. KNOWLEDGE RETRIEVAL
+
+The model receives enabled knowledge titles/purpose/keys and commercial
+discovery metadata, not the full KB on every turn. It selects records in its
+plan. Business requests require selected approved data; price/recommendation
+requests can also rely on a current authoritative quote. Social greetings do
+not require retrieval. Selected knowledge is fetched before final composition,
+and business coverage must reference a retrieved source.
+
+Unknown keys are rejected, retrieval errors cannot become business facts, and
+the model can combine multiple selected entries. A source ledger records what
+was fetched. Existing catalogue eligibility and size limits remain in force.
+
+This closes optional retrieval for requests correctly classified as business.
+It does NOT prove the model will classify every business question correctly,
+choose the right entry, or faithfully summarize it. Irrelevant citations and
+omitted requests remain semantic risks requiring later real-model evaluation.
+
+5. TOOL FIXES AND CONTRACTS
+
+plan_turn: required first; current requests, exact message evidence, relevant
+knowledge/service IDs, plan retrieval flag, purchase change, quote change,
+payment interpretation. It must not invent source IDs or cite absent text.
+
+get_services/get_service_details: discovery and approved service facts. The
+latter requires a discovered key. resolve_service accepts service concept
+(account_setup/ads_management/course) and optional platform; it returns a
+unique enabled match or clarification error. It does not select a purchase.
+
+get_business_knowledge: selected index keys, maximum eight per call; use for
+approved explanations/policies. It must not be treated as a financial source.
+
+get_recommended_ads_plans: configured inclusive packages plus existing
+calculator breakdowns. Conflicting packages remain non-quotable.
+
+calculate_ads_quote: setup needs only service and platform. Management needs
+budget basis, budget/duration or discovered package key, and optional creative
+choices. Whole-purchase cap is separate. It must not add unselected services,
+guess allocations or replace the calculator. PACKAGE does not need a customer
+budget. Invalid schemas return machine-readable schema/choices/error details.
+
+create_invoice: current quote ID plus latest inbound message ID and exact
+customer evidence. It requires current interpreted payment request, existing
+authorization, recalculated matching quote, current catalogue, permissions,
+ownership and existing idempotency. It never accepts a model amount, account,
+payment URL or customer ID. A ready payment request cannot simply finalize
+without the invoice action: the runtime invokes the same guarded tool before
+final composition. TEST/DRAFT remains simulated. If no valid quote exists,
+clarification/calculation is still required, not an invented invoice.
+
+get_invoice_status/check_payment_status: existing conversation-bound trusted
+records only. Claims do not mark payment paid. Payment claims trigger checking.
+
+handoff_to_human: reason and internal summary. An interpreted explicit human
+request invokes it automatically. Actual assignment remains the existing
+worker's responsibility; TEST/DRAFT reports simulation. Test Agent rejects
+further turns after its simulated handoff until reset.
+
+finish_response: natural-language text plus trusted placeholders, source IDs,
+coverage of each interpreted request, and declared qualification questions.
+It must not contain raw tool envelopes or invented numeric/link values.
+
+A failing tool returns ok:false, error, relevant field/schema, valid service
+keys, recoverable and attemptsRemaining. One correction is allowed; further
+calls after two failures stop with TOOL_RECOVERY_EXHAUSTED. Errors are not
+cached as successful business facts. Successful repeated calls retain traces.
+
+PRICE/SCOPE DEFAULT AUDIT
+- Management creativeMode null -> existing approved testing mode.
+- Management creatives null -> calculator testingMax, currently two.
+- Individual mode or creatives beyond testingMax requires customer evidence.
+  Evidence text existence is checked; its meaning is still model-interpreted.
+- Setup adapter supplies no campaign budget/duration/plan. Its internal
+  testing/one-creative normalization does not add a campaign or creative fee.
+- No default platform, service, budget, duration, package or extra setup line.
+- Recommended packages are inclusive; management fees are not added twice.
+- All-in caps use the existing calculator adapter; ambiguous allocation is
+  rejected. Currency output remains NGN, matching this business catalogue.
+- Monetary values still come from existing services/plans/calculator. Their
+  fee thresholds were not changed or copied into prompts.
+
+6. FINANCIAL SAFETY
+
+Final model prose is no longer accepted as numeric authority. Every rendered
+number/link must use {{value:ID}} from a ledger produced from fetched typed
+commercial data, a quote or invoice. The ledger records source, field path,
+value and display label. Unknown references and uncited sources are rejected.
+Knowledge prose cannot supply a financial token. Conflicting plans are skipped.
+The renderer emits labels with values, so a management fee token retains its
+management-fee label rather than becoming a naked invented setup amount.
+
+Deterministic tests reject unsupported '₦15,000', '15,000 NGN', 'NGN 15,000',
+'15000 naira', 'about 15k', 'approximately 15,000', '15k setup fee',
+'15,000 for setup', 'fifteen thousand naira', full-width currency/digits and
+'the setup is free'. Forged token IDs and JSON envelopes also fail. The valid
+setup token renders its approved ₦20,000 value. One repair is allowed; the
+second unsupported finalization fails closed. Existing invoice/URL/payment
+validation remains a second layer.
+
+LIMIT: this is stronger numeric provenance, not a proof of all possible
+financial semantics. It conservatively rejects ALL literal digits/currency
+symbols and common English number words in prose, even harmless 'one'. This
+can cause awkward replies and false rejections. Other-language number words,
+non-numeric implied discounts or misusing an otherwise valid source still
+need attention. It would be dishonest to claim universal semantic safety from
+these tests alone. No model-backed safety result is claimed.
+
+7. CONVERSATION FIXES
+
+Repeated questions: declared questions are checked against selected service,
+platform and quote. Setup/course cannot request campaign budget/duration;
+priced packages already contain those inputs. Deferral blocks payment/proceed
+questions; payment request blocks asking permission again. A declared
+contradiction requires current evidence. Remaining history interpretation is
+OpenAI's job. The model could omit/mislabel a question, so this is not a complete
+semantic repetition detector.
+
+Course: separate purchase concept and resolver. A question about training keeps
+an existing purchase; explicit switch replaces it using evidence. Returning to
+management can restore the selected service without a keyword state machine.
+
+Corrections: service/platform changes invalidate the quote. The plan also has
+explicit quote invalidation for budget/duration/package changes. Negotiation
+does not itself authorize discounts or require replacing the purchase.
+
+Payment: current contextual interpretation and exact evidence replace optional
+action selection. Deferral disallows create_invoice even if earlier consent
+exists. The original invoice authorization checks are preserved.
+
+Multiple questions: each declared request has answered/deferred/unsupported
+coverage and approved sources where required. Missing coverage is rejected;
+unsupported coverage requires handoff. The model still must detect all requests.
+
+Output: actual history is plain role/text. Old context format is rebuilt using
+bounded real messages. JSON braces, code fences and common internal identifiers
+are rejected in final prose. This addresses the observed envelope leak without
+exposing hidden reasoning or tool payloads to customers.
+
+8. FIFTEEN-DAY PACKAGE AND FUTURE PRODUCTION MIGRATION
+
+Local defaults/tests remain ₦265,000 = ₦200,000 advertising + ₦65,000 management.
+Relevant tests compare the plan with the unchanged calculator. No further
+calculator or production correction occurred during this task.
+
+The previous read-only audit identified the stale production-configured row:
+database test, collection inboxairecords,
+_id 6ac17d26f2f0297bebf4a75a, kind plan, key plan_15,
+revision 0, data.amount 285000.
+This is prior evidence, not a new production read; recheck before migrating.
+The database name 'test' does not make that connected database non-production.
+
+Later, separately authorized migration: read/back up the current row; confirm
+its revision; use the existing Admin record update path in inbox/ai/routes.js
+with optimistic revision to change data.amount to 265000. Preserve all other
+fields. The normal path should increment record/config revisions and create
+its audit event. Verify the plan and calculator breakdown, refresh catalogue
+views, and confirm stale quotes cannot be reused. Do not update just the raw
+amount while bypassing revision safeguards. No new index is needed. Existing
+seed defaults do not automatically overwrite an existing production record.
+
+9. TEST RESULTS
+
+Final run: 188 tests, 188 passed, zero failed/skipped/cancelled; about 13.6 s.
+V3: 66 tests. Existing V1/V2 regression coverage: 122 tests.
+
+Command (cwd backend):
+node --test --test-reporter=spec inbox/ai/v3/core.test.js inbox/ai/v3/conversation.test.js inbox/ai/v3/integration.test.js inbox/ai/v3/repairs.test.js inbox/ai/engine.test.js inbox/ai/structured.test.js inbox/ai/v2/core.test.js inbox/ai/v2/architecture.test.js inbox/ai/v2/integration.test.js > evaluations/v3-repairs-20261007/tests-final.txt
+
+Also: git diff --check passed (line-ending warnings only). Hash comparison
+confirmed all 193 frozen files and calculator unchanged.
+
+New coverage includes same-turn course retrieval; business-source requirements;
+multi-question coverage; course detour/switch/return; fabricated evidence;
+service discovery and bounded correction; setup-only input; creative defaults
+and evidence; unselected service rejection; repeated/irrelevant questions;
+eleven unsupported money formats; trusted rendering; human-action fixtures;
+deferral; payment-plus-question simulated invoice; corrected fifteen-day plan;
+quote invalidation; one output repair; contextual payment fixtures; Test Agent
+handoff termination. Existing tests preserve calculator, ownership, financial
+guards, batching/context recovery and V1/V2 behavior.
+
+An intermediate combined run failed because a closing parenthesis was missing
+in the newly extended plan schema. That syntax error was fixed; its log remains
+in tests.txt. The subsequent complete run passed. No original golden artifacts
+were overwritten or reclassified. Paraphrase fixtures supply mocked model
+interpretations; they are NOT evidence of real language understanding.
+
+10. REMAINING RISKS / RELEASE POSITION
+
+Keep V3 local and unreleased. Deterministic green is not production readiness.
+- Real OpenAI schema acceptance, tool choices, understanding and naturalness
+  have not been exercised after these changes.
+- Two-stage planning adds latency/tokens; eight rounds still share the deadline.
+- Mandatory retrieval depends on model request classification. Coverage depends
+  on detecting every request. Evidence existence does not prove its meaning.
+- Source citations do not prove every statement faithfully follows the source.
+- Numeric provenance is conservative and can reject useful ordinary prose.
+  It does not prove all semantic financial or guarantee claims in every language.
+- Human handoff intent must still be correctly interpreted. Worker assignment
+  availability and production delivery were not exercised.
+- A simulated invoice test proves no real side effect; it does not prove real
+  provider success. Guarded invoice creation can precede final response approval,
+  so existing idempotent recovery remains important if composition then fails.
+- Old conflicting enabled KB records were not edited here. Production plan_15
+  remains a separate migration requirement.
+- One bounded correction may be insufficient for some complex valid requests;
+  extra retries were deliberately not added to hide failures.
+
+11. SMALLEST NEXT MODEL-BACKED EVALUATION — PROPOSAL ONLY
+
+After owner review/authorization, use one configured model, one pass, no judge,
+six short closed-loop conversations (roughly 24–30 total customer turns):
+1. Setup selection -> price -> contextual payment plus requirements question.
+2. Management daily budget -> quote -> deferral -> explicit return/payment.
+3. Management -> course question detour -> course switch -> management return.
+4. Mixed-platform setup/management -> correction -> whole-purchase cap.
+5. Recommendations -> fifteen-day breakdown -> question about included spend.
+6. Multi-question approved support -> explicit human request -> stop.
+
+Use approved local facts and simulated effects, capture every response/tool/
+source/token/cost, and stop on safety failures. Include naturally worded short
+answers, not just existing fixture sentences. This is a focused smoke test,
+not sufficient proof for LIVE release. Do not rerun the original golden set or
+expand/repeat automatically. NONE of this proposed evaluation was run.

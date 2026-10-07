@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G26-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "run TikTok for me",
+      "createdAt": "2026-10-07T09:21:46.423Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3378,
+    "output_tokens": 95,
+    "total_tokens": 3473,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0015032000000000001
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=100&order=asc&after=msg_6ac60f2c7554819590b90a291d57d0f8059b221db6e6e330"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items/msg_059b221db6e6e330006ac60f2d861c8195a1f3cf5e5b0ab6c6"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items/msg_059b221db6e6e330006ac60f2de18c8195be88df9753bac088"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=100&order=asc&after=msg_6ac60f2c7554819590b90a291d57d0f8059b221db6e6e330"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_059b221db6e6e330006ac60f2d60f88195ac45f372d2737e3e",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3378,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 95,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3473
+      },
+      "output": [
+        {
+          "id": "msg_059b221db6e6e330006ac60f2de18c8195be88df9753bac088",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for your interest in running TikTok ads with us! To get started, could you please let me know if you want us to fully manage your TikTok ad campaigns for you, or would you prefer we just help set up the TikTok ads account so you can run the ads yourself?\n\nAlso, it would help to know your advertising budget and how long you want the campaign to run.\n\nThis info will help me prepare the best options and quote for you."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3127,
+      "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330"
+    },
+    "action": "reply",
+    "response": "Thanks for your interest in running TikTok ads with us! To get started, could you please let me know if you want us to fully manage your TikTok ad campaigns for you, or would you prefer we just help set up the TikTok ads account so you can run the ads yourself?\n\nAlso, it would help to know your advertising budget and how long you want the campaign to run.\n\nThis info will help me prepare the best options and quote for you.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4738,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330",
+    "seenMessageIds": [
+      "G26-in-0"
+    ],
+    "contextCharacters": 146,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

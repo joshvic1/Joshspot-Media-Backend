@@ -1,0 +1,1287 @@
+{
+  "id": "G16",
+  "category": "duration uncertainty",
+  "expected": [
+    "Retain daily amount; use tools for recommendation/quote; do not lose budget."
+  ],
+  "plannedCustomerTurns": [
+    "I want Meta management",
+    "I have 5k per day",
+    "how long do you recommend",
+    "a week sounds good",
+    "how much in total"
+  ],
+  "turns": [
+    {
+      "customer": [
+        {
+          "_id": "G16-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "I want Meta management",
+          "createdAt": "2026-10-07T09:19:35.803Z"
+        }
+      ],
+      "historyBefore": [],
+      "stateBefore": {},
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3377,
+        "output_tokens": 60,
+        "total_tokens": 3437,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0014468
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "post",
+          "path": "/conversations"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=100&order=asc&after=msg_6ac60ea9df248194a082d61bf4c4abdf06663448639a2296"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/msg_06663448639a2296006ac60eab0c2c819483f3e2e143504099"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/msg_06663448639a2296006ac60eab5e6c8194b08533a545531909"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=100&order=asc&after=msg_6ac60ea9df248194a082d61bf4c4abdf06663448639a2296"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_06663448639a2296006ac60eaae7208194897432a29af8c582",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3377,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 60,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3437
+          },
+          "output": [
+            {
+              "id": "msg_06663448639a2296006ac60eab5e6c8194b08533a545531909",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Thanks for choosing Meta ads management. To prepare a quote, could you please tell me:\n\n1. Your total budget or daily ad spend for Meta ads?\n2. How long do you want the ads campaign to run (in days)?\n\nThis helps me give you the best plan and pricing."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 4109,
+          "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296"
+        },
+        "action": "reply",
+        "response": "Thanks for choosing Meta ads management. To prepare a quote, could you please tell me:\n\n1. Your total budget or daily ad spend for Meta ads?\n2. How long do you want the ads campaign to run (in days)?\n\nThis helps me give you the best plan and pricing.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 6405,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296",
+        "seenMessageIds": [
+          "G16-in-0"
+        ],
+        "contextCharacters": 151,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G16-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "I have 5k per day",
+          "createdAt": "2026-10-07T09:19:42.211Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G16-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "I want Meta management",
+          "createdAt": "2026-10-07T09:19:35.803Z"
+        },
+        {
+          "_id": "G16-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for choosing Meta ads management. To prepare a quote, could you please tell me:\n\n1. Your total budget or daily ad spend for Meta ads?\n2. How long do you want the ads campaign to run (in days)?\n\nThis helps me give you the best plan and pricing.",
+          "createdAt": "2026-10-07T09:19:42.208Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296",
+        "seenMessageIds": [
+          "G16-in-0"
+        ],
+        "contextCharacters": 151,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3519,
+        "output_tokens": 46,
+        "total_tokens": 3565,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0014812
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=100&order=asc&after=msg_6ac60eb071b4819495a81c93e00d7f4406663448639a2296"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/msg_06663448639a2296006ac60eb1ab2881948b5638f560ffd66b"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/msg_06663448639a2296006ac60eb1f1188194ab324ae01ea153f1"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=100&order=asc&after=msg_6ac60eb071b4819495a81c93e00d7f4406663448639a2296"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_06663448639a2296006ac60eb1808c8194b57292655874604b",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3519,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 46,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3565
+          },
+          "output": [
+            {
+              "id": "msg_06663448639a2296006ac60eb1f1188194ab324ae01ea153f1",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Thanks for sharing your daily budget of 5,000 for Meta ads management.\n\nCould you also tell me how many days you want your Meta ads campaign to run? This will help me prepare an accurate quote for you."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 3102,
+          "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296"
+        },
+        "action": "reply",
+        "response": "Thanks for sharing your daily budget of 5,000 for Meta ads management.\n\nCould you also tell me how many days you want your Meta ads campaign to run? This will help me prepare an accurate quote for you.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 4816,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296",
+        "seenMessageIds": [
+          "G16-in-0",
+          "G16-out-0",
+          "G16-in-1"
+        ],
+        "contextCharacters": 691,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G16-in-2",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "how long do you recommend",
+          "createdAt": "2026-10-07T09:19:47.030Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G16-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "I want Meta management",
+          "createdAt": "2026-10-07T09:19:35.803Z"
+        },
+        {
+          "_id": "G16-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for choosing Meta ads management. To prepare a quote, could you please tell me:\n\n1. Your total budget or daily ad spend for Meta ads?\n2. How long do you want the ads campaign to run (in days)?\n\nThis helps me give you the best plan and pricing.",
+          "createdAt": "2026-10-07T09:19:42.208Z"
+        },
+        {
+          "_id": "G16-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "I have 5k per day",
+          "createdAt": "2026-10-07T09:19:42.211Z"
+        },
+        {
+          "_id": "G16-out-1",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for sharing your daily budget of 5,000 for Meta ads management.\n\nCould you also tell me how many days you want your Meta ads campaign to run? This will help me prepare an accurate quote for you.",
+          "createdAt": "2026-10-07T09:19:47.027Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296",
+        "seenMessageIds": [
+          "G16-in-0",
+          "G16-out-0",
+          "G16-in-1"
+        ],
+        "contextCharacters": 691,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3641,
+        "output_tokens": 76,
+        "total_tokens": 3717,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.001578
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=100&order=asc&after=msg_6ac60eb502e481948b7a3ac8114ae78b06663448639a2296"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/msg_06663448639a2296006ac60eb636bc8194be6907aa23f036b0"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/msg_06663448639a2296006ac60eb683ac8194be6994b896fee7ae"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=100&order=asc&after=msg_6ac60eb502e481948b7a3ac8114ae78b06663448639a2296"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_06663448639a2296006ac60eb60e9c8194ad3aacd58b60660d",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3641,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 76,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3717
+          },
+          "output": [
+            {
+              "id": "msg_06663448639a2296006ac60eb683ac8194be6994b896fee7ae",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "For Meta ads management with a daily budget of 5,000, a common recommended campaign duration is around 14 to 30 days. This allows enough time for the ads to optimize and gather meaningful results.\n\nWould you prefer a shorter 2-week campaign to test performance or a month-long campaign for more sustained exposure? Or do you have a specific duration in mind?"
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 3055,
+          "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296"
+        },
+        "action": "reply",
+        "response": "For Meta ads management with a daily budget of 5,000, a common recommended campaign duration is around 14 to 30 days. This allows enough time for the ads to optimize and gather meaningful results.\n\nWould you prefer a shorter 2-week campaign to test performance or a month-long campaign for more sustained exposure? Or do you have a specific duration in mind?",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 4799,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296",
+        "seenMessageIds": [
+          "G16-in-0",
+          "G16-out-0",
+          "G16-in-1",
+          "G16-out-1",
+          "G16-in-2"
+        ],
+        "contextCharacters": 1184,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G16-in-3",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "a week sounds good",
+          "createdAt": "2026-10-07T09:19:51.831Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G16-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "I want Meta management",
+          "createdAt": "2026-10-07T09:19:35.803Z"
+        },
+        {
+          "_id": "G16-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for choosing Meta ads management. To prepare a quote, could you please tell me:\n\n1. Your total budget or daily ad spend for Meta ads?\n2. How long do you want the ads campaign to run (in days)?\n\nThis helps me give you the best plan and pricing.",
+          "createdAt": "2026-10-07T09:19:42.208Z"
+        },
+        {
+          "_id": "G16-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "I have 5k per day",
+          "createdAt": "2026-10-07T09:19:42.211Z"
+        },
+        {
+          "_id": "G16-out-1",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for sharing your daily budget of 5,000 for Meta ads management.\n\nCould you also tell me how many days you want your Meta ads campaign to run? This will help me prepare an accurate quote for you.",
+          "createdAt": "2026-10-07T09:19:47.027Z"
+        },
+        {
+          "_id": "G16-in-2",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "how long do you recommend",
+          "createdAt": "2026-10-07T09:19:47.030Z"
+        },
+        {
+          "_id": "G16-out-2",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "For Meta ads management with a daily budget of 5,000, a common recommended campaign duration is around 14 to 30 days. This allows enough time for the ads to optimize and gather meaningful results.\n\nWould you prefer a shorter 2-week campaign to test performance or a month-long campaign for more sustained exposure? Or do you have a specific duration in mind?",
+          "createdAt": "2026-10-07T09:19:51.828Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296",
+        "seenMessageIds": [
+          "G16-in-0",
+          "G16-out-0",
+          "G16-in-1",
+          "G16-out-1",
+          "G16-in-2"
+        ],
+        "contextCharacters": 1184,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 2,
+        "input_tokens": 8186,
+        "output_tokens": 207,
+        "total_tokens": 8393,
+        "cached_input_tokens": 3712,
+        "estimated_cost_usd": 0.002492
+      },
+      "httpCalls": 12,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=100&order=asc&after=msg_6ac60eb9cbac8194b512b72e3c64662606663448639a2296"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/msg_06663448639a2296006ac60ebba1a88194a642b5f0f44a35b0"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/msg_06663448639a2296006ac60ebbe8a88194b01cb91ab4755a7e"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/fc_06663448639a2296006ac60ebc7adc8194a0fdfbac94801290"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/fc_06663448639a2296006ac60ebda92081948353a626d6769edd"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/msg_06663448639a2296006ac60ebdfdd0819491021dfb46221011"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=100&order=asc&after=msg_6ac60eb9cbac8194b512b72e3c64662606663448639a2296"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_06663448639a2296006ac60ebae8f48194abbfc1c26fc8e938",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3795,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 108,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3903
+          },
+          "output": [
+            {
+              "id": "msg_06663448639a2296006ac60ebbe8a88194b01cb91ab4755a7e",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Thanks for confirming a 7-day Meta ads management campaign with a daily budget of 5,000.\n\nI’ll prepare a quote for managing Meta ads for one week at that daily spend. Just a moment please."
+                }
+              ],
+              "role": "assistant"
+            },
+            {
+              "id": "fc_06663448639a2296006ac60ebc7adc8194a0fdfbac94801290",
+              "type": "function_call",
+              "status": "completed",
+              "arguments": "{\"items\":[{\"platform\":\"meta\",\"service\":\"ads_management\",\"budgetBasis\":\"DAILY_AD_SPEND\",\"budget\":5000,\"duration\":7,\"planKey\":null,\"creativeMode\":\"individual\",\"creatives\":1}],\"purchaseCap\":null}",
+              "call_id": "call_tq4sepV6Y554d0dAKfzm5PCf",
+              "name": "calculate_ads_quote"
+            }
+          ]
+        },
+        {
+          "id": "resp_06663448639a2296006ac60ebd7e9c819498f18020d1a3ce86",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4391,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 3712
+            },
+            "output_tokens": 99,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 4490
+          },
+          "output": [
+            {
+              "id": "msg_06663448639a2296006ac60ebdfdd0819491021dfb46221011",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Here's the quote for Meta ads management with a daily budget of ₦5,000 over one week:\n\n- Total advertising budget for 7 days: ₦35,000\n- Service fee for running and managing the ads: ₦30,000\n- Total amount: ₦65,000\n\nThis includes managing 1 video ad, monitoring, adjusting targeting, and retargeting as needed throughout the campaign.\n\nWould you like to proceed with payment and start the campaign?"
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [
+            {
+              "tool": "calculate_ads_quote",
+              "args": {
+                "items": [
+                  {
+                    "platform": "meta",
+                    "service": "ads_management",
+                    "budgetBasis": "DAILY_AD_SPEND",
+                    "budget": 5000,
+                    "duration": 7,
+                    "planKey": null,
+                    "creativeMode": "individual",
+                    "creatives": 1
+                  }
+                ],
+                "purchaseCap": null
+              },
+              "result": {
+                "id": "q_c6617de2c1401935a8e007aa",
+                "fingerprint": "c6617de2c1401935a8e007aa864ecdc32692e371d740acc238e4b562ba434bd4",
+                "currency": "NGN",
+                "total": 65000,
+                "items": [
+                  {
+                    "platform": "meta",
+                    "service": "ads_management",
+                    "budgetBasis": "DAILY_AD_SPEND",
+                    "budget": 5000,
+                    "duration": 7,
+                    "planKey": null,
+                    "creativeMode": "individual",
+                    "creatives": 1
+                  }
+                ],
+                "lines": [
+                  {
+                    "key": "meta:ads_management",
+                    "serviceKey": "ads_management",
+                    "title": "Ads Management",
+                    "platform": "meta",
+                    "budgetBasis": "DAILY_AD_SPEND",
+                    "valid": true,
+                    "errors": {},
+                    "mode": "custom",
+                    "creativeMode": "individual",
+                    "baseAdBudget": 35000,
+                    "advertisingBudget": 35000,
+                    "duration": 7,
+                    "creativeCount": 1,
+                    "baseManagementFee": 25000,
+                    "durationMultiplier": 1,
+                    "calculatedManagementFee": 25000,
+                    "managementFee": 25000,
+                    "creativeFee": 5000,
+                    "serviceFee": 30000,
+                    "scriptSupportFee": 0,
+                    "setupServiceFee": 0,
+                    "addOnsTotal": 0,
+                    "total": 65000,
+                    "dailyBudget": 5000,
+                    "dailyBudgetPerCreative": 5000,
+                    "manualAdjustment": false,
+                    "warnings": [],
+                    "breakdownText": "Here's a breakdown:\n\nEach video will have an advertising budget of ₦35,000 for 7 days, making the total advertising budget ₦35,000 for 1 video.\n\nOur service fee for helping you run and manage the ads is ₦30,000.\n\nWe will advertise 1 video individually, each with its own advertising budget.\n\nTotal amount: ₦65,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+                  }
+                ],
+                "purchaseCap": null,
+                "createdAt": "2026-10-07T09:19:55.817Z",
+                "expiresAt": "2026-10-07T09:49:55.817Z",
+                "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18"
+              }
+            }
+          ],
+          "latency": 6234,
+          "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296"
+        },
+        "action": "reply",
+        "response": "Here's the quote for Meta ads management with a daily budget of ₦5,000 over one week:\n\n- Total advertising budget for 7 days: ₦35,000\n- Service fee for running and managing the ads: ₦30,000\n- Total amount: ₦65,000\n\nThis includes managing 1 video ad, monitoring, adjusting targeting, and retargeting as needed throughout the campaign.\n\nWould you like to proceed with payment and start the campaign?",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 9691,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296",
+        "seenMessageIds": [
+          "G16-in-0",
+          "G16-out-0",
+          "G16-in-1",
+          "G16-out-1",
+          "G16-in-2",
+          "G16-out-2",
+          "G16-in-3"
+        ],
+        "contextCharacters": 1827,
+        "dirty": false,
+        "quote": {
+          "id": "q_c6617de2c1401935a8e007aa",
+          "fingerprint": "c6617de2c1401935a8e007aa864ecdc32692e371d740acc238e4b562ba434bd4",
+          "currency": "NGN",
+          "total": 65000,
+          "items": [
+            {
+              "platform": "meta",
+              "service": "ads_management",
+              "budgetBasis": "DAILY_AD_SPEND",
+              "budget": 5000,
+              "duration": 7,
+              "planKey": null,
+              "creativeMode": "individual",
+              "creatives": 1
+            }
+          ],
+          "lines": [
+            {
+              "key": "meta:ads_management",
+              "serviceKey": "ads_management",
+              "title": "Ads Management",
+              "platform": "meta",
+              "budgetBasis": "DAILY_AD_SPEND",
+              "valid": true,
+              "errors": {},
+              "mode": "custom",
+              "creativeMode": "individual",
+              "baseAdBudget": 35000,
+              "advertisingBudget": 35000,
+              "duration": 7,
+              "creativeCount": 1,
+              "baseManagementFee": 25000,
+              "durationMultiplier": 1,
+              "calculatedManagementFee": 25000,
+              "managementFee": 25000,
+              "creativeFee": 5000,
+              "serviceFee": 30000,
+              "scriptSupportFee": 0,
+              "setupServiceFee": 0,
+              "addOnsTotal": 0,
+              "total": 65000,
+              "dailyBudget": 5000,
+              "dailyBudgetPerCreative": 5000,
+              "manualAdjustment": false,
+              "warnings": [],
+              "breakdownText": "Here's a breakdown:\n\nEach video will have an advertising budget of ₦35,000 for 7 days, making the total advertising budget ₦35,000 for 1 video.\n\nOur service fee for helping you run and manage the ads is ₦30,000.\n\nWe will advertise 1 video individually, each with its own advertising budget.\n\nTotal amount: ₦65,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+            }
+          ],
+          "purchaseCap": null,
+          "createdAt": "2026-10-07T09:19:55.817Z",
+          "expiresAt": "2026-10-07T09:49:55.817Z",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18"
+        }
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G16-in-4",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "how much in total",
+          "createdAt": "2026-10-07T09:20:01.526Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G16-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "I want Meta management",
+          "createdAt": "2026-10-07T09:19:35.803Z"
+        },
+        {
+          "_id": "G16-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for choosing Meta ads management. To prepare a quote, could you please tell me:\n\n1. Your total budget or daily ad spend for Meta ads?\n2. How long do you want the ads campaign to run (in days)?\n\nThis helps me give you the best plan and pricing.",
+          "createdAt": "2026-10-07T09:19:42.208Z"
+        },
+        {
+          "_id": "G16-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "I have 5k per day",
+          "createdAt": "2026-10-07T09:19:42.211Z"
+        },
+        {
+          "_id": "G16-out-1",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for sharing your daily budget of 5,000 for Meta ads management.\n\nCould you also tell me how many days you want your Meta ads campaign to run? This will help me prepare an accurate quote for you.",
+          "createdAt": "2026-10-07T09:19:47.027Z"
+        },
+        {
+          "_id": "G16-in-2",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "how long do you recommend",
+          "createdAt": "2026-10-07T09:19:47.030Z"
+        },
+        {
+          "_id": "G16-out-2",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "For Meta ads management with a daily budget of 5,000, a common recommended campaign duration is around 14 to 30 days. This allows enough time for the ads to optimize and gather meaningful results.\n\nWould you prefer a shorter 2-week campaign to test performance or a month-long campaign for more sustained exposure? Or do you have a specific duration in mind?",
+          "createdAt": "2026-10-07T09:19:51.828Z"
+        },
+        {
+          "_id": "G16-in-3",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "a week sounds good",
+          "createdAt": "2026-10-07T09:19:51.831Z"
+        },
+        {
+          "_id": "G16-out-3",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Here's the quote for Meta ads management with a daily budget of ₦5,000 over one week:\n\n- Total advertising budget for 7 days: ₦35,000\n- Service fee for running and managing the ads: ₦30,000\n- Total amount: ₦65,000\n\nThis includes managing 1 video ad, monitoring, adjusting targeting, and retargeting as needed throughout the campaign.\n\nWould you like to proceed with payment and start the campaign?",
+          "createdAt": "2026-10-07T09:20:01.523Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296",
+        "seenMessageIds": [
+          "G16-in-0",
+          "G16-out-0",
+          "G16-in-1",
+          "G16-out-1",
+          "G16-in-2",
+          "G16-out-2",
+          "G16-in-3"
+        ],
+        "contextCharacters": 1827,
+        "dirty": false,
+        "quote": {
+          "id": "q_c6617de2c1401935a8e007aa",
+          "fingerprint": "c6617de2c1401935a8e007aa864ecdc32692e371d740acc238e4b562ba434bd4",
+          "currency": "NGN",
+          "total": 65000,
+          "items": [
+            {
+              "platform": "meta",
+              "service": "ads_management",
+              "budgetBasis": "DAILY_AD_SPEND",
+              "budget": 5000,
+              "duration": 7,
+              "planKey": null,
+              "creativeMode": "individual",
+              "creatives": 1
+            }
+          ],
+          "lines": [
+            {
+              "key": "meta:ads_management",
+              "serviceKey": "ads_management",
+              "title": "Ads Management",
+              "platform": "meta",
+              "budgetBasis": "DAILY_AD_SPEND",
+              "valid": true,
+              "errors": {},
+              "mode": "custom",
+              "creativeMode": "individual",
+              "baseAdBudget": 35000,
+              "advertisingBudget": 35000,
+              "duration": 7,
+              "creativeCount": 1,
+              "baseManagementFee": 25000,
+              "durationMultiplier": 1,
+              "calculatedManagementFee": 25000,
+              "managementFee": 25000,
+              "creativeFee": 5000,
+              "serviceFee": 30000,
+              "scriptSupportFee": 0,
+              "setupServiceFee": 0,
+              "addOnsTotal": 0,
+              "total": 65000,
+              "dailyBudget": 5000,
+              "dailyBudgetPerCreative": 5000,
+              "manualAdjustment": false,
+              "warnings": [],
+              "breakdownText": "Here's a breakdown:\n\nEach video will have an advertising budget of ₦35,000 for 7 days, making the total advertising budget ₦35,000 for 1 video.\n\nOur service fee for helping you run and manage the ads is ₦30,000.\n\nWe will advertise 1 video individually, each with its own advertising budget.\n\nTotal amount: ₦65,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+            }
+          ],
+          "purchaseCap": null,
+          "createdAt": "2026-10-07T09:19:55.817Z",
+          "expiresAt": "2026-10-07T09:49:55.817Z",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18"
+        }
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 4448,
+        "output_tokens": 86,
+        "total_tokens": 4534,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0019168
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=100&order=asc&after=msg_6ac60ec377248194a060ab5d2117c51a06663448639a2296"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/msg_06663448639a2296006ac60ec4bbd0819484ea99014fa763ae"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/msg_06663448639a2296006ac60ec50358819499da6e0d62bb1fb9"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=100&order=asc&after=msg_6ac60ec377248194a060ab5d2117c51a06663448639a2296"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_06663448639a2296006ac60ec48b6c8194af6405e1ecd75af9",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4448,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 86,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 4534
+          },
+          "output": [
+            {
+              "id": "msg_06663448639a2296006ac60ec50358819499da6e0d62bb1fb9",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "The total cost for Meta ads management with a daily ad spend of ₦5,000 over one week is ₦65,000. \n\nThis includes:\n- ₦35,000 for the total ad spend (7 days × ₦5,000 daily budget)\n- ₦30,000 service fee for running and managing the ads.\n\nLet me know if you want to proceed or need any more details."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 3025,
+          "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296"
+        },
+        "action": "reply",
+        "response": "The total cost for Meta ads management with a daily ad spend of ₦5,000 over one week is ₦65,000. \n\nThis includes:\n- ₦35,000 for the total ad spend (7 days × ₦5,000 daily budget)\n- ₦30,000 service fee for running and managing the ads.\n\nLet me know if you want to proceed or need any more details.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 4795,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296",
+        "seenMessageIds": [
+          "G16-in-0",
+          "G16-out-0",
+          "G16-in-1",
+          "G16-out-1",
+          "G16-in-2",
+          "G16-out-2",
+          "G16-in-3",
+          "G16-out-3",
+          "G16-in-4"
+        ],
+        "contextCharacters": 2520,
+        "dirty": false,
+        "quote": {
+          "id": "q_c6617de2c1401935a8e007aa",
+          "fingerprint": "c6617de2c1401935a8e007aa864ecdc32692e371d740acc238e4b562ba434bd4",
+          "currency": "NGN",
+          "total": 65000,
+          "items": [
+            {
+              "platform": "meta",
+              "service": "ads_management",
+              "budgetBasis": "DAILY_AD_SPEND",
+              "budget": 5000,
+              "duration": 7,
+              "planKey": null,
+              "creativeMode": "individual",
+              "creatives": 1
+            }
+          ],
+          "lines": [
+            {
+              "key": "meta:ads_management",
+              "serviceKey": "ads_management",
+              "title": "Ads Management",
+              "platform": "meta",
+              "budgetBasis": "DAILY_AD_SPEND",
+              "valid": true,
+              "errors": {},
+              "mode": "custom",
+              "creativeMode": "individual",
+              "baseAdBudget": 35000,
+              "advertisingBudget": 35000,
+              "duration": 7,
+              "creativeCount": 1,
+              "baseManagementFee": 25000,
+              "durationMultiplier": 1,
+              "calculatedManagementFee": 25000,
+              "managementFee": 25000,
+              "creativeFee": 5000,
+              "serviceFee": 30000,
+              "scriptSupportFee": 0,
+              "setupServiceFee": 0,
+              "addOnsTotal": 0,
+              "total": 65000,
+              "dailyBudget": 5000,
+              "dailyBudgetPerCreative": 5000,
+              "manualAdjustment": false,
+              "warnings": [],
+              "breakdownText": "Here's a breakdown:\n\nEach video will have an advertising budget of ₦35,000 for 7 days, making the total advertising budget ₦35,000 for 1 video.\n\nOur service fee for helping you run and manage the ads is ₦30,000.\n\nWe will advertise 1 video individually, each with its own advertising budget.\n\nTotal amount: ₦65,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+            }
+          ],
+          "purchaseCap": null,
+          "createdAt": "2026-10-07T09:19:55.817Z",
+          "expiresAt": "2026-10-07T09:49:55.817Z",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18"
+        }
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    }
+  ],
+  "completeHistory": [
+    {
+      "_id": "G16-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I want Meta management",
+      "createdAt": "2026-10-07T09:19:35.803Z"
+    },
+    {
+      "_id": "G16-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing Meta ads management. To prepare a quote, could you please tell me:\n\n1. Your total budget or daily ad spend for Meta ads?\n2. How long do you want the ads campaign to run (in days)?\n\nThis helps me give you the best plan and pricing.",
+      "createdAt": "2026-10-07T09:19:42.208Z"
+    },
+    {
+      "_id": "G16-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I have 5k per day",
+      "createdAt": "2026-10-07T09:19:42.211Z"
+    },
+    {
+      "_id": "G16-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for sharing your daily budget of 5,000 for Meta ads management.\n\nCould you also tell me how many days you want your Meta ads campaign to run? This will help me prepare an accurate quote for you.",
+      "createdAt": "2026-10-07T09:19:47.027Z"
+    },
+    {
+      "_id": "G16-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "how long do you recommend",
+      "createdAt": "2026-10-07T09:19:47.030Z"
+    },
+    {
+      "_id": "G16-out-2",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "For Meta ads management with a daily budget of 5,000, a common recommended campaign duration is around 14 to 30 days. This allows enough time for the ads to optimize and gather meaningful results.\n\nWould you prefer a shorter 2-week campaign to test performance or a month-long campaign for more sustained exposure? Or do you have a specific duration in mind?",
+      "createdAt": "2026-10-07T09:19:51.828Z"
+    },
+    {
+      "_id": "G16-in-3",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "a week sounds good",
+      "createdAt": "2026-10-07T09:19:51.831Z"
+    },
+    {
+      "_id": "G16-out-3",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Here's the quote for Meta ads management with a daily budget of ₦5,000 over one week:\n\n- Total advertising budget for 7 days: ₦35,000\n- Service fee for running and managing the ads: ₦30,000\n- Total amount: ₦65,000\n\nThis includes managing 1 video ad, monitoring, adjusting targeting, and retargeting as needed throughout the campaign.\n\nWould you like to proceed with payment and start the campaign?",
+      "createdAt": "2026-10-07T09:20:01.523Z"
+    },
+    {
+      "_id": "G16-in-4",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "how much in total",
+      "createdAt": "2026-10-07T09:20:01.526Z"
+    },
+    {
+      "_id": "G16-out-4",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "The total cost for Meta ads management with a daily ad spend of ₦5,000 over one week is ₦65,000. \n\nThis includes:\n- ₦35,000 for the total ad spend (7 days × ₦5,000 daily budget)\n- ₦30,000 service fee for running and managing the ads.\n\nLet me know if you want to proceed or need any more details.",
+      "createdAt": "2026-10-07T09:20:06.321Z"
+    }
+  ],
+  "usage": {
+    "calls": 6,
+    "input_tokens": 23171,
+    "output_tokens": 475,
+    "total_tokens": 23646,
+    "cached_input_tokens": 3712,
+    "estimated_cost_usd": 0.008914799999999999
+  }
+}

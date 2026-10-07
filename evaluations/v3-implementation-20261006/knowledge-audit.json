@@ -1,0 +1,349 @@
+{
+  "source": "Prior read-only snapshot; not a fresh production query",
+  "configRevision": 30,
+  "catalogueRevision": "a3e39094b387f185c2c6f5755e9c260a0f9bd7a5a314d9cd1b13bc2b5b753712",
+  "knowledgeCount": 57,
+  "exactDuplicates": [],
+  "placeholders": [
+    {
+      "key": "setup_requirements",
+      "issue": "Legacy placeholders require trusted tools; do not output literally."
+    },
+    {
+      "key": "custom_management_price",
+      "issue": "Legacy placeholders require trusted tools; do not output literally."
+    },
+    {
+      "key": "recommended_ads_plans",
+      "issue": "Legacy placeholders require trusted tools; do not output literally."
+    },
+    {
+      "key": "service_price",
+      "issue": "Legacy placeholders require trusted tools; do not output literally."
+    }
+  ],
+  "strict": [
+    {
+      "key": "service_difference",
+      "wording": "With account setup, we set up your advertising account and guide you to run ads yourself. With ads management, we run the campaign for you."
+    },
+    {
+      "key": "setup_budget_separate",
+      "wording": "The setup fee covers account setup and guidance. Your advertising budget is separate."
+    },
+    {
+      "key": "setup_requirements",
+      "wording": "{{requirements}}"
+    },
+    {
+      "key": "setup_scope",
+      "wording": "Account setup covers advertising-account setup and guidance on accessing it and running your own ads."
+    },
+    {
+      "key": "ads_budget",
+      "wording": "What is your daily advertising budget?"
+    },
+    {
+      "key": "ads_duration",
+      "wording": "How many days would you like the ads to run?"
+    },
+    {
+      "key": "ads_management_details",
+      "wording": "What is your daily advertising budget, and how many days would you like to run the ads for?"
+    },
+    {
+      "key": "ads_platform_selection",
+      "wording": "Which platform do you want?\n\nTikTok\n\nor\n\nMeta (Facebook & Instagram)?"
+    },
+    {
+      "key": "ads_service_clarification",
+      "wording": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?"
+    },
+    {
+      "key": "ai_identity",
+      "wording": "This is Joshspot’s automated assistant helping with quick responses 😊 If you’d prefer someone from the team, I can get them for you."
+    },
+    {
+      "key": "confirm_proceed",
+      "wording": "Would you like to proceed?"
+    },
+    {
+      "key": "custom_management_price",
+      "wording": "The total is {{price}} for {{duration}} days.\n\nThis includes {{ad_budget}} advertising budget and {{management_fee}} management fee.\n\nWould you like to proceed?"
+    },
+    {
+      "key": "customer_declines",
+      "wording": "Okay."
+    },
+    {
+      "key": "media_handoff",
+      "wording": "Hold on, you will get a response shortly."
+    },
+    {
+      "key": "payment_claim",
+      "wording": "Thanks for letting us know. Customer support will check the payment before confirming it."
+    },
+    {
+      "key": "payment_followup",
+      "wording": "Would you still like to proceed? Let us know if you need any help with payment."
+    },
+    {
+      "key": "payment_verified",
+      "wording": "Payment confirmed. Thank you — I’m passing this to customer support for the next step."
+    },
+    {
+      "key": "pending_payment",
+      "wording": "Have you made payment already?"
+    },
+    {
+      "key": "ready_to_proceed",
+      "wording": "Should I send the account details now?"
+    },
+    {
+      "key": "recommended_ads_plans",
+      "wording": "{{plans}}\n\nWhich one would you like to go with?"
+    },
+    {
+      "key": "service_price",
+      "wording": "{{service_name}} costs {{price}}.\n\nWould you like to proceed?"
+    },
+    {
+      "key": "unrelated_question",
+      "wording": "I’m here to help with Joshspot services 😊 What would you like help with?"
+    }
+  ],
+  "ignoredLegacyHandoffFlags": [
+    {
+      "key": "after_payment_process",
+      "reason": "SERVICE_ONBOARDING"
+    },
+    {
+      "key": "existing_ad_account",
+      "reason": "ACCOUNT_REVIEW"
+    },
+    {
+      "key": "existing_campaign_issue",
+      "reason": "CAMPAIGN_REVIEW"
+    },
+    {
+      "key": "expired_payment_details",
+      "reason": "INVOICE_REVIEW"
+    },
+    {
+      "key": "human_support_information",
+      "reason": "CUSTOMER_REQUESTED_HUMAN"
+    },
+    {
+      "key": "incorrect_payment_amount",
+      "reason": "PAYMENT_PROBLEM"
+    },
+    {
+      "key": "invoice_correction",
+      "reason": "INVOICE_REVIEW"
+    },
+    {
+      "key": "meta_management_access",
+      "reason": "SERVICE_ONBOARDING"
+    },
+    {
+      "key": "other_services_review",
+      "reason": "SERVICE_REVIEW"
+    },
+    {
+      "key": "payment_claim_information",
+      "reason": "PAYMENT_VERIFICATION_REQUIRED"
+    },
+    {
+      "key": "payment_pending_review",
+      "reason": "PAYMENT_PROBLEM"
+    },
+    {
+      "key": "receipt_request",
+      "reason": "RECEIPT_REQUEST"
+    },
+    {
+      "key": "receipt_review_information",
+      "reason": "PAYMENT_VERIFICATION_REQUIRED"
+    },
+    {
+      "key": "refund_cancellation_review",
+      "reason": "REFUND_REVIEW"
+    },
+    {
+      "key": "response_time_information",
+      "reason": "SUPPORT_REVIEW"
+    },
+    {
+      "key": "secure_account_access",
+      "reason": "SERVICE_ONBOARDING"
+    },
+    {
+      "key": "service_timing_review",
+      "reason": "TIMING_REVIEW"
+    },
+    {
+      "key": "tiktok_management_access",
+      "reason": "SERVICE_ONBOARDING"
+    }
+  ],
+  "plans": [
+    {
+      "key": "plan_7",
+      "title": "7 Days",
+      "duration": 7,
+      "amount": 60000,
+      "currency": "NGN",
+      "platforms": [
+        "tiktok",
+        "meta"
+      ],
+      "service": "ads_management",
+      "description": "",
+      "breakdown": {
+        "valid": true,
+        "errors": {},
+        "mode": "recommend",
+        "creativeMode": "testing",
+        "baseAdBudget": 35000,
+        "advertisingBudget": 35000,
+        "duration": 7,
+        "creativeCount": 1,
+        "baseManagementFee": 25000,
+        "durationMultiplier": 1,
+        "calculatedManagementFee": 25000,
+        "managementFee": 25000,
+        "creativeFee": 0,
+        "serviceFee": 25000,
+        "scriptSupportFee": 0,
+        "setupServiceFee": 0,
+        "addOnsTotal": 0,
+        "total": 60000,
+        "dailyBudget": 5000,
+        "dailyBudgetPerCreative": 5000,
+        "manualAdjustment": false,
+        "warnings": []
+      },
+      "quotable": true
+    },
+    {
+      "key": "plan_10",
+      "title": "10 Days",
+      "duration": 10,
+      "amount": 135000,
+      "currency": "NGN",
+      "platforms": [
+        "tiktok",
+        "meta"
+      ],
+      "service": "ads_management",
+      "description": "",
+      "breakdown": {
+        "valid": true,
+        "errors": {},
+        "mode": "recommend",
+        "creativeMode": "testing",
+        "baseAdBudget": 100000,
+        "advertisingBudget": 100000,
+        "duration": 10,
+        "creativeCount": 1,
+        "baseManagementFee": 30000,
+        "durationMultiplier": 1.15,
+        "calculatedManagementFee": 35000,
+        "managementFee": 35000,
+        "creativeFee": 0,
+        "serviceFee": 35000,
+        "scriptSupportFee": 0,
+        "setupServiceFee": 0,
+        "addOnsTotal": 0,
+        "total": 135000,
+        "dailyBudget": 10000,
+        "dailyBudgetPerCreative": 10000,
+        "manualAdjustment": false,
+        "warnings": []
+      },
+      "quotable": true
+    },
+    {
+      "key": "plan_15",
+      "title": "15 Days",
+      "duration": 15,
+      "amount": 285000,
+      "currency": "NGN",
+      "platforms": [
+        "tiktok",
+        "meta"
+      ],
+      "service": "ads_management",
+      "description": "",
+      "breakdown": {
+        "valid": true,
+        "errors": {},
+        "mode": "recommend",
+        "creativeMode": "testing",
+        "baseAdBudget": 200000,
+        "advertisingBudget": 200000,
+        "duration": 15,
+        "creativeCount": 1,
+        "baseManagementFee": 50000,
+        "durationMultiplier": 1.3,
+        "calculatedManagementFee": 65000,
+        "managementFee": 65000,
+        "creativeFee": 0,
+        "serviceFee": 65000,
+        "scriptSupportFee": 0,
+        "setupServiceFee": 0,
+        "addOnsTotal": 0,
+        "total": 265000,
+        "dailyBudget": 13333.333333333334,
+        "dailyBudgetPerCreative": 13333.333333333334,
+        "manualAdjustment": false,
+        "warnings": []
+      },
+      "quotable": false,
+      "error": "OWNER_DECISION_REQUIRED"
+    },
+    {
+      "key": "plan_30",
+      "title": "30 Days",
+      "duration": 30,
+      "amount": 415000,
+      "currency": "NGN",
+      "platforms": [
+        "tiktok",
+        "meta"
+      ],
+      "service": "ads_management",
+      "description": "",
+      "breakdown": {
+        "valid": true,
+        "errors": {},
+        "mode": "recommend",
+        "creativeMode": "testing",
+        "baseAdBudget": 300000,
+        "advertisingBudget": 300000,
+        "duration": 30,
+        "creativeCount": 1,
+        "baseManagementFee": 65000,
+        "durationMultiplier": 1.75,
+        "calculatedManagementFee": 115000,
+        "managementFee": 115000,
+        "creativeFee": 0,
+        "serviceFee": 115000,
+        "scriptSupportFee": 0,
+        "setupServiceFee": 0,
+        "addOnsTotal": 0,
+        "total": 415000,
+        "dailyBudget": 10000,
+        "dailyBudgetPerCreative": 10000,
+        "manualAdjustment": false,
+        "warnings": []
+      },
+      "quotable": true
+    }
+  ],
+  "notes": [
+    "No records were edited. Semantic conflicts still require owner review.",
+    "V3 does not load response/workflow/tone records or execute legacy knowledge state updates.",
+    "Newer/higher-priority knowledge does not override service prices or verified payment."
+  ]
+}

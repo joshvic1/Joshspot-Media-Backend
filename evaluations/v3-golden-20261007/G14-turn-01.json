@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G14-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "set up TikTok and also manage it for 7 days",
+      "createdAt": "2026-10-07T09:18:57.437Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3385,
+    "output_tokens": 58,
+    "total_tokens": 3443,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0014468
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60e830ad88197b65897efc145e87501191caffd3121eb/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e830ad88197b65897efc145e87501191caffd3121eb/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e830ad88197b65897efc145e87501191caffd3121eb/items?limit=100&order=asc&after=msg_6ac60e8370788197b4149cf9cf81950c01191caffd3121eb"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e830ad88197b65897efc145e87501191caffd3121eb/items/msg_01191caffd3121eb006ac60e84a2008197856e250a15c00df0"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e830ad88197b65897efc145e87501191caffd3121eb/items/msg_01191caffd3121eb006ac60e8518f48197bf6bc56269b40814"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e830ad88197b65897efc145e87501191caffd3121eb/items?limit=100&order=asc&after=msg_6ac60e8370788197b4149cf9cf81950c01191caffd3121eb"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_01191caffd3121eb006ac60e84792c8197a84356b9af7cbace",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3385,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 58,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3443
+      },
+      "output": [
+        {
+          "id": "msg_01191caffd3121eb006ac60e8518f48197bf6bc56269b40814",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "You want us to both set up your TikTok ads account and manage the ads for 7 days. To proceed, please let me know your total budget for the 7-day management period, including any ad spend and fees. This helps me calculate an accurate cost for you."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3283,
+      "openaiConversationId": "conv_6ac60e830ad88197b65897efc145e87501191caffd3121eb"
+    },
+    "action": "reply",
+    "response": "You want us to both set up your TikTok ads account and manage the ads for 7 days. To proceed, please let me know your total budget for the 7-day management period, including any ad spend and fees. This helps me calculate an accurate cost for you.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 5021,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60e830ad88197b65897efc145e87501191caffd3121eb",
+    "seenMessageIds": [
+      "G14-in-0"
+    ],
+    "contextCharacters": 172,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

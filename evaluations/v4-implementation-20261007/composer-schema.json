@@ -1,0 +1,56 @@
+{
+  "type": "object",
+  "properties": {
+    "message": {
+      "type": "string",
+      "maxLength": 6000
+    },
+    "covered_request_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 80
+      },
+      "maxItems": 12
+    },
+    "questions_asked": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "purpose": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "field": {
+            "type": "string",
+            "enum": [
+              "service",
+              "platform",
+              "budget",
+              "budget_basis",
+              "duration",
+              "package",
+              "allocation",
+              "proceed",
+              "payment",
+              "clarification"
+            ]
+          }
+        },
+        "required": [
+          "purpose",
+          "field"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 6
+    }
+  },
+  "required": [
+    "message",
+    "covered_request_ids",
+    "questions_asked"
+  ],
+  "additionalProperties": false
+}

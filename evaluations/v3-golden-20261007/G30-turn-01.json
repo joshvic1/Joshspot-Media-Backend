@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G30-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok ads",
+      "createdAt": "2026-10-07T09:22:42.818Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3377,
+    "output_tokens": 51,
+    "total_tokens": 3428,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0014324000000000001
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=100&order=asc&after=msg_6ac60f64d32c81949f5b987ce085d4bc0983d8566d2bf3ce"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items/msg_0983d8566d2bf3ce006ac60f65faf08194b0ffa86f39d7b546"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items/msg_0983d8566d2bf3ce006ac60f666300819480ba11fdca17234a"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=100&order=asc&after=msg_6ac60f64d32c81949f5b987ce085d4bc0983d8566d2bf3ce"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0983d8566d2bf3ce006ac60f65d25881948ad319764114000b",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3377,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 51,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3428
+      },
+      "output": [
+        {
+          "id": "msg_0983d8566d2bf3ce006ac60f666300819480ba11fdca17234a",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for choosing TikTok ads management. To create the best quote and plan for your campaign, could you please share your planned total budget for ads and how long you want the ads to run? This helps us tailor our service to your needs."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 2734,
+      "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce"
+    },
+    "action": "reply",
+    "response": "Thanks for choosing TikTok ads management. To create the best quote and plan for your campaign, could you please share your planned total budget for ads and how long you want the ads to run? This helps us tailor our service to your needs.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4932,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce",
+    "seenMessageIds": [
+      "G30-in-0"
+    ],
+    "contextCharacters": 146,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

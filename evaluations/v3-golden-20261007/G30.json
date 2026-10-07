@@ -1,0 +1,995 @@
+{
+  "id": "G30",
+  "category": "owner-corrected 15-day package",
+  "expected": [
+    "Owner corrected plan:265000 total =200000 advertising+65000 management. Use authoritative package; simulated invoice only on current permission."
+  ],
+  "plannedCustomerTurns": [
+    "manage TikTok ads",
+    "recommend something",
+    "the 15 day package",
+    "give me exact breakdown",
+    "send account for that one"
+  ],
+  "turns": [
+    {
+      "customer": [
+        {
+          "_id": "G30-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "manage TikTok ads",
+          "createdAt": "2026-10-07T09:22:42.818Z"
+        }
+      ],
+      "historyBefore": [],
+      "stateBefore": {},
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3377,
+        "output_tokens": 51,
+        "total_tokens": 3428,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0014324000000000001
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "post",
+          "path": "/conversations"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=100&order=asc&after=msg_6ac60f64d32c81949f5b987ce085d4bc0983d8566d2bf3ce"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items/msg_0983d8566d2bf3ce006ac60f65faf08194b0ffa86f39d7b546"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items/msg_0983d8566d2bf3ce006ac60f666300819480ba11fdca17234a"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=100&order=asc&after=msg_6ac60f64d32c81949f5b987ce085d4bc0983d8566d2bf3ce"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_0983d8566d2bf3ce006ac60f65d25881948ad319764114000b",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3377,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 51,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3428
+          },
+          "output": [
+            {
+              "id": "msg_0983d8566d2bf3ce006ac60f666300819480ba11fdca17234a",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Thanks for choosing TikTok ads management. To create the best quote and plan for your campaign, could you please share your planned total budget for ads and how long you want the ads to run? This helps us tailor our service to your needs."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 2734,
+          "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce"
+        },
+        "action": "reply",
+        "response": "Thanks for choosing TikTok ads management. To create the best quote and plan for your campaign, could you please share your planned total budget for ads and how long you want the ads to run? This helps us tailor our service to your needs.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 4932,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce",
+        "seenMessageIds": [
+          "G30-in-0"
+        ],
+        "contextCharacters": 146,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G30-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "recommend something",
+          "createdAt": "2026-10-07T09:22:47.753Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G30-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "manage TikTok ads",
+          "createdAt": "2026-10-07T09:22:42.818Z"
+        },
+        {
+          "_id": "G30-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for choosing TikTok ads management. To create the best quote and plan for your campaign, could you please share your planned total budget for ads and how long you want the ads to run? This helps us tailor our service to your needs.",
+          "createdAt": "2026-10-07T09:22:47.750Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce",
+        "seenMessageIds": [
+          "G30-in-0"
+        ],
+        "contextCharacters": 146,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3499,
+        "output_tokens": 114,
+        "total_tokens": 3613,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.001582
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=100&order=asc&after=msg_6ac60f69b5d88194a5438e7fd6bc45560983d8566d2bf3ce"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items/msg_0983d8566d2bf3ce006ac60f6b003c8194acd369cf38e7118d"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items/msg_0983d8566d2bf3ce006ac60f6b59b48194a855b98bb915cb3e"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=100&order=asc&after=msg_6ac60f69b5d88194a5438e7fd6bc45560983d8566d2bf3ce"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_0983d8566d2bf3ce006ac60f6acc088194a4e23ddfa0525801",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3499,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 114,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3613
+          },
+          "output": [
+            {
+              "id": "msg_0983d8566d2bf3ce006ac60f6b59b48194a855b98bb915cb3e",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Thanks for asking for a recommendation on TikTok ads management.\n\nTo suggest the best plan, I usually need to know your total budget and desired campaign duration. However, here’s a general idea:\n\nWe offer inclusive TikTok ads management plans that cover setting up and running your campaigns with creative testing. These plans differ mainly by your total ad spend and campaign length.\n\nCould you share approximately how much you want to invest in ads and for how many days you want the campaign to run? That way, I can offer a tailored plan that fits your goals and budget."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 3402,
+          "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce"
+        },
+        "action": "reply",
+        "response": "Thanks for asking for a recommendation on TikTok ads management.\n\nTo suggest the best plan, I usually need to know your total budget and desired campaign duration. However, here’s a general idea:\n\nWe offer inclusive TikTok ads management plans that cover setting up and running your campaigns with creative testing. These plans differ mainly by your total ad spend and campaign length.\n\nCould you share approximately how much you want to invest in ads and for how many days you want the campaign to run? That way, I can offer a tailored plan that fits your goals and budget.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 5176,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce",
+        "seenMessageIds": [
+          "G30-in-0",
+          "G30-out-0",
+          "G30-in-1"
+        ],
+        "contextCharacters": 666,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G30-in-2",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "the 15 day package",
+          "createdAt": "2026-10-07T09:22:52.932Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G30-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "manage TikTok ads",
+          "createdAt": "2026-10-07T09:22:42.818Z"
+        },
+        {
+          "_id": "G30-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for choosing TikTok ads management. To create the best quote and plan for your campaign, could you please share your planned total budget for ads and how long you want the ads to run? This helps us tailor our service to your needs.",
+          "createdAt": "2026-10-07T09:22:47.750Z"
+        },
+        {
+          "_id": "G30-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "recommend something",
+          "createdAt": "2026-10-07T09:22:47.753Z"
+        },
+        {
+          "_id": "G30-out-1",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for asking for a recommendation on TikTok ads management.\n\nTo suggest the best plan, I usually need to know your total budget and desired campaign duration. However, here’s a general idea:\n\nWe offer inclusive TikTok ads management plans that cover setting up and running your campaigns with creative testing. These plans differ mainly by your total ad spend and campaign length.\n\nCould you share approximately how much you want to invest in ads and for how many days you want the campaign to run? That way, I can offer a tailored plan that fits your goals and budget.",
+          "createdAt": "2026-10-07T09:22:52.929Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce",
+        "seenMessageIds": [
+          "G30-in-0",
+          "G30-out-0",
+          "G30-in-1"
+        ],
+        "contextCharacters": 666,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3693,
+        "output_tokens": 48,
+        "total_tokens": 3741,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.001554
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=100&order=asc&after=msg_6ac60f6ee61c8194bb9776c0f74ae2e90983d8566d2bf3ce"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items/msg_0983d8566d2bf3ce006ac60f70432c81949d54c42911f086a5"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items/msg_0983d8566d2bf3ce006ac60f7091a48194acf4ffdf31b95940"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=100&order=asc&after=msg_6ac60f6ee61c8194bb9776c0f74ae2e90983d8566d2bf3ce"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_0983d8566d2bf3ce006ac60f7014208194b31cb281913f3893",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3693,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 48,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3741
+          },
+          "output": [
+            {
+              "id": "msg_0983d8566d2bf3ce006ac60f7091a48194acf4ffdf31b95940",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "You mentioned the 15-day package for TikTok ads management. To provide an accurate quote and plan, could you please share your total ad budget for this 15-day period? This helps us tailor the package and fees precisely."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 2884,
+          "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce"
+        },
+        "action": "reply",
+        "response": "You mentioned the 15-day package for TikTok ads management. To provide an accurate quote and plan, could you please share your total ad budget for this 15-day period? This helps us tailor the package and fees precisely.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 4568,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce",
+        "seenMessageIds": [
+          "G30-in-0",
+          "G30-out-0",
+          "G30-in-1",
+          "G30-out-1",
+          "G30-in-2"
+        ],
+        "contextCharacters": 1533,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G30-in-3",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "give me exact breakdown",
+          "createdAt": "2026-10-07T09:22:57.503Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G30-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "manage TikTok ads",
+          "createdAt": "2026-10-07T09:22:42.818Z"
+        },
+        {
+          "_id": "G30-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for choosing TikTok ads management. To create the best quote and plan for your campaign, could you please share your planned total budget for ads and how long you want the ads to run? This helps us tailor our service to your needs.",
+          "createdAt": "2026-10-07T09:22:47.750Z"
+        },
+        {
+          "_id": "G30-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "recommend something",
+          "createdAt": "2026-10-07T09:22:47.753Z"
+        },
+        {
+          "_id": "G30-out-1",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for asking for a recommendation on TikTok ads management.\n\nTo suggest the best plan, I usually need to know your total budget and desired campaign duration. However, here’s a general idea:\n\nWe offer inclusive TikTok ads management plans that cover setting up and running your campaigns with creative testing. These plans differ mainly by your total ad spend and campaign length.\n\nCould you share approximately how much you want to invest in ads and for how many days you want the campaign to run? That way, I can offer a tailored plan that fits your goals and budget.",
+          "createdAt": "2026-10-07T09:22:52.929Z"
+        },
+        {
+          "_id": "G30-in-2",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "the 15 day package",
+          "createdAt": "2026-10-07T09:22:52.932Z"
+        },
+        {
+          "_id": "G30-out-2",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "You mentioned the 15-day package for TikTok ads management. To provide an accurate quote and plan, could you please share your total ad budget for this 15-day period? This helps us tailor the package and fees precisely.",
+          "createdAt": "2026-10-07T09:22:57.500Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce",
+        "seenMessageIds": [
+          "G30-in-0",
+          "G30-out-0",
+          "G30-in-1",
+          "G30-out-1",
+          "G30-in-2"
+        ],
+        "contextCharacters": 1533,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3814,
+        "output_tokens": 91,
+        "total_tokens": 3905,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0016712
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=100&order=asc&after=msg_6ac60f7388dc8194a190dfe7e105b8e50983d8566d2bf3ce"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items/msg_0983d8566d2bf3ce006ac60f74ce24819484229d9470f58078"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items/msg_0983d8566d2bf3ce006ac60f7598388194836365cdea8e053d"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=100&order=asc&after=msg_6ac60f7388dc8194a190dfe7e105b8e50983d8566d2bf3ce"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_0983d8566d2bf3ce006ac60f74a6a081948e28785feb8d6f3b",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3814,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 91,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3905
+          },
+          "output": [
+            {
+              "id": "msg_0983d8566d2bf3ce006ac60f7598388194836365cdea8e053d",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "To provide an exact breakdown for the 15-day TikTok ads management package, I need to know the total budget you plan to allocate for ad spend during those 15 days. \n\nOnce you share that budget, I can detail the setup fees (if any), management fees, ad spend allocation, and overall total cost for the full 15-day campaign package. Could you please provide your total ad spend budget for this 15-day period?"
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 3801,
+          "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce"
+        },
+        "action": "reply",
+        "response": "To provide an exact breakdown for the 15-day TikTok ads management package, I need to know the total budget you plan to allocate for ad spend during those 15 days. \n\nOnce you share that budget, I can detail the setup fees (if any), management fees, ad spend allocation, and overall total cost for the full 15-day campaign package. Could you please provide your total ad spend budget for this 15-day period?",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 5541,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce",
+        "seenMessageIds": [
+          "G30-in-0",
+          "G30-out-0",
+          "G30-in-1",
+          "G30-out-1",
+          "G30-in-2",
+          "G30-out-2",
+          "G30-in-3"
+        ],
+        "contextCharacters": 2038,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G30-in-4",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "send account for that one",
+          "createdAt": "2026-10-07T09:23:03.047Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G30-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "manage TikTok ads",
+          "createdAt": "2026-10-07T09:22:42.818Z"
+        },
+        {
+          "_id": "G30-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for choosing TikTok ads management. To create the best quote and plan for your campaign, could you please share your planned total budget for ads and how long you want the ads to run? This helps us tailor our service to your needs.",
+          "createdAt": "2026-10-07T09:22:47.750Z"
+        },
+        {
+          "_id": "G30-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "recommend something",
+          "createdAt": "2026-10-07T09:22:47.753Z"
+        },
+        {
+          "_id": "G30-out-1",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for asking for a recommendation on TikTok ads management.\n\nTo suggest the best plan, I usually need to know your total budget and desired campaign duration. However, here’s a general idea:\n\nWe offer inclusive TikTok ads management plans that cover setting up and running your campaigns with creative testing. These plans differ mainly by your total ad spend and campaign length.\n\nCould you share approximately how much you want to invest in ads and for how many days you want the campaign to run? That way, I can offer a tailored plan that fits your goals and budget.",
+          "createdAt": "2026-10-07T09:22:52.929Z"
+        },
+        {
+          "_id": "G30-in-2",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "the 15 day package",
+          "createdAt": "2026-10-07T09:22:52.932Z"
+        },
+        {
+          "_id": "G30-out-2",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "You mentioned the 15-day package for TikTok ads management. To provide an accurate quote and plan, could you please share your total ad budget for this 15-day period? This helps us tailor the package and fees precisely.",
+          "createdAt": "2026-10-07T09:22:57.500Z"
+        },
+        {
+          "_id": "G30-in-3",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "give me exact breakdown",
+          "createdAt": "2026-10-07T09:22:57.503Z"
+        },
+        {
+          "_id": "G30-out-3",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "To provide an exact breakdown for the 15-day TikTok ads management package, I need to know the total budget you plan to allocate for ad spend during those 15 days. \n\nOnce you share that budget, I can detail the setup fees (if any), management fees, ad spend allocation, and overall total cost for the full 15-day campaign package. Could you please provide your total ad spend budget for this 15-day period?",
+          "createdAt": "2026-10-07T09:23:03.044Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce",
+        "seenMessageIds": [
+          "G30-in-0",
+          "G30-out-0",
+          "G30-in-1",
+          "G30-out-1",
+          "G30-in-2",
+          "G30-out-2",
+          "G30-in-3"
+        ],
+        "contextCharacters": 2038,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3982,
+        "output_tokens": 63,
+        "total_tokens": 4045,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0016936
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=100&order=asc&after=msg_6ac60f78ff248194a12fdf1f5ccce2130983d8566d2bf3ce"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items/msg_0983d8566d2bf3ce006ac60f7a3b0481949874949cb40d31fd"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items/msg_0983d8566d2bf3ce006ac60f7a9eb48194896081444379a42d"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=100&order=asc&after=msg_6ac60f78ff248194a12fdf1f5ccce2130983d8566d2bf3ce"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_0983d8566d2bf3ce006ac60f7a110881949d6a4da3e8e32e8d",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3982,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 63,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 4045
+          },
+          "output": [
+            {
+              "id": "msg_0983d8566d2bf3ce006ac60f7a9eb48194896081444379a42d",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Could you please clarify what you mean by \"send account for that one\"? Are you asking for help setting up a TikTok ad account as part of the 15-day management package, or do you want details about an existing account linked to this service? Let me know so I can assist you correctly."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 3375,
+          "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce"
+        },
+        "action": "reply",
+        "response": "Could you please clarify what you mean by \"send account for that one\"? Are you asking for help setting up a TikTok ad account as part of the 15-day management package, or do you want details about an existing account linked to this service? Let me know so I can assist you correctly.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 5265,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce",
+        "seenMessageIds": [
+          "G30-in-0",
+          "G30-out-0",
+          "G30-in-1",
+          "G30-out-1",
+          "G30-in-2",
+          "G30-out-2",
+          "G30-in-3",
+          "G30-out-3",
+          "G30-in-4"
+        ],
+        "contextCharacters": 2736,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    }
+  ],
+  "completeHistory": [
+    {
+      "_id": "G30-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok ads",
+      "createdAt": "2026-10-07T09:22:42.818Z"
+    },
+    {
+      "_id": "G30-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing TikTok ads management. To create the best quote and plan for your campaign, could you please share your planned total budget for ads and how long you want the ads to run? This helps us tailor our service to your needs.",
+      "createdAt": "2026-10-07T09:22:47.750Z"
+    },
+    {
+      "_id": "G30-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "recommend something",
+      "createdAt": "2026-10-07T09:22:47.753Z"
+    },
+    {
+      "_id": "G30-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for asking for a recommendation on TikTok ads management.\n\nTo suggest the best plan, I usually need to know your total budget and desired campaign duration. However, here’s a general idea:\n\nWe offer inclusive TikTok ads management plans that cover setting up and running your campaigns with creative testing. These plans differ mainly by your total ad spend and campaign length.\n\nCould you share approximately how much you want to invest in ads and for how many days you want the campaign to run? That way, I can offer a tailored plan that fits your goals and budget.",
+      "createdAt": "2026-10-07T09:22:52.929Z"
+    },
+    {
+      "_id": "G30-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "the 15 day package",
+      "createdAt": "2026-10-07T09:22:52.932Z"
+    },
+    {
+      "_id": "G30-out-2",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "You mentioned the 15-day package for TikTok ads management. To provide an accurate quote and plan, could you please share your total ad budget for this 15-day period? This helps us tailor the package and fees precisely.",
+      "createdAt": "2026-10-07T09:22:57.500Z"
+    },
+    {
+      "_id": "G30-in-3",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "give me exact breakdown",
+      "createdAt": "2026-10-07T09:22:57.503Z"
+    },
+    {
+      "_id": "G30-out-3",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "To provide an exact breakdown for the 15-day TikTok ads management package, I need to know the total budget you plan to allocate for ad spend during those 15 days. \n\nOnce you share that budget, I can detail the setup fees (if any), management fees, ad spend allocation, and overall total cost for the full 15-day campaign package. Could you please provide your total ad spend budget for this 15-day period?",
+      "createdAt": "2026-10-07T09:23:03.044Z"
+    },
+    {
+      "_id": "G30-in-4",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "send account for that one",
+      "createdAt": "2026-10-07T09:23:03.047Z"
+    },
+    {
+      "_id": "G30-out-4",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Could you please clarify what you mean by \"send account for that one\"? Are you asking for help setting up a TikTok ad account as part of the 15-day management package, or do you want details about an existing account linked to this service? Let me know so I can assist you correctly.",
+      "createdAt": "2026-10-07T09:23:08.312Z"
+    }
+  ],
+  "usage": {
+    "calls": 5,
+    "input_tokens": 18365,
+    "output_tokens": 367,
+    "total_tokens": 18732,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.007933200000000001
+  }
+}

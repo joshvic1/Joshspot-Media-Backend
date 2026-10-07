@@ -1,0 +1,222 @@
+2026-10-07T11:36:21.213Z MongoMS:ResolveConfig Debug Mode Enabled, through Environment Variable
+2026-10-07T11:36:21.217Z MongoMS:ResolveConfig findPackageJson: Found package.json at "C:\Users\pc\Desktop\joshspot-media\backend\package.json"
+2026-10-07T11:36:21.219Z MongoMS:ResolveConfig findPackageJson: Found package.json at "C:\Users\pc\package.json"
+2026-10-07T11:36:22.528Z MongoMS:MongoMemoryServer create: Called .create() method
+2026-10-07T11:36:22.529Z MongoMS:MongoMemoryServer Mongo[unknown]: start: Called .start() method
+2026-10-07T11:36:22.530Z MongoMS:MongoMemoryServer Mongo[unknown]: _startUpInstance: Called MongoMemoryServer._startUpInstance() method
+2026-10-07T11:36:22.531Z MongoMS:MongoMemoryServer Mongo[unknown]: getStartOptions: forceSamePort: false
+2026-10-07T11:36:22.531Z MongoMS:DryMongoBinary generateOptions
+2026-10-07T11:36:22.532Z MongoMS:DryMongoBinary generateDownloadPath: Generating Download Path, preferGlobal: "true"
+2026-10-07T11:36:22.534Z MongoMS:DryMongoBinary generatePaths {
+  version: '8.2.6',
+  downloadDir: '',
+  os: { os: 'win32' },
+  platform: 'win32',
+  arch: 'x64',
+  systemBinary: ''
+}
+2026-10-07T11:36:22.535Z MongoMS:DryMongoBinary getBinaryName
+2026-10-07T11:36:22.537Z MongoMS:DryMongoBinary combineBinaryName
+2026-10-07T11:36:22.537Z MongoMS:DryMongoBinary combineBinaryName
+2026-10-07T11:36:22.537Z MongoMS:DryMongoBinary combineBinaryName
+2026-10-07T11:36:22.537Z MongoMS:DryMongoBinary generateDownloadPath: Paths: {
+  homeCache: 'C:\\Users\\pc\\.cache\\mongodb-binaries\\mongod-x64-win32-8.2.6.exe',
+  modulesCache: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\node_modules\\.cache\\mongodb-memory-server\\mongod-x64-win32-8.2.6.exe',
+  relative: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\mongodb-binaries\\mongod-x64-win32-8.2.6.exe',
+  resolveConfig: ''
+} 
+2026-10-07T11:36:22.540Z MongoMS:DryMongoBinary generateDownloadPath: Found binary in modulesCache: "C:\Users\pc\Desktop\joshspot-media\backend\node_modules\.cache\mongodb-memory-server\mongod-x64-win32-8.2.6.exe"
+2026-10-07T11:36:22.549Z MongoMS:GetPort getFreePort: found free port 60765, in cache and not custom: false
+2026-10-07T11:36:22.551Z MongoMS:MongoMemoryServer Mongo[unknown]: _startUpInstance: Creating new MongoDB instance with options: {
+  instance: {
+    port: 60765,
+    dbName: '',
+    ip: '127.0.0.1',
+    storageEngine: 'wiredTiger',
+    replSet: undefined,
+    dbPath: 'C:\\Users\\pc\\AppData\\Local\\Temp\\mongo-mem-1CPHlR',
+    tmpDir: 'C:\\Users\\pc\\AppData\\Local\\Temp\\mongo-mem-1CPHlR',
+    keyfileLocation: undefined,
+    launchTimeout: undefined,
+    args: undefined,
+    auth: false
+  },
+  binary: undefined,
+  spawn: undefined
+}
+2026-10-07T11:36:22.553Z MongoMS:MongoInstance create: Called .create() method
+2026-10-07T11:36:22.553Z MongoMS:MongoInstance Mongo[60765]: start
+2026-10-07T11:36:22.554Z MongoMS:MongoBinary getPath
+2026-10-07T11:36:22.554Z MongoMS:DryMongoBinary generateOptions
+2026-10-07T11:36:22.554Z MongoMS:DryMongoBinary generateDownloadPath: Generating Download Path, preferGlobal: "true"
+2026-10-07T11:36:22.554Z MongoMS:DryMongoBinary generatePaths {
+  version: '8.2.6',
+  downloadDir: '',
+  os: { os: 'win32' },
+  platform: 'win32',
+  arch: 'x64',
+  systemBinary: ''
+}
+2026-10-07T11:36:22.555Z MongoMS:DryMongoBinary getBinaryName
+2026-10-07T11:36:22.556Z MongoMS:DryMongoBinary combineBinaryName
+2026-10-07T11:36:22.556Z MongoMS:DryMongoBinary combineBinaryName
+2026-10-07T11:36:22.556Z MongoMS:DryMongoBinary combineBinaryName
+2026-10-07T11:36:22.556Z MongoMS:DryMongoBinary generateDownloadPath: Paths: {
+  homeCache: 'C:\\Users\\pc\\.cache\\mongodb-binaries\\mongod-x64-win32-8.2.6.exe',
+  modulesCache: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\node_modules\\.cache\\mongodb-memory-server\\mongod-x64-win32-8.2.6.exe',
+  relative: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\mongodb-binaries\\mongod-x64-win32-8.2.6.exe',
+  resolveConfig: ''
+} 
+2026-10-07T11:36:22.558Z MongoMS:DryMongoBinary generateDownloadPath: Found binary in modulesCache: "C:\Users\pc\Desktop\joshspot-media\backend\node_modules\.cache\mongodb-memory-server\mongod-x64-win32-8.2.6.exe"
+2026-10-07T11:36:22.559Z MongoMS:MongoBinary getPath: MongoBinary options: {
+  "version": "8.2.6",
+  "downloadDir": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\node_modules\\.cache\\mongodb-memory-server",
+  "os": {
+    "os": "win32"
+  },
+  "platform": "win32",
+  "arch": "x64",
+  "systemBinary": "",
+  "checkMD5": true
+}
+2026-10-07T11:36:22.560Z MongoMS:DryMongoBinary locateBinary: Trying to locate Binary for version "8.2.6"
+2026-10-07T11:36:22.560Z MongoMS:DryMongoBinary generateOptions
+2026-10-07T11:36:22.560Z MongoMS:DryMongoBinary generateDownloadPath: Generating Download Path, preferGlobal: "true"
+2026-10-07T11:36:22.560Z MongoMS:DryMongoBinary generatePaths {
+  version: '8.2.6',
+  downloadDir: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\node_modules\\.cache\\mongodb-memory-server',
+  os: { os: 'win32' },
+  platform: 'win32',
+  arch: 'x64',
+  systemBinary: ''
+}
+2026-10-07T11:36:22.561Z MongoMS:DryMongoBinary getBinaryName
+2026-10-07T11:36:22.561Z MongoMS:DryMongoBinary combineBinaryName
+2026-10-07T11:36:22.562Z MongoMS:DryMongoBinary combineBinaryName
+2026-10-07T11:36:22.562Z MongoMS:DryMongoBinary generatePaths: resolveConfigValue is not empty
+2026-10-07T11:36:22.562Z MongoMS:DryMongoBinary combineBinaryName
+2026-10-07T11:36:22.562Z MongoMS:DryMongoBinary combineBinaryName
+2026-10-07T11:36:22.562Z MongoMS:DryMongoBinary generateDownloadPath: Paths: {
+  homeCache: 'C:\\Users\\pc\\.cache\\mongodb-binaries\\mongod-x64-win32-8.2.6.exe',
+  modulesCache: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\node_modules\\.cache\\mongodb-memory-server\\mongod-x64-win32-8.2.6.exe',
+  relative: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\mongodb-binaries\\mongod-x64-win32-8.2.6.exe',
+  resolveConfig: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\node_modules\\.cache\\mongodb-memory-server\\mongod-x64-win32-8.2.6.exe'
+} 
+2026-10-07T11:36:22.563Z MongoMS:DryMongoBinary generateDownloadPath: Found binary in resolveConfig (DOWNLOAD_DIR): "C:\Users\pc\Desktop\joshspot-media\backend\node_modules\.cache\mongodb-memory-server\mongod-x64-win32-8.2.6.exe"
+2026-10-07T11:36:22.563Z MongoMS:DryMongoBinary locateBinary: running generateDownloadPath
+2026-10-07T11:36:22.563Z MongoMS:DryMongoBinary generateDownloadPath: Generating Download Path, preferGlobal: "true"
+2026-10-07T11:36:22.563Z MongoMS:DryMongoBinary generatePaths {
+  version: '8.2.6',
+  downloadDir: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\node_modules\\.cache\\mongodb-memory-server',
+  os: { os: 'win32' },
+  platform: 'win32',
+  arch: 'x64',
+  systemBinary: ''
+}
+2026-10-07T11:36:22.563Z MongoMS:DryMongoBinary getBinaryName
+2026-10-07T11:36:22.564Z MongoMS:DryMongoBinary combineBinaryName
+2026-10-07T11:36:22.564Z MongoMS:DryMongoBinary combineBinaryName
+2026-10-07T11:36:22.564Z MongoMS:DryMongoBinary generatePaths: resolveConfigValue is not empty
+2026-10-07T11:36:22.564Z MongoMS:DryMongoBinary combineBinaryName
+2026-10-07T11:36:22.564Z MongoMS:DryMongoBinary combineBinaryName
+2026-10-07T11:36:22.565Z MongoMS:DryMongoBinary generateDownloadPath: Paths: {
+  homeCache: 'C:\\Users\\pc\\.cache\\mongodb-binaries\\mongod-x64-win32-8.2.6.exe',
+  modulesCache: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\node_modules\\.cache\\mongodb-memory-server\\mongod-x64-win32-8.2.6.exe',
+  relative: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\mongodb-binaries\\mongod-x64-win32-8.2.6.exe',
+  resolveConfig: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\node_modules\\.cache\\mongodb-memory-server\\mongod-x64-win32-8.2.6.exe'
+} 
+2026-10-07T11:36:22.566Z MongoMS:DryMongoBinary generateDownloadPath: Found binary in resolveConfig (DOWNLOAD_DIR): "C:\Users\pc\Desktop\joshspot-media\backend\node_modules\.cache\mongodb-memory-server\mongod-x64-win32-8.2.6.exe"
+2026-10-07T11:36:22.569Z MongoMS:DryMongoBinary locateBinary: found binary at "C:\Users\pc\Desktop\joshspot-media\backend\node_modules\.cache\mongodb-memory-server\mongod-x64-win32-8.2.6.exe"
+2026-10-07T11:36:22.570Z MongoMS:MongoBinary getPath: Mongod binary path: "C:\Users\pc\Desktop\joshspot-media\backend\node_modules\.cache\mongodb-memory-server\mongod-x64-win32-8.2.6.exe"
+2026-10-07T11:36:22.571Z MongoMS:MongoInstance Mongo[60765]: start: Starting Processes
+2026-10-07T11:36:22.571Z MongoMS:MongoInstance Mongo[60765]: _launchMongod: Launching Mongod Process
+2026-10-07T11:36:22.572Z MongoMS:MongoInstance Mongo[60765]: prepareCommandArgs
+2026-10-07T11:36:22.572Z MongoMS:MongoInstance Mongo[60765]: prepareCommandArgs: final argument array:["--port","60765","--dbpath","C:\\Users\\pc\\AppData\\Local\\Temp\\mongo-mem-1CPHlR","--storageEngine","wiredTiger","--bind_ip","127.0.0.1","--noauth"]
+2026-10-07T11:36:22.611Z MongoMS:MongoInstance Mongo[60765]: _launchKiller: Launching Killer Process (parent: 45092, child: 49224)
+2026-10-07T11:36:22.784Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:22.779+01:00"},"s":"I",  "c":"-",        "id":8991200, "ctx":"thread1","msg":"Shuffling initializers","attr":{"seed":222672913}}""
+2026-10-07T11:36:23.033Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.034+01:00"},"s":"I",  "c":"CONTROL",  "id":97374,   "ctx":"thread1","msg":"Automatically disabling TLS 1.0 and TLS 1.1, to force-enable TLS 1.1 specify --sslDisabledProtocols 'TLS1_0'; to force-enable TLS 1.0 specify --sslDisabledProtocols 'none'"}""
+2026-10-07T11:36:23.040Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.040+01:00"},"s":"I",  "c":"NETWORK",  "id":4915701, "ctx":"thread1","msg":"Initialized wire specification","attr":{"spec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":27},"incomingInternalClient":{"minWireVersion":0,"maxWireVersion":27},"outgoing":{"minWireVersion":6,"maxWireVersion":27},"isInternalClient":true}}}""
+2026-10-07T11:36:23.046Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.047+01:00"},"s":"I",  "c":"CONTROL",  "id":5945603, "ctx":"thread1","msg":"Multi threading initialized"}""
+2026-10-07T11:36:23.047Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.047+01:00"},"s":"I",  "c":"CONTROL",  "id":4615611, "ctx":"initandlisten","msg":"MongoDB starting","attr":{"pid":49224,"port":60765,"dbPath":"C:/Users/pc/AppData/Local/Temp/mongo-mem-1CPHlR","architecture":"64-bit","host":"OVJ"}}
+{"t":{"$date":"2026-10-07T12:36:23.047+01:00"},"s":"I",  "c":"CONTROL",  "id":23398,   "ctx":"initandlisten","msg":"Target operating system minimum version","attr":{"targetMinOS":"Windows 7/Windows Server 2008 R2"}}
+{"t":{"$date":"2026-10-07T12:36:23.047+01:00"},"s":"I",  "c":"CONTROL",  "id":23403,   "ctx":"initandlisten","msg":"Build Info","attr":{"buildInfo":{"version":"8.2.6","gitVersion":"5d25c835745d06f712320b6cdae9d50b7b43663e","modules":[],"allocator":"tcmalloc-gperf","environment":{"distmod":"windows"}}}}
+{"t":{"$date":"2026-10-07T12:36:23.047+01:00"},"s":"I",  "c":"CONTROL",  "id":51765,   "ctx":"initandlisten","msg":"Operating System","attr":{"os":{"name":"Microsoft Windows Workstation (build 22621)","version":"10.0 (build 22621)"}}}
+{"t":{"$date":"2026-10-07T12:36:23.047+01:00"},"s":"I",  "c":"CONTROL",  "id":21951,   "ctx":"initandlisten","msg":"Options set by command line","attr":{"options":{"net":{"bindIp":"127.0.0.1","port":60765},"security":{"authorization":"disabled"},"storage":{"dbPath":"C:\\Users\\pc\\AppData\\Local\\Temp\\mongo-mem-1CPHlR","engine":"wiredTiger"}}}}""
+2026-10-07T11:36:23.049Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.050+01:00"},"s":"W",  "c":"NETWORK",  "id":11621101,"ctx":"initandlisten","msg":"Overriding max connections to honor `capMemoryConsumptionForPreAuthBuffers` settings","attr":{"limit":207344}}""
+2026-10-07T11:36:23.050Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.050+01:00"},"s":"I",  "c":"NETWORK",  "id":4648601, "ctx":"initandlisten","msg":"Implicit TCP FastOpen unavailable. If TCP FastOpen is required, set at least one of the related parameters","attr":{"relatedParameters":["tcpFastOpenServer","tcpFastOpenClient","tcpFastOpenQueueSize"]}}""
+2026-10-07T11:36:23.054Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.055+01:00"},"s":"I",  "c":"STORAGE",  "id":22315,   "ctx":"initandlisten","msg":"Opening WiredTiger","attr":{"config":"create,cache_size=7587M,session_max=33000,eviction=(threads_min=4,threads_max=4),config_base=false,statistics=(fast),log=(enabled=true,remove=true,path=journal,compressor=snappy),builtin_extension_config=(zstd=(compression_level=6)),file_manager=(close_idle_time=600,close_scan_interval=10,close_handle_minimum=2000),statistics_log=(wait=0),json_output=(error,message),verbose=[recovery_progress:1,checkpoint_progress:1,compact_progress:1,live_restore_progress:1,backup:0,checkpoint:0,compact:0,eviction:0,fileops:0,history_store:0,live_restore:0,recovery:0,rts:0,salvage:0,tiered:0,timestamp:0,transaction:0,verify:0,log:0],prefetch=(available=true,default=false),"}}""
+2026-10-07T11:36:23.064Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.065+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":64523,"thread":"49224:140711978805072","session_name":"wiredtiger_open","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"opening the WiredTiger library"}}}""
+2026-10-07T11:36:23.084Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.084+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":84196,"thread":"49224:140711978805072","session_name":"connection","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"connection configuration string parsing completed"}}}""
+2026-10-07T11:36:23.094Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.094+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":94056,"thread":"49224:140711978805072","session_name":"connection","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"starting WiredTiger utility threads"}}}""
+2026-10-07T11:36:23.120Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.120+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":120603,"thread":"49224:140711978805072","session_name":"connection","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"starting WiredTiger recovery"}}}""
+2026-10-07T11:36:23.121Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.121+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":120603,"thread":"49224:140711978805072","session_name":"txn-recover","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"scanning metadata to find the largest file ID"}}}""
+2026-10-07T11:36:23.121Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.121+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":120603,"thread":"49224:140711978805072","session_name":"txn-recover","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"largest file ID found in the metadata 0"}}}
+{"t":{"$date":"2026-10-07T12:36:23.121+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":120603,"thread":"49224:140711978805072","session_name":"txn-recover","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"recovery log replay has successfully finished and ran for 0 milliseconds"}}}
+{"t":{"$date":"2026-10-07T12:36:23.121+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":120603,"thread":"49224:140711978805072","session_name":"txn-recover","category":"WT_VERB_RECOVERY_PROGRESS","log_id":1000000,"category_id":33,"verbose_level":"DEBUG_1","verbose_level_id":1,"msg":"Set global recovery timestamp: (0, 0)"}}}""
+2026-10-07T11:36:23.121Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.121+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":121909,"thread":"49224:140711978805072","session_name":"txn-recover","category":"WT_VERB_RECOVERY_PROGRESS","log_id":1000000,"category_id":33,"verbose_level":"DEBUG_1","verbose_level_id":1,"msg":"Set global oldest timestamp: (0, 0)"}}}""
+2026-10-07T11:36:23.121Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.122+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":121909,"thread":"49224:140711978805072","session_name":"txn-recover","category":"WT_VERB_RECOVERY","log_id":1493201,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"recovery was completed successfully and took 1ms, including 0ms for the log replay, 0ms for the rollback to stable, and 0ms for the checkpoint."}}}""
+2026-10-07T11:36:23.121Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.122+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":121909,"thread":"49224:140711978805072","session_name":"txn-recover","category":"WT_VERB_RECOVERY_PROGRESS","log_id":1493201,"category_id":33,"verbose_level":"INFO","verbose_level_id":0,"msg":"recovery was completed successfully and took 1ms, including 0ms for the log replay, 0ms for the rollback to stable, and 0ms for the checkpoint."}}}""
+2026-10-07T11:36:23.129Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.129+01:00"},"s":"I",  "c":"WTEVICT",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":128981,"thread":"49224:140711978805072","session_name":"connection","category":"WT_VERB_EVICTION","log_id":1000000,"category_id":15,"verbose_level":"INFO","verbose_level_id":0,"msg":"starting eviction threads"}}}""
+2026-10-07T11:36:23.132Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.132+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":131498,"thread":"49224:140711978805072","session_name":"connection","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"WiredTiger utility threads started successfully"}}}
+{"t":{"$date":"2026-10-07T12:36:23.132+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":131498,"thread":"49224:140711978805072","session_name":"connection","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"the WiredTiger library has successfully opened"}}}""
+2026-10-07T11:36:23.132Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.132+01:00"},"s":"I",  "c":"STORAGE",  "id":4795906, "ctx":"initandlisten","msg":"WiredTiger opened","attr":{"durationMillis":77}}
+{"t":{"$date":"2026-10-07T12:36:23.133+01:00"},"s":"I",  "c":"RECOVERY", "id":23987,   "ctx":"initandlisten","msg":"WiredTiger recoveryTimestamp","attr":{"recoveryTimestamp":{"$timestamp":{"t":0,"i":0}}}}
+{"t":{"$date":"2026-10-07T12:36:23.133+01:00"},"s":"I",  "c":"STORAGE",  "id":9086700, "ctx":"initandlisten","msg":"WiredTiger session cache max value has been set","attr":{"sessionCacheMax":16500}}""
+2026-10-07T11:36:23.141Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.142+01:00"},"s":"I",  "c":"STORAGE",  "id":10158000,"ctx":"initandlisten","msg":"Opening spill WiredTiger","attr":{"config":"create,cache_size=404M,session_max=1024,eviction=(threads_min=1,threads_max=1),eviction_dirty_target=20MB,eviction_dirty_trigger=323MB,eviction_updates_trigger=323MB,config_base=false,statistics=(fast),log=(enabled=false),builtin_extension_config=(zstd=(compression_level=-7)),file_manager=(close_idle_time=600,close_scan_interval=10,close_handle_minimum=2000),statistics_log=(wait=0),json_output=(error,message),verbose=[recovery_progress:1,checkpoint_progress:1,compact_progress:1,live_restore_progress:1,backup:0,checkpoint:0,compact:0,eviction:0,fileops:0,history_store:0,live_restore:0,recovery:0,rts:0,salvage:0,tiered:0,timestamp:0,transaction:0,verify:0,log:0],"}}""
+2026-10-07T11:36:23.149Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.150+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":148941,"thread":"49224:140711978805072","session_name":"wiredtiger_open","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"opening the WiredTiger library"}}}""
+2026-10-07T11:36:23.153Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.153+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":153305,"thread":"49224:140711978805072","session_name":"connection","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"connection configuration string parsing completed"}}}""
+2026-10-07T11:36:23.164Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.165+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":164931,"thread":"49224:140711978805072","session_name":"connection","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"starting WiredTiger utility threads"}}}""
+2026-10-07T11:36:23.165Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.165+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":164931,"thread":"49224:140711978805072","session_name":"connection","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"starting WiredTiger recovery"}}}""
+2026-10-07T11:36:23.166Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.166+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":166192,"thread":"49224:140711978805072","session_name":"txn-recover","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"scanning metadata to find the largest file ID"}}}""
+2026-10-07T11:36:23.166Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.166+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":166192,"thread":"49224:140711978805072","session_name":"txn-recover","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"largest file ID found in the metadata 0"}}}
+{"t":{"$date":"2026-10-07T12:36:23.167+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":166192,"thread":"49224:140711978805072","session_name":"txn-recover","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"recovery log replay has successfully finished and ran for 1 milliseconds"}}}
+{"t":{"$date":"2026-10-07T12:36:23.167+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":166192,"thread":"49224:140711978805072","session_name":"txn-recover","category":"WT_VERB_RECOVERY_PROGRESS","log_id":1000000,"category_id":33,"verbose_level":"DEBUG_1","verbose_level_id":1,"msg":"Set global recovery timestamp: (0, 0)"}}}""
+2026-10-07T11:36:23.166Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.167+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":166192,"thread":"49224:140711978805072","session_name":"txn-recover","category":"WT_VERB_RECOVERY_PROGRESS","log_id":1000000,"category_id":33,"verbose_level":"DEBUG_1","verbose_level_id":1,"msg":"Set global oldest timestamp: (0, 0)"}}}""
+2026-10-07T11:36:23.167Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.167+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":167410,"thread":"49224:140711978805072","session_name":"txn-recover","category":"WT_VERB_RECOVERY","log_id":1493201,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"recovery was completed successfully and took 2ms, including 1ms for the log replay, 0ms for the rollback to stable, and 0ms for the checkpoint."}}}""
+2026-10-07T11:36:23.167Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.167+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":167410,"thread":"49224:140711978805072","session_name":"txn-recover","category":"WT_VERB_RECOVERY_PROGRESS","log_id":1493201,"category_id":33,"verbose_level":"INFO","verbose_level_id":0,"msg":"recovery was completed successfully and took 2ms, including 1ms for the log replay, 0ms for the rollback to stable, and 0ms for the checkpoint."}}}""
+2026-10-07T11:36:23.198Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.199+01:00"},"s":"I",  "c":"WTEVICT",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":198413,"thread":"49224:140711978805072","session_name":"connection","category":"WT_VERB_EVICTION","log_id":1000000,"category_id":15,"verbose_level":"INFO","verbose_level_id":0,"msg":"starting eviction threads"}}}""
+2026-10-07T11:36:23.199Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.200+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":199770,"thread":"49224:140711978805072","session_name":"connection","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"WiredTiger utility threads started successfully"}}}""
+2026-10-07T11:36:23.199Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.200+01:00"},"s":"I",  "c":"WTRECOV",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":{"ts_sec":1791372983,"ts_usec":199770,"thread":"49224:140711978805072","session_name":"connection","category":"WT_VERB_RECOVERY","log_id":1000000,"category_id":32,"verbose_level":"INFO","verbose_level_id":0,"msg":"the WiredTiger library has successfully opened"}}}
+{"t":{"$date":"2026-10-07T12:36:23.200+01:00"},"s":"I",  "c":"STORAGE",  "id":10158001,"ctx":"initandlisten","msg":"Spill WiredTiger opened","attr":{"durationMillis":58}}""
+2026-10-07T11:36:23.208Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.208+01:00"},"s":"I",  "c":"STORAGE",  "id":9529901, "ctx":"initandlisten","msg":"Initializing durable catalog","attr":{"numRecords":0}}""
+2026-10-07T11:36:23.208Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.209+01:00"},"s":"I",  "c":"STORAGE",  "id":9529902, "ctx":"initandlisten","msg":"Retrieving all idents from storage engine"}""
+2026-10-07T11:36:23.208Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.209+01:00"},"s":"I",  "c":"STORAGE",  "id":9529903, "ctx":"initandlisten","msg":"Initializing all collections in durable catalog","attr":{"numEntries":0}}""
+2026-10-07T11:36:23.230Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.230+01:00"},"s":"I",  "c":"STORAGE",  "id":20320,   "ctx":"initandlisten","msg":"createCollection","attr":{"namespace":"admin.system.version","uuidDisposition":"provided","uuid":{"uuid":{"$uuid":"639466ff-0c02-4952-ad1e-5a5bab23e073"}},"options":{"uuid":{"$uuid":"639466ff-0c02-4952-ad1e-5a5bab23e073"}}}}""
+2026-10-07T11:36:23.251Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.251+01:00"},"s":"I",  "c":"INDEX",    "id":20345,   "ctx":"initandlisten","msg":"Index build: done building","attr":{"buildUUID":null,"collectionUUID":{"uuid":{"$uuid":"639466ff-0c02-4952-ad1e-5a5bab23e073"}},"namespace":"admin.system.version","index":"_id_","ident":"index-6e5e6f58-6b94-462a-86cc-40b455da8b8a","collectionIdent":"collection-6567fb13-1026-4ebf-a084-e5ec050a4415","commitTimestamp":null}}""
+2026-10-07T11:36:23.252Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.252+01:00"},"s":"I",  "c":"REPL",     "id":20459,   "ctx":"initandlisten","msg":"Setting featureCompatibilityVersion","attr":{"newVersion":"8.2"}}""
+2026-10-07T11:36:23.252Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.252+01:00"},"s":"I",  "c":"REPL",     "id":5853300, "ctx":"initandlisten","msg":"current featureCompatibilityVersion value","attr":{"featureCompatibilityVersion":"8.2","context":"setFCV"}}
+{"t":{"$date":"2026-10-07T12:36:23.252+01:00"},"s":"I",  "c":"NETWORK",  "id":4915702, "ctx":"initandlisten","msg":"Updated wire specification","attr":{"oldSpec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":27},"incomingInternalClient":{"minWireVersion":0,"maxWireVersion":27},"outgoing":{"minWireVersion":6,"maxWireVersion":27},"isInternalClient":true},"newSpec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":27},"incomingInternalClient":{"minWireVersion":27,"maxWireVersion":27},"outgoing":{"minWireVersion":27,"maxWireVersion":27},"isInternalClient":true}}}""
+2026-10-07T11:36:23.252Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.253+01:00"},"s":"I",  "c":"NETWORK",  "id":4915702, "ctx":"initandlisten","msg":"Updated wire specification","attr":{"oldSpec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":27},"incomingInternalClient":{"minWireVersion":27,"maxWireVersion":27},"outgoing":{"minWireVersion":27,"maxWireVersion":27},"isInternalClient":true},"newSpec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":27},"incomingInternalClient":{"minWireVersion":27,"maxWireVersion":27},"outgoing":{"minWireVersion":27,"maxWireVersion":27},"isInternalClient":true}}}""
+2026-10-07T11:36:23.253Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.253+01:00"},"s":"I",  "c":"REPL",     "id":5853300, "ctx":"initandlisten","msg":"current featureCompatibilityVersion value","attr":{"featureCompatibilityVersion":"8.2","context":"startup"}}""
+2026-10-07T11:36:23.254Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.254+01:00"},"s":"I",  "c":"STORAGE",  "id":5071100, "ctx":"initandlisten","msg":"Clearing temp directory"}""
+2026-10-07T11:36:23.256Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.256+01:00"},"s":"I",  "c":"STORAGE",  "id":10682200,"ctx":"initandlisten","msg":"Dropping spill idents","attr":{"numIdents":0}}
+{"t":{"$date":"2026-10-07T12:36:23.256+01:00"},"s":"I",  "c":"CONTROL",  "id":6608200, "ctx":"initandlisten","msg":"Initializing cluster server parameters from disk"}""
+2026-10-07T11:36:23.256Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.256+01:00"},"s":"I",  "c":"CONTROL",  "id":20536,   "ctx":"initandlisten","msg":"Flow Control is enabled on this deployment"}""
+2026-10-07T11:36:23.822Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.822+01:00"},"s":"I",  "c":"FTDC",     "id":20625,   "ctx":"initandlisten","msg":"Initializing full-time diagnostic data capture","attr":{"dataDirectory":"C:/Users/pc/AppData/Local/Temp/mongo-mem-1CPHlR/diagnostic.data"}}""
+2026-10-07T11:36:23.824Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.824+01:00"},"s":"I",  "c":"STORAGE",  "id":20320,   "ctx":"initandlisten","msg":"createCollection","attr":{"namespace":"local.startup_log","uuidDisposition":"generated","uuid":{"uuid":{"$uuid":"df864194-c43f-4a92-a890-560d9196648a"}},"options":{"capped":true,"size":10485760}}}""
+2026-10-07T11:36:23.853Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.853+01:00"},"s":"I",  "c":"INDEX",    "id":20345,   "ctx":"initandlisten","msg":"Index build: done building","attr":{"buildUUID":null,"collectionUUID":{"uuid":{"$uuid":"df864194-c43f-4a92-a890-560d9196648a"}},"namespace":"local.startup_log","index":"_id_","ident":"index-70b1a449-bae0-4216-8a0d-8d37cf5f98ac","collectionIdent":"collection-7c966f7c-365c-421a-a5f0-4fa88371f3e4","commitTimestamp":null}}""
+2026-10-07T11:36:23.853Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.853+01:00"},"s":"I",  "c":"REPL",     "id":6015317, "ctx":"initandlisten","msg":"Setting new configuration state","attr":{"newState":"ConfigReplicationDisabled","oldState":"ConfigPreStart"}}
+{"t":{"$date":"2026-10-07T12:36:23.854+01:00"},"s":"I",  "c":"STORAGE",  "id":22262,   "ctx":"initandlisten","msg":"Timestamp monitor starting"}""
+2026-10-07T11:36:23.854Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.855+01:00"},"s":"I",  "c":"STORAGE",  "id":7333401, "ctx":"initandlisten","msg":"Starting the DiskSpaceMonitor"}""
+2026-10-07T11:36:23.860Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.860+01:00"},"s":"I",  "c":"NETWORK",  "id":23015,   "ctx":"listener","msg":"Listening on","attr":{"address":"127.0.0.1:60765"}}
+{"t":{"$date":"2026-10-07T12:36:23.860+01:00"},"s":"I",  "c":"NETWORK",  "id":23016,   "ctx":"listener","msg":"Waiting for connections","attr":{"port":60765,"ssl":"off"}}""
+2026-10-07T11:36:23.860Z MongoMS:MongoInstance Mongo[60765]: constructor: Instance is ready!
+2026-10-07T11:36:23.860Z MongoMS:MongoInstance Mongo[60765]: start: Processes Started
+2026-10-07T11:36:23.860Z MongoMS:MongoMemoryServer Mongo[60765]: _startUpInstance: Instance Started, createAuth: "false"
+2026-10-07T11:36:23.860Z MongoMS:MongoMemoryServer Mongo[60765]: start: Instance fully Started
+2026-10-07T11:36:23.861Z MongoMS:MongoMemoryServer Mongo[60765]: stop: Called .stop() method
+2026-10-07T11:36:23.861Z MongoMS:MongoMemoryServer Mongo[60765]: stop: Stopping MongoDB server on port 60765 with pid 49224
+2026-10-07T11:36:23.861Z MongoMS:MongoInstance Mongo[60765]: stop
+2026-10-07T11:36:23.862Z MongoMS:utils Mongo[60765] killProcess: mongodProcess: sending "SIGINT"
+2026-10-07T11:36:23.863Z MongoMS:MongoInstance Mongo[60765]: stdoutHandler: ""{"t":{"$date":"2026-10-07T12:36:23.860+01:00"},"s":"I",  "c":"CONTROL",  "id":8423403, "ctx":"initandlisten","msg":"mongod startup complete","attr":{"Summary of time elapsed":{"Startup from clean shutdown?":true,"Statistics":{"setUpPeriodicRunnerMillis":0,"setUpOCSPMillis":0,"setUpTransportLayerMillis":0,"initSyncCrashRecoveryMillis":0,"createLockFileMillis":0,"getStorageEngineMetadataMillis":0,"createStorageEngineMillis":156,"writePIDMillis":0,"writeNewMetadataMillis":9,"initializeFCVForIndexMillis":1,"dropAbandonedIdentsMillis":0,"standaloneClusterParamsMillis":0,"userAndRolesGraphMillis":0,"waitForMajorityServiceMillis":1,"startUpReplCoordMillis":0,"recoverChangeStreamMillis":0,"logStartupOptionsMillis":0,"startUpTransportLayerMillis":1,"initAndListenTotalMillis":813}}}}""
+2026-10-07T11:36:23.947Z MongoMS:utils Mongo[60765] killProcess: mongodProcess: got exit signal, Code: null, Signal: SIGINT
+2026-10-07T11:36:23.948Z MongoMS:MongoInstance Mongo[60765]: closeHandler: Mongod instance closed with an non-0 (or non 12 on windows) code!
+2026-10-07T11:36:23.948Z MongoMS:MongoInstance Mongo[60765]: constructor: Instance has thrown an Error: Error: Instance closed unexpectedly with code "null" and signal "SIGINT"
+2026-10-07T11:36:23.948Z MongoMS:MongoInstance Mongo[60765]: stop
+2026-10-07T11:36:23.948Z MongoMS:MongoInstance Mongo[60765]: stop: stopPromise is already set, using that
+2026-10-07T11:36:23.948Z MongoMS:MongoInstance Mongo[60765]: closeHandler: code: "null", signal: "SIGINT"
+2026-10-07T11:36:23.949Z MongoMS:utils Mongo[60765] killProcess: killerProcess: sending "SIGINT"
+2026-10-07T11:36:23.961Z MongoMS:utils Mongo[60765] killProcess: killerProcess: got exit signal, Code: null, Signal: SIGINT
+2026-10-07T11:36:23.961Z MongoMS:MongoInstance Mongo[60765]: stop: Instance Finished Shutdown
+2026-10-07T11:36:23.962Z MongoMS:MongoMemoryServer Mongo[60765]: cleanup: { doCleanup: true, force: false }
+2026-10-07T11:36:23.962Z MongoMS:MongoMemoryServer Mongo[60765]: cleanup: removing tmpDir at C:\Users\pc\AppData\Local\Temp\mongo-mem-1CPHlR

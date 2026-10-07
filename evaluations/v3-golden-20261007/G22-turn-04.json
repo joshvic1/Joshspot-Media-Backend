@@ -1,0 +1,199 @@
+{
+  "customer": [
+    {
+      "_id": "G22-in-3",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "okay I am back ready now",
+      "createdAt": "2026-10-07T09:21:10.724Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G22-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok 5k daily for 7 days",
+      "createdAt": "2026-10-07T09:20:54.314Z"
+    },
+    {
+      "_id": "G22-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing TikTok ads management with a daily budget of 5,000 for 7 days.\n\nI will prepare a quote for TikTok ads management for that budget and duration. Just to confirm, is this amount the total daily ad spend you want allocated, excluding setup fees? Also, do you already have a TikTok ad account, or do you need us to set that up for you? \n\nLet me know so I can provide the most accurate quote.",
+      "createdAt": "2026-10-07T09:20:59.369Z"
+    },
+    {
+      "_id": "G22-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "let me think",
+      "createdAt": "2026-10-07T09:20:59.371Z"
+    },
+    {
+      "_id": "G22-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Take your time to decide. If you'd like, I can provide more details about the TikTok ads management service, including setup options and pricing, whenever you're ready. Just let me know how you want to proceed!",
+      "createdAt": "2026-10-07T09:21:05.850Z"
+    },
+    {
+      "_id": "G22-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I will get back tomorrow",
+      "createdAt": "2026-10-07T09:21:05.851Z"
+    },
+    {
+      "_id": "G22-out-2",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for letting me know. Whenever you're ready tomorrow or later, just reach out and we can continue with your TikTok ads management quote or any questions you have. Have a great day!",
+      "createdAt": "2026-10-07T09:21:10.721Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad",
+    "seenMessageIds": [
+      "G22-in-0",
+      "G22-out-0",
+      "G22-in-1",
+      "G22-out-1",
+      "G22-in-2"
+    ],
+    "contextCharacters": 1348,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3792,
+    "output_tokens": 85,
+    "total_tokens": 3877,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0016528
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad/items?limit=100&order=asc&after=msg_6ac60f08bacc8196b2656a6234a371d302654f4b06bd94ad"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad/items/msg_02654f4b06bd94ad006ac60f0a013c819696eecb47d4bd24a6"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad/items/msg_02654f4b06bd94ad006ac60f0ade1081969004548e432a2ab3"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad/items?limit=100&order=asc&after=msg_6ac60f08bacc8196b2656a6234a371d302654f4b06bd94ad"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_02654f4b06bd94ad006ac60f09cbf081968e69b739f1a467f5",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3792,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 85,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3877
+      },
+      "output": [
+        {
+          "id": "msg_02654f4b06bd94ad006ac60f0ade1081969004548e432a2ab3",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thank you for coming back and confirming you're ready.\n\nJust to finalize your TikTok ads management quote: You want us to manage TikTok ads with a daily ad spend of 5,000 for 7 days, correct?\n\nAlso, do you already have a TikTok ad account, or do you need us to handle the account setup as well?\n\nLet me know so I can prepare the exact quote for you."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 8379,
+      "openaiConversationId": "conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad"
+    },
+    "action": "reply",
+    "response": "Thank you for coming back and confirming you're ready.\n\nJust to finalize your TikTok ads management quote: You want us to manage TikTok ads with a daily ad spend of 5,000 for 7 days, correct?\n\nAlso, do you already have a TikTok ad account, or do you need us to handle the account setup as well?\n\nLet me know so I can prepare the exact quote for you.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 10160,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60ef7eb6c8196ab1abe39a59ca40f02654f4b06bd94ad",
+    "seenMessageIds": [
+      "G22-in-0",
+      "G22-out-0",
+      "G22-in-1",
+      "G22-out-1",
+      "G22-in-2",
+      "G22-out-2",
+      "G22-in-3"
+    ],
+    "contextCharacters": 1821,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

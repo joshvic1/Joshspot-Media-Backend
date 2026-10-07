@@ -1,0 +1,159 @@
+{
+  "customer": [
+    {
+      "_id": "G25-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "actually Facebook instead",
+      "createdAt": "2026-10-07T09:21:37.493Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G25-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok for 10 days 5k daily",
+      "createdAt": "2026-10-07T09:21:32.564Z"
+    },
+    {
+      "_id": "G25-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "You want me to manage TikTok ads for 10 days with a daily ad spend of 5,000. Just to confirm, you want Joshspot Media to handle the full TikTok ads management service for that period and budget, correct?\n\nAlso, would you like me to prepare a quote for this service now?",
+      "createdAt": "2026-10-07T09:21:37.490Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba",
+    "seenMessageIds": [
+      "G25-in-0"
+    ],
+    "contextCharacters": 163,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3525,
+    "output_tokens": 60,
+    "total_tokens": 3585,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.001506
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items?limit=100&order=asc&after=msg_6ac60f2376b88196a8ed67573b134ed20390d396ad4cc9ba"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items/msg_0390d396ad4cc9ba006ac60f24ad788196961ec1ce3ebeb0d1"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items/msg_0390d396ad4cc9ba006ac60f253eb08196921ea6ac95f33fde"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items?limit=100&order=asc&after=msg_6ac60f2376b88196a8ed67573b134ed20390d396ad4cc9ba"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0390d396ad4cc9ba006ac60f2489208196acc64a4dbc4882d9",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3525,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 60,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3585
+      },
+      "output": [
+        {
+          "id": "msg_0390d396ad4cc9ba006ac60f253eb08196921ea6ac95f33fde",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "You want Joshspot Media to manage Facebook ads for 10 days with a daily ad spend of 5,000. Just to confirm, you want the full Facebook (Meta) ads management service for that period and budget, correct?\n\nShall I prepare a quote for this service now?"
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 4379,
+      "openaiConversationId": "conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba"
+    },
+    "action": "reply",
+    "response": "You want Joshspot Media to manage Facebook ads for 10 days with a daily ad spend of 5,000. Just to confirm, you want the full Facebook (Meta) ads management service for that period and budget, correct?\n\nShall I prepare a quote for this service now?",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 6186,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba",
+    "seenMessageIds": [
+      "G25-in-0",
+      "G25-out-0",
+      "G25-in-1"
+    ],
+    "contextCharacters": 724,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

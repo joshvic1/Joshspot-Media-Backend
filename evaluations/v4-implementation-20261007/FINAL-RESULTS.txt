@@ -1,0 +1,32 @@
+FINAL DETERMINISTIC VERIFICATION — 7 October 2026
+
+Full suite, final diagnostic serial run: 312 tests; 311 passed; 1 failed.
+Log: regressions-serial-diagnostic.txt
+All 36 V4 tests passed in this final full run.
+Frontend build: passed, exit 0. Log: frontend/v4-build-final.txt.
+Backend and frontend git diff --check: passed.
+
+Remaining assertion:
+inbox/integration.test.js:577
+"mentions are idempotent, private and grant read access without sending permission"
+Expected 200, received 404 when a mentioned CSS user opens a conversation
+assigned to someone else. Existing assigned-only CSS visibility in
+inbox/policy.js denies that access. The test and policy were not changed.
+This suite is not reported as fully green. Resolve the conflicting expectation
+separately without weakening the owner's assigned-only policy.
+
+The earlier reaction test lease-conflict failure did not recur in this final
+run. Its initial failure remains recorded in regressions-first.txt.
+Two intervening runs encountered temporary MongoDB startup errors; they were
+not treated as product passes. The serial diagnostic run completed without
+those startup errors. No test expectations were rewritten.
+
+Preservation: 263 baseline V2/V3 core/evaluation files unchanged; calculator
+hash unchanged. See preservation-final.json.
+
+No deployment, no production LIVE activation, no production database writes,
+no paid model calls, no prior evaluation overwrites. Mocked LIVE branches in
+tests used only ephemeral MongoDB and stubbed providers.
+
+Readiness: LOCAL IMPLEMENTATION ONLY. Real-model conversational acceptance
+has not been run. See REPORT.txt section 23 for a proposed small evaluation.

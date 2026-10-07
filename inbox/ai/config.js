@@ -16,7 +16,14 @@ function validateConfig(input) {
   const ranges = { followupFirstHours:[1,168],followupSecondHours:[1,168],followupMaximum:[1,2],paymentQuestionCooldownMinutes:[1,1440], confidence:[0,1], maxResponseLength:[100,4000], maxHistory:[0,12], debounceSeconds:[1,10], responseDelaySeconds:[0,10], maxConsecutive:[0,30], maxDailyCalls:[0,10000], maxConversationCalls:[0,200], startHour:[0,23], endHour:[1,24] };
   for (const [key,[min,max]] of Object.entries(ranges)) if(out[key]<min || out[key]>max) fail(`${key} must be between ${min} and ${max}.`);
   if(!Number.isInteger(out.followupMaximum)||out.followupSecondHours<=out.followupFirstHours)fail('Follow-up count must be 1 or 2 and the second reminder must be later than the first.');
-  if (!['OFF','DRAFT','LIVE'].includes(out.mode) || out.provider !== 'openai') fail('Unsupported AI mode/provider.');
+  if (!(out.engineVersion==='v4'?['OFF','TEST','DRAFT','LIVE']:['OFF','DRAFT','LIVE']).includes(out.mode) || out.provider !== 'openai') fail('Unsupported AI mode/provider.');
+  if(!['v1','shadow','v2','v3','v4'].includes(out.engineVersion))fail('Choose v1, shadow, v2, v3 or v4.');
+  if(out.engineVersion==='v4'&&out.mode==='LIVE'&&process.env.AI_V4_LIVE_APPROVED!=='1')fail('V4 LIVE requires explicit backend approval after validation.');
+  for(const stage of ['Interpreter','Composer']){if(!/^gpt-[a-z0-9.\-]+$/.test(out[`v4${stage}Model`]))fail('Enter a valid V4 model name.');if(!['none','low','medium','high','xhigh','max'].includes(out[`v4${stage}Reasoning`]))fail('Choose supported V4 reasoning.');if(out[`v4${stage}Model`]==='gpt-6.1-sol'&&out[`v4${stage}Reasoning`]==='none')fail('GPT-6.1 Sol requires low or higher reasoning.');}
+  if(!Number.isInteger(out.v4HistoryMessages)||out.v4HistoryMessages<4||out.v4HistoryMessages>80||!Number.isInteger(out.v4MaxOutputTokens)||out.v4MaxOutputTokens<1000||out.v4MaxOutputTokens>12000)fail('V4 history must be 4–80 messages and output 1000–12000 tokens.');
+  if(!Number.isInteger(out.v3MaxOutputTokens)||out.v3MaxOutputTokens<500||out.v3MaxOutputTokens>4000)fail('V3 output tokens must be between 500 and 4000.');
+  if(out.engineVersion==='v3'&&out.mode==='LIVE'&&process.env.AI_V3_LIVE_APPROVED!=='1')fail('V3 LIVE is not approved. Use Test Agent or DRAFT.');
+  if(out.engineVersion==='v2'&&out.mode==='LIVE'&&process.env.AI_V2_LIVE_APPROVED!=='1')fail('Validate V2 in shadow and DRAFT before authorizing V2 LIVE on the backend.');
   if (!['CSS','SS'].includes(out.handoffTeam) || !['least_loaded','round_robin','fallback'].includes(out.assignment)) fail('Invalid handoff strategy.');
   if (!['handoff','continue'].includes(out.outsideHours) || !['handoff','ignore'].includes(out.stickerAction) || !['handoff','ignore'].includes(out.contactAction)) fail('Invalid handling rule.');
   for (const key of ['fallbackAgent','paymentAgent']) if (out[key] && !/^[a-f0-9]{24}$/i.test(out[key])) fail('Choose a valid staff member.');
@@ -35,6 +42,10 @@ function validateRecord(input) {
   if (!fields[input.kind]) fail('Invalid record kind.');
   const data = {}; const source = input.data || {};
   if(input.kind==='knowledge' && source.schemaVersion===1) Object.assign(data,require('./structuredKnowledge').validate(source));
+  if(input.kind==='knowledge'){
+    for(const [field,allowed]of Object.entries({v4Topics:require('./v4/schema').requests,v4Platforms:require('./v4/schema').platforms,v4Services:require('./v4/schema').services,v4ExcludedServices:require('./v4/schema').services}))if(source[field]!==undefined){if(!Array.isArray(source[field])||source[field].some(v=>!allowed.includes(v)))fail('Invalid V4 knowledge metadata.');data[field]=source[field];}
+    if(source.v4Mandatory!==undefined){if(typeof source.v4Mandatory!=='boolean')fail('Invalid V4 mandatory flag.');data.v4Mandatory=source.v4Mandatory;}
+  }
   for (const key of fields[input.kind]) if (source[key] !== undefined) {
     if(input.kind==='knowledge'&&source.schemaVersion===1)continue;
     const value = source[key];

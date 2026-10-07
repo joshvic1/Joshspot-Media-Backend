@@ -29,6 +29,7 @@ async function deleteChat(id){
  // An external send/upload already in flight cannot be recalled. Wait for it to
  // finish rather than report a successful purge while a worker can recreate data.
  const busy=await Message.exists({...scope,status:'sending',attemptedAt:{$gt:new Date(Date.now()-120000)}})
+  || await require('./ai/v2/shadow').Job.exists({...scope,status:'running',leaseUntil:{$gt:now}})
   || await Media.exists({...scope,state:'copying',leaseUntil:{$gt:now}})
   || await Conversation.exists({_id:{$in:conversations},'ai.leaseUntil':{$gt:now}})
   || await WebhookJob.exists({...webhookFilter(contact.phone),state:'processing',leaseUntil:{$gt:now}});
@@ -45,10 +46,12 @@ async function deleteChat(id){
  const recordIds=promoted.map(log=>log.after?.record).filter(Boolean);
  if(recordIds.length){await Record.deleteMany({_id:{$in:recordIds}});await Log.deleteMany({$or:[{_id:{$in:promoted.map(log=>log._id)}},{'before._id':{$in:recordIds}}]});}
  await require('./ai/models').Followup.deleteMany(scope);
+ await require('./ai/v2/shadow').Job.deleteMany(scope);
+ await require('./ai/v2/shadow').Memory.deleteMany({key:{$in:conversations.map(String)}});
  await require('./shortcuts').Action.deleteMany(scope);
  await Notification.deleteMany(scope);
  await Log.deleteMany(scope);
- for(const conversation of conversations)await Usage.deleteMany({key:{$regex:`^${conversation}:`}});
+ for(const conversation of conversations)await Usage.deleteMany({key:{$regex:`^(?:shadow:)?${conversation}:`}});
  await Media.deleteMany(scope);
  await Message.deleteMany(scope);
  await Conversation.deleteMany({_id:{$in:conversations}});

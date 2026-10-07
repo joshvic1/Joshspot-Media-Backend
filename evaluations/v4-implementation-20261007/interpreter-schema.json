@@ -1,0 +1,503 @@
+{
+  "type": "object",
+  "properties": {
+    "current_requests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ASK_PRICE",
+              "ASK_QUOTE",
+              "ASK_RECOMMENDATION",
+              "ASK_BREAKDOWN",
+              "ASK_REQUIREMENTS",
+              "ASK_SERVICE_INCLUSIONS",
+              "ASK_EXPECTED_RESULTS",
+              "ASK_CREATIVE_REQUIREMENTS",
+              "ASK_TECHNICAL_HELP",
+              "ASK_COURSE_DETAILS",
+              "ASK_PAYMENT_DETAILS",
+              "CLAIM_PAYMENT",
+              "REQUEST_HUMAN",
+              "NEGOTIATE",
+              "OTHER"
+            ]
+          },
+          "platform": {
+            "type": "string",
+            "enum": [
+              "TIKTOK",
+              "META",
+              "FACEBOOK",
+              "INSTAGRAM",
+              "UNKNOWN"
+            ]
+          },
+          "service": {
+            "type": "string",
+            "enum": [
+              "ACCOUNT_SETUP",
+              "ADS_MANAGEMENT",
+              "COURSE",
+              "GENERAL_SUPPORT",
+              "UNKNOWN"
+            ]
+          },
+          "evidence": {
+            "type": "object",
+            "properties": {
+              "messageId": {
+                "type": "string",
+                "maxLength": 160
+              },
+              "text": {
+                "type": "string",
+                "maxLength": 6000
+              }
+            },
+            "required": [
+              "messageId",
+              "text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "platform",
+          "service",
+          "evidence"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 12
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": "string",
+            "enum": [
+              "TIKTOK",
+              "META",
+              "FACEBOOK",
+              "INSTAGRAM",
+              "UNKNOWN"
+            ]
+          },
+          "service": {
+            "type": "string",
+            "enum": [
+              "ACCOUNT_SETUP",
+              "ADS_MANAGEMENT",
+              "COURSE",
+              "GENERAL_SUPPORT",
+              "UNKNOWN"
+            ]
+          },
+          "budget": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "minimum": 0.01,
+                    "maximum": 100000000
+                  },
+                  "basis": {
+                    "type": "string",
+                    "enum": [
+                      "DAILY_AD_SPEND",
+                      "TOTAL_AD_SPEND",
+                      "ALL_IN_MAXIMUM",
+                      "PACKAGE",
+                      "COUNTEROFFER",
+                      "UNKNOWN"
+                    ]
+                  },
+                  "currency": {
+                    "type": "string",
+                    "enum": [
+                      "NGN"
+                    ]
+                  }
+                },
+                "required": [
+                  "amount",
+                  "basis",
+                  "currency"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "duration_days": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 365
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "package_duration_days": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 365
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "evidence": {
+            "type": "object",
+            "properties": {
+              "messageId": {
+                "type": "string",
+                "maxLength": 160
+              },
+              "text": {
+                "type": "string",
+                "maxLength": 6000
+              }
+            },
+            "required": [
+              "messageId",
+              "text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "platform",
+          "service",
+          "budget",
+          "duration_days",
+          "package_duration_days",
+          "evidence"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 12
+    },
+    "purchase_change": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "type": "string",
+          "enum": [
+            "KEEP",
+            "ADD",
+            "REPLACE",
+            "REMOVE",
+            "NONE"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "platform": {
+                "type": "string",
+                "enum": [
+                  "TIKTOK",
+                  "META",
+                  "FACEBOOK",
+                  "INSTAGRAM",
+                  "UNKNOWN"
+                ]
+              },
+              "service": {
+                "type": "string",
+                "enum": [
+                  "ACCOUNT_SETUP",
+                  "ADS_MANAGEMENT",
+                  "COURSE",
+                  "GENERAL_SUPPORT",
+                  "UNKNOWN"
+                ]
+              },
+              "evidence": {
+                "type": "object",
+                "properties": {
+                  "messageId": {
+                    "type": "string",
+                    "maxLength": 160
+                  },
+                  "text": {
+                    "type": "string",
+                    "maxLength": 6000
+                  }
+                },
+                "required": [
+                  "messageId",
+                  "text"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "platform",
+              "service",
+              "evidence"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 4
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "messageId": {
+                  "type": "string",
+                  "maxLength": 160
+                },
+                "text": {
+                  "type": "string",
+                  "maxLength": 6000
+                }
+              },
+              "required": [
+                "messageId",
+                "text"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "operation",
+        "items",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "readiness": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": [
+            "EXPLORING",
+            "INTERESTED",
+            "READY_TO_PAY",
+            "DEFERRED",
+            "DECLINED",
+            "UNKNOWN"
+          ]
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "messageId": {
+                  "type": "string",
+                  "maxLength": 160
+                },
+                "text": {
+                  "type": "string",
+                  "maxLength": 6000
+                }
+              },
+              "required": [
+                "messageId",
+                "text"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "whole_purchase_cap": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 100000000
+            },
+            "currency": {
+              "type": "string",
+              "enum": [
+                "NGN"
+              ]
+            },
+            "evidence": {
+              "type": "object",
+              "properties": {
+                "messageId": {
+                  "type": "string",
+                  "maxLength": 160
+                },
+                "text": {
+                  "type": "string",
+                  "maxLength": 6000
+                }
+              },
+              "required": [
+                "messageId",
+                "text"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "amount",
+            "currency",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "knowledge_needs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string",
+            "enum": [
+              "ASK_PRICE",
+              "ASK_QUOTE",
+              "ASK_RECOMMENDATION",
+              "ASK_BREAKDOWN",
+              "ASK_REQUIREMENTS",
+              "ASK_SERVICE_INCLUSIONS",
+              "ASK_EXPECTED_RESULTS",
+              "ASK_CREATIVE_REQUIREMENTS",
+              "ASK_TECHNICAL_HELP",
+              "ASK_COURSE_DETAILS",
+              "ASK_PAYMENT_DETAILS",
+              "CLAIM_PAYMENT",
+              "REQUEST_HUMAN",
+              "NEGOTIATE",
+              "OTHER"
+            ]
+          },
+          "platform": {
+            "type": "string",
+            "enum": [
+              "TIKTOK",
+              "META",
+              "FACEBOOK",
+              "INSTAGRAM",
+              "UNKNOWN"
+            ]
+          },
+          "service": {
+            "type": "string",
+            "enum": [
+              "ACCOUNT_SETUP",
+              "ADS_MANAGEMENT",
+              "COURSE",
+              "GENERAL_SUPPORT",
+              "UNKNOWN"
+            ]
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 400
+          }
+        },
+        "required": [
+          "topic",
+          "platform",
+          "service",
+          "query"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 12
+    },
+    "clarification": {
+      "type": "object",
+      "properties": {
+        "needed": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "missing_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "service",
+              "platform",
+              "budget",
+              "budget_basis",
+              "duration",
+              "package",
+              "allocation",
+              "proceed",
+              "payment",
+              "clarification"
+            ]
+          },
+          "maxItems": 8
+        }
+      },
+      "required": [
+        "needed",
+        "reason",
+        "missing_fields"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "current_requests",
+    "facts",
+    "purchase_change",
+    "readiness",
+    "whole_purchase_cap",
+    "knowledge_needs",
+    "clarification"
+  ],
+  "additionalProperties": false
+}

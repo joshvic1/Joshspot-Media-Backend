@@ -1,0 +1,179 @@
+{
+  "customer": [
+    {
+      "_id": "G19-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I was only asking I still want you to run it",
+      "createdAt": "2026-10-07T09:20:16.611Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G19-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok for me 5k daily 7 days",
+      "createdAt": "2026-10-07T09:20:06.327Z"
+    },
+    {
+      "_id": "G19-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "You want us to manage TikTok ads for you with a daily budget of 5,000 for 7 days. \n\nJust to confirm, do you want us to run and manage the campaign fully on your behalf, including ad creation and optimization? Also, do you already have a TikTok ads account set up, or do you need us to create and set that up for you? \n\nOnce I have these details, I can prepare an accurate quote for you.",
+      "createdAt": "2026-10-07T09:20:11.894Z"
+    },
+    {
+      "_id": "G19-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "what about the 8k own",
+      "createdAt": "2026-10-07T09:20:11.897Z"
+    },
+    {
+      "_id": "G19-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "You mentioned \"8k own.\" Could you please clarify—are you referring to having an 8,000 budget that you want to use yourself to run ads, or are you asking about managing TikTok ads with an 8,000 daily budget instead of 5,000? \n\nJust want to make sure I understand your preference so I can assist you accurately.",
+      "createdAt": "2026-10-07T09:20:16.608Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60ec7ec9c8190804440f6b314372e071b8ba3fbb3b283",
+    "seenMessageIds": [
+      "G19-in-0",
+      "G19-out-0",
+      "G19-in-1"
+    ],
+    "contextCharacters": 843,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3719,
+    "output_tokens": 71,
+    "total_tokens": 3790,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0016012
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ec7ec9c8190804440f6b314372e071b8ba3fbb3b283"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60ec7ec9c8190804440f6b314372e071b8ba3fbb3b283/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ec7ec9c8190804440f6b314372e071b8ba3fbb3b283/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ec7ec9c8190804440f6b314372e071b8ba3fbb3b283/items?limit=100&order=asc&after=msg_6ac60ed28bb08190b7cb19ba0f0ba1e4071b8ba3fbb3b283"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ec7ec9c8190804440f6b314372e071b8ba3fbb3b283/items/msg_071b8ba3fbb3b283006ac60ed3a9b88190be53237993dfd529"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ec7ec9c8190804440f6b314372e071b8ba3fbb3b283/items/msg_071b8ba3fbb3b283006ac60ed4013c8190add0134b9c04a32f"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ec7ec9c8190804440f6b314372e071b8ba3fbb3b283/items?limit=100&order=asc&after=msg_6ac60ed28bb08190b7cb19ba0f0ba1e4071b8ba3fbb3b283"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_071b8ba3fbb3b283006ac60ed36cbc8190964a4e1598862db5",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3719,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 71,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3790
+      },
+      "output": [
+        {
+          "id": "msg_071b8ba3fbb3b283006ac60ed4013c8190add0134b9c04a32f",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for clarifying you want us to run and manage your TikTok ads with a daily budget of 5,000 for 7 days.\n\nI'll prepare a quote now for TikTok ads management with that budget and duration.  \n\nDo you already have a TikTok ads account set up, or should we include the account setup service as well?"
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3247,
+      "openaiConversationId": "conv_6ac60ec7ec9c8190804440f6b314372e071b8ba3fbb3b283"
+    },
+    "action": "reply",
+    "response": "Thanks for clarifying you want us to run and manage your TikTok ads with a daily budget of 5,000 for 7 days.\n\nI'll prepare a quote now for TikTok ads management with that budget and duration.  \n\nDo you already have a TikTok ads account set up, or should we include the account setup service as well?",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4776,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60ec7ec9c8190804440f6b314372e071b8ba3fbb3b283",
+    "seenMessageIds": [
+      "G19-in-0",
+      "G19-out-0",
+      "G19-in-1",
+      "G19-out-1",
+      "G19-in-2"
+    ],
+    "contextCharacters": 1469,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

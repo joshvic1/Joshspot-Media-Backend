@@ -1,0 +1,220 @@
+✔ AI diagnostics distinguish quota, authentication and timeouts without exposing raw errors (10.8328ms)
+✔ initial greeting, explicit platform, setup prices and management context use configured records (105.268ms)
+✔ recommendations, selecting plans and payment actions cannot invent amounts (5.8231ms)
+✔ media, receipts, human requests, sensitive data and unknown questions stop AI (4.0608ms)
+✔ knowledge must match retrieved approved entries and template variables must exist (5.1118ms)
+✔ onboarding from requirements, saved workflow responses and knowledge continues with AI (2.8961ms)
+✔ payment/human rules supply the approved fallback without bypassing mandatory handoff (2.7349ms)
+✔ OpenAI adapter uses structured Responses API, store false and redacted input (6.1613ms)
+✔ Receipts confirm only verified payments; payment troubleshooting can use approved knowledge (2.0168ms)
+✔ Primary document answer overrides old greeting and onboarding wording without handoff (5.1598ms)
+✔ Primary answer cannot invent a price, confirm payment or bypass an explicit human request (14.0624ms)
+✔ Provider receives the complete primary document including its last line with priority instructions (2.8574ms)
+✔ Price questions use verified catalogue amount rather than stale onboarding text (1.8282ms)
+✔ Elora combined setup and management preserves choice and adds setup once (360.1728ms)
+✔ course interest and advertised 8k are separate from services, budgets and invoices (24.5098ms)
+✔ negotiation safeguards refuse counteroffers without changing prices or advancing payment (31.2619ms)
+✔ Pricelessworth: option choices advance despite an irrelevant setup explanation (24.4513ms)
+✔ Pricelessworth: repetition complaint recovers missed customer choice, never assistant inference (12.793ms)
+✔ repeated factual copy yields to progression, but a request to explain again is respected (5.7974ms)
+✔ strict generic greeting bypasses provider; intent-bearing greeting retains useful information (4.1505ms)
+✔ setup progresses quote, consent, payment details without duplicate questions (6.58ms)
+✔ management custom quote calls the actual calculator and preserves partial information (11.2493ms)
+✔ calculator copy has exact parity with existing frontend module (7.4873ms)
+✔ recommendations use current records and explicit plan selection (2.9032ms)
+✔ decline stops progression and service changes unlink wrong invoice without deleting it (3.2961ms)
+✔ media, human and claimed payments hand off; only verified payment is confirmed (7.3786ms)
+✔ approved multi-entry answers precede progression and financial claims are rejected (4.2471ms)
+✔ pending payment questions respect cooldown and do not regenerate invoices (12.5668ms)
+✔ state-aware retrieval excludes inapplicable entries and validation rejects financial writes (10.2011ms)
+✔ bare agreement cannot invent a new budget, select a plan, or skip the payment-details question (9.5168ms)
+✔ explicit payment request survives a mistaken requirements classification (1.907ms)
+✔ active invoice amount stays authoritative after service price changes (2.4249ms)
+✔ low-risk unrelated questions redirect; unknown business information transfers (4.4701ms)
+✔ STRICT preserves line breaks and disabled records do not control answers (3.4745ms)
+✔ expected-results answer survives a missing optional sales prompt (1.6637ms)
+✔ missing sales rules do not authorize unsupported answers (0.7056ms)
+✔ custom quotes and selected plan explanations reuse calculator breakdown copy (10.3568ms)
+✔ platform reply skips unrelated handoff requirements (3.0214ms)
+✔ counteroffer retains authoritative price (1.591ms)
+✔ daily custom budget and duration produce 35000 without package fee duplication (6.7358ms)
+✔ generic ads request must clarify service before quoting or collecting budget (3.2531ms)
+✔ duration-only request cannot invent a custom advertising budget (4.4257ms)
+✔ deferred payment and refusal override mistaken readiness flags (3.0919ms)
+✔ daily-cost followup answers recommended plan spend without repeating discovery (15.504ms)
+✔ Universe all and all of them select both platforms without asking platform again (7.1349ms)
+✔ Belvia uncertainty persists as recommendation guidance even if intent is advertising (3.2284ms)
+✔ Universe duration without money selects inclusive plan even if model invents budget (6.2691ms)
+✔ supported followup in advertising intent answers the concern without repeating platform prompt (2.0271ms)
+✔ Odera: personal account question cannot imply Meta even with confident model extraction (3.0024ms)
+✔ KENNCOMFORT: page conversion, follower count and sales advice do not select setup (3.473ms)
+✔ knowledge matching cannot silently set platform or service and generic ads cannot confirm setup (1.8827ms)
+✔ explicit setup and management requests remain supported and known platform is retained (2.9099ms)
+✔ historical payment request cannot override DEFERRED (223.403ms)
+✔ historical payment request cannot override DECLINED (7.2455ms)
+✔ 12 deferral/support turns do not repeat payment pressure; explicit resume works (110.6869ms)
+✔ later evidence inside one multi-message turn wins over earlier consent (1.7972ms)
+✔ changing a price input during deferral does not silently resume (1.9327ms)
+✔ explicit relationships [["tiktok","account_setup"],["meta","ads_management"]] (15.0521ms)
+✔ explicit relationships [["tiktok","account_setup"],["tiktok","ads_management"]] (12.2756ms)
+✔ explicit relationships [["tiktok","ads_management"],["meta","ads_management"]] (7.6088ms)
+✔ ambiguous old two-by-two slots never produce four charged items (6.0932ms)
+✔ scoped duration invalidates only its item plan and quote (2.9929ms)
+✔ budget meaning DAILY_AD_SPEND uses calculator (254.9096ms)
+✔ budget meaning TOTAL_AD_SPEND uses calculator (98.4819ms)
+✔ budget meaning ALL_IN_CAP uses calculator (49.879ms)
+✔ all-in cap includes selected setup fee exactly once (36.0407ms)
+✔ impossible cap asks for clarification without invoice or discount (27.1546ms)
+✔ all platform cap is clarified rather than silently multiplied (4.4524ms)
+✔ statement needs invoke knowledge selection after updated items (5.1206ms)
+✔ invoice request plus question must be composed before side effect intent returns (10.693ms)
+✔ missing request coverage fails closed after bounded repair (5.7781ms)
+✔ typed PAYMENT_STATUS claim is rejected, including paraphrases (14.6351ms)
+✔ typed GUARANTEE claim is rejected, including paraphrases (0.5201ms)
+✔ typed DESTINATION claim is rejected, including paraphrases (0.5803ms)
+✔ typed PRICE claim is rejected, including paraphrases (0.4237ms)
+✔ typed DISCOUNT claim is rejected, including paraphrases (0.6898ms)
+✔ typed PERMISSION claim is rejected, including paraphrases (3.9684ms)
+✔ backend financial references cannot be forged or changed after issue (0.9527ms)
+✔ strict warning and nonfinancial digit explanation coexist with provenance (4.798ms)
+✔ prepared quote does not set PRICE_PRESENTED; successful send does (5.3909ms)
+✔ failed or queued response cannot become delivery evidence (0.8476ms)
+✔ benign credential discussion retains meaning but values are redacted (0.5868ms)
+✔ long-message tail survives context and oversized turn is explicit (444.191ms)
+✔ unknown-budget answer deactivates actual sent budget question (1.9853ms)
+✔ typed package selection uses inclusive catalogue total exactly once (13.3749ms)
+✔ counteroffer is neither accepted ad spend nor a discount (3.5476ms)
+✔ all-in and daily budgets project without stale legacy budget meanings (72.325ms)
+✔ switching purchase paths does not leak budgets and preserves negative decisions (3.0299ms)
+✔ legacy negative hold survives without trusting historical yes slots (1.2377ms)
+✔ legacy many-by-many relationships require clarification (6.5702ms)
+✔ unaccepted request cannot be recorded as an executed selection (8.4894ms)
+✔ later support reply preserves the last meaningful delivered stage (0.5892ms)
+✔ quoted multiword credentials are redacted without losing service question (0.4125ms)
+✔ V2 invoice wording only uses trusted invoice fields (3267.227ms)
+✔ repeating an unchanged typed budget does not revoke valid current consent (2.0395ms)
+✔ explicit item selection answers the actual sent service choice (1.1234ms)
+✔ validation repair rechecks the entire ledger, not only the last failed need (7.4767ms)
+✔ a purchase cap also bounds independently selected item budgets (8.6509ms)
+✔ whole turn retains all slots and uses daily calculator, never model arithmetic (312.3393ms)
+✔ combined setup and management sums each service once (23.7419ms)
+✔ evidence and contradiction validation never requires matching phrases (3.9024ms)
+✔ sent questions anchor answers; failed and queued drafts do not (3.1577ms)
+✔ knowledge becomes eligible in the same turn after extraction (40.7473ms)
+✔ course exploration does not erase advertising purchase (17.629ms)
+✔ deferral pauses pressure but allows daily recommendations (34.9793ms)
+✔ explicit correction supersedes evidence and detaches an obsolete invoice (15.5917ms)
+✔ unconfirmed budget basis is clarified, not guessed (7.0809ms)
+✔ multi-platform shared budget is not silently doubled (56.6609ms)
+✔ invoices require consent AND payment request and stay deterministic (28.2372ms)
+✔ missing account does not silently consent to buying setup (7.8026ms)
+✔ negotiation cannot lower a quote (8.0409ms)
+✔ financial and question content cannot bypass the final composer (1.2431ms)
+✔ media, verified payments and explicit humans use actual handoff action (46.8914ms)
+✔ live V2 is gated separately from tests and shadow (15.0153ms)
+✔ selecting course and resuming ads restores purchase facts, not old consent (18.1108ms)
+✔ a verified existing invoice amount beats newly edited service pricing (12.8563ms)
+✔ admin corrections update provenance instead of fighting the projected legacy state (5.6512ms)
+✔ unapproved knowledge and forbidden financial state writes fail closed (2.5597ms)
+✔ shadow is idempotent and cannot mutate live state or send/assign/create an invoice (2832.8352ms)
+✔ V2 Test Agent preserves nested state and uses the same core without side effects (246.9307ms)
+✔ rollback prevents queued V2 output from being sent by the V1 engine (22.4354ms)
+✔ delivery persistence advances only successful current-selection sends and preserves paid truth (75.7008ms)
+C:\Users\pc\Desktop\joshspot-media\backend\inbox\ai\v3\contracts.js:8
+const plan=object({requests:array(request,12),purchaseChange:enumeration('keep','replace','clear'),purchase:array(object({platform:nullable(enumeration('tiktok','meta')),service:enumeration('account_setup','ads_management','course'),evidence}),quoteChange:enumeration('keep','invalidate'),payment:enumeration('none','request','defer','claim'),paymentEvidence:nullable(evidence)});
+                                                                                                                                                                                                                                                    ^^^^^^^^^^^
+
+SyntaxError: missing ) after argument list
+    at wrapSafe (node:internal/modules/cjs/loader:1486:18)
+    at Module._compile (node:internal/modules/cjs/loader:1528:20)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\ai\v3\index.js:1:21)
+
+Node.js v22.14.0
+✖ inbox\ai\v3\conversation.test.js (929.6977ms)
+C:\Users\pc\Desktop\joshspot-media\backend\inbox\ai\v3\contracts.js:8
+const plan=object({requests:array(request,12),purchaseChange:enumeration('keep','replace','clear'),purchase:array(object({platform:nullable(enumeration('tiktok','meta')),service:enumeration('account_setup','ads_management','course'),evidence}),quoteChange:enumeration('keep','invalidate'),payment:enumeration('none','request','defer','claim'),paymentEvidence:nullable(evidence)});
+                                                                                                                                                                                                                                                    ^^^^^^^^^^^
+
+SyntaxError: missing ) after argument list
+    at wrapSafe (node:internal/modules/cjs/loader:1486:18)
+    at Module._compile (node:internal/modules/cjs/loader:1528:20)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\ai\v3\core.test.js:6:15)
+
+Node.js v22.14.0
+✖ inbox\ai\v3\core.test.js (865.6228ms)
+C:\Users\pc\Desktop\joshspot-media\backend\inbox\ai\v3\contracts.js:8
+const plan=object({requests:array(request,12),purchaseChange:enumeration('keep','replace','clear'),purchase:array(object({platform:nullable(enumeration('tiktok','meta')),service:enumeration('account_setup','ads_management','course'),evidence}),quoteChange:enumeration('keep','invalidate'),payment:enumeration('none','request','defer','claim'),paymentEvidence:nullable(evidence)});
+                                                                                                                                                                                                                                                    ^^^^^^^^^^^
+
+SyntaxError: missing ) after argument list
+    at wrapSafe (node:internal/modules/cjs/loader:1486:18)
+    at Module._compile (node:internal/modules/cjs/loader:1528:20)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\ai\v3\openai.js:2:28)
+
+Node.js v22.14.0
+✖ inbox\ai\v3\integration.test.js (5674.9273ms)
+C:\Users\pc\Desktop\joshspot-media\backend\inbox\ai\v3\contracts.js:8
+const plan=object({requests:array(request,12),purchaseChange:enumeration('keep','replace','clear'),purchase:array(object({platform:nullable(enumeration('tiktok','meta')),service:enumeration('account_setup','ads_management','course'),evidence}),quoteChange:enumeration('keep','invalidate'),payment:enumeration('none','request','defer','claim'),paymentEvidence:nullable(evidence)});
+                                                                                                                                                                                                                                                    ^^^^^^^^^^^
+
+SyntaxError: missing ) after argument list
+    at wrapSafe (node:internal/modules/cjs/loader:1486:18)
+    at Module._compile (node:internal/modules/cjs/loader:1528:20)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\ai\v3\tools.js:2:15)
+
+Node.js v22.14.0
+✖ inbox\ai\v3\repairs.test.js (1568.1521ms)
+ℹ tests 126
+ℹ suites 0
+ℹ pass 122
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9500.0224
+
+✖ failing tests:
+
+test at inbox\ai\v3\conversation.test.js:1:1
+✖ inbox\ai\v3\conversation.test.js (929.6977ms)
+  'test failed'
+
+test at inbox\ai\v3\core.test.js:1:1
+✖ inbox\ai\v3\core.test.js (865.6228ms)
+  'test failed'
+
+test at inbox\ai\v3\integration.test.js:1:1
+✖ inbox\ai\v3\integration.test.js (5674.9273ms)
+  'test failed'
+
+test at inbox\ai\v3\repairs.test.js:1:1
+✖ inbox\ai\v3\repairs.test.js (1568.1521ms)
+  'test failed'

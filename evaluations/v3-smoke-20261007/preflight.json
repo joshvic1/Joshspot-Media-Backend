@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-07T10:21:33.428Z",
+  "model": "gpt-4.1-mini",
+  "config": {
+    "data": {
+      "model": "",
+      "maxResponseLength": 1500
+    },
+    "revision": 30
+  },
+  "commands": [
+    "find",
+    "endSessions"
+  ],
+  "scope": "Read only configuration fields. No customer or financial reads/writes. Evaluation catalogue remains the previously corrected local snapshot."
+}

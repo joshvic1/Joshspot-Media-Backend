@@ -1,0 +1,268 @@
+{
+  "customer": [
+    {
+      "_id": "G13-in-3",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "how much goes to ads",
+      "createdAt": "2026-10-07T09:18:54.293Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G13-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok ads for 7 days",
+      "createdAt": "2026-10-07T09:18:34.785Z"
+    },
+    {
+      "_id": "G13-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing TikTok ads management for 7 days. To provide a precise quote, could you please share your total advertising budget or daily ad spend for this period? This helps me calculate the full management cost including setup if needed. Also, do you want Joshspot to set up your TikTok ad account too, or do you already have one set up?",
+      "createdAt": "2026-10-07T09:18:39.309Z"
+    },
+    {
+      "_id": "G13-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I have 60k altogether including your fee",
+      "createdAt": "2026-10-07T09:18:39.310Z"
+    },
+    {
+      "_id": "G13-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for the budget info! Just to confirm, you want Joshspot to both set up your TikTok ad account and manage your ads for the 7 days within the total 60,000 Naira including all fees, correct? Or do you already have the TikTok ad account set up yourself? This helps me allocate the budget correctly for setup plus management.",
+      "createdAt": "2026-10-07T09:18:44.119Z"
+    },
+    {
+      "_id": "G13-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "dont let it pass that",
+      "createdAt": "2026-10-07T09:18:44.121Z"
+    },
+    {
+      "_id": "G13-out-2",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "For TikTok ads management including account setup, the setup fee requires a separate allocation beyond the ad spend itself. Could you please clarify how you want to split your 60,000 Naira total budget between setup fees and actual ad spend (the money spent running ads)? That way I can give you an accurate quote within your full budget.",
+      "createdAt": "2026-10-07T09:18:54.290Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d",
+    "seenMessageIds": [
+      "G13-in-0",
+      "G13-out-0",
+      "G13-in-1",
+      "G13-out-1",
+      "G13-in-2"
+    ],
+    "contextCharacters": 1416,
+    "dirty": false,
+    "quote": null
+  },
+  "usage": {
+    "calls": 2,
+    "input_tokens": 7812,
+    "output_tokens": 218,
+    "total_tokens": 8030,
+    "cached_input_tokens": 3840,
+    "estimated_cost_usd": 0.0023216
+  },
+  "httpCalls": 12,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items?limit=100&order=asc&after=msg_6ac60e803d348195b4459e8349c43a7c0489a08f56f13d2d"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items/msg_0489a08f56f13d2d006ac60e815a148195825ea351599ebe5d"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items/msg_0489a08f56f13d2d006ac60e81bc548195aef8dbe08afb1751"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items/fc_0489a08f56f13d2d006ac60e82effc8195a1d5a4904f280545"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items/fc_0489a08f56f13d2d006ac60e83d6a8819587af45403bcaa19c"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items/msg_0489a08f56f13d2d006ac60e8431488195bc495316818f9058"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items?limit=100&order=asc&after=msg_6ac60e803d348195b4459e8349c43a7c0489a08f56f13d2d"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0489a08f56f13d2d006ac60e812ea08195acb6d0118676f54e",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3830,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 132,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3962
+      },
+      "output": [
+        {
+          "id": "msg_0489a08f56f13d2d006ac60e81bc548195aef8dbe08afb1751",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "For your total budget of 60,000 Naira covering both TikTok ad account setup and 7 days of ads management, part of that amount will go to the setup fee, and the remainder will be the actual ad spend used to run your ads.\n\nTypically, account setup has a fixed fee separate from the ad spend. Once you confirm you want me to handle the setup, I can check the exact setup fee and then we can allocate the leftover amount for your ad spend. Let me confirm the current TikTok account setup fee for you now."
+            }
+          ],
+          "role": "assistant"
+        },
+        {
+          "id": "fc_0489a08f56f13d2d006ac60e82effc8195a1d5a4904f280545",
+          "type": "function_call",
+          "status": "completed",
+          "arguments": "{\"key\":\"tiktok_account_setup\"}",
+          "call_id": "call_Id7tG3deyhFYy1RwaaRGXgIK",
+          "name": "get_service_details"
+        }
+      ]
+    },
+    {
+      "id": "resp_0489a08f56f13d2d006ac60e83ac888195a042d9e1f02e1925",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3982,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3840
+        },
+        "output_tokens": 86,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 4068
+      },
+      "output": [
+        {
+          "id": "msg_0489a08f56f13d2d006ac60e8431488195bc495316818f9058",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "The TikTok account setup service details are currently unavailable to me. Usually, the setup fee is a fixed cost, and the remaining budget goes to ads. \n\nTo best use your full 60,000 Naira total, would you prefer that I prioritize a larger ad spend and minimal setup work, or do you want a full official setup with some portion reserved for that? This will guide how we split your budget."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [
+        {
+          "tool": "get_service_details",
+          "args": {
+            "key": "tiktok_account_setup"
+          },
+          "result": {
+            "ok": false,
+            "error": "SERVICE_UNAVAILABLE"
+          }
+        }
+      ],
+      "latency": 5418,
+      "openaiConversationId": "conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d"
+    },
+    "action": "reply",
+    "response": "The TikTok account setup service details are currently unavailable to me. Usually, the setup fee is a fixed cost, and the remaining budget goes to ads. \n\nTo best use your full 60,000 Naira total, would you prefer that I prioritize a larger ad spend and minimal setup work, or do you want a full official setup with some portion reserved for that? This will guide how we split your budget.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 8275,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d",
+    "seenMessageIds": [
+      "G13-in-0",
+      "G13-out-0",
+      "G13-in-1",
+      "G13-out-1",
+      "G13-in-2",
+      "G13-out-2",
+      "G13-in-3"
+    ],
+    "contextCharacters": 2037,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

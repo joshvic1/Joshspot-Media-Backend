@@ -1,0 +1,4810 @@
+[
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-1",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-2",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-3",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-4",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-5",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-6",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-7",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-8",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-9",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-10",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-11",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-12",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-13",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-14",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-15",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-16",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-17",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-18",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-19",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-20",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-21",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-22",
+    "pass": 1,
+    "fail": 2,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-23",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-24",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-25",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-26",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-27",
+    "pass": 2,
+    "fail": 1,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-28",
+    "pass": 2,
+    "fail": 1,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-29",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "choice-30",
+    "pass": 1,
+    "fail": 2,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "missing-account",
+    "pass": 1,
+    "fail": 2,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "platform-31",
+    "pass": 2,
+    "fail": 1,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "platform-32",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "platform-33",
+    "pass": 2,
+    "fail": 1,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "platform-34",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "multi-daily",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "multi-setup-management",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "multi-total",
+    "pass": 1,
+    "fail": 2,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "PASS",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "mixed-platform-services",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "correction-35",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "correction-36",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "correction-37",
+    "pass": 1,
+    "fail": 0,
+    "other": 2,
+    "attempts": 3,
+    "result": "INCONCLUSIVE_OR_REVIEW",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "NEEDS_REVIEW",
+      "NEEDS_REVIEW"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "correction-38",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "correction-39",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "correction-40",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "budget-41",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "budget-42",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "budget-43",
+    "pass": 2,
+    "fail": 1,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "budget-44",
+    "pass": 2,
+    "fail": 1,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "budget-45",
+    "pass": 2,
+    "fail": 1,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "budget-46",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "budget-47",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "inclusive-48",
+    "pass": 1,
+    "fail": 2,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "PASS",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "inclusive-49",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "inclusive-50",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "negotiation-51",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "negotiation-52",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "negotiation-53",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "recommend-54",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "recommend-55",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "recommend-56",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "recommend-57",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "recommend-58",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "recommend-59",
+    "pass": 2,
+    "fail": 1,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "reach-60",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "reach-61",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "reach-62",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "reach-63",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "reach-64",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "reach-65",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "reach-66",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "interruption-service",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "interruption-platform",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "interruption-budget",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "interruption-duration",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "interruption-quote",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "interruption-proceed",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "three-questions",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "requirements-same-turn",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "meta-requirements",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "unknown-platform",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "existing-page",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "plan-no-double-fee",
+    "pass": 2,
+    "fail": 1,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "plan-15-day",
+    "pass": 0,
+    "fail": 0,
+    "other": 3,
+    "attempts": 3,
+    "result": "INCONCLUSIVE_OR_REVIEW",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "NEEDS_REVIEW",
+      "NEEDS_REVIEW",
+      "NEEDS_REVIEW"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "payment-claim",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "human-request",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "injection-price",
+    "pass": 0,
+    "fail": 2,
+    "other": 1,
+    "attempts": 3,
+    "result": "INCONCLUSIVE_OR_REVIEW",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "NEEDS_REVIEW"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "benign-password-question",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "benign-keyword",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "two-days-daily",
+    "pass": 2,
+    "fail": 1,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "course-detour",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "deferral-support",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "suggestion-daily",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "frozen",
+    "id": "long-journey",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-001",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-002",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-004",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-003",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-005",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-006",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-007",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-008",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-009",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-010",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-012",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-011",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-013",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-014",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-015",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-016",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-017",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-019",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-018",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-020",
+    "pass": 1,
+    "fail": 2,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-021",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-022",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-023",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-024",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-025",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-026",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-028",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-027",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-030",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-029",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-031",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-032",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-033",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-034",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-035",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-036",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-037",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-038",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-039",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-040",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-042",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-041",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-043",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-044",
+    "pass": 0,
+    "fail": 0,
+    "other": 1,
+    "attempts": 1,
+    "result": "INCONCLUSIVE_OR_REVIEW",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "NEEDS_REVIEW"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-046",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-045",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-047",
+    "pass": 1,
+    "fail": 2,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-048",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-049",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-051",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-050",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-052",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-053",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-055",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-054",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-056",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-057",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-058",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-059",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-060",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-062",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-061",
+    "pass": 0,
+    "fail": 0,
+    "other": 1,
+    "attempts": 1,
+    "result": "INCONCLUSIVE_OR_REVIEW",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "NEEDS_REVIEW"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-063",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-064",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-065",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-066",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-067",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-068",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-069",
+    "pass": 2,
+    "fail": 1,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-070",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-071",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-072",
+    "pass": 2,
+    "fail": 1,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-073",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-074",
+    "pass": 1,
+    "fail": 2,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-075",
+    "pass": 2,
+    "fail": 1,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-076",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-077",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-078",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-079",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-080",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-081",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-082",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-083",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-084",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-085",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-086",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-087",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-088",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-089",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-090",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-091",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-092",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-093",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-094",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-095",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-096",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-097",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-098",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-099",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-100",
+    "pass": 0,
+    "fail": 2,
+    "other": 1,
+    "attempts": 3,
+    "result": "INCONCLUSIVE_OR_REVIEW",
+    "rawOutcomes": [
+      "FAIL",
+      "INCONCLUSIVE_PROVIDER",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "INCONCLUSIVE_PROVIDER",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-101",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-102",
+    "pass": 0,
+    "fail": 0,
+    "other": 1,
+    "attempts": 1,
+    "result": "INCONCLUSIVE_OR_REVIEW",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "NEEDS_REVIEW"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-103",
+    "pass": 0,
+    "fail": 0,
+    "other": 1,
+    "attempts": 1,
+    "result": "INCONCLUSIVE_OR_REVIEW",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "NEEDS_REVIEW"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-104",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-105",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-106",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-107",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-108",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-109",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-110",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-111",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-112",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-113",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-114",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-115",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-116",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-117",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-118",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-119",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-120",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "supp-121",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "journey-A",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "journey-B",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "journey-C",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "suite": "supplemental",
+    "id": "journey-D",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "choice-1",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "choice-6",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "choice-12",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "choice-20",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "choice-23",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "choice-27",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "missing-account",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "platform-31",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "multi-daily",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "multi-total",
+    "pass": 1,
+    "fail": 2,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "mixed-platform-services",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "correction-35",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "budget-41",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "inclusive-48",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "negotiation-51",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "recommend-54",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "reach-60",
+    "pass": 1,
+    "fail": 2,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "interruption-service",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "interruption-proceed",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "three-questions",
+    "pass": 0,
+    "fail": 0,
+    "other": 3,
+    "attempts": 3,
+    "result": "INCONCLUSIVE_OR_REVIEW",
+    "rawOutcomes": [
+      "INCONCLUSIVE_PROVIDER",
+      "INCONCLUSIVE_PROVIDER",
+      "INCONCLUSIVE_PROVIDER"
+    ],
+    "semanticOutcomes": [
+      "INCONCLUSIVE_PROVIDER",
+      "INCONCLUSIVE_PROVIDER",
+      "INCONCLUSIVE_PROVIDER"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "frozen",
+    "id": "requirements-same-turn",
+    "pass": 0,
+    "fail": 0,
+    "other": 1,
+    "attempts": 1,
+    "result": "INCONCLUSIVE_OR_REVIEW",
+    "rawOutcomes": [
+      "INCONCLUSIVE_PROVIDER"
+    ],
+    "semanticOutcomes": [
+      "INCONCLUSIVE_PROVIDER"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-001",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-019",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-028",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-038",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-024",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-041",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-050",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-055",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-062",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-066",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-071",
+    "pass": 3,
+    "fail": 0,
+    "other": 0,
+    "attempts": 3,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-077",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-082",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-083",
+    "pass": 2,
+    "fail": 1,
+    "other": 0,
+    "attempts": 3,
+    "result": "UNSTABLE",
+    "rawOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-084",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-096",
+    "pass": 0,
+    "fail": 3,
+    "other": 0,
+    "attempts": 3,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-101",
+    "pass": 1,
+    "fail": 0,
+    "other": 0,
+    "attempts": 1,
+    "result": "PASS",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "PASS"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-102",
+    "pass": 0,
+    "fail": 0,
+    "other": 1,
+    "attempts": 1,
+    "result": "INCONCLUSIVE_OR_REVIEW",
+    "rawOutcomes": [
+      "PASS"
+    ],
+    "semanticOutcomes": [
+      "NEEDS_REVIEW"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "supp-109",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "journey-A",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "journey-B",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "journey-C",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  },
+  {
+    "model": "gpt-5.4",
+    "suite": "supplemental",
+    "id": "journey-D",
+    "pass": 0,
+    "fail": 1,
+    "other": 0,
+    "attempts": 1,
+    "result": "FAIL",
+    "rawOutcomes": [
+      "FAIL"
+    ],
+    "semanticOutcomes": [
+      "FAIL"
+    ]
+  }
+]

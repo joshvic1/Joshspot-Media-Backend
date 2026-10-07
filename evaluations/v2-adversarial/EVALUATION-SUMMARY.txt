@@ -1,0 +1,70 @@
+V2 ADVERSARIAL EVALUATION — FINAL SUMMARY
+6 October 2026
+
+Release decision: NO-GO. No deployment, production data change, or engine fix.
+
+V2 JavaScript hashes unchanged across evaluation: true
+API call attempts across recorded runs: 230
+Recorded completed-response token usage: input=379757, output=37824. This is not a billing statement.
+
+The initial batch contains provider failures. Raw pass/fail flags were NOT used as final accuracy scores.
+Adjudication separates provider failures and handles effective per-item facts and equivalent knowledge sources.
+
+gpt-4.1-mini: latest evaluable outcome per scenario: {"PASS":3,"FAIL":7,"INCONCLUSIVE_PROVIDER":0}
+  FAIL multi-daily: Expected amount 60000, got 80000
+  FAIL mixed-platform-services: Wrong service/platform association
+  FAIL reach-62: Engine error: Uncontrolled financial content or question; Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE); No relevant approved source for eval_expected_results
+  FAIL existing-page: Engine error: Unsafe or unavailable knowledge template; Expected question SERVICE, got undefined
+  FAIL course-detour: Engine error: Uncontrolled financial content or question; Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE); Expected response content: 8,000; Remaining turns blocked by handoff
+  FAIL deferral-support: Expected response content: 5,000
+  FAIL suggestion-daily: Expected response content: 60,000; Expected response content: 5,000
+
+gpt-4.1: latest evaluable outcome per scenario: {"PASS":53,"FAIL":17,"INCONCLUSIVE_PROVIDER":24}
+  FAIL reach-62: Engine error: Repeated response component; Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE); No relevant approved source for eval_expected_results
+  FAIL reach-64: Engine error: Invalid result.parts; Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE); No relevant approved source for eval_expected_results
+  FAIL choice-25: Exploration became a purchase selection; Missing separate question interpretation
+  FAIL mixed-platform-services: Wrong service/platform association
+  FAIL budget-41: Effective budgetBasis: expected "daily", got undefined
+  FAIL budget-45: Effective budgetBasis: expected "daily", got undefined
+  FAIL inclusive-49: Inclusive cap exceeded: 130000 > 100000
+  FAIL recommend-58: Engine error: Uncontrolled financial content or question; Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE); Expected response content: 60,000
+  FAIL recommend-59: Expected response content: 60,000
+  FAIL interruption-service: Engine error: Repeated response component; Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE); No relevant approved source for eval_management; Expected response content: campaign
+  FAIL interruption-platform: Engine error: Repeated response component; Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE); No relevant approved source for eval_management; Expected response content: campaign
+  FAIL interruption-duration: Engine error: Repeated response component; Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE); No relevant approved source for eval_management; Expected response content: campaign
+  FAIL interruption-quote: Engine error: Repeated response component; Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE); No relevant approved source for eval_management; Expected response content: campaign
+  FAIL interruption-proceed: Engine error: Repeated response component; Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE); No relevant approved source for eval_management; Expected response content: campaign
+  FAIL three-questions: Engine error: Incomplete V2 model response; Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE); No relevant approved source for eval_setup_timing; Expected response content: separate
+  FAIL unknown-platform: Engine error: Unsafe or unavailable knowledge template
+  FAIL plan-15-day: Engine error: Plan price differs from calculator; review configuration; Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE); Expected amount 285000, got undefined
+
+Provider blocker: final serial run returned HTTP 429 / credit_balance_exhausted / insufficient_quota.
+No more API calls were made after reading this explicit blocker. Do not assume the first run had the same subtype.
+The main serial run stopped with eight scenarios not started; its human-request result was provider-blocked.
+The 15-turn real-model journey was not completed. A controlled 12-turn replay reproduced twelve repeated PAYMENT questions.
+
+Offline: 34 adversarial probes, 11 passed, 23 failed. This selected challenge set is not a production failure-rate estimate.
+Ephemeral DB: 3 existing isolation/Test Agent/rollback integration tests passed.
+
+Representative verified failures:
+- Perfect interpretation of a fresh deferral can still produce invoice intent when historical consent exists (D27).
+- Mixed platform/service requests lose associations or produce unintended purchases (D01, real mixed-platform-services).
+- “100k for the whole thing” produced 130000 in the GPT-4.1 synthetic test.
+- GPT-4.1-mini added setup to a manage-only daily-budget request, yielding 80000 instead of 60000.
+- Ordinary management/expected-reach questions sometimes hand off on duplicate response components.
+- Output validation accepts some false payment confirmations, guarantees and bare payment domains (controlled injection, not real customer delivery).
+
+What succeeded:
+- Multiple contextual service choices and single-platform multi-fact extraction.
+- Same-turn requirements retrieval after platform/service update.
+- Daily 5000 for 2 days => 35000; seven-day plan => 60000 including management (offline).
+- Invalid evidence rejected; actual sent question excludes queued draft; payment claim does not mark paid.
+- Corrected platform retains unrelated facts; genuine renewed consent can resume after deferral.
+
+Remaining limits:
+- No production log replay or live enabled-catalogue snapshot; local seeds + five synthetic KB fixtures.
+- Harness response limit 4000 versus local default 1500; production-limit tests remain.
+- No statistical multi-run reliability estimate, calibrated human quality panel or full concurrent financial fault injection.
+- HTTP/provider failures are inconclusive for semantic quality, although current handoff-on-provider-failure behavior is a reliability concern.
+
+Read AUDIT.txt for the runtime-order audit, response-authority map, findings, file references and remediation/release gates.

@@ -1,0 +1,179 @@
+{
+  "customer": [
+    {
+      "_id": "G30-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "the 15 day package",
+      "createdAt": "2026-10-07T09:22:52.932Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G30-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok ads",
+      "createdAt": "2026-10-07T09:22:42.818Z"
+    },
+    {
+      "_id": "G30-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing TikTok ads management. To create the best quote and plan for your campaign, could you please share your planned total budget for ads and how long you want the ads to run? This helps us tailor our service to your needs.",
+      "createdAt": "2026-10-07T09:22:47.750Z"
+    },
+    {
+      "_id": "G30-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "recommend something",
+      "createdAt": "2026-10-07T09:22:47.753Z"
+    },
+    {
+      "_id": "G30-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for asking for a recommendation on TikTok ads management.\n\nTo suggest the best plan, I usually need to know your total budget and desired campaign duration. However, here’s a general idea:\n\nWe offer inclusive TikTok ads management plans that cover setting up and running your campaigns with creative testing. These plans differ mainly by your total ad spend and campaign length.\n\nCould you share approximately how much you want to invest in ads and for how many days you want the campaign to run? That way, I can offer a tailored plan that fits your goals and budget.",
+      "createdAt": "2026-10-07T09:22:52.929Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce",
+    "seenMessageIds": [
+      "G30-in-0",
+      "G30-out-0",
+      "G30-in-1"
+    ],
+    "contextCharacters": 666,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3693,
+    "output_tokens": 48,
+    "total_tokens": 3741,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.001554
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=100&order=asc&after=msg_6ac60f6ee61c8194bb9776c0f74ae2e90983d8566d2bf3ce"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items/msg_0983d8566d2bf3ce006ac60f70432c81949d54c42911f086a5"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items/msg_0983d8566d2bf3ce006ac60f7091a48194acf4ffdf31b95940"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce/items?limit=100&order=asc&after=msg_6ac60f6ee61c8194bb9776c0f74ae2e90983d8566d2bf3ce"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0983d8566d2bf3ce006ac60f7014208194b31cb281913f3893",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3693,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 48,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3741
+      },
+      "output": [
+        {
+          "id": "msg_0983d8566d2bf3ce006ac60f7091a48194acf4ffdf31b95940",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "You mentioned the 15-day package for TikTok ads management. To provide an accurate quote and plan, could you please share your total ad budget for this 15-day period? This helps us tailor the package and fees precisely."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 2884,
+      "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce"
+    },
+    "action": "reply",
+    "response": "You mentioned the 15-day package for TikTok ads management. To provide an accurate quote and plan, could you please share your total ad budget for this 15-day period? This helps us tailor the package and fees precisely.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4568,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60f646d94819494f01fd8572aa4950983d8566d2bf3ce",
+    "seenMessageIds": [
+      "G30-in-0",
+      "G30-out-0",
+      "G30-in-1",
+      "G30-out-1",
+      "G30-in-2"
+    ],
+    "contextCharacters": 1533,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

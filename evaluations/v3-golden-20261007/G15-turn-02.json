@@ -1,0 +1,159 @@
+{
+  "customer": [
+    {
+      "_id": "G15-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I dont know how much to spend",
+      "createdAt": "2026-10-07T09:19:17.862Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G15-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok for me",
+      "createdAt": "2026-10-07T09:19:12.974Z"
+    },
+    {
+      "_id": "G15-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing us to manage your TikTok ads!\n\nTo get started with TikTok ads management for you, could you please share your intended advertising budget and how long you'd like the campaign to run? This will help me provide you with a precise quote. \n\nAlso, do you already have a TikTok Ads account set up, or would you need us to handle that setup as well?",
+      "createdAt": "2026-10-07T09:19:17.860Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27",
+    "seenMessageIds": [
+      "G15-in-0"
+    ],
+    "contextCharacters": 149,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3539,
+    "output_tokens": 99,
+    "total_tokens": 3638,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.001574
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27/items?limit=100&order=asc&after=msg_6ac60e97d1088190b7d8fa654f65766b0f3564c69b4c1d27"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27/items/msg_0f3564c69b4c1d27006ac60e995e4081908c3eb126e3b8536b"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27/items/msg_0f3564c69b4c1d27006ac60e99a5cc8190863e97785e15687b"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27/items?limit=100&order=asc&after=msg_6ac60e97d1088190b7d8fa654f65766b0f3564c69b4c1d27"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0f3564c69b4c1d27006ac60e9910088190aa2748d92b904557",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3539,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 99,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3638
+      },
+      "output": [
+        {
+          "id": "msg_0f3564c69b4c1d27006ac60e99a5cc8190863e97785e15687b",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for letting me know.\n\nIf you’re unsure about how much to spend on TikTok ads, I can guide you with some common budget ranges and what they can achieve. Typically, even a modest daily budget can start generating meaningful data, helping us optimize the campaign for better results.\n\nWould you prefer if I suggest some recommended budget plans based on typical successful campaigns? Or do you want me to know any marketing goals or target audience details you have that might help tailor a budget suggestion?"
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3740,
+      "openaiConversationId": "conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27"
+    },
+    "action": "reply",
+    "response": "Thanks for letting me know.\n\nIf you’re unsure about how much to spend on TikTok ads, I can guide you with some common budget ranges and what they can achieve. Typically, even a modest daily budget can start generating meaningful data, helping us optimize the campaign for better results.\n\nWould you prefer if I suggest some recommended budget plans based on typical successful campaigns? Or do you want me to know any marketing goals or target audience details you have that might help tailor a budget suggestion?",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 5249,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60e92956081909849e68f08cb62de0f3564c69b4c1d27",
+    "seenMessageIds": [
+      "G15-in-0",
+      "G15-out-0",
+      "G15-in-1"
+    ],
+    "contextCharacters": 811,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

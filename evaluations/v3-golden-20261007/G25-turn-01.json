@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G25-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok for 10 days 5k daily",
+      "createdAt": "2026-10-07T09:21:32.564Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3384,
+    "output_tokens": 66,
+    "total_tokens": 3450,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0014592000000000001
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items?limit=100&order=asc&after=msg_6ac60f1e92708196bb1df7be4847dfd90390d396ad4cc9ba"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items/msg_0390d396ad4cc9ba006ac60f1fcf68819695965f973bab5cd2"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items/msg_0390d396ad4cc9ba006ac60f202a488196b7943786287dfdd9"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba/items?limit=100&order=asc&after=msg_6ac60f1e92708196bb1df7be4847dfd90390d396ad4cc9ba"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0390d396ad4cc9ba006ac60f1fa29c8196a3d7935324e6929b",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3384,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 66,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3450
+      },
+      "output": [
+        {
+          "id": "msg_0390d396ad4cc9ba006ac60f202a488196b7943786287dfdd9",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "You want me to manage TikTok ads for 10 days with a daily ad spend of 5,000. Just to confirm, you want Joshspot Media to handle the full TikTok ads management service for that period and budget, correct?\n\nAlso, would you like me to prepare a quote for this service now?"
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3161,
+      "openaiConversationId": "conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba"
+    },
+    "action": "reply",
+    "response": "You want me to manage TikTok ads for 10 days with a daily ad spend of 5,000. Just to confirm, you want Joshspot Media to handle the full TikTok ads management service for that period and budget, correct?\n\nAlso, would you like me to prepare a quote for this service now?",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4926,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60f1e2cf881969b4e497751b96ccf0390d396ad4cc9ba",
+    "seenMessageIds": [
+      "G25-in-0"
+    ],
+    "contextCharacters": 163,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

@@ -1,0 +1,3482 @@
+{
+  "model": "gpt-4.1",
+  "started": "2026-10-06T18:43:28.570Z",
+  "source": "user-reported anonymized reconstructions + synthetic tests, not production logs",
+  "catalogue": "local seeds plus five explicit synthetic knowledge fixtures",
+  "hashes": {
+    "compose.js": "f67637abe4ffb6a2a5e809e04c1fdaec9f6dba05e8b3bdd1acf1fcc1e89e842c",
+    "context.js": "835e14e546da0917624f26dbfc022c529340aabe3aec316f3d83c26631bda248",
+    "contracts.js": "21c6e34617b8cca0ec4df7b32a5f11b01bcaeb5aa44c697420dcbd5b29a9967f",
+    "core.test.js": "46e733da375c86b33290745375986092e88744e246b1fe8ac559c7cd64ff3e25",
+    "index.js": "0e31240f9663ce15e7e76fdc908343c0c904530445d174335974d9da1334f76b",
+    "integration.test.js": "339403789b18e9a28488a5ae9eb851365a49c39ccef3459dd3ff8f7c08146e9f",
+    "knowledge.js": "d314a9ed24e3fb45eece79cae40046394beab60d07f7e83f27234a03edf06723",
+    "model.js": "89b823c9941c6dfb69d9c828b9840c39e0a79ec3713367bed0f310973c36d0f7",
+    "planner.js": "d2419f40d98be2da3bc61fcd73af5fc1a441c931865402336535947e431bd72c",
+    "runtime.js": "9a566a1b7d482c4fb857d4fad00cfc50e69e83ad2219035d326a5631884fd094",
+    "shadow.js": "3043eff4d58e4ca1d253d00db85fe2925fd280d776f576880f4262d9db92e2ad",
+    "state.js": "95533bb5cab00c528ab7825914d3545ee80f1d3f08442f4356c52fae5079cbe1"
+  },
+  "scenarios": [
+    {
+      "id": "reach-60",
+      "group": "semantic-retrieval",
+      "pass": true,
+      "rows": [
+        {
+          "text": "How many views will I get?",
+          "expect": {
+            "action": "reply",
+            "selected": "eval_expected_results"
+          },
+          "errors": [],
+          "latency": 15205,
+          "before": {
+            "core": {
+              "version": 2,
+              "facts": {
+                "global:services": {
+                  "value": [
+                    "ads_management"
+                  ],
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:platforms": {
+                  "value": [
+                    "tiktok"
+                  ],
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:budget": {
+                  "value": 5000,
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:budgetBasis": {
+                  "value": "daily",
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:duration": {
+                  "value": 7,
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                }
+              },
+              "superseded": [],
+              "items": [
+                {
+                  "id": "tiktok:ads_management",
+                  "type": "ads_management",
+                  "platform": "tiktok"
+                }
+              ],
+              "topic": "advertising",
+              "purchasePath": "advertising",
+              "readiness": "undecided",
+              "answeredQuestions": [],
+              "legacy": {},
+              "revision": 1,
+              "selectionChanged": true,
+              "updatedAt": "2026-10-06T10:00:00Z"
+            },
+            "selectedPlatforms": [
+              "tiktok"
+            ],
+            "selectedPlatform": "tiktok",
+            "serviceType": "ads_management",
+            "includeSetup": false,
+            "serviceChoiceConfirmed": true,
+            "budget": 5000,
+            "budgetBasis": "daily",
+            "duration": 7,
+            "customerWantsToProceed": false,
+            "paymentDetailsRequested": false,
+            "salesPaused": false,
+            "purchasePath": "advertising"
+          },
+          "result": {
+            "action": "reply",
+            "state": {
+              "core": {
+                "version": 2,
+                "facts": {
+                  "global:services": {
+                    "value": [
+                      "ads_management"
+                    ],
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:platforms": {
+                    "value": [
+                      "tiktok"
+                    ],
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:budget": {
+                    "value": 5000,
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:budgetBasis": {
+                    "value": "daily",
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:duration": {
+                    "value": 7,
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  }
+                },
+                "superseded": [],
+                "items": [
+                  {
+                    "id": "tiktok:ads_management",
+                    "type": "ads_management",
+                    "platform": "tiktok"
+                  }
+                ],
+                "topic": "advertising",
+                "purchasePath": "advertising",
+                "readiness": "undecided",
+                "answeredQuestions": [],
+                "legacy": {},
+                "revision": 2,
+                "selectionChanged": false,
+                "updatedAt": "2026-10-06T18:43:28.599Z",
+                "quote": {
+                  "amount": 60000,
+                  "items": [
+                    {
+                      "itemId": "tiktok:ads_management",
+                      "serviceKey": "ads_management",
+                      "total": 60000,
+                      "text": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)",
+                      "breakdown": {
+                        "platform": "tiktok",
+                        "budget": 5000,
+                        "duration": 7,
+                        "total": 60000,
+                        "advertisingBudget": 35000,
+                        "managementFee": 25000,
+                        "dailyBudget": 5000,
+                        "breakdown": "Here's a breakdown:\n\nWe will run approximately ₦5,000 daily for 7 days (₦35,000 advertising budget).\n\nOur service fee for helping you run and manage the ads is ₦25,000.\n\nYou can use up to 1 video for the ads.\n\nTotal amount: ₦60,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+                      },
+                      "paymentEnabled": true
+                    }
+                  ],
+                  "at": "2026-10-06T18:43:28.599Z"
+                }
+              },
+              "selectedPlatforms": [
+                "tiktok"
+              ],
+              "selectedPlatform": "tiktok",
+              "serviceType": "ads_management",
+              "includeSetup": false,
+              "serviceChoiceConfirmed": true,
+              "budget": 5000,
+              "budgetBasis": "daily",
+              "duration": 7,
+              "customerWantsToProceed": false,
+              "paymentDetailsRequested": false,
+              "salesPaused": false,
+              "purchasePath": "advertising",
+              "quotedAmount": 60000,
+              "nextObjective": "PROCEED",
+              "currentSalesStage": "PRICE_PRESENTED"
+            },
+            "response": "Views, reach and engagement can vary with TikTok ads. There’s no guaranteed number. We can talk more about your campaign approach and set expectations for your business.\n\nWould you like to proceed?",
+            "amount": 60000,
+            "serviceKey": "tiktok:ads_management",
+            "intent": "knowledge",
+            "confidence": 1,
+            "model": "gpt-4.1",
+            "usage": {
+              "input_tokens": 7427,
+              "output_tokens": 405,
+              "total_tokens": 7832
+            },
+            "knowledge": [
+              "eval_expected_results",
+              "campaign_expectations"
+            ],
+            "question": {
+              "text": "Would you like to proceed?",
+              "fields": [
+                "proceed"
+              ],
+              "choices": [
+                {
+                  "label": "yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "no",
+                  "value": "no"
+                }
+              ],
+              "purpose": "PROCEED"
+            },
+            "debug": {
+              "engineVersion": "v2",
+              "context": {
+                "messages": [
+                  {
+                    "id": "reach-60-0",
+                    "text": "How many views will I get?",
+                    "type": "text"
+                  }
+                ],
+                "history": [],
+                "pendingQuestion": null,
+                "now": "2026-10-06T18:43:28.599Z"
+              },
+              "steps": [
+                {
+                  "phase": "interpretation",
+                  "latency": 6079
+                },
+                {
+                  "phase": "selection",
+                  "latency": 4734
+                },
+                {
+                  "phase": "composition",
+                  "latency": 4299
+                }
+              ],
+              "interpretation": {
+                "intents": [
+                  "knowledge"
+                ],
+                "questions": [
+                  {
+                    "text": "How many views will I get?",
+                    "evidence": {
+                      "messageId": "reach-60-0",
+                      "text": "How many views will I get?"
+                    }
+                  }
+                ],
+                "facts": [],
+                "answeredQuestionIds": [],
+                "recommendations": [],
+                "unresolvedReferences": [],
+                "negotiation": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-60-0",
+                    "text": "How many views will I get?"
+                  }
+                },
+                "deferral": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-60-0",
+                    "text": "How many views will I get?"
+                  }
+                },
+                "humanRequest": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-60-0",
+                    "text": "How many views will I get?"
+                  }
+                },
+                "paymentClaim": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-60-0",
+                    "text": "How many views will I get?"
+                  }
+                },
+                "sensitiveCase": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-60-0",
+                    "text": "How many views will I get?"
+                  }
+                },
+                "topic": "advertising",
+                "purchaseChange": {
+                  "action": "none",
+                  "path": "unchanged",
+                  "evidence": {
+                    "messageId": "reach-60-0",
+                    "text": "How many views will I get?"
+                  }
+                },
+                "confidence": 1
+              },
+              "rejectedRequests": [],
+              "stateChanges": {
+                "accepted": [],
+                "rejected": []
+              },
+              "retrieval": {
+                "candidates": [
+                  "advertising_services",
+                  "supported_platforms",
+                  "setup_vs_management",
+                  "tiktok_setup_information",
+                  "meta_setup_information",
+                  "ads_management_information",
+                  "self_managed_ads",
+                  "meta_explanation",
+                  "choose_service",
+                  "budget_guidance",
+                  "custom_budget_review",
+                  "package_inclusions_review",
+                  "campaign_expectations",
+                  "service_timing_review",
+                  "existing_ad_account",
+                  "secure_account_access",
+                  "tiktok_management_access",
+                  "meta_management_access",
+                  "payment_process",
+                  "invoice_information",
+                  "invoice_correction",
+                  "payment_claim_information",
+                  "receipt_review_information",
+                  "payment_pending_review",
+                  "incorrect_payment_amount",
+                  "expired_payment_details",
+                  "after_payment_process",
+                  "receipt_request",
+                  "refund_cancellation_review",
+                  "existing_campaign_issue",
+                  "human_support_information",
+                  "response_time_information",
+                  "other_services_review",
+                  "credential_safety",
+                  "setup_scope",
+                  "setup_budget_separate",
+                  "setup_requirements",
+                  "service_difference",
+                  "eval_expected_results",
+                  "eval_management",
+                  "eval_setup_timing"
+                ],
+                "selected": {
+                  "entries": [
+                    {
+                      "key": "eval_expected_results",
+                      "reason": "The customer is asking how many views they will get, which relates directly to expected campaign results such as views, engagement, and reach."
+                    },
+                    {
+                      "key": "campaign_expectations",
+                      "reason": "The question is about performance expectations and what can be guaranteed or estimated in terms of results from the ad campaign."
+                    }
+                  ],
+                  "unsupportedQuestions": []
+                }
+              },
+              "plan": {
+                "action": "reply",
+                "facts": {
+                  "course": "TikTok, Facebook and Instagram Ads Video Course\nVideo training for customers who want to learn to run ads themselves.\n\n₦8,000\nhttps://joshspotmedia.com/course",
+                  "setup_prices": "TikTok Ads Account Setup: ₦20,000\nMeta Ads Account Setup: ₦30,000",
+                  "requirements_tiktok:ads_management": "[Sensitive information excluded]",
+                  "quote": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)"
+                },
+                "requiredFacts": [],
+                "question": {
+                  "text": "Would you like to proceed?",
+                  "fields": [
+                    "proceed"
+                  ],
+                  "choices": [
+                    {
+                      "label": "yes",
+                      "value": "yes"
+                    },
+                    {
+                      "label": "no",
+                      "value": "no"
+                    }
+                  ],
+                  "purpose": "PROCEED"
+                },
+                "reason": "PROCEED",
+                "quotes": [
+                  {
+                    "itemId": "tiktok:ads_management",
+                    "serviceKey": "ads_management",
+                    "total": 60000,
+                    "text": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)",
+                    "breakdown": {
+                      "platform": "tiktok",
+                      "budget": 5000,
+                      "duration": 7,
+                      "total": 60000,
+                      "advertisingBudget": 35000,
+                      "managementFee": 25000,
+                      "dailyBudget": 5000,
+                      "breakdown": "Here's a breakdown:\n\nWe will run approximately ₦5,000 daily for 7 days (₦35,000 advertising budget).\n\nOur service fee for helping you run and manage the ads is ₦25,000.\n\nYou can use up to 1 video for the ads.\n\nTotal amount: ₦60,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+                    },
+                    "paymentEnabled": true
+                  }
+                ],
+                "amount": 60000
+              },
+              "composition": {
+                "parts": [
+                  {
+                    "kind": "text",
+                    "value": "Views, reach and engagement can vary with TikTok ads. There’s no guaranteed number. We can talk more about your campaign approach and set expectations for your business."
+                  },
+                  {
+                    "kind": "question",
+                    "value": "PROCEED"
+                  }
+                ],
+                "usedKnowledge": [
+                  "eval_expected_results",
+                  "campaign_expectations"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reach-61",
+      "group": "semantic-retrieval",
+      "pass": true,
+      "rows": [
+        {
+          "text": "How many people will see it?",
+          "expect": {
+            "action": "reply",
+            "selected": "eval_expected_results"
+          },
+          "errors": [],
+          "latency": 14712,
+          "before": {
+            "core": {
+              "version": 2,
+              "facts": {
+                "global:services": {
+                  "value": [
+                    "ads_management"
+                  ],
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:platforms": {
+                  "value": [
+                    "tiktok"
+                  ],
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:budget": {
+                  "value": 5000,
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:budgetBasis": {
+                  "value": "daily",
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:duration": {
+                  "value": 7,
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                }
+              },
+              "superseded": [],
+              "items": [
+                {
+                  "id": "tiktok:ads_management",
+                  "type": "ads_management",
+                  "platform": "tiktok"
+                }
+              ],
+              "topic": "advertising",
+              "purchasePath": "advertising",
+              "readiness": "undecided",
+              "answeredQuestions": [],
+              "legacy": {},
+              "revision": 1,
+              "selectionChanged": true,
+              "updatedAt": "2026-10-06T10:00:00Z"
+            },
+            "selectedPlatforms": [
+              "tiktok"
+            ],
+            "selectedPlatform": "tiktok",
+            "serviceType": "ads_management",
+            "includeSetup": false,
+            "serviceChoiceConfirmed": true,
+            "budget": 5000,
+            "budgetBasis": "daily",
+            "duration": 7,
+            "customerWantsToProceed": false,
+            "paymentDetailsRequested": false,
+            "salesPaused": false,
+            "purchasePath": "advertising"
+          },
+          "result": {
+            "action": "reply",
+            "state": {
+              "core": {
+                "version": 2,
+                "facts": {
+                  "global:services": {
+                    "value": [
+                      "ads_management"
+                    ],
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:platforms": {
+                    "value": [
+                      "tiktok"
+                    ],
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:budget": {
+                    "value": 5000,
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:budgetBasis": {
+                    "value": "daily",
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:duration": {
+                    "value": 7,
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  }
+                },
+                "superseded": [],
+                "items": [
+                  {
+                    "id": "tiktok:ads_management",
+                    "type": "ads_management",
+                    "platform": "tiktok"
+                  }
+                ],
+                "topic": "advertising",
+                "purchasePath": "advertising",
+                "readiness": "undecided",
+                "answeredQuestions": [],
+                "legacy": {},
+                "revision": 2,
+                "selectionChanged": false,
+                "updatedAt": "2026-10-06T18:43:43.804Z",
+                "quote": {
+                  "amount": 60000,
+                  "items": [
+                    {
+                      "itemId": "tiktok:ads_management",
+                      "serviceKey": "ads_management",
+                      "total": 60000,
+                      "text": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)",
+                      "breakdown": {
+                        "platform": "tiktok",
+                        "budget": 5000,
+                        "duration": 7,
+                        "total": 60000,
+                        "advertisingBudget": 35000,
+                        "managementFee": 25000,
+                        "dailyBudget": 5000,
+                        "breakdown": "Here's a breakdown:\n\nWe will run approximately ₦5,000 daily for 7 days (₦35,000 advertising budget).\n\nOur service fee for helping you run and manage the ads is ₦25,000.\n\nYou can use up to 1 video for the ads.\n\nTotal amount: ₦60,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+                      },
+                      "paymentEnabled": true
+                    }
+                  ],
+                  "at": "2026-10-06T18:43:43.804Z"
+                }
+              },
+              "selectedPlatforms": [
+                "tiktok"
+              ],
+              "selectedPlatform": "tiktok",
+              "serviceType": "ads_management",
+              "includeSetup": false,
+              "serviceChoiceConfirmed": true,
+              "budget": 5000,
+              "budgetBasis": "daily",
+              "duration": 7,
+              "customerWantsToProceed": false,
+              "paymentDetailsRequested": false,
+              "salesPaused": false,
+              "purchasePath": "advertising",
+              "quotedAmount": 60000,
+              "nextObjective": "PROCEED",
+              "currentSalesStage": "PRICE_PRESENTED"
+            },
+            "response": "Advertising results can vary from campaign to campaign, so the exact number of people who will see your ad is not guaranteed. If you want, I can share more about how results are typically measured and what to expect based on your setup.\n\nWould you like to proceed?",
+            "amount": 60000,
+            "serviceKey": "tiktok:ads_management",
+            "intent": "knowledge",
+            "confidence": 1,
+            "model": "gpt-4.1",
+            "usage": {
+              "input_tokens": 7427,
+              "output_tokens": 410,
+              "total_tokens": 7837
+            },
+            "knowledge": [
+              "eval_expected_results",
+              "campaign_expectations"
+            ],
+            "question": {
+              "text": "Would you like to proceed?",
+              "fields": [
+                "proceed"
+              ],
+              "choices": [
+                {
+                  "label": "yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "no",
+                  "value": "no"
+                }
+              ],
+              "purpose": "PROCEED"
+            },
+            "debug": {
+              "engineVersion": "v2",
+              "context": {
+                "messages": [
+                  {
+                    "id": "reach-61-0",
+                    "text": "How many people will see it?",
+                    "type": "text"
+                  }
+                ],
+                "history": [],
+                "pendingQuestion": null,
+                "now": "2026-10-06T18:43:43.804Z"
+              },
+              "steps": [
+                {
+                  "phase": "interpretation",
+                  "latency": 5561
+                },
+                {
+                  "phase": "selection",
+                  "latency": 4454
+                },
+                {
+                  "phase": "composition",
+                  "latency": 4690
+                }
+              ],
+              "interpretation": {
+                "intents": [
+                  "knowledge"
+                ],
+                "questions": [
+                  {
+                    "text": "How many people will see it?",
+                    "evidence": {
+                      "messageId": "reach-61-0",
+                      "text": "How many people will see it?"
+                    }
+                  }
+                ],
+                "facts": [],
+                "answeredQuestionIds": [],
+                "recommendations": [],
+                "unresolvedReferences": [],
+                "negotiation": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-61-0",
+                    "text": "How many people will see it?"
+                  }
+                },
+                "deferral": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-61-0",
+                    "text": "How many people will see it?"
+                  }
+                },
+                "humanRequest": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-61-0",
+                    "text": "How many people will see it?"
+                  }
+                },
+                "paymentClaim": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-61-0",
+                    "text": "How many people will see it?"
+                  }
+                },
+                "sensitiveCase": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-61-0",
+                    "text": "How many people will see it?"
+                  }
+                },
+                "topic": "advertising",
+                "purchaseChange": {
+                  "action": "none",
+                  "path": "unchanged",
+                  "evidence": {
+                    "messageId": "reach-61-0",
+                    "text": "How many people will see it?"
+                  }
+                },
+                "confidence": 1
+              },
+              "rejectedRequests": [],
+              "stateChanges": {
+                "accepted": [],
+                "rejected": []
+              },
+              "retrieval": {
+                "candidates": [
+                  "advertising_services",
+                  "supported_platforms",
+                  "setup_vs_management",
+                  "tiktok_setup_information",
+                  "meta_setup_information",
+                  "ads_management_information",
+                  "self_managed_ads",
+                  "meta_explanation",
+                  "choose_service",
+                  "budget_guidance",
+                  "custom_budget_review",
+                  "package_inclusions_review",
+                  "campaign_expectations",
+                  "service_timing_review",
+                  "existing_ad_account",
+                  "secure_account_access",
+                  "tiktok_management_access",
+                  "meta_management_access",
+                  "payment_process",
+                  "invoice_information",
+                  "invoice_correction",
+                  "payment_claim_information",
+                  "receipt_review_information",
+                  "payment_pending_review",
+                  "incorrect_payment_amount",
+                  "expired_payment_details",
+                  "after_payment_process",
+                  "receipt_request",
+                  "refund_cancellation_review",
+                  "existing_campaign_issue",
+                  "human_support_information",
+                  "response_time_information",
+                  "other_services_review",
+                  "credential_safety",
+                  "setup_scope",
+                  "setup_budget_separate",
+                  "setup_requirements",
+                  "service_difference",
+                  "eval_expected_results",
+                  "eval_management",
+                  "eval_setup_timing"
+                ],
+                "selected": {
+                  "entries": [
+                    {
+                      "key": "eval_expected_results",
+                      "reason": "The customer is asking about how many people will see their ad. This falls under expected reach, views, and engagement."
+                    },
+                    {
+                      "key": "campaign_expectations",
+                      "reason": "Customer wants to know what kind of results or reach to expect from their TikTok ads campaign management service."
+                    }
+                  ],
+                  "unsupportedQuestions": []
+                }
+              },
+              "plan": {
+                "action": "reply",
+                "facts": {
+                  "course": "TikTok, Facebook and Instagram Ads Video Course\nVideo training for customers who want to learn to run ads themselves.\n\n₦8,000\nhttps://joshspotmedia.com/course",
+                  "setup_prices": "TikTok Ads Account Setup: ₦20,000\nMeta Ads Account Setup: ₦30,000",
+                  "requirements_tiktok:ads_management": "[Sensitive information excluded]",
+                  "quote": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)"
+                },
+                "requiredFacts": [],
+                "question": {
+                  "text": "Would you like to proceed?",
+                  "fields": [
+                    "proceed"
+                  ],
+                  "choices": [
+                    {
+                      "label": "yes",
+                      "value": "yes"
+                    },
+                    {
+                      "label": "no",
+                      "value": "no"
+                    }
+                  ],
+                  "purpose": "PROCEED"
+                },
+                "reason": "PROCEED",
+                "quotes": [
+                  {
+                    "itemId": "tiktok:ads_management",
+                    "serviceKey": "ads_management",
+                    "total": 60000,
+                    "text": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)",
+                    "breakdown": {
+                      "platform": "tiktok",
+                      "budget": 5000,
+                      "duration": 7,
+                      "total": 60000,
+                      "advertisingBudget": 35000,
+                      "managementFee": 25000,
+                      "dailyBudget": 5000,
+                      "breakdown": "Here's a breakdown:\n\nWe will run approximately ₦5,000 daily for 7 days (₦35,000 advertising budget).\n\nOur service fee for helping you run and manage the ads is ₦25,000.\n\nYou can use up to 1 video for the ads.\n\nTotal amount: ₦60,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+                    },
+                    "paymentEnabled": true
+                  }
+                ],
+                "amount": 60000
+              },
+              "composition": {
+                "parts": [
+                  {
+                    "kind": "text",
+                    "value": "Advertising results can vary from campaign to campaign, so the exact number of people who will see your ad is not guaranteed. If you want, I can share more about how results are typically measured and what to expect based on your setup."
+                  },
+                  {
+                    "kind": "question",
+                    "value": "PROCEED"
+                  }
+                ],
+                "usedKnowledge": [
+                  "eval_expected_results"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reach-62",
+      "group": "semantic-retrieval",
+      "pass": false,
+      "rows": [
+        {
+          "text": "What’s the expected reach?",
+          "expect": {
+            "action": "reply",
+            "selected": "eval_expected_results"
+          },
+          "errors": [
+            "action expected reply, got handoff: V2_VALIDATION_OR_PROVIDER_FAILURE",
+            "missing approved knowledge eval_expected_results"
+          ],
+          "latency": 15526,
+          "before": {
+            "core": {
+              "version": 2,
+              "facts": {
+                "global:services": {
+                  "value": [
+                    "ads_management"
+                  ],
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:platforms": {
+                  "value": [
+                    "tiktok"
+                  ],
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:budget": {
+                  "value": 5000,
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:budgetBasis": {
+                  "value": "daily",
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:duration": {
+                  "value": 7,
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                }
+              },
+              "superseded": [],
+              "items": [
+                {
+                  "id": "tiktok:ads_management",
+                  "type": "ads_management",
+                  "platform": "tiktok"
+                }
+              ],
+              "topic": "advertising",
+              "purchasePath": "advertising",
+              "readiness": "undecided",
+              "answeredQuestions": [],
+              "legacy": {},
+              "revision": 1,
+              "selectionChanged": true,
+              "updatedAt": "2026-10-06T10:00:00Z"
+            },
+            "selectedPlatforms": [
+              "tiktok"
+            ],
+            "selectedPlatform": "tiktok",
+            "serviceType": "ads_management",
+            "includeSetup": false,
+            "serviceChoiceConfirmed": true,
+            "budget": 5000,
+            "budgetBasis": "daily",
+            "duration": 7,
+            "customerWantsToProceed": false,
+            "paymentDetailsRequested": false,
+            "salesPaused": false,
+            "purchasePath": "advertising"
+          },
+          "result": {
+            "action": "handoff",
+            "handoff": "V2_VALIDATION_OR_PROVIDER_FAILURE",
+            "state": {
+              "core": {
+                "version": 2,
+                "facts": {
+                  "global:services": {
+                    "value": [
+                      "ads_management"
+                    ],
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:platforms": {
+                    "value": [
+                      "tiktok"
+                    ],
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:budget": {
+                    "value": 5000,
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:budgetBasis": {
+                    "value": "daily",
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:duration": {
+                    "value": 7,
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  }
+                },
+                "superseded": [],
+                "items": [
+                  {
+                    "id": "tiktok:ads_management",
+                    "type": "ads_management",
+                    "platform": "tiktok"
+                  }
+                ],
+                "topic": "advertising",
+                "purchasePath": "advertising",
+                "readiness": "undecided",
+                "answeredQuestions": [],
+                "legacy": {},
+                "revision": 2,
+                "selectionChanged": false,
+                "updatedAt": "2026-10-06T18:43:58.519Z"
+              },
+              "selectedPlatforms": [
+                "tiktok"
+              ],
+              "selectedPlatform": "tiktok",
+              "serviceType": "ads_management",
+              "includeSetup": false,
+              "serviceChoiceConfirmed": true,
+              "budget": 5000,
+              "budgetBasis": "daily",
+              "duration": 7,
+              "customerWantsToProceed": false,
+              "paymentDetailsRequested": false,
+              "salesPaused": false,
+              "purchasePath": "advertising"
+            },
+            "response": "A customer-service representative needs to review this before we continue. Please leave any relevant details here.",
+            "error": "Repeated response component",
+            "model": "gpt-4.1",
+            "usage": {
+              "input_tokens": 7420,
+              "output_tokens": 554,
+              "total_tokens": 7974
+            },
+            "debug": {
+              "engineVersion": "v2",
+              "context": {
+                "messages": [
+                  {
+                    "id": "reach-62-0",
+                    "text": "What’s the expected reach?",
+                    "type": "text"
+                  }
+                ],
+                "history": [],
+                "pendingQuestion": null,
+                "now": "2026-10-06T18:43:58.519Z"
+              },
+              "steps": [
+                {
+                  "phase": "interpretation",
+                  "latency": 5458
+                },
+                {
+                  "phase": "selection",
+                  "latency": 4515
+                },
+                {
+                  "phase": "composition",
+                  "latency": 5548
+                }
+              ],
+              "interpretation": {
+                "intents": [
+                  "knowledge"
+                ],
+                "questions": [
+                  {
+                    "text": "What’s the expected reach?",
+                    "evidence": {
+                      "messageId": "reach-62-0",
+                      "text": "What’s the expected reach?"
+                    }
+                  }
+                ],
+                "facts": [],
+                "answeredQuestionIds": [],
+                "recommendations": [],
+                "unresolvedReferences": [],
+                "negotiation": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-62-0",
+                    "text": "What’s the expected reach?"
+                  }
+                },
+                "deferral": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-62-0",
+                    "text": "What’s the expected reach?"
+                  }
+                },
+                "humanRequest": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-62-0",
+                    "text": "What’s the expected reach?"
+                  }
+                },
+                "paymentClaim": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-62-0",
+                    "text": "What’s the expected reach?"
+                  }
+                },
+                "sensitiveCase": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-62-0",
+                    "text": "What’s the expected reach?"
+                  }
+                },
+                "topic": "advertising",
+                "purchaseChange": {
+                  "action": "none",
+                  "path": "unchanged",
+                  "evidence": {
+                    "messageId": "reach-62-0",
+                    "text": "What’s the expected reach?"
+                  }
+                },
+                "confidence": 1
+              },
+              "rejectedRequests": [],
+              "stateChanges": {
+                "accepted": [],
+                "rejected": []
+              },
+              "retrieval": {
+                "candidates": [
+                  "advertising_services",
+                  "supported_platforms",
+                  "setup_vs_management",
+                  "tiktok_setup_information",
+                  "meta_setup_information",
+                  "ads_management_information",
+                  "self_managed_ads",
+                  "meta_explanation",
+                  "choose_service",
+                  "budget_guidance",
+                  "custom_budget_review",
+                  "package_inclusions_review",
+                  "campaign_expectations",
+                  "service_timing_review",
+                  "existing_ad_account",
+                  "secure_account_access",
+                  "tiktok_management_access",
+                  "meta_management_access",
+                  "payment_process",
+                  "invoice_information",
+                  "invoice_correction",
+                  "payment_claim_information",
+                  "receipt_review_information",
+                  "payment_pending_review",
+                  "incorrect_payment_amount",
+                  "expired_payment_details",
+                  "after_payment_process",
+                  "receipt_request",
+                  "refund_cancellation_review",
+                  "existing_campaign_issue",
+                  "human_support_information",
+                  "response_time_information",
+                  "other_services_review",
+                  "credential_safety",
+                  "setup_scope",
+                  "setup_budget_separate",
+                  "setup_requirements",
+                  "service_difference",
+                  "eval_expected_results",
+                  "eval_management",
+                  "eval_setup_timing"
+                ],
+                "selected": {
+                  "entries": [
+                    {
+                      "key": "eval_expected_results",
+                      "reason": "The customer is asking about expected reach. This entry covers expected views, engagement, reach, and sales for campaigns, which aligns with their question."
+                    },
+                    {
+                      "key": "campaign_expectations",
+                      "reason": "This entry addresses general performance expectations, which includes queries about how many people might see or be reached by an advert when a campaign is managed."
+                    }
+                  ],
+                  "unsupportedQuestions": []
+                }
+              },
+              "plan": {
+                "action": "reply",
+                "facts": {
+                  "course": "TikTok, Facebook and Instagram Ads Video Course\nVideo training for customers who want to learn to run ads themselves.\n\n₦8,000\nhttps://joshspotmedia.com/course",
+                  "setup_prices": "TikTok Ads Account Setup: ₦20,000\nMeta Ads Account Setup: ₦30,000",
+                  "requirements_tiktok:ads_management": "[Sensitive information excluded]",
+                  "quote": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)"
+                },
+                "requiredFacts": [],
+                "question": {
+                  "text": "Would you like to proceed?",
+                  "fields": [
+                    "proceed"
+                  ],
+                  "choices": [
+                    {
+                      "label": "yes",
+                      "value": "yes"
+                    },
+                    {
+                      "label": "no",
+                      "value": "no"
+                    }
+                  ],
+                  "purpose": "PROCEED"
+                },
+                "reason": "PROCEED",
+                "quotes": [
+                  {
+                    "itemId": "tiktok:ads_management",
+                    "serviceKey": "ads_management",
+                    "total": 60000,
+                    "text": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)",
+                    "breakdown": {
+                      "platform": "tiktok",
+                      "budget": 5000,
+                      "duration": 7,
+                      "total": 60000,
+                      "advertisingBudget": 35000,
+                      "managementFee": 25000,
+                      "dailyBudget": 5000,
+                      "breakdown": "Here's a breakdown:\n\nWe will run approximately ₦5,000 daily for 7 days (₦35,000 advertising budget).\n\nOur service fee for helping you run and manage the ads is ₦25,000.\n\nYou can use up to 1 video for the ads.\n\nTotal amount: ₦60,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+                    },
+                    "paymentEnabled": true
+                  }
+                ],
+                "amount": 60000
+              },
+              "composition": {
+                "parts": [
+                  {
+                    "kind": "text",
+                    "value": "The expected reach for your TikTok ads can vary a lot depending on your target and content."
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "course"
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "setup_prices"
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "requirements_tiktok:ads_management"
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "quote"
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "course"
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "setup_prices"
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "requirements_tiktok:ads_management"
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "quote"
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "setup_prices"
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "requirements_tiktok:ads_management"
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "quote"
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "course"
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "quote"
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "requirements_tiktok:ads_management"
+                  },
+                  {
+                    "kind": "fact",
+                    "value": "setup_prices"
+                  },
+                  {
+                    "kind": "text",
+                    "value": "Advertising results vary. Views, reach, engagement and sales cannot be guaranteed."
+                  },
+                  {
+                    "kind": "question",
+                    "value": "PROCEED"
+                  }
+                ],
+                "usedKnowledge": [
+                  "eval_expected_results"
+                ]
+              },
+              "failure": {
+                "message": "Repeated response component"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reach-63",
+      "group": "semantic-retrieval",
+      "pass": true,
+      "rows": [
+        {
+          "text": "Will this get engagement?",
+          "expect": {
+            "action": "reply",
+            "selected": "eval_expected_results"
+          },
+          "errors": [],
+          "latency": 15970,
+          "before": {
+            "core": {
+              "version": 2,
+              "facts": {
+                "global:services": {
+                  "value": [
+                    "ads_management"
+                  ],
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:platforms": {
+                  "value": [
+                    "tiktok"
+                  ],
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:budget": {
+                  "value": 5000,
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:budgetBasis": {
+                  "value": "daily",
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:duration": {
+                  "value": 7,
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                }
+              },
+              "superseded": [],
+              "items": [
+                {
+                  "id": "tiktok:ads_management",
+                  "type": "ads_management",
+                  "platform": "tiktok"
+                }
+              ],
+              "topic": "advertising",
+              "purchasePath": "advertising",
+              "readiness": "undecided",
+              "answeredQuestions": [],
+              "legacy": {},
+              "revision": 1,
+              "selectionChanged": true,
+              "updatedAt": "2026-10-06T10:00:00Z"
+            },
+            "selectedPlatforms": [
+              "tiktok"
+            ],
+            "selectedPlatform": "tiktok",
+            "serviceType": "ads_management",
+            "includeSetup": false,
+            "serviceChoiceConfirmed": true,
+            "budget": 5000,
+            "budgetBasis": "daily",
+            "duration": 7,
+            "customerWantsToProceed": false,
+            "paymentDetailsRequested": false,
+            "salesPaused": false,
+            "purchasePath": "advertising"
+          },
+          "result": {
+            "action": "reply",
+            "state": {
+              "core": {
+                "version": 2,
+                "facts": {
+                  "global:services": {
+                    "value": [
+                      "ads_management"
+                    ],
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:platforms": {
+                    "value": [
+                      "tiktok"
+                    ],
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:budget": {
+                    "value": 5000,
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:budgetBasis": {
+                    "value": "daily",
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:duration": {
+                    "value": 7,
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  }
+                },
+                "superseded": [],
+                "items": [
+                  {
+                    "id": "tiktok:ads_management",
+                    "type": "ads_management",
+                    "platform": "tiktok"
+                  }
+                ],
+                "topic": "advertising",
+                "purchasePath": "advertising",
+                "readiness": "undecided",
+                "answeredQuestions": [],
+                "legacy": {},
+                "revision": 2,
+                "selectionChanged": false,
+                "updatedAt": "2026-10-06T18:44:14.048Z",
+                "quote": {
+                  "amount": 60000,
+                  "items": [
+                    {
+                      "itemId": "tiktok:ads_management",
+                      "serviceKey": "ads_management",
+                      "total": 60000,
+                      "text": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)",
+                      "breakdown": {
+                        "platform": "tiktok",
+                        "budget": 5000,
+                        "duration": 7,
+                        "total": 60000,
+                        "advertisingBudget": 35000,
+                        "managementFee": 25000,
+                        "dailyBudget": 5000,
+                        "breakdown": "Here's a breakdown:\n\nWe will run approximately ₦5,000 daily for 7 days (₦35,000 advertising budget).\n\nOur service fee for helping you run and manage the ads is ₦25,000.\n\nYou can use up to 1 video for the ads.\n\nTotal amount: ₦60,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+                      },
+                      "paymentEnabled": true
+                    }
+                  ],
+                  "at": "2026-10-06T18:44:14.048Z"
+                }
+              },
+              "selectedPlatforms": [
+                "tiktok"
+              ],
+              "selectedPlatform": "tiktok",
+              "serviceType": "ads_management",
+              "includeSetup": false,
+              "serviceChoiceConfirmed": true,
+              "budget": 5000,
+              "budgetBasis": "daily",
+              "duration": 7,
+              "customerWantsToProceed": false,
+              "paymentDetailsRequested": false,
+              "salesPaused": false,
+              "purchasePath": "advertising",
+              "quotedAmount": 60000,
+              "nextObjective": "PROCEED",
+              "currentSalesStage": "PRICE_PRESENTED"
+            },
+            "response": "Thanks for your question. Advertising results vary, so while we work to optimize and monitor your TikTok campaign closely, we cannot guarantee specific engagement levels.\n\nWould you like to proceed?",
+            "amount": 60000,
+            "serviceKey": "tiktok:ads_management",
+            "intent": "knowledge",
+            "confidence": 1,
+            "model": "gpt-4.1",
+            "usage": {
+              "input_tokens": 7494,
+              "output_tokens": 409,
+              "total_tokens": 7903
+            },
+            "knowledge": [
+              "eval_expected_results",
+              "eval_management",
+              "campaign_expectations"
+            ],
+            "question": {
+              "text": "Would you like to proceed?",
+              "fields": [
+                "proceed"
+              ],
+              "choices": [
+                {
+                  "label": "yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "no",
+                  "value": "no"
+                }
+              ],
+              "purpose": "PROCEED"
+            },
+            "debug": {
+              "engineVersion": "v2",
+              "context": {
+                "messages": [
+                  {
+                    "id": "reach-63-0",
+                    "text": "Will this get engagement?",
+                    "type": "text"
+                  }
+                ],
+                "history": [],
+                "pendingQuestion": null,
+                "now": "2026-10-06T18:44:14.048Z"
+              },
+              "steps": [
+                {
+                  "phase": "interpretation",
+                  "latency": 6850
+                },
+                {
+                  "phase": "selection",
+                  "latency": 4853
+                },
+                {
+                  "phase": "composition",
+                  "latency": 4258
+                }
+              ],
+              "interpretation": {
+                "intents": [
+                  "knowledge"
+                ],
+                "questions": [
+                  {
+                    "text": "Will this get engagement?",
+                    "evidence": {
+                      "messageId": "reach-63-0",
+                      "text": "Will this get engagement?"
+                    }
+                  }
+                ],
+                "facts": [],
+                "answeredQuestionIds": [],
+                "recommendations": [],
+                "unresolvedReferences": [],
+                "negotiation": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-63-0",
+                    "text": "Will this get engagement?"
+                  }
+                },
+                "deferral": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-63-0",
+                    "text": "Will this get engagement?"
+                  }
+                },
+                "humanRequest": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-63-0",
+                    "text": "Will this get engagement?"
+                  }
+                },
+                "paymentClaim": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-63-0",
+                    "text": "Will this get engagement?"
+                  }
+                },
+                "sensitiveCase": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-63-0",
+                    "text": "Will this get engagement?"
+                  }
+                },
+                "topic": "advertising",
+                "purchaseChange": {
+                  "action": "none",
+                  "path": "unchanged",
+                  "evidence": {
+                    "messageId": "reach-63-0",
+                    "text": "Will this get engagement?"
+                  }
+                },
+                "confidence": 1
+              },
+              "rejectedRequests": [],
+              "stateChanges": {
+                "accepted": [],
+                "rejected": []
+              },
+              "retrieval": {
+                "candidates": [
+                  "advertising_services",
+                  "supported_platforms",
+                  "setup_vs_management",
+                  "tiktok_setup_information",
+                  "meta_setup_information",
+                  "ads_management_information",
+                  "self_managed_ads",
+                  "meta_explanation",
+                  "choose_service",
+                  "budget_guidance",
+                  "custom_budget_review",
+                  "package_inclusions_review",
+                  "campaign_expectations",
+                  "service_timing_review",
+                  "existing_ad_account",
+                  "secure_account_access",
+                  "tiktok_management_access",
+                  "meta_management_access",
+                  "payment_process",
+                  "invoice_information",
+                  "invoice_correction",
+                  "payment_claim_information",
+                  "receipt_review_information",
+                  "payment_pending_review",
+                  "incorrect_payment_amount",
+                  "expired_payment_details",
+                  "after_payment_process",
+                  "receipt_request",
+                  "refund_cancellation_review",
+                  "existing_campaign_issue",
+                  "human_support_information",
+                  "response_time_information",
+                  "other_services_review",
+                  "credential_safety",
+                  "setup_scope",
+                  "setup_budget_separate",
+                  "setup_requirements",
+                  "service_difference",
+                  "eval_expected_results",
+                  "eval_management",
+                  "eval_setup_timing"
+                ],
+                "selected": {
+                  "entries": [
+                    {
+                      "key": "eval_expected_results",
+                      "reason": "The customer is asking about expected engagement, which matches 'Expected views, engagement, reach and sales'."
+                    },
+                    {
+                      "key": "campaign_expectations",
+                      "reason": "Campaign expectations also covers questions about likely results, including engagement outcomes with advertising."
+                    },
+                    {
+                      "key": "eval_management",
+                      "reason": "Customer is enquiring about engagement from TikTok ads management, so it's relevant to clarify what is included in ads management (optimization, targeting, etc.)."
+                    }
+                  ],
+                  "unsupportedQuestions": []
+                }
+              },
+              "plan": {
+                "action": "reply",
+                "facts": {
+                  "course": "TikTok, Facebook and Instagram Ads Video Course\nVideo training for customers who want to learn to run ads themselves.\n\n₦8,000\nhttps://joshspotmedia.com/course",
+                  "setup_prices": "TikTok Ads Account Setup: ₦20,000\nMeta Ads Account Setup: ₦30,000",
+                  "requirements_tiktok:ads_management": "[Sensitive information excluded]",
+                  "quote": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)"
+                },
+                "requiredFacts": [],
+                "question": {
+                  "text": "Would you like to proceed?",
+                  "fields": [
+                    "proceed"
+                  ],
+                  "choices": [
+                    {
+                      "label": "yes",
+                      "value": "yes"
+                    },
+                    {
+                      "label": "no",
+                      "value": "no"
+                    }
+                  ],
+                  "purpose": "PROCEED"
+                },
+                "reason": "PROCEED",
+                "quotes": [
+                  {
+                    "itemId": "tiktok:ads_management",
+                    "serviceKey": "ads_management",
+                    "total": 60000,
+                    "text": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)",
+                    "breakdown": {
+                      "platform": "tiktok",
+                      "budget": 5000,
+                      "duration": 7,
+                      "total": 60000,
+                      "advertisingBudget": 35000,
+                      "managementFee": 25000,
+                      "dailyBudget": 5000,
+                      "breakdown": "Here's a breakdown:\n\nWe will run approximately ₦5,000 daily for 7 days (₦35,000 advertising budget).\n\nOur service fee for helping you run and manage the ads is ₦25,000.\n\nYou can use up to 1 video for the ads.\n\nTotal amount: ₦60,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+                    },
+                    "paymentEnabled": true
+                  }
+                ],
+                "amount": 60000
+              },
+              "composition": {
+                "parts": [
+                  {
+                    "kind": "text",
+                    "value": "Thanks for your question. Advertising results vary, so while we work to optimize and monitor your TikTok campaign closely, we cannot guarantee specific engagement levels."
+                  },
+                  {
+                    "kind": "question",
+                    "value": "PROCEED"
+                  }
+                ],
+                "usedKnowledge": [
+                  "eval_expected_results",
+                  "eval_management"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reach-64",
+      "group": "semantic-retrieval",
+      "pass": false,
+      "rows": [
+        {
+          "text": "How many customers should I expect?",
+          "expect": {
+            "action": "reply",
+            "selected": "eval_expected_results"
+          },
+          "errors": [
+            "action expected reply, got handoff: V2_VALIDATION_OR_PROVIDER_FAILURE",
+            "missing approved knowledge eval_expected_results"
+          ],
+          "latency": 20613,
+          "before": {
+            "core": {
+              "version": 2,
+              "facts": {
+                "global:services": {
+                  "value": [
+                    "ads_management"
+                  ],
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:platforms": {
+                  "value": [
+                    "tiktok"
+                  ],
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:budget": {
+                  "value": 5000,
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:budgetBasis": {
+                  "value": "daily",
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:duration": {
+                  "value": 7,
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                }
+              },
+              "superseded": [],
+              "items": [
+                {
+                  "id": "tiktok:ads_management",
+                  "type": "ads_management",
+                  "platform": "tiktok"
+                }
+              ],
+              "topic": "advertising",
+              "purchasePath": "advertising",
+              "readiness": "undecided",
+              "answeredQuestions": [],
+              "legacy": {},
+              "revision": 1,
+              "selectionChanged": true,
+              "updatedAt": "2026-10-06T10:00:00Z"
+            },
+            "selectedPlatforms": [
+              "tiktok"
+            ],
+            "selectedPlatform": "tiktok",
+            "serviceType": "ads_management",
+            "includeSetup": false,
+            "serviceChoiceConfirmed": true,
+            "budget": 5000,
+            "budgetBasis": "daily",
+            "duration": 7,
+            "customerWantsToProceed": false,
+            "paymentDetailsRequested": false,
+            "salesPaused": false,
+            "purchasePath": "advertising"
+          },
+          "result": {
+            "action": "handoff",
+            "handoff": "V2_VALIDATION_OR_PROVIDER_FAILURE",
+            "state": {
+              "core": {
+                "version": 2,
+                "facts": {
+                  "global:services": {
+                    "value": [
+                      "ads_management"
+                    ],
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:platforms": {
+                    "value": [
+                      "tiktok"
+                    ],
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:budget": {
+                    "value": 5000,
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:budgetBasis": {
+                    "value": "daily",
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:duration": {
+                    "value": 7,
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  }
+                },
+                "superseded": [],
+                "items": [
+                  {
+                    "id": "tiktok:ads_management",
+                    "type": "ads_management",
+                    "platform": "tiktok"
+                  }
+                ],
+                "topic": "advertising",
+                "purchasePath": "advertising",
+                "readiness": "undecided",
+                "answeredQuestions": [],
+                "legacy": {},
+                "revision": 2,
+                "selectionChanged": false,
+                "updatedAt": "2026-10-06T18:44:30.022Z"
+              },
+              "selectedPlatforms": [
+                "tiktok"
+              ],
+              "selectedPlatform": "tiktok",
+              "serviceType": "ads_management",
+              "includeSetup": false,
+              "serviceChoiceConfirmed": true,
+              "budget": 5000,
+              "budgetBasis": "daily",
+              "duration": 7,
+              "customerWantsToProceed": false,
+              "paymentDetailsRequested": false,
+              "salesPaused": false,
+              "purchasePath": "advertising"
+            },
+            "response": "A customer-service representative needs to review this before we continue. Please leave any relevant details here.",
+            "error": "Invalid result.parts",
+            "model": "gpt-4.1",
+            "usage": {
+              "input_tokens": 7427,
+              "output_tokens": 874,
+              "total_tokens": 8301
+            },
+            "debug": {
+              "engineVersion": "v2",
+              "context": {
+                "messages": [
+                  {
+                    "id": "reach-64-0",
+                    "text": "How many customers should I expect?",
+                    "type": "text"
+                  }
+                ],
+                "history": [],
+                "pendingQuestion": null,
+                "now": "2026-10-06T18:44:30.022Z"
+              },
+              "steps": [
+                {
+                  "phase": "interpretation",
+                  "latency": 5381
+                },
+                {
+                  "phase": "selection",
+                  "latency": 8401
+                }
+              ],
+              "interpretation": {
+                "intents": [
+                  "knowledge"
+                ],
+                "questions": [
+                  {
+                    "text": "How many customers should I expect?",
+                    "evidence": {
+                      "messageId": "reach-64-0",
+                      "text": "How many customers should I expect?"
+                    }
+                  }
+                ],
+                "facts": [],
+                "answeredQuestionIds": [],
+                "recommendations": [],
+                "unresolvedReferences": [],
+                "negotiation": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-64-0",
+                    "text": "How many customers should I expect?"
+                  }
+                },
+                "deferral": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-64-0",
+                    "text": "How many customers should I expect?"
+                  }
+                },
+                "humanRequest": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-64-0",
+                    "text": "How many customers should I expect?"
+                  }
+                },
+                "paymentClaim": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-64-0",
+                    "text": "How many customers should I expect?"
+                  }
+                },
+                "sensitiveCase": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-64-0",
+                    "text": "How many customers should I expect?"
+                  }
+                },
+                "topic": "advertising",
+                "purchaseChange": {
+                  "action": "none",
+                  "path": "unchanged",
+                  "evidence": {
+                    "messageId": "reach-64-0",
+                    "text": "How many customers should I expect?"
+                  }
+                },
+                "confidence": 1
+              },
+              "rejectedRequests": [],
+              "stateChanges": {
+                "accepted": [],
+                "rejected": []
+              },
+              "retrieval": {
+                "candidates": [
+                  "advertising_services",
+                  "supported_platforms",
+                  "setup_vs_management",
+                  "tiktok_setup_information",
+                  "meta_setup_information",
+                  "ads_management_information",
+                  "self_managed_ads",
+                  "meta_explanation",
+                  "choose_service",
+                  "budget_guidance",
+                  "custom_budget_review",
+                  "package_inclusions_review",
+                  "campaign_expectations",
+                  "service_timing_review",
+                  "existing_ad_account",
+                  "secure_account_access",
+                  "tiktok_management_access",
+                  "meta_management_access",
+                  "payment_process",
+                  "invoice_information",
+                  "invoice_correction",
+                  "payment_claim_information",
+                  "receipt_review_information",
+                  "payment_pending_review",
+                  "incorrect_payment_amount",
+                  "expired_payment_details",
+                  "after_payment_process",
+                  "receipt_request",
+                  "refund_cancellation_review",
+                  "existing_campaign_issue",
+                  "human_support_information",
+                  "response_time_information",
+                  "other_services_review",
+                  "credential_safety",
+                  "setup_scope",
+                  "setup_budget_separate",
+                  "setup_requirements",
+                  "service_difference",
+                  "eval_expected_results",
+                  "eval_management",
+                  "eval_setup_timing"
+                ],
+                "selected": {
+                  "entries": [
+                    {
+                      "key": "campaign_expectations",
+                      "reason": "The customer is asking how many customers they should expect—directly related to campaign/sales guarantees."
+                    },
+                    {
+                      "key": "eval_expected_results",
+                      "reason": "This provides information on what kind of views, engagement, reach, or sales can typically be expected from a campaign, aligning with the customer's question about expected customers."
+                    }
+                  ],
+                  "unsupportedQuestions": []
+                }
+              },
+              "plan": {
+                "action": "reply",
+                "facts": {
+                  "course": "TikTok, Facebook and Instagram Ads Video Course\nVideo training for customers who want to learn to run ads themselves.\n\n₦8,000\nhttps://joshspotmedia.com/course",
+                  "setup_prices": "TikTok Ads Account Setup: ₦20,000\nMeta Ads Account Setup: ₦30,000",
+                  "requirements_tiktok:ads_management": "[Sensitive information excluded]",
+                  "quote": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)"
+                },
+                "requiredFacts": [],
+                "question": {
+                  "text": "Would you like to proceed?",
+                  "fields": [
+                    "proceed"
+                  ],
+                  "choices": [
+                    {
+                      "label": "yes",
+                      "value": "yes"
+                    },
+                    {
+                      "label": "no",
+                      "value": "no"
+                    }
+                  ],
+                  "purpose": "PROCEED"
+                },
+                "reason": "PROCEED",
+                "quotes": [
+                  {
+                    "itemId": "tiktok:ads_management",
+                    "serviceKey": "ads_management",
+                    "total": 60000,
+                    "text": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)",
+                    "breakdown": {
+                      "platform": "tiktok",
+                      "budget": 5000,
+                      "duration": 7,
+                      "total": 60000,
+                      "advertisingBudget": 35000,
+                      "managementFee": 25000,
+                      "dailyBudget": 5000,
+                      "breakdown": "Here's a breakdown:\n\nWe will run approximately ₦5,000 daily for 7 days (₦35,000 advertising budget).\n\nOur service fee for helping you run and manage the ads is ₦25,000.\n\nYou can use up to 1 video for the ads.\n\nTotal amount: ₦60,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+                    },
+                    "paymentEnabled": true
+                  }
+                ],
+                "amount": 60000
+              },
+              "failure": {
+                "message": "Invalid result.parts"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reach-65",
+      "group": "semantic-retrieval",
+      "pass": true,
+      "rows": [
+        {
+          "text": "Can you guarantee sales?",
+          "expect": {
+            "action": "reply",
+            "selected": "eval_expected_results"
+          },
+          "errors": [],
+          "latency": 17507,
+          "before": {
+            "core": {
+              "version": 2,
+              "facts": {
+                "global:services": {
+                  "value": [
+                    "ads_management"
+                  ],
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:platforms": {
+                  "value": [
+                    "tiktok"
+                  ],
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:budget": {
+                  "value": 5000,
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:budgetBasis": {
+                  "value": "daily",
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:duration": {
+                  "value": 7,
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                }
+              },
+              "superseded": [],
+              "items": [
+                {
+                  "id": "tiktok:ads_management",
+                  "type": "ads_management",
+                  "platform": "tiktok"
+                }
+              ],
+              "topic": "advertising",
+              "purchasePath": "advertising",
+              "readiness": "undecided",
+              "answeredQuestions": [],
+              "legacy": {},
+              "revision": 1,
+              "selectionChanged": true,
+              "updatedAt": "2026-10-06T10:00:00Z"
+            },
+            "selectedPlatforms": [
+              "tiktok"
+            ],
+            "selectedPlatform": "tiktok",
+            "serviceType": "ads_management",
+            "includeSetup": false,
+            "serviceChoiceConfirmed": true,
+            "budget": 5000,
+            "budgetBasis": "daily",
+            "duration": 7,
+            "customerWantsToProceed": false,
+            "paymentDetailsRequested": false,
+            "salesPaused": false,
+            "purchasePath": "advertising"
+          },
+          "result": {
+            "action": "reply",
+            "state": {
+              "core": {
+                "version": 2,
+                "facts": {
+                  "global:services": {
+                    "value": [
+                      "ads_management"
+                    ],
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:platforms": {
+                    "value": [
+                      "tiktok"
+                    ],
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:budget": {
+                    "value": 5000,
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:budgetBasis": {
+                    "value": "daily",
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:duration": {
+                    "value": 7,
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  }
+                },
+                "superseded": [],
+                "items": [
+                  {
+                    "id": "tiktok:ads_management",
+                    "type": "ads_management",
+                    "platform": "tiktok"
+                  }
+                ],
+                "topic": "advertising",
+                "purchasePath": "advertising",
+                "readiness": "undecided",
+                "answeredQuestions": [],
+                "legacy": {},
+                "revision": 2,
+                "selectionChanged": false,
+                "updatedAt": "2026-10-06T18:44:50.641Z",
+                "quote": {
+                  "amount": 60000,
+                  "items": [
+                    {
+                      "itemId": "tiktok:ads_management",
+                      "serviceKey": "ads_management",
+                      "total": 60000,
+                      "text": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)",
+                      "breakdown": {
+                        "platform": "tiktok",
+                        "budget": 5000,
+                        "duration": 7,
+                        "total": 60000,
+                        "advertisingBudget": 35000,
+                        "managementFee": 25000,
+                        "dailyBudget": 5000,
+                        "breakdown": "Here's a breakdown:\n\nWe will run approximately ₦5,000 daily for 7 days (₦35,000 advertising budget).\n\nOur service fee for helping you run and manage the ads is ₦25,000.\n\nYou can use up to 1 video for the ads.\n\nTotal amount: ₦60,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+                      },
+                      "paymentEnabled": true
+                    }
+                  ],
+                  "at": "2026-10-06T18:44:50.641Z"
+                }
+              },
+              "selectedPlatforms": [
+                "tiktok"
+              ],
+              "selectedPlatform": "tiktok",
+              "serviceType": "ads_management",
+              "includeSetup": false,
+              "serviceChoiceConfirmed": true,
+              "budget": 5000,
+              "budgetBasis": "daily",
+              "duration": 7,
+              "customerWantsToProceed": false,
+              "paymentDetailsRequested": false,
+              "salesPaused": false,
+              "purchasePath": "advertising",
+              "quotedAmount": 60000,
+              "nextObjective": "PROCEED",
+              "currentSalesStage": "PRICE_PRESENTED"
+            },
+            "response": "Sales can’t be guaranteed because results from ads vary. What we can do is plan a strong campaign based on your goals and budget.\n\nWould you like to proceed?",
+            "amount": 60000,
+            "serviceKey": "tiktok:ads_management",
+            "intent": "knowledge",
+            "confidence": 1,
+            "model": "gpt-4.1",
+            "usage": {
+              "input_tokens": 7413,
+              "output_tokens": 526,
+              "total_tokens": 7939
+            },
+            "knowledge": [
+              "eval_expected_results",
+              "campaign_expectations"
+            ],
+            "question": {
+              "text": "Would you like to proceed?",
+              "fields": [
+                "proceed"
+              ],
+              "choices": [
+                {
+                  "label": "yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "no",
+                  "value": "no"
+                }
+              ],
+              "purpose": "PROCEED"
+            },
+            "debug": {
+              "engineVersion": "v2",
+              "context": {
+                "messages": [
+                  {
+                    "id": "reach-65-0",
+                    "text": "Can you guarantee sales?",
+                    "type": "text"
+                  }
+                ],
+                "history": [],
+                "pendingQuestion": null,
+                "now": "2026-10-06T18:44:50.641Z"
+              },
+              "steps": [
+                {
+                  "phase": "interpretation",
+                  "latency": 7576
+                },
+                {
+                  "phase": "selection",
+                  "latency": 4667
+                },
+                {
+                  "phase": "composition",
+                  "latency": 5259
+                }
+              ],
+              "interpretation": {
+                "intents": [
+                  "knowledge"
+                ],
+                "questions": [
+                  {
+                    "text": "Can you guarantee sales?",
+                    "evidence": {
+                      "messageId": "reach-65-0",
+                      "text": "Can you guarantee sales?"
+                    }
+                  }
+                ],
+                "facts": [],
+                "answeredQuestionIds": [],
+                "recommendations": [],
+                "unresolvedReferences": [],
+                "negotiation": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-65-0",
+                    "text": "Can you guarantee sales?"
+                  }
+                },
+                "deferral": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-65-0",
+                    "text": "Can you guarantee sales?"
+                  }
+                },
+                "humanRequest": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-65-0",
+                    "text": "Can you guarantee sales?"
+                  }
+                },
+                "paymentClaim": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-65-0",
+                    "text": "Can you guarantee sales?"
+                  }
+                },
+                "sensitiveCase": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-65-0",
+                    "text": "Can you guarantee sales?"
+                  }
+                },
+                "topic": "advertising",
+                "purchaseChange": {
+                  "action": "none",
+                  "path": "unchanged",
+                  "evidence": {
+                    "messageId": "reach-65-0",
+                    "text": "Can you guarantee sales?"
+                  }
+                },
+                "confidence": 1
+              },
+              "rejectedRequests": [],
+              "stateChanges": {
+                "accepted": [],
+                "rejected": []
+              },
+              "retrieval": {
+                "candidates": [
+                  "advertising_services",
+                  "supported_platforms",
+                  "setup_vs_management",
+                  "tiktok_setup_information",
+                  "meta_setup_information",
+                  "ads_management_information",
+                  "self_managed_ads",
+                  "meta_explanation",
+                  "choose_service",
+                  "budget_guidance",
+                  "custom_budget_review",
+                  "package_inclusions_review",
+                  "campaign_expectations",
+                  "service_timing_review",
+                  "existing_ad_account",
+                  "secure_account_access",
+                  "tiktok_management_access",
+                  "meta_management_access",
+                  "payment_process",
+                  "invoice_information",
+                  "invoice_correction",
+                  "payment_claim_information",
+                  "receipt_review_information",
+                  "payment_pending_review",
+                  "incorrect_payment_amount",
+                  "expired_payment_details",
+                  "after_payment_process",
+                  "receipt_request",
+                  "refund_cancellation_review",
+                  "existing_campaign_issue",
+                  "human_support_information",
+                  "response_time_information",
+                  "other_services_review",
+                  "credential_safety",
+                  "setup_scope",
+                  "setup_budget_separate",
+                  "setup_requirements",
+                  "service_difference",
+                  "eval_expected_results",
+                  "eval_management",
+                  "eval_setup_timing"
+                ],
+                "selected": {
+                  "entries": [
+                    {
+                      "key": "campaign_expectations",
+                      "reason": "The customer is asking if sales can be guaranteed, which is addressed in the knowledge entry about performance and result guarantees."
+                    },
+                    {
+                      "key": "eval_expected_results",
+                      "reason": "This covers what can be realistically expected in terms of views, engagement, reach, and sales, clarifying that guarantees like sales are typically not possible."
+                    }
+                  ],
+                  "unsupportedQuestions": []
+                }
+              },
+              "plan": {
+                "action": "reply",
+                "facts": {
+                  "course": "TikTok, Facebook and Instagram Ads Video Course\nVideo training for customers who want to learn to run ads themselves.\n\n₦8,000\nhttps://joshspotmedia.com/course",
+                  "setup_prices": "TikTok Ads Account Setup: ₦20,000\nMeta Ads Account Setup: ₦30,000",
+                  "requirements_tiktok:ads_management": "[Sensitive information excluded]",
+                  "quote": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)"
+                },
+                "requiredFacts": [],
+                "question": {
+                  "text": "Would you like to proceed?",
+                  "fields": [
+                    "proceed"
+                  ],
+                  "choices": [
+                    {
+                      "label": "yes",
+                      "value": "yes"
+                    },
+                    {
+                      "label": "no",
+                      "value": "no"
+                    }
+                  ],
+                  "purpose": "PROCEED"
+                },
+                "reason": "PROCEED",
+                "quotes": [
+                  {
+                    "itemId": "tiktok:ads_management",
+                    "serviceKey": "ads_management",
+                    "total": 60000,
+                    "text": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)",
+                    "breakdown": {
+                      "platform": "tiktok",
+                      "budget": 5000,
+                      "duration": 7,
+                      "total": 60000,
+                      "advertisingBudget": 35000,
+                      "managementFee": 25000,
+                      "dailyBudget": 5000,
+                      "breakdown": "Here's a breakdown:\n\nWe will run approximately ₦5,000 daily for 7 days (₦35,000 advertising budget).\n\nOur service fee for helping you run and manage the ads is ₦25,000.\n\nYou can use up to 1 video for the ads.\n\nTotal amount: ₦60,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+                    },
+                    "paymentEnabled": true
+                  }
+                ],
+                "amount": 60000
+              },
+              "composition": {
+                "parts": [
+                  {
+                    "kind": "text",
+                    "value": "Sales can’t be guaranteed because results from ads vary. What we can do is plan a strong campaign based on your goals and budget."
+                  },
+                  {
+                    "kind": "question",
+                    "value": "PROCEED"
+                  }
+                ],
+                "usedKnowledge": [
+                  "eval_expected_results"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reach-66",
+      "group": "semantic-retrieval",
+      "pass": true,
+      "rows": [
+        {
+          "text": "How well will it perform?",
+          "expect": {
+            "action": "reply",
+            "selected": "eval_expected_results"
+          },
+          "errors": [],
+          "latency": 15951,
+          "before": {
+            "core": {
+              "version": 2,
+              "facts": {
+                "global:services": {
+                  "value": [
+                    "ads_management"
+                  ],
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:platforms": {
+                  "value": [
+                    "tiktok"
+                  ],
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:budget": {
+                  "value": 5000,
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:budgetBasis": {
+                  "value": "daily",
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                },
+                "global:duration": {
+                  "value": 7,
+                  "status": "CONFIRMED",
+                  "explicit": true,
+                  "confidence": 1,
+                  "evidence": {
+                    "messageId": "seed",
+                    "text": "Fixture customer explicitly selected these details"
+                  },
+                  "at": "2026-10-06T10:00:00Z",
+                  "itemId": null
+                }
+              },
+              "superseded": [],
+              "items": [
+                {
+                  "id": "tiktok:ads_management",
+                  "type": "ads_management",
+                  "platform": "tiktok"
+                }
+              ],
+              "topic": "advertising",
+              "purchasePath": "advertising",
+              "readiness": "undecided",
+              "answeredQuestions": [],
+              "legacy": {},
+              "revision": 1,
+              "selectionChanged": true,
+              "updatedAt": "2026-10-06T10:00:00Z"
+            },
+            "selectedPlatforms": [
+              "tiktok"
+            ],
+            "selectedPlatform": "tiktok",
+            "serviceType": "ads_management",
+            "includeSetup": false,
+            "serviceChoiceConfirmed": true,
+            "budget": 5000,
+            "budgetBasis": "daily",
+            "duration": 7,
+            "customerWantsToProceed": false,
+            "paymentDetailsRequested": false,
+            "salesPaused": false,
+            "purchasePath": "advertising"
+          },
+          "result": {
+            "action": "reply",
+            "state": {
+              "core": {
+                "version": 2,
+                "facts": {
+                  "global:services": {
+                    "value": [
+                      "ads_management"
+                    ],
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:platforms": {
+                    "value": [
+                      "tiktok"
+                    ],
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:budget": {
+                    "value": 5000,
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:budgetBasis": {
+                    "value": "daily",
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  },
+                  "global:duration": {
+                    "value": 7,
+                    "status": "CONFIRMED",
+                    "explicit": true,
+                    "confidence": 1,
+                    "evidence": {
+                      "messageId": "seed",
+                      "text": "Fixture customer explicitly selected these details"
+                    },
+                    "at": "2026-10-06T10:00:00Z",
+                    "itemId": null
+                  }
+                },
+                "superseded": [],
+                "items": [
+                  {
+                    "id": "tiktok:ads_management",
+                    "type": "ads_management",
+                    "platform": "tiktok"
+                  }
+                ],
+                "topic": "advertising",
+                "purchasePath": "advertising",
+                "readiness": "undecided",
+                "answeredQuestions": [],
+                "legacy": {},
+                "revision": 2,
+                "selectionChanged": false,
+                "updatedAt": "2026-10-06T18:45:08.153Z",
+                "quote": {
+                  "amount": 60000,
+                  "items": [
+                    {
+                      "itemId": "tiktok:ads_management",
+                      "serviceKey": "ads_management",
+                      "total": 60000,
+                      "text": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)",
+                      "breakdown": {
+                        "platform": "tiktok",
+                        "budget": 5000,
+                        "duration": 7,
+                        "total": 60000,
+                        "advertisingBudget": 35000,
+                        "managementFee": 25000,
+                        "dailyBudget": 5000,
+                        "breakdown": "Here's a breakdown:\n\nWe will run approximately ₦5,000 daily for 7 days (₦35,000 advertising budget).\n\nOur service fee for helping you run and manage the ads is ₦25,000.\n\nYou can use up to 1 video for the ads.\n\nTotal amount: ₦60,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+                      },
+                      "paymentEnabled": true
+                    }
+                  ],
+                  "at": "2026-10-06T18:45:08.153Z"
+                }
+              },
+              "selectedPlatforms": [
+                "tiktok"
+              ],
+              "selectedPlatform": "tiktok",
+              "serviceType": "ads_management",
+              "includeSetup": false,
+              "serviceChoiceConfirmed": true,
+              "budget": 5000,
+              "budgetBasis": "daily",
+              "duration": 7,
+              "customerWantsToProceed": false,
+              "paymentDetailsRequested": false,
+              "salesPaused": false,
+              "purchasePath": "advertising",
+              "quotedAmount": 60000,
+              "nextObjective": "PROCEED",
+              "currentSalesStage": "PRICE_PRESENTED"
+            },
+            "response": "Performance can really vary because advertising results are not guaranteed. Outcomes like views, reach, engagement or sales sometimes depend on many factors.\n\nThe team is happy to talk about your campaign approach and set realistic expectations for your business.\n\nWould you like to proceed?",
+            "amount": 60000,
+            "serviceKey": "tiktok:ads_management",
+            "intent": "knowledge",
+            "confidence": 1,
+            "model": "gpt-4.1",
+            "usage": {
+              "input_tokens": 7420,
+              "output_tokens": 539,
+              "total_tokens": 7959
+            },
+            "knowledge": [
+              "eval_expected_results",
+              "campaign_expectations"
+            ],
+            "question": {
+              "text": "Would you like to proceed?",
+              "fields": [
+                "proceed"
+              ],
+              "choices": [
+                {
+                  "label": "yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "no",
+                  "value": "no"
+                }
+              ],
+              "purpose": "PROCEED"
+            },
+            "debug": {
+              "engineVersion": "v2",
+              "context": {
+                "messages": [
+                  {
+                    "id": "reach-66-0",
+                    "text": "How well will it perform?",
+                    "type": "text"
+                  }
+                ],
+                "history": [],
+                "pendingQuestion": null,
+                "now": "2026-10-06T18:45:08.153Z"
+              },
+              "steps": [
+                {
+                  "phase": "interpretation",
+                  "latency": 6676
+                },
+                {
+                  "phase": "selection",
+                  "latency": 4985
+                },
+                {
+                  "phase": "composition",
+                  "latency": 4287
+                }
+              ],
+              "interpretation": {
+                "intents": [
+                  "knowledge"
+                ],
+                "questions": [
+                  {
+                    "text": "How well will it perform?",
+                    "evidence": {
+                      "messageId": "reach-66-0",
+                      "text": "How well will it perform?"
+                    }
+                  }
+                ],
+                "facts": [],
+                "answeredQuestionIds": [],
+                "recommendations": [],
+                "unresolvedReferences": [],
+                "negotiation": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-66-0",
+                    "text": "How well will it perform?"
+                  }
+                },
+                "deferral": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-66-0",
+                    "text": "How well will it perform?"
+                  }
+                },
+                "humanRequest": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-66-0",
+                    "text": "How well will it perform?"
+                  }
+                },
+                "paymentClaim": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-66-0",
+                    "text": "How well will it perform?"
+                  }
+                },
+                "sensitiveCase": {
+                  "value": false,
+                  "evidence": {
+                    "messageId": "reach-66-0",
+                    "text": "How well will it perform?"
+                  }
+                },
+                "topic": "advertising",
+                "purchaseChange": {
+                  "action": "none",
+                  "path": "unchanged",
+                  "evidence": {
+                    "messageId": "reach-66-0",
+                    "text": "How well will it perform?"
+                  }
+                },
+                "confidence": 1
+              },
+              "rejectedRequests": [],
+              "stateChanges": {
+                "accepted": [],
+                "rejected": []
+              },
+              "retrieval": {
+                "candidates": [
+                  "advertising_services",
+                  "supported_platforms",
+                  "setup_vs_management",
+                  "tiktok_setup_information",
+                  "meta_setup_information",
+                  "ads_management_information",
+                  "self_managed_ads",
+                  "meta_explanation",
+                  "choose_service",
+                  "budget_guidance",
+                  "custom_budget_review",
+                  "package_inclusions_review",
+                  "campaign_expectations",
+                  "service_timing_review",
+                  "existing_ad_account",
+                  "secure_account_access",
+                  "tiktok_management_access",
+                  "meta_management_access",
+                  "payment_process",
+                  "invoice_information",
+                  "invoice_correction",
+                  "payment_claim_information",
+                  "receipt_review_information",
+                  "payment_pending_review",
+                  "incorrect_payment_amount",
+                  "expired_payment_details",
+                  "after_payment_process",
+                  "receipt_request",
+                  "refund_cancellation_review",
+                  "existing_campaign_issue",
+                  "human_support_information",
+                  "response_time_information",
+                  "other_services_review",
+                  "credential_safety",
+                  "setup_scope",
+                  "setup_budget_separate",
+                  "setup_requirements",
+                  "service_difference",
+                  "eval_expected_results",
+                  "eval_management",
+                  "eval_setup_timing"
+                ],
+                "selected": {
+                  "entries": [
+                    {
+                      "key": "campaign_expectations",
+                      "reason": "The customer is asking about expected campaign performance, which includes topics like guaranteed results and likely outcomes."
+                    },
+                    {
+                      "key": "eval_expected_results",
+                      "reason": "This specifically covers expected views, engagement, reach and sales for TikTok ad campaigns managed as a service."
+                    }
+                  ],
+                  "unsupportedQuestions": []
+                }
+              },
+              "plan": {
+                "action": "reply",
+                "facts": {
+                  "course": "TikTok, Facebook and Instagram Ads Video Course\nVideo training for customers who want to learn to run ads themselves.\n\n₦8,000\nhttps://joshspotmedia.com/course",
+                  "setup_prices": "TikTok Ads Account Setup: ₦20,000\nMeta Ads Account Setup: ₦30,000",
+                  "requirements_tiktok:ads_management": "[Sensitive information excluded]",
+                  "quote": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)"
+                },
+                "requiredFacts": [],
+                "question": {
+                  "text": "Would you like to proceed?",
+                  "fields": [
+                    "proceed"
+                  ],
+                  "choices": [
+                    {
+                      "label": "yes",
+                      "value": "yes"
+                    },
+                    {
+                      "label": "no",
+                      "value": "no"
+                    }
+                  ],
+                  "purpose": "PROCEED"
+                },
+                "reason": "PROCEED",
+                "quotes": [
+                  {
+                    "itemId": "tiktok:ads_management",
+                    "serviceKey": "ads_management",
+                    "total": 60000,
+                    "text": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)",
+                    "breakdown": {
+                      "platform": "tiktok",
+                      "budget": 5000,
+                      "duration": 7,
+                      "total": 60000,
+                      "advertisingBudget": 35000,
+                      "managementFee": 25000,
+                      "dailyBudget": 5000,
+                      "breakdown": "Here's a breakdown:\n\nWe will run approximately ₦5,000 daily for 7 days (₦35,000 advertising budget).\n\nOur service fee for helping you run and manage the ads is ₦25,000.\n\nYou can use up to 1 video for the ads.\n\nTotal amount: ₦60,000\n\nThroughout the 7 days, we will create and manage the ads for you, monitor the ads, make targeting adjustments and retarget where necessary."
+                    },
+                    "paymentEnabled": true
+                  }
+                ],
+                "amount": 60000
+              },
+              "composition": {
+                "parts": [
+                  {
+                    "kind": "text",
+                    "value": "Performance can really vary because advertising results are not guaranteed. Outcomes like views, reach, engagement or sales sometimes depend on many factors."
+                  },
+                  {
+                    "kind": "text",
+                    "value": "The team is happy to talk about your campaign approach and set realistic expectations for your business."
+                  },
+                  {
+                    "kind": "question",
+                    "value": "PROCEED"
+                  }
+                ],
+                "usedKnowledge": [
+                  "eval_expected_results",
+                  "campaign_expectations"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "calls": 21,
+  "finished": "2026-10-06T18:45:24.108Z",
+  "providerErrors": [],
+  "summary": {
+    "total": 7,
+    "passed": 5,
+    "failed": 2,
+    "calls": 21,
+    "notRun": 0
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "customer": [
+    {
+      "_id": "G03-in-3",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "does that include your fee",
+      "createdAt": "2026-10-07T09:16:41.180Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G03-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "run tiktok ads for me",
+      "createdAt": "2026-10-07T09:16:20.193Z"
+    },
+    {
+      "_id": "G03-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing to run TikTok ads with us!\n\nTo get started, could you please tell me if you want Joshspot to set up your TikTok ads account for you, or if you already have an account and just want us to manage the ad campaigns?\n\nAlso, what's your budget and how long do you want the ads to run? This helps me prepare an accurate quote for you.",
+      "createdAt": "2026-10-07T09:16:28.788Z"
+    },
+    {
+      "_id": "G03-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "5000 per day",
+      "createdAt": "2026-10-07T09:16:28.789Z"
+    },
+    {
+      "_id": "G03-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for sharing your budget of 5000 per day for TikTok ads.\n\nNext, please let me know if you want Joshspot to set up your TikTok ads account for you or if you already have an account and need only campaign management? This helps tailor the services accordingly.\n\nAlso, how many days do you want to run the ads?",
+      "createdAt": "2026-10-07T09:16:33.948Z"
+    },
+    {
+      "_id": "G03-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "2 days",
+      "createdAt": "2026-10-07T09:16:33.950Z"
+    },
+    {
+      "_id": "G03-out-2",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for confirming a daily budget of 5000 and a duration of 2 days for TikTok ads.\n\nDo you want Joshspot to set up the TikTok ads account for you, or do you already have an account and just want us to manage the campaign? This helps me prepare the right service and quote for you.",
+      "createdAt": "2026-10-07T09:16:41.178Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60de5ccbc81908b3cf323fb6788030f29f76f33d018e2",
+    "seenMessageIds": [
+      "G03-in-0",
+      "G03-out-0",
+      "G03-in-1",
+      "G03-out-1",
+      "G03-in-2"
+    ],
+    "contextCharacters": 1370,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3829,
+    "output_tokens": 68,
+    "total_tokens": 3897,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0016404000000000002
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60de5ccbc81908b3cf323fb6788030f29f76f33d018e2"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60de5ccbc81908b3cf323fb6788030f29f76f33d018e2/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60de5ccbc81908b3cf323fb6788030f29f76f33d018e2/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60de5ccbc81908b3cf323fb6788030f29f76f33d018e2/items?limit=100&order=asc&after=msg_6ac60dfb26a48190b56ebac4eb3496010f29f76f33d018e2"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60de5ccbc81908b3cf323fb6788030f29f76f33d018e2/items/msg_0f29f76f33d018e2006ac60dfc4e7881908056edae924dc1ef"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60de5ccbc81908b3cf323fb6788030f29f76f33d018e2/items/msg_0f29f76f33d018e2006ac60dfd4afc81909ffc3a8d87db610e"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60de5ccbc81908b3cf323fb6788030f29f76f33d018e2/items?limit=100&order=asc&after=msg_6ac60dfb26a48190b56ebac4eb3496010f29f76f33d018e2"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0f29f76f33d018e2006ac60dfc08908190b3d4043640a9b73b",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3829,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 68,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3897
+      },
+      "output": [
+        {
+          "id": "msg_0f29f76f33d018e2006ac60dfd4afc81909ffc3a8d87db610e",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Our pricing can include management fees, setup fees, or just ad spend depending on the service you choose.\n\nTo clarify, do you want Joshspot to handle both TikTok account setup and ongoing management of your ad campaigns? Or just one of those services? That way, I can give you a clear quote including any fees involved."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 4440,
+      "openaiConversationId": "conv_6ac60de5ccbc81908b3cf323fb6788030f29f76f33d018e2"
+    },
+    "action": "reply",
+    "response": "Our pricing can include management fees, setup fees, or just ad spend depending on the service you choose.\n\nTo clarify, do you want Joshspot to handle both TikTok account setup and ongoing management of your ad campaigns? Or just one of those services? That way, I can give you a clear quote including any fees involved.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 5878,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60de5ccbc81908b3cf323fb6788030f29f76f33d018e2",
+    "seenMessageIds": [
+      "G03-in-0",
+      "G03-out-0",
+      "G03-in-1",
+      "G03-out-1",
+      "G03-in-2",
+      "G03-out-2",
+      "G03-in-3"
+    ],
+    "contextCharacters": 1946,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

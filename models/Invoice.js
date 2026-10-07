@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const invoiceSchema = new mongoose.Schema({
   automationKey: { type: String, unique: true, sparse: true },
   automationGenerating: Boolean,
+  aiQuoteFingerprint: String,
   inboxAIHandledAt: Date,
   inboxConversation: { type: mongoose.Schema.Types.ObjectId, ref: 'InboxConversation' },
   inboxContact: { type: mongoose.Schema.Types.ObjectId, ref: 'InboxContact' },

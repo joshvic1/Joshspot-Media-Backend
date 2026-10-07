@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G11-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok for me",
+      "createdAt": "2026-10-07T09:18:06.444Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3378,
+    "output_tokens": 51,
+    "total_tokens": 3429,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0014328
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31/items?limit=100&order=asc&after=msg_6ac60e5074748193aecb37fe46969742077e4b17328c1a31"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31/items/msg_077e4b17328c1a31006ac60e51b9f08193a22b8d333272c497"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31/items/msg_077e4b17328c1a31006ac60e5219e081939e0c6cd4e15a23cd"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31/items?limit=100&order=asc&after=msg_6ac60e5074748193aecb37fe46969742077e4b17328c1a31"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_077e4b17328c1a31006ac60e518d008193aea9de27e2ea5957",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3378,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 51,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3429
+      },
+      "output": [
+        {
+          "id": "msg_077e4b17328c1a31006ac60e5219e081939e0c6cd4e15a23cd",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Great! You want us to manage TikTok ads for you.\n\nTo proceed, please tell me your total budget for TikTok ads and how long you want the campaign to run. This helps us create the right management plan and quote for you."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3015,
+      "openaiConversationId": "conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31"
+    },
+    "action": "reply",
+    "response": "Great! You want us to manage TikTok ads for you.\n\nTo proceed, please tell me your total budget for TikTok ads and how long you want the campaign to run. This helps us create the right management plan and quote for you.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4755,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60e500c40819397d74c60e93cb22e077e4b17328c1a31",
+    "seenMessageIds": [
+      "G11-in-0"
+    ],
+    "contextCharacters": 149,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

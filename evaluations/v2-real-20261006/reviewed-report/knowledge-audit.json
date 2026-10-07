@@ -1,0 +1,471 @@
+{
+  "configRevision": 30,
+  "recordCount": 84,
+  "counts": {
+    "knowledge": 57,
+    "workflow": 4,
+    "handoff": 5,
+    "plan": 4,
+    "service": 4,
+    "response": 9,
+    "tone": 1
+  },
+  "exactDuplicateText": [
+    {
+      "text": "{{requirements}}",
+      "keys": [
+        "setup_requirements",
+        "requirements"
+      ]
+    },
+    {
+      "text": "how many days would you like the ads to run?",
+      "keys": [
+        "ads_duration",
+        "duration"
+      ]
+    }
+  ],
+  "legacyEnabled": [
+    {
+      "key": "platform",
+      "kind": "workflow",
+      "title": "Ask platform",
+      "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+    },
+    {
+      "key": "service",
+      "kind": "workflow",
+      "title": "Ask service",
+      "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+    },
+    {
+      "key": "budget",
+      "kind": "workflow",
+      "title": "Ask budget",
+      "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+    },
+    {
+      "key": "duration",
+      "kind": "workflow",
+      "title": "Ask duration",
+      "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+    },
+    {
+      "key": "budget",
+      "kind": "response",
+      "title": "Ask budget",
+      "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+    },
+    {
+      "key": "duration",
+      "kind": "response",
+      "title": "Ask duration",
+      "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+    },
+    {
+      "key": "email",
+      "kind": "response",
+      "title": "Invoice email",
+      "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+    },
+    {
+      "key": "friendly",
+      "kind": "tone",
+      "title": "Simple greeting",
+      "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+    },
+    {
+      "key": "greeting",
+      "kind": "response",
+      "title": "Greeting",
+      "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+    },
+    {
+      "key": "plans",
+      "kind": "response",
+      "title": "Recommended plans",
+      "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+    },
+    {
+      "key": "platform",
+      "kind": "response",
+      "title": "Ask platform",
+      "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+    },
+    {
+      "key": "quote",
+      "kind": "response",
+      "title": "Service quote",
+      "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+    },
+    {
+      "key": "requirements",
+      "kind": "response",
+      "title": "Onboarding requirements",
+      "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+    },
+    {
+      "key": "service",
+      "kind": "response",
+      "title": "Ask service",
+      "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+    }
+  ],
+  "unexpandedStrict": [
+    {
+      "key": "setup_requirements",
+      "text": "{{requirements}}",
+      "role": "RESPONSE",
+      "note": "Review role/eligibility: literal template is not necessarily a usable V2 response."
+    },
+    {
+      "key": "custom_management_price",
+      "text": "The total is {{price}} for {{duration}} days.\n\nThis includes {{ad_budget}} advertising budget and {{management_fee}} management fee.\n\nWould you like to proceed?",
+      "role": "GUIDANCE",
+      "note": "Review role/eligibility: literal template is not necessarily a usable V2 response."
+    },
+    {
+      "key": "recommended_ads_plans",
+      "text": "{{plans}}\n\nWhich one would you like to go with?",
+      "role": "GUIDANCE",
+      "note": "Review role/eligibility: literal template is not necessarily a usable V2 response."
+    },
+    {
+      "key": "service_price",
+      "text": "{{service_name}} costs {{price}}.\n\nWould you like to proceed?",
+      "role": "GUIDANCE",
+      "note": "Review role/eligibility: literal template is not necessarily a usable V2 response."
+    }
+  ],
+  "legacyHandoffAfterReply": [
+    {
+      "key": "after_payment_process",
+      "reason": "SERVICE_ONBOARDING",
+      "wording": "Once payment has been verified, the team will confirm the next steps and any onboarding information needed for your selected service.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "existing_ad_account",
+      "reason": "ACCOUNT_REVIEW",
+      "wording": "Please let us know which platform your existing account is on. The team can review the appropriate next step without asking you to share your password here.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "existing_campaign_issue",
+      "reason": "CAMPAIGN_REVIEW",
+      "wording": "Please explain what is happening with the campaign or account. A team member needs to review the issue before confirming the next step.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "expired_payment_details",
+      "reason": "INVOICE_REVIEW",
+      "wording": "Please let the team check the invoice before you use those payment details. They can confirm whether the invoice is still valid or needs to be updated.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "human_support_information",
+      "reason": "CUSTOMER_REQUESTED_HUMAN",
+      "wording": "A customer-service representative can help with this. Please leave any details you would like them to review.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "incorrect_payment_amount",
+      "reason": "PAYMENT_PROBLEM",
+      "wording": "Please share the amount you transferred and the invoice it relates to. The team will review it and explain the next step.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "invoice_correction",
+      "reason": "INVOICE_REVIEW",
+      "wording": "Please hold off on paying that invoice while the team checks it. Let us know which detail appears incorrect.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "meta_management_access",
+      "reason": "SERVICE_ONBOARDING",
+      "wording": "The team will guide you through the appropriate Meta business or advertising-account access process. Please don’t share your personal Facebook password.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "other_services_review",
+      "reason": "SERVICE_REVIEW",
+      "wording": "Please tell us which service you’re interested in. The team can help confirm the approved details.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "payment_claim_information",
+      "reason": "PAYMENT_VERIFICATION_REQUIRED",
+      "wording": "Thanks for the update. Your payment needs to be checked before we can confirm it. If you haven’t already sent your receipt, you can share it here.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "payment_pending_review",
+      "reason": "PAYMENT_PROBLEM",
+      "wording": "Please don’t make another payment just yet. The team needs to check the transaction and confirm its status.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "receipt_request",
+      "reason": "RECEIPT_REQUEST",
+      "wording": "We can help with a receipt for a confirmed payment. Please provide the customer name and email address to use for the receipt if they are not already on the invoice.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "receipt_review_information",
+      "reason": "PAYMENT_VERIFICATION_REQUIRED",
+      "wording": "Thanks for sending it. The receipt needs to be reviewed and the payment verified before we can confirm the next step.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "refund_cancellation_review",
+      "reason": "REFUND_REVIEW",
+      "wording": "A team member needs to review your refund or cancellation request. Please tell us which service or payment it relates to and what happened.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "response_time_information",
+      "reason": "SUPPORT_REVIEW",
+      "wording": "I don’t have a confirmed response time to promise. Please leave the details of your request so the team can review them.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "secure_account_access",
+      "reason": "SERVICE_ONBOARDING",
+      "wording": "Please don’t send passwords, OTPs or access tokens in this chat. The team will guide you through the approved account-access process.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "service_timing_review",
+      "reason": "TIMING_REVIEW",
+      "wording": "The team will confirm the setup or campaign start time after reviewing your requirements. I don’t have a confirmed completion time to promise yet.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    },
+    {
+      "key": "tiktok_management_access",
+      "reason": "SERVICE_ONBOARDING",
+      "wording": "The team will guide you through providing the required TikTok Ads Manager access using the approved onboarding process. Please don’t send passwords or verification codes here.",
+      "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+    }
+  ],
+  "strict": [
+    {
+      "key": "service_difference",
+      "role": "RESPONSE",
+      "text": "With account setup, we set up your advertising account and guide you to run ads yourself. With ads management, we run the campaign for you."
+    },
+    {
+      "key": "setup_budget_separate",
+      "role": "RESPONSE",
+      "text": "The setup fee covers account setup and guidance. Your advertising budget is separate."
+    },
+    {
+      "key": "setup_requirements",
+      "role": "RESPONSE",
+      "text": "{{requirements}}"
+    },
+    {
+      "key": "setup_scope",
+      "role": "RESPONSE",
+      "text": "Account setup covers advertising-account setup and guidance on accessing it and running your own ads."
+    },
+    {
+      "key": "ads_budget",
+      "role": "GUIDANCE",
+      "text": "What is your daily advertising budget?"
+    },
+    {
+      "key": "ads_duration",
+      "role": "GUIDANCE",
+      "text": "How many days would you like the ads to run?"
+    },
+    {
+      "key": "ads_management_details",
+      "role": "GUIDANCE",
+      "text": "What is your daily advertising budget, and how many days would you like to run the ads for?"
+    },
+    {
+      "key": "ads_platform_selection",
+      "role": "GUIDANCE",
+      "text": "Which platform do you want?\n\nTikTok\n\nor\n\nMeta (Facebook & Instagram)?"
+    },
+    {
+      "key": "ads_service_clarification",
+      "role": "GUIDANCE",
+      "text": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?"
+    },
+    {
+      "key": "ai_identity",
+      "role": "GUIDANCE",
+      "text": "This is Joshspot’s automated assistant helping with quick responses 😊 If you’d prefer someone from the team, I can get them for you."
+    },
+    {
+      "key": "confirm_proceed",
+      "role": "GUIDANCE",
+      "text": "Would you like to proceed?"
+    },
+    {
+      "key": "custom_management_price",
+      "role": "GUIDANCE",
+      "text": "The total is {{price}} for {{duration}} days.\n\nThis includes {{ad_budget}} advertising budget and {{management_fee}} management fee.\n\nWould you like to proceed?"
+    },
+    {
+      "key": "customer_declines",
+      "role": "GUIDANCE",
+      "text": "Okay."
+    },
+    {
+      "key": "media_handoff",
+      "role": "GUIDANCE",
+      "text": "Hold on, you will get a response shortly."
+    },
+    {
+      "key": "payment_claim",
+      "role": "GUIDANCE",
+      "text": "Thanks for letting us know. Customer support will check the payment before confirming it."
+    },
+    {
+      "key": "payment_followup",
+      "role": "GUIDANCE",
+      "text": "Would you still like to proceed? Let us know if you need any help with payment."
+    },
+    {
+      "key": "payment_verified",
+      "role": "GUIDANCE",
+      "text": "Payment confirmed. Thank you — I’m passing this to customer support for the next step."
+    },
+    {
+      "key": "pending_payment",
+      "role": "GUIDANCE",
+      "text": "Have you made payment already?"
+    },
+    {
+      "key": "ready_to_proceed",
+      "role": "GUIDANCE",
+      "text": "Should I send the account details now?"
+    },
+    {
+      "key": "recommended_ads_plans",
+      "role": "GUIDANCE",
+      "text": "{{plans}}\n\nWhich one would you like to go with?"
+    },
+    {
+      "key": "service_price",
+      "role": "GUIDANCE",
+      "text": "{{service_name}} costs {{price}}.\n\nWould you like to proceed?"
+    },
+    {
+      "key": "unrelated_question",
+      "role": "GUIDANCE",
+      "text": "I’m here to help with Joshspot services 😊 What would you like help with?"
+    }
+  ],
+  "overlapGroups": [
+    [
+      "service_difference",
+      "setup_vs_management",
+      "choose_service",
+      "ads_service_clarification"
+    ],
+    [
+      "setup_scope",
+      "tiktok_setup_information",
+      "meta_setup_information",
+      "setup_requirements"
+    ],
+    [
+      "campaign_expectations",
+      "review_6ac33e30ba3cd7082113f310_1791180346395"
+    ],
+    [
+      "payment_claim",
+      "payment_claim_information",
+      "receipt_review_information"
+    ]
+  ],
+  "configConflict": {
+    "source": "config.data.instructions",
+    "text": "Service onboarding and access requirements must hand off to CSS immediately after the approved onboarding response.",
+    "note": "Stale relative to the requested pre-payment policy. V2 does not directly load this legacy instruction string into its phase prompts; report as dormant configuration conflict, not proof it caused a V2 handoff."
+  },
+  "plans": [
+    {
+      "key": "plan_7",
+      "configuredTotal": 60000,
+      "recordRevision": 0,
+      "recordUpdatedAt": "2026-10-03T23:02:12.036Z",
+      "calculator": {
+        "advertisingSpend": 35000,
+        "managementFee": 25000,
+        "total": 60000
+      },
+      "sources": {
+        "configured": "catalogue-snapshot.json records.plan_7.data.amount",
+        "advertisingSpend": "inbox/ai/vendor/adsPricingConfig.mjs recommendationPresets",
+        "managementFee": "same calculator getManagementFee()/calculateTotal(), reused by inbox/ai/pricing.js"
+      },
+      "conflict": false
+    },
+    {
+      "key": "plan_10",
+      "configuredTotal": 135000,
+      "recordRevision": 0,
+      "recordUpdatedAt": "2026-10-03T23:02:12.196Z",
+      "calculator": {
+        "advertisingSpend": 100000,
+        "managementFee": 35000,
+        "total": 135000
+      },
+      "sources": {
+        "configured": "catalogue-snapshot.json records.plan_10.data.amount",
+        "advertisingSpend": "inbox/ai/vendor/adsPricingConfig.mjs recommendationPresets",
+        "managementFee": "same calculator getManagementFee()/calculateTotal(), reused by inbox/ai/pricing.js"
+      },
+      "conflict": false
+    },
+    {
+      "key": "plan_15",
+      "configuredTotal": 285000,
+      "recordRevision": 0,
+      "recordUpdatedAt": "2026-10-03T23:02:12.376Z",
+      "calculator": {
+        "advertisingSpend": 200000,
+        "managementFee": 65000,
+        "total": 265000
+      },
+      "sources": {
+        "configured": "catalogue-snapshot.json records.plan_15.data.amount",
+        "advertisingSpend": "inbox/ai/vendor/adsPricingConfig.mjs recommendationPresets",
+        "managementFee": "same calculator getManagementFee()/calculateTotal(), reused by inbox/ai/pricing.js"
+      },
+      "conflict": true
+    },
+    {
+      "key": "plan_30",
+      "configuredTotal": 415000,
+      "recordRevision": 0,
+      "recordUpdatedAt": "2026-10-03T23:02:12.548Z",
+      "calculator": {
+        "advertisingSpend": 300000,
+        "managementFee": 115000,
+        "total": 415000
+      },
+      "sources": {
+        "configured": "catalogue-snapshot.json records.plan_30.data.amount",
+        "advertisingSpend": "inbox/ai/vendor/adsPricingConfig.mjs recommendationPresets",
+        "managementFee": "same calculator getManagementFee()/calculateTotal(), reused by inbox/ai/pricing.js"
+      },
+      "conflict": false
+    }
+  ],
+  "ownerDecision": [
+    {
+      "key": "plan_15",
+      "label": "OWNER DECISION REQUIRED",
+      "choices": [
+        "Keep calculator advertising spend and fee; explicitly update configured package total to calculator result.",
+        "Keep configured package total; explicitly approve revised spend/fee or calculator preset. Do not let the model decide."
+      ]
+    }
+  ]
+}

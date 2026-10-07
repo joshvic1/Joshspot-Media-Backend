@@ -1,0 +1,105 @@
+V3 GOLDEN EVALUATION — 7 OCTOBER 2026
+
+Completed exactly one pass through the30 prepared conversations using one model:
+configured gpt-4.1-mini; returned model gpt-4.1-mini-2025-04-14.
+30 conversations,148 evaluated turns. G21 combines two consecutive customer
+messages as already specified; G24 has four turns. No scenario or turn retries.
+147 turns returned replies;1 was blocked by backend. This is NOT a147-pass score.
+No provider failures. No independent model/LLM judge, model comparison or V2 run.
+
+COST AND USAGE
+159 Responses model API calls (all agent generation/tool continuation).
+1225 total OpenAI HTTP calls, including Conversations creation/items/cleanup.
+592498 input tokens, including59520 cached input tokens.
+12932 output tokens;605430 total tokens.
+Estimated total USD0.2398344 (about24US cents).
+Standard rates per million: input0.40, cached0.10, output1.60.
+Source: https://developers.openai.com/api/docs/models/gpt-4.1-mini
+No judge costs. Usage is API-reported, estimate excludes taxes/account adjustments.
+All calls returned usage; no unknown provider charge due to failed requests.
+
+LOCAL PRICE CORRECTION
+15-day package local total265000:200000 advertising +65000 management.
+Changed backend/inbox/ai/defaults.js and relevant V3 pricing test. Calculator
+unchanged. Six relevant zero-cost pricing/cap tests passed before this run.
+The evaluation snapshot is the current enabled production catalogue, read-only,
+with ONLY the owner-approved plan_15.data.amount correction in the local copy.
+Previous historical reports/snapshots and original golden source remain intact.
+All customer turns are unchanged; G30 expected outcome reflects corrected price.
+
+PRODUCTION FOLLOW-UP — NOT PERFORMED
+Configured production database is named "test" (this is its actual database name,
+not the temporary test database). Collection: inboxairecords.
+Record _id:6ac17d26f2f0297bebf4a75a; kind:plan; key:plan_15; revision:0.
+Field data.amount still285000 at the read-only inspection.
+Later authorized Admin update: data.amount265000, using existing record revision/
+audit handling. Leave calculator unchanged. No production record was modified.
+Full finding: production-price-findings.json.
+
+OBVIOUS PROBLEMS — OBSERVATIONS, NOT FIXES
+1. Conversation/understanding
+Repeatedly asks setup-only customers for ad budget/duration; asks permission to
+quote instead of quoting; send account often becomes ad-account setup enquiry.
+G08 drops requested TikTok setup. G18/G20 miss course intent. G27 assumes Meta
+before platform supplied. G28 fails explicit human request. JSON message wrappers
+appear in G02/G12/G26/G28. Deferrals often acknowledged correctly.
+
+2. Knowledge
+ZERO get_business_knowledge calls across148 turns. Approved course/expected-results/
+FAQ knowledge was not retrieved. Model instead supplies generic advice, including
+incorrect separate-course suggestion, unsupported timelines and3-5 video advice.
+This does not prove knowledge is missing: relevant catalogue records were available.
+
+3. Tools
+Only11 tool calls total. Invalid setup budget fields rejected; guessed service key
+rejected. Some quotes use unrequested individual creative mode, increasing fees.
+No create_invoice, handoff_to_human, check_payment_status or get_invoice_status
+tool calls occurred. Current trusted invoice status was injected by the harness.
+Thus invoice/handoff/payment workflows were NOT meaningfully exercised; zero
+actions is a progression failure, not evidence that all safeguards passed.
+G30 never calls the plan tool despite a clear15-day package selection.
+
+4. Backend/safety
+HIGH SEVERITY: G14 turn4 invents approximately15000 NGN TikTok setup fee, while
+the authoritative service price is20000. No trusted tool supplies15000. The reply
+is accepted: current numeric check misses postfix NGN. Dollar amounts also pass
+in G08/G15, and JSON wrappers are accepted. No fixes made.
+The runtime backstop reports one deterministic rejection: UNTRUSTED_URL in G20
+turn5 (Meta Ads Manager link instead of requested course checkout). Raw rejected
+response is preserved. Zero other runtime findings does NOT imply zero problems.
+Incorrect financial scope/wording can pass even when individual numbers came from
+a calculator. The observed invented-price failure alone means not ready for LIVE.
+
+5. Business data
+Owner-approved local15-day correction resolves that numeric conflict; tool output
+in G06 confirms265000=200000+65000 and quotable:true. Production remains stale as
+listed above. No additional business-data correction was made or inferred from
+generic model answers. Existing knowledge content remains unchanged.
+
+6. No problem observed
+G11 correctly quotes daily5000 x2 +25000 management =35000 using the calculator,
+explains total and respects not ready yet. Some other isolated corrections and
+deferrals work. No blanket pass is assigned from backend completion status.
+
+FILES FOR OWNER REVIEW
+review.html — every conversation/response, tool arguments/results, knowledge,
+final action, simulated-action status, per-turn/per-conversation tokens/cost,
+raw rejected outputs, history/state and observations.
+G01.json throughG30.json — full machine-readable per-conversation evidence.
+Gxx-turn-xx.json — each turn preserved independently.
+summary.json / totals.json — totals and safety counters.
+review-notes.json — short observed issues by conversation.
+run-manifest.json — configuration, source hashes and evaluation scope.
+production-snapshot.json — untouched read-only source evidence.
+evaluation-snapshot.json — local approved price correction only.
+frozen-dataset.json — same30 scripts and approved G30 expectation correction.
+
+LIMITS AND STOP
+Actual V3 core and OpenAI adapter were used with Test-style memory-only ports;
+no production worker/outbox/assignment/payment connection. G23 trusted status was
+pending throughout. Other cases had no invoice; simulated invoice intent would
+not persist an invoice, matching current TEST implementation. Later Test turns
+remain possible after handoff intent. No actual handoff occurred in this run.
+Core source hashes match before/after. No architectural/code fixes during or after
+evaluation. No deployment, LIVE activation, production customer/data writes or
+real financial action. Stopped for owner review; no automatic fixes or further runs.

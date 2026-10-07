@@ -1,0 +1,995 @@
+{
+  "id": "G26",
+  "category": "expected results",
+  "expected": [
+    "Retrieve approved expected-results knowledge; no fabricated numeric reach/sales guarantee; use plans."
+  ],
+  "plannedCustomerTurns": [
+    "run TikTok for me",
+    "what can 60k get me",
+    "how many people will see it",
+    "so you guarantee customers abi",
+    "what do you recommend then"
+  ],
+  "turns": [
+    {
+      "customer": [
+        {
+          "_id": "G26-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "run TikTok for me",
+          "createdAt": "2026-10-07T09:21:46.423Z"
+        }
+      ],
+      "historyBefore": [],
+      "stateBefore": {},
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3378,
+        "output_tokens": 95,
+        "total_tokens": 3473,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0015032000000000001
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "post",
+          "path": "/conversations"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=100&order=asc&after=msg_6ac60f2c7554819590b90a291d57d0f8059b221db6e6e330"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items/msg_059b221db6e6e330006ac60f2d861c8195a1f3cf5e5b0ab6c6"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items/msg_059b221db6e6e330006ac60f2de18c8195be88df9753bac088"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=100&order=asc&after=msg_6ac60f2c7554819590b90a291d57d0f8059b221db6e6e330"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_059b221db6e6e330006ac60f2d60f88195ac45f372d2737e3e",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3378,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 95,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3473
+          },
+          "output": [
+            {
+              "id": "msg_059b221db6e6e330006ac60f2de18c8195be88df9753bac088",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Thanks for your interest in running TikTok ads with us! To get started, could you please let me know if you want us to fully manage your TikTok ad campaigns for you, or would you prefer we just help set up the TikTok ads account so you can run the ads yourself?\n\nAlso, it would help to know your advertising budget and how long you want the campaign to run.\n\nThis info will help me prepare the best options and quote for you."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 3127,
+          "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330"
+        },
+        "action": "reply",
+        "response": "Thanks for your interest in running TikTok ads with us! To get started, could you please let me know if you want us to fully manage your TikTok ad campaigns for you, or would you prefer we just help set up the TikTok ads account so you can run the ads yourself?\n\nAlso, it would help to know your advertising budget and how long you want the campaign to run.\n\nThis info will help me prepare the best options and quote for you.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 4738,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330",
+        "seenMessageIds": [
+          "G26-in-0"
+        ],
+        "contextCharacters": 146,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G26-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "what can 60k get me",
+          "createdAt": "2026-10-07T09:21:51.164Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G26-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "run TikTok for me",
+          "createdAt": "2026-10-07T09:21:46.423Z"
+        },
+        {
+          "_id": "G26-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for your interest in running TikTok ads with us! To get started, could you please let me know if you want us to fully manage your TikTok ad campaigns for you, or would you prefer we just help set up the TikTok ads account so you can run the ads yourself?\n\nAlso, it would help to know your advertising budget and how long you want the campaign to run.\n\nThis info will help me prepare the best options and quote for you.",
+          "createdAt": "2026-10-07T09:21:51.161Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330",
+        "seenMessageIds": [
+          "G26-in-0"
+        ],
+        "contextCharacters": 146,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3553,
+        "output_tokens": 109,
+        "total_tokens": 3662,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0015956
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=100&order=asc&after=msg_6ac60f3122d881959ce43134b44ddec9059b221db6e6e330"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items/msg_059b221db6e6e330006ac60f323f808195879ff6f72772e3f6"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items/msg_059b221db6e6e330006ac60f3290c48195982953aa09245fdf"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=100&order=asc&after=msg_6ac60f3122d881959ce43134b44ddec9059b221db6e6e330"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_059b221db6e6e330006ac60f32174881959d6221fa63e3700c",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3553,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 109,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3662
+          },
+          "output": [
+            {
+              "id": "msg_059b221db6e6e330006ac60f3290c48195982953aa09245fdf",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "With a 60,000 budget for TikTok ads, the exact services and campaign duration depend on what you want:\n\n- Do you want Joshspot to fully manage and run the TikTok ad campaigns for you?  \n- Or just help set up the TikTok ads account so you can run ads yourself?\n\nAlso, how long would you like to run the ads? This helps me provide a detailed quote showing what 60,000 can cover in setup and management. Let me know these details, and I’ll prepare your options."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 3302,
+          "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330"
+        },
+        "action": "reply",
+        "response": "With a 60,000 budget for TikTok ads, the exact services and campaign duration depend on what you want:\n\n- Do you want Joshspot to fully manage and run the TikTok ad campaigns for you?  \n- Or just help set up the TikTok ads account so you can run ads yourself?\n\nAlso, how long would you like to run the ads? This helps me provide a detailed quote showing what 60,000 can cover in setup and management. Let me know these details, and I’ll prepare your options.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 5166,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330",
+        "seenMessageIds": [
+          "G26-in-0",
+          "G26-out-0",
+          "G26-in-1"
+        ],
+        "contextCharacters": 861,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G26-in-2",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "how many people will see it",
+          "createdAt": "2026-10-07T09:21:56.334Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G26-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "run TikTok for me",
+          "createdAt": "2026-10-07T09:21:46.423Z"
+        },
+        {
+          "_id": "G26-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for your interest in running TikTok ads with us! To get started, could you please let me know if you want us to fully manage your TikTok ad campaigns for you, or would you prefer we just help set up the TikTok ads account so you can run the ads yourself?\n\nAlso, it would help to know your advertising budget and how long you want the campaign to run.\n\nThis info will help me prepare the best options and quote for you.",
+          "createdAt": "2026-10-07T09:21:51.161Z"
+        },
+        {
+          "_id": "G26-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "what can 60k get me",
+          "createdAt": "2026-10-07T09:21:51.164Z"
+        },
+        {
+          "_id": "G26-out-1",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "With a 60,000 budget for TikTok ads, the exact services and campaign duration depend on what you want:\n\n- Do you want Joshspot to fully manage and run the TikTok ad campaigns for you?  \n- Or just help set up the TikTok ads account so you can run ads yourself?\n\nAlso, how long would you like to run the ads? This helps me provide a detailed quote showing what 60,000 can cover in setup and management. Let me know these details, and I’ll prepare your options.",
+          "createdAt": "2026-10-07T09:21:56.331Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330",
+        "seenMessageIds": [
+          "G26-in-0",
+          "G26-out-0",
+          "G26-in-1"
+        ],
+        "contextCharacters": 861,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3743,
+        "output_tokens": 109,
+        "total_tokens": 3852,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0016715999999999999
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=100&order=asc&after=msg_6ac60f364ea081959207525217b097b0059b221db6e6e330"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items/msg_059b221db6e6e330006ac60f376ff881958394094e39fbc85e"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items/msg_059b221db6e6e330006ac60f37ce048195af628da3c9acf8a4"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=100&order=asc&after=msg_6ac60f364ea081959207525217b097b0059b221db6e6e330"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_059b221db6e6e330006ac60f37435c8195b27049a8ae005816",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3743,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 109,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3852
+          },
+          "output": [
+            {
+              "id": "msg_059b221db6e6e330006ac60f37ce048195af628da3c9acf8a4",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "The number of people your TikTok ads will reach depends on your budget, campaign duration, targeting choices, and ad content quality. It's not possible to guarantee an exact number of views or impressions in advance.\n\nTo give you a better idea, could you please confirm if you want us to fully manage your TikTok ads or just set up the account for you to run ads yourself? Also, how long do you plan to run the ads with your 60,000 budget? This info helps tailor the estimate on reach and campaign setup."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 3130,
+          "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330"
+        },
+        "action": "reply",
+        "response": "The number of people your TikTok ads will reach depends on your budget, campaign duration, targeting choices, and ad content quality. It's not possible to guarantee an exact number of views or impressions in advance.\n\nTo give you a better idea, could you please confirm if you want us to fully manage your TikTok ads or just set up the account for you to run ads yourself? Also, how long do you plan to run the ads with your 60,000 budget? This info helps tailor the estimate on reach and campaign setup.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 4719,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330",
+        "seenMessageIds": [
+          "G26-in-0",
+          "G26-out-0",
+          "G26-in-1",
+          "G26-out-1",
+          "G26-in-2"
+        ],
+        "contextCharacters": 1619,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G26-in-3",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "so you guarantee customers abi",
+          "createdAt": "2026-10-07T09:22:01.056Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G26-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "run TikTok for me",
+          "createdAt": "2026-10-07T09:21:46.423Z"
+        },
+        {
+          "_id": "G26-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for your interest in running TikTok ads with us! To get started, could you please let me know if you want us to fully manage your TikTok ad campaigns for you, or would you prefer we just help set up the TikTok ads account so you can run the ads yourself?\n\nAlso, it would help to know your advertising budget and how long you want the campaign to run.\n\nThis info will help me prepare the best options and quote for you.",
+          "createdAt": "2026-10-07T09:21:51.161Z"
+        },
+        {
+          "_id": "G26-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "what can 60k get me",
+          "createdAt": "2026-10-07T09:21:51.164Z"
+        },
+        {
+          "_id": "G26-out-1",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "With a 60,000 budget for TikTok ads, the exact services and campaign duration depend on what you want:\n\n- Do you want Joshspot to fully manage and run the TikTok ad campaigns for you?  \n- Or just help set up the TikTok ads account so you can run ads yourself?\n\nAlso, how long would you like to run the ads? This helps me provide a detailed quote showing what 60,000 can cover in setup and management. Let me know these details, and I’ll prepare your options.",
+          "createdAt": "2026-10-07T09:21:56.331Z"
+        },
+        {
+          "_id": "G26-in-2",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "how many people will see it",
+          "createdAt": "2026-10-07T09:21:56.334Z"
+        },
+        {
+          "_id": "G26-out-2",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "The number of people your TikTok ads will reach depends on your budget, campaign duration, targeting choices, and ad content quality. It's not possible to guarantee an exact number of views or impressions in advance.\n\nTo give you a better idea, could you please confirm if you want us to fully manage your TikTok ads or just set up the account for you to run ads yourself? Also, how long do you plan to run the ads with your 60,000 budget? This info helps tailor the estimate on reach and campaign setup.",
+          "createdAt": "2026-10-07T09:22:01.053Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330",
+        "seenMessageIds": [
+          "G26-in-0",
+          "G26-out-0",
+          "G26-in-1",
+          "G26-out-1",
+          "G26-in-2"
+        ],
+        "contextCharacters": 1619,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 4051,
+        "output_tokens": 107,
+        "total_tokens": 4158,
+        "cached_input_tokens": 3840,
+        "estimated_cost_usd": 0.0006396
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=100&order=asc&after=msg_6ac60f3afde08195af7b2b7ded6f4c81059b221db6e6e330"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items/msg_059b221db6e6e330006ac60f3c3d288195b82ad223ec3e5d76"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items/msg_059b221db6e6e330006ac60f3ca11c8195a02ab0242490bb08"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=100&order=asc&after=msg_6ac60f3afde08195af7b2b7ded6f4c81059b221db6e6e330"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_059b221db6e6e330006ac60f3c0f648195ac352c619c6530a4",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4051,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 3840
+            },
+            "output_tokens": 107,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 4158
+          },
+          "output": [
+            {
+              "id": "msg_059b221db6e6e330006ac60f3ca11c8195a02ab0242490bb08",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "{\"messageId\":\"G26-out-3\",\"text\":\"We do not guarantee customers or sales. Advertising results depend on many factors like your offer, audience, ad quality, and market conditions. What we do is run your TikTok ads professionally to maximize your chances of good results, but no guarantees can be made.\\n\\nIf you want, I can explain how we manage campaigns and what realistic expectations you can have. Would you like that? Also, please confirm if you want us to fully manage your TikTok ads or just set up the account for you to run them yourself.\"}"
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 4228,
+          "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330"
+        },
+        "action": "reply",
+        "response": "{\"messageId\":\"G26-out-3\",\"text\":\"We do not guarantee customers or sales. Advertising results depend on many factors like your offer, audience, ad quality, and market conditions. What we do is run your TikTok ads professionally to maximize your chances of good results, but no guarantees can be made.\\n\\nIf you want, I can explain how we manage campaigns and what realistic expectations you can have. Would you like that? Also, please confirm if you want us to fully manage your TikTok ads or just set up the account for you to run them yourself.\"}",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 5821,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330",
+        "seenMessageIds": [
+          "G26-in-0",
+          "G26-out-0",
+          "G26-in-1",
+          "G26-out-1",
+          "G26-in-2",
+          "G26-out-2",
+          "G26-in-3"
+        ],
+        "contextCharacters": 2420,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G26-in-4",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "what do you recommend then",
+          "createdAt": "2026-10-07T09:22:06.880Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G26-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "run TikTok for me",
+          "createdAt": "2026-10-07T09:21:46.423Z"
+        },
+        {
+          "_id": "G26-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Thanks for your interest in running TikTok ads with us! To get started, could you please let me know if you want us to fully manage your TikTok ad campaigns for you, or would you prefer we just help set up the TikTok ads account so you can run the ads yourself?\n\nAlso, it would help to know your advertising budget and how long you want the campaign to run.\n\nThis info will help me prepare the best options and quote for you.",
+          "createdAt": "2026-10-07T09:21:51.161Z"
+        },
+        {
+          "_id": "G26-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "what can 60k get me",
+          "createdAt": "2026-10-07T09:21:51.164Z"
+        },
+        {
+          "_id": "G26-out-1",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "With a 60,000 budget for TikTok ads, the exact services and campaign duration depend on what you want:\n\n- Do you want Joshspot to fully manage and run the TikTok ad campaigns for you?  \n- Or just help set up the TikTok ads account so you can run ads yourself?\n\nAlso, how long would you like to run the ads? This helps me provide a detailed quote showing what 60,000 can cover in setup and management. Let me know these details, and I’ll prepare your options.",
+          "createdAt": "2026-10-07T09:21:56.331Z"
+        },
+        {
+          "_id": "G26-in-2",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "how many people will see it",
+          "createdAt": "2026-10-07T09:21:56.334Z"
+        },
+        {
+          "_id": "G26-out-2",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "The number of people your TikTok ads will reach depends on your budget, campaign duration, targeting choices, and ad content quality. It's not possible to guarantee an exact number of views or impressions in advance.\n\nTo give you a better idea, could you please confirm if you want us to fully manage your TikTok ads or just set up the account for you to run ads yourself? Also, how long do you plan to run the ads with your 60,000 budget? This info helps tailor the estimate on reach and campaign setup.",
+          "createdAt": "2026-10-07T09:22:01.053Z"
+        },
+        {
+          "_id": "G26-in-3",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "so you guarantee customers abi",
+          "createdAt": "2026-10-07T09:22:01.056Z"
+        },
+        {
+          "_id": "G26-out-3",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "{\"messageId\":\"G26-out-3\",\"text\":\"We do not guarantee customers or sales. Advertising results depend on many factors like your offer, audience, ad quality, and market conditions. What we do is run your TikTok ads professionally to maximize your chances of good results, but no guarantees can be made.\\n\\nIf you want, I can explain how we manage campaigns and what realistic expectations you can have. Would you like that? Also, please confirm if you want us to fully manage your TikTok ads or just set up the account for you to run them yourself.\"}",
+          "createdAt": "2026-10-07T09:22:06.877Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330",
+        "seenMessageIds": [
+          "G26-in-0",
+          "G26-out-0",
+          "G26-in-1",
+          "G26-out-1",
+          "G26-in-2",
+          "G26-out-2",
+          "G26-in-3"
+        ],
+        "contextCharacters": 2420,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 4126,
+        "output_tokens": 141,
+        "total_tokens": 4267,
+        "cached_input_tokens": 1920,
+        "estimated_cost_usd": 0.0013
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=100&order=asc&after=msg_6ac60f40d0608195bba4165c1bf0fb0d059b221db6e6e330"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items/msg_059b221db6e6e330006ac60f41e4d881959e3a745883fc7c5a"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items/msg_059b221db6e6e330006ac60f42723c8195981c17a04880dd27"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=100&order=asc&after=msg_6ac60f40d0608195bba4165c1bf0fb0d059b221db6e6e330"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_059b221db6e6e330006ac60f41b8708195a8ec33a0d86873da",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4126,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 1920
+            },
+            "output_tokens": 141,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 4267
+          },
+          "output": [
+            {
+              "id": "msg_059b221db6e6e330006ac60f42723c8195981c17a04880dd27",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "For the best results with your TikTok ads, I typically recommend our full campaign management service. This means we handle everything: targeting, ad creation guidance, budget optimization, and ongoing adjustments to maximize your ad performance.\n\nIf you prefer more control or want to learn, we also offer just an account setup service, where we help you create and configure your TikTok ad account so you can run and manage ads yourself.\n\nTo tailor a recommendation and a quote for your 60,000 budget, could you please confirm:\n- Do you want full TikTok ads management or just account setup?\n- How long do you want the campaign to run?\n\nThis helps us suggest the best package and expected scope."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 3805,
+          "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330"
+        },
+        "action": "reply",
+        "response": "For the best results with your TikTok ads, I typically recommend our full campaign management service. This means we handle everything: targeting, ad creation guidance, budget optimization, and ongoing adjustments to maximize your ad performance.\n\nIf you prefer more control or want to learn, we also offer just an account setup service, where we help you create and configure your TikTok ad account so you can run and manage ads yourself.\n\nTo tailor a recommendation and a quote for your 60,000 budget, could you please confirm:\n- Do you want full TikTok ads management or just account setup?\n- How long do you want the campaign to run?\n\nThis helps us suggest the best package and expected scope.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 5449,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330",
+        "seenMessageIds": [
+          "G26-in-0",
+          "G26-out-0",
+          "G26-in-1",
+          "G26-out-1",
+          "G26-in-2",
+          "G26-out-2",
+          "G26-in-3",
+          "G26-out-3",
+          "G26-in-4"
+        ],
+        "contextCharacters": 3286,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    }
+  ],
+  "completeHistory": [
+    {
+      "_id": "G26-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "run TikTok for me",
+      "createdAt": "2026-10-07T09:21:46.423Z"
+    },
+    {
+      "_id": "G26-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for your interest in running TikTok ads with us! To get started, could you please let me know if you want us to fully manage your TikTok ad campaigns for you, or would you prefer we just help set up the TikTok ads account so you can run the ads yourself?\n\nAlso, it would help to know your advertising budget and how long you want the campaign to run.\n\nThis info will help me prepare the best options and quote for you.",
+      "createdAt": "2026-10-07T09:21:51.161Z"
+    },
+    {
+      "_id": "G26-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "what can 60k get me",
+      "createdAt": "2026-10-07T09:21:51.164Z"
+    },
+    {
+      "_id": "G26-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "With a 60,000 budget for TikTok ads, the exact services and campaign duration depend on what you want:\n\n- Do you want Joshspot to fully manage and run the TikTok ad campaigns for you?  \n- Or just help set up the TikTok ads account so you can run ads yourself?\n\nAlso, how long would you like to run the ads? This helps me provide a detailed quote showing what 60,000 can cover in setup and management. Let me know these details, and I’ll prepare your options.",
+      "createdAt": "2026-10-07T09:21:56.331Z"
+    },
+    {
+      "_id": "G26-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "how many people will see it",
+      "createdAt": "2026-10-07T09:21:56.334Z"
+    },
+    {
+      "_id": "G26-out-2",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "The number of people your TikTok ads will reach depends on your budget, campaign duration, targeting choices, and ad content quality. It's not possible to guarantee an exact number of views or impressions in advance.\n\nTo give you a better idea, could you please confirm if you want us to fully manage your TikTok ads or just set up the account for you to run ads yourself? Also, how long do you plan to run the ads with your 60,000 budget? This info helps tailor the estimate on reach and campaign setup.",
+      "createdAt": "2026-10-07T09:22:01.053Z"
+    },
+    {
+      "_id": "G26-in-3",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "so you guarantee customers abi",
+      "createdAt": "2026-10-07T09:22:01.056Z"
+    },
+    {
+      "_id": "G26-out-3",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "{\"messageId\":\"G26-out-3\",\"text\":\"We do not guarantee customers or sales. Advertising results depend on many factors like your offer, audience, ad quality, and market conditions. What we do is run your TikTok ads professionally to maximize your chances of good results, but no guarantees can be made.\\n\\nIf you want, I can explain how we manage campaigns and what realistic expectations you can have. Would you like that? Also, please confirm if you want us to fully manage your TikTok ads or just set up the account for you to run them yourself.\"}",
+      "createdAt": "2026-10-07T09:22:06.877Z"
+    },
+    {
+      "_id": "G26-in-4",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "what do you recommend then",
+      "createdAt": "2026-10-07T09:22:06.880Z"
+    },
+    {
+      "_id": "G26-out-4",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "For the best results with your TikTok ads, I typically recommend our full campaign management service. This means we handle everything: targeting, ad creation guidance, budget optimization, and ongoing adjustments to maximize your ad performance.\n\nIf you prefer more control or want to learn, we also offer just an account setup service, where we help you create and configure your TikTok ad account so you can run and manage ads yourself.\n\nTo tailor a recommendation and a quote for your 60,000 budget, could you please confirm:\n- Do you want full TikTok ads management or just account setup?\n- How long do you want the campaign to run?\n\nThis helps us suggest the best package and expected scope.",
+      "createdAt": "2026-10-07T09:22:12.329Z"
+    }
+  ],
+  "usage": {
+    "calls": 5,
+    "input_tokens": 18851,
+    "output_tokens": 561,
+    "total_tokens": 19412,
+    "cached_input_tokens": 5760,
+    "estimated_cost_usd": 0.00671
+  }
+}

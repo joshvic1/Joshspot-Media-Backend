@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G16-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I want Meta management",
+      "createdAt": "2026-10-07T09:19:35.803Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3377,
+    "output_tokens": 60,
+    "total_tokens": 3437,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0014468
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=100&order=asc&after=msg_6ac60ea9df248194a082d61bf4c4abdf06663448639a2296"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/msg_06663448639a2296006ac60eab0c2c819483f3e2e143504099"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items/msg_06663448639a2296006ac60eab5e6c8194b08533a545531909"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296/items?limit=100&order=asc&after=msg_6ac60ea9df248194a082d61bf4c4abdf06663448639a2296"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_06663448639a2296006ac60eaae7208194897432a29af8c582",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3377,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 60,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3437
+      },
+      "output": [
+        {
+          "id": "msg_06663448639a2296006ac60eab5e6c8194b08533a545531909",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for choosing Meta ads management. To prepare a quote, could you please tell me:\n\n1. Your total budget or daily ad spend for Meta ads?\n2. How long do you want the ads campaign to run (in days)?\n\nThis helps me give you the best plan and pricing."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 4109,
+      "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296"
+    },
+    "action": "reply",
+    "response": "Thanks for choosing Meta ads management. To prepare a quote, could you please tell me:\n\n1. Your total budget or daily ad spend for Meta ads?\n2. How long do you want the ads campaign to run (in days)?\n\nThis helps me give you the best plan and pricing.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 6405,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60ea968048194a175b5ea08a00fdd06663448639a2296",
+    "seenMessageIds": [
+      "G16-in-0"
+    ],
+    "contextCharacters": 151,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

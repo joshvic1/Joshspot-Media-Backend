@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G17-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "TikTok setup only I will run it myself",
+      "createdAt": "2026-10-07T09:19:37.654Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3382,
+    "output_tokens": 52,
+    "total_tokens": 3434,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.001436
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a/items?limit=100&order=asc&after=msg_6ac60eabaf808197901a9a094eea0fe30bde0b57fbd4286a"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a/items/msg_0bde0b57fbd4286a006ac60eacfc9c8197bf171a638b761a26"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a/items/msg_0bde0b57fbd4286a006ac60ead521881978f301d497397c1ff"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a/items?limit=100&order=asc&after=msg_6ac60eabaf808197901a9a094eea0fe30bde0b57fbd4286a"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0bde0b57fbd4286a006ac60eacbc608197a5def159d8612633",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3382,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 52,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3434
+      },
+      "output": [
+        {
+          "id": "msg_0bde0b57fbd4286a006ac60ead521881978f301d497397c1ff",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for confirming TikTok account setup only, where you will run the ads yourself.\n\nTo prepare an accurate quote, could you please let me know your planned budget for this TikTok setup service? Also, how soon do you want this setup done?"
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 4309,
+      "openaiConversationId": "conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a"
+    },
+    "action": "reply",
+    "response": "Thanks for confirming TikTok account setup only, where you will run the ads yourself.\n\nTo prepare an accurate quote, could you please let me know your planned budget for this TikTok setup service? Also, how soon do you want this setup done?",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 6218,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a",
+    "seenMessageIds": [
+      "G17-in-0"
+    ],
+    "contextCharacters": 167,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

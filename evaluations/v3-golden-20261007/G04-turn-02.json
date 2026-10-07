@@ -1,0 +1,159 @@
+{
+  "customer": [
+    {
+      "_id": "G04-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "instagram too",
+      "createdAt": "2026-10-07T09:16:31.200Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G04-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "set up facebook ads account for me I will run it myself",
+      "createdAt": "2026-10-07T09:16:25.271Z"
+    },
+    {
+      "_id": "G04-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing Facebook ads account setup where you’ll run the ads yourself.\n\nTo proceed with setting up your Facebook ads account, could you please share your budget and how long you plan to run the ads? This helps me prepare an accurate setup quotation for you.",
+      "createdAt": "2026-10-07T09:16:31.198Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8",
+    "seenMessageIds": [
+      "G04-in-0"
+    ],
+    "contextCharacters": 184,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3512,
+    "output_tokens": 51,
+    "total_tokens": 3563,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0014864000000000001
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8/items?limit=100&order=asc&after=msg_6ac60df12d2081978b08c9e13b9fa68004c50c70569ab6b8"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8/items/msg_04c50c70569ab6b8006ac60df2725881978a7822237107106f"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8/items/msg_04c50c70569ab6b8006ac60df2d8d481979fba824eb1cea826"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8/items?limit=100&order=asc&after=msg_6ac60df12d2081978b08c9e13b9fa68004c50c70569ab6b8"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_04c50c70569ab6b8006ac60df2483c8197a1ae6042d5e9f70e",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3512,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 51,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3563
+      },
+      "output": [
+        {
+          "id": "msg_04c50c70569ab6b8006ac60df2d8d481979fba824eb1cea826",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for confirming you want setup for both Facebook and Instagram ads accounts to run yourself.\n\nCould you please share your budget and the duration (in days) you plan to run ads? This will help me provide an accurate setup quote for both platforms."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3048,
+      "openaiConversationId": "conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8"
+    },
+    "action": "reply",
+    "response": "Thanks for confirming you want setup for both Facebook and Instagram ads accounts to run yourself.\n\nCould you please share your budget and the duration (in days) you plan to run ads? This will help me provide an accurate setup quote for both platforms.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4833,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8",
+    "seenMessageIds": [
+      "G04-in-0",
+      "G04-out-0",
+      "G04-in-1"
+    ],
+    "contextCharacters": 732,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

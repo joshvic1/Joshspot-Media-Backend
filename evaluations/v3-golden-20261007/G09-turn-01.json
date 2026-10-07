@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G09-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I want ads",
+      "createdAt": "2026-10-07T09:17:40.924Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3376,
+    "output_tokens": 97,
+    "total_tokens": 3473,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0015056
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60e3687ec8196a95c1a2b3b4c7dd50314e7862cf4ccff/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e3687ec8196a95c1a2b3b4c7dd50314e7862cf4ccff/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e3687ec8196a95c1a2b3b4c7dd50314e7862cf4ccff/items?limit=100&order=asc&after=msg_6ac60e36ec488196b1255319572416ba0314e7862cf4ccff"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e3687ec8196a95c1a2b3b4c7dd50314e7862cf4ccff/items/msg_0314e7862cf4ccff006ac60e3879348196b7503c4523d10170"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e3687ec8196a95c1a2b3b4c7dd50314e7862cf4ccff/items/msg_0314e7862cf4ccff006ac60e38d550819680c844324d9fdb73"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e3687ec8196a95c1a2b3b4c7dd50314e7862cf4ccff/items?limit=100&order=asc&after=msg_6ac60e36ec488196b1255319572416ba0314e7862cf4ccff"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0314e7862cf4ccff006ac60e384c6881969b7c6c20011bb834",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3376,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 97,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3473
+      },
+      "output": [
+        {
+          "id": "msg_0314e7862cf4ccff006ac60e38d550819680c844324d9fdb73",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for reaching out! To get started with ads, could you please tell me:\n\n1. Which platform do you want to advertise on? (For example, TikTok, Facebook, Instagram)\n2. Do you want us to set up the ad account and guide you, or do you want us to fully manage and run your ad campaigns?\n3. What budget and duration are you considering for your ads?\n\nThis will help me provide the best options and quotes for you."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3547,
+      "openaiConversationId": "conv_6ac60e3687ec8196a95c1a2b3b4c7dd50314e7862cf4ccff"
+    },
+    "action": "reply",
+    "response": "Thanks for reaching out! To get started with ads, could you please tell me:\n\n1. Which platform do you want to advertise on? (For example, TikTok, Facebook, Instagram)\n2. Do you want us to set up the ad account and guide you, or do you want us to fully manage and run your ad campaigns?\n3. What budget and duration are you considering for your ads?\n\nThis will help me provide the best options and quotes for you.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 5777,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60e3687ec8196a95c1a2b3b4c7dd50314e7862cf4ccff",
+    "seenMessageIds": [
+      "G09-in-0"
+    ],
+    "contextCharacters": 139,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

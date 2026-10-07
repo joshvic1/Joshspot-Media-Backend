@@ -1,0 +1,746 @@
+[
+  {
+    "key": "ads_budget",
+    "title": "Missing budget",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "ads_duration",
+    "title": "Missing duration",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "ads_management_details",
+    "title": "Budget and duration",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [
+        "ADS_MANAGEMENT"
+      ],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "ads_management_information",
+    "title": "Ads management",
+    "enabled": true,
+    "metadata": {
+      "topics": [
+        "ASK_SERVICE_INCLUSIONS"
+      ],
+      "platforms": [],
+      "services": [
+        "ADS_MANAGEMENT"
+      ],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "ads_platform_selection",
+    "title": "Choose platform",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "ads_service_clarification",
+    "title": "Setup or management",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "advertising_services",
+    "title": "Advertising services",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "after_payment_process",
+    "title": "After-payment process",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "ai_identity",
+    "title": "Automated assistant identity",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "budget_guidance",
+    "title": "Unsure about budget",
+    "enabled": true,
+    "metadata": {
+      "topics": [
+        "ASK_RECOMMENDATION"
+      ],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "campaign_expectations",
+    "title": "Performance expectations",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "choose_service",
+    "title": "Unsure which service to choose",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "confirm_proceed",
+    "title": "Confirm purchase decision",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "custom_budget_review",
+    "title": "Custom budget",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "custom_management_price",
+    "title": "Custom ads quote",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [
+        "ADS_MANAGEMENT"
+      ],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "customer_declines",
+    "title": "Customer is not ready",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "existing_ad_account",
+    "title": "Existing advertising account",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "existing_campaign_issue",
+    "title": "Existing campaign problem",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "expired_payment_details",
+    "title": "Expired payment details",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "generic_first_contact",
+    "title": "Generic First Contact",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "human_support_information",
+    "title": "Human support request",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "incorrect_payment_amount",
+    "title": "Incorrect transfer amount",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "invoice_correction",
+    "title": "Incorrect invoice details",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "invoice_information",
+    "title": "Invoice request",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "media_handoff",
+    "title": "Media handoff",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "meta_explanation",
+    "title": "Facebook and Instagram terminology",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [
+        "META"
+      ],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "meta_management_access",
+    "title": "Meta management access",
+    "enabled": true,
+    "metadata": {
+      "topics": [
+        "ASK_REQUIREMENTS",
+        "ASK_TECHNICAL_HELP"
+      ],
+      "platforms": [
+        "META"
+      ],
+      "services": [
+        "ADS_MANAGEMENT"
+      ],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "meta_setup_information",
+    "title": "Meta account setup",
+    "enabled": true,
+    "metadata": {
+      "topics": [
+        "ASK_REQUIREMENTS",
+        "ASK_SERVICE_INCLUSIONS",
+        "ASK_TECHNICAL_HELP"
+      ],
+      "platforms": [
+        "META"
+      ],
+      "services": [
+        "ACCOUNT_SETUP"
+      ],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "other_services_review",
+    "title": "Other Joshspot services",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "package_inclusions_review",
+    "title": "Package inclusions",
+    "enabled": true,
+    "metadata": {
+      "topics": [
+        "ASK_SERVICE_INCLUSIONS",
+        "ASK_BREAKDOWN"
+      ],
+      "platforms": [],
+      "services": [
+        "ADS_MANAGEMENT"
+      ],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "payment_claim",
+    "title": "Payment needs verification",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "payment_claim_information",
+    "title": "Payment made",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "payment_followup",
+    "title": "Pending invoice reminder",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "payment_pending_review",
+    "title": "Payment not confirmed",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "payment_process",
+    "title": "How payment works",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "payment_verified",
+    "title": "Verified payment",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "pending_payment",
+    "title": "Payment status question",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "ready_to_proceed",
+    "title": "Offer payment details",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "receipt_request",
+    "title": "Receipt request",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "receipt_review_information",
+    "title": "Receipt submitted",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "recommended_ads_plans",
+    "title": "Recommended plans",
+    "enabled": true,
+    "metadata": {
+      "topics": [
+        "ASK_RECOMMENDATION"
+      ],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "refund_cancellation_review",
+    "title": "Refund or cancellation request",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "response_time_information",
+    "title": "Response-time question",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "review_6ac33e30ba3cd7082113f310_1791180346395",
+    "title": "Expected Views / Engagement",
+    "enabled": true,
+    "metadata": {
+      "topics": [
+        "ASK_EXPECTED_RESULTS"
+      ],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "secure_account_access",
+    "title": "Secure account access",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "self_managed_ads",
+    "title": "Customer runs their own ads",
+    "enabled": true,
+    "metadata": {
+      "topics": [
+        "ASK_COURSE_DETAILS",
+        "ASK_SERVICE_INCLUSIONS"
+      ],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "service_difference",
+    "title": "Setup versus campaign management",
+    "enabled": true,
+    "metadata": {
+      "topics": [
+        "ASK_SERVICE_INCLUSIONS"
+      ],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "service_price",
+    "title": "Present price",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "service_timing_review",
+    "title": "Setup and launch timing",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "setup_budget_separate",
+    "title": "Setup fee and advertising spend",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "setup_requirements",
+    "title": "Account setup requirements",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "setup_scope",
+    "title": "What account setup includes",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "setup_vs_management",
+    "title": "Setup versus management",
+    "enabled": true,
+    "metadata": {
+      "topics": [
+        "ASK_SERVICE_INCLUSIONS"
+      ],
+      "platforms": [],
+      "services": [
+        "ADS_MANAGEMENT"
+      ],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "supported_platforms",
+    "title": "Supported platforms",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "tiktok_management_access",
+    "title": "TikTok management access",
+    "enabled": true,
+    "metadata": {
+      "topics": [
+        "ASK_REQUIREMENTS",
+        "ASK_TECHNICAL_HELP"
+      ],
+      "platforms": [
+        "TIKTOK"
+      ],
+      "services": [
+        "ADS_MANAGEMENT"
+      ],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "tiktok_setup_information",
+    "title": "TikTok account setup",
+    "enabled": true,
+    "metadata": {
+      "topics": [
+        "ASK_REQUIREMENTS",
+        "ASK_SERVICE_INCLUSIONS",
+        "ASK_TECHNICAL_HELP"
+      ],
+      "platforms": [
+        "TIKTOK"
+      ],
+      "services": [
+        "ACCOUNT_SETUP"
+      ],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  },
+  {
+    "key": "unrelated_question",
+    "title": "Unrelated question",
+    "enabled": true,
+    "metadata": {
+      "topics": [],
+      "platforms": [],
+      "services": [],
+      "excludedServices": [],
+      "mandatory": false
+    }
+  }
+]

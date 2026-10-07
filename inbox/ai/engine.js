@@ -99,6 +99,10 @@ async function decideCore({text,type='text',state={},config,records,knowledge=[]
   return handoff(service ? 'CUSTOM_PLAN_REVIEW' : 'NO_KNOWLEDGE',meta);
 }
 async function decide(args){
+ const selected=args.engineVersion||require('./runtime').version(args.config);
+ if(selected==='v3')return require('./v3').decide(args);
+ if(selected==='v4')return require('./v4').decide(args);
+ if(selected==='v2')return require('./v2').decide(args);
  if(args.config.structuredSales)return require('./structuredEngine').decide(args);
  const result=await decideCore(args);
  if(result.action==='reply' && require('./responsePolicy').promisesHandoff(result.response,args.config.fallbackResponse))return {...result,action:'handoff',handoff:'RESPONSE_REQUIRES_STAFF',handoffTeam:'CSS'};

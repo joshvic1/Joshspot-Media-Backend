@@ -24,7 +24,7 @@ conversation.index({ assignedTo: 1, status: 1, lastMessageAt: -1, _id: -1 });
 conversation.add({ collaborators: [{ type: Schema.Types.ObjectId, ref: 'Staff' }] });
 conversation.add({ ai: {
   phoneId:String, active: {type:Boolean,default:true}, pending:Boolean, pendingAt:Date, leaseUntil:Date, leaseToken:String,
-  version:{type:Number,default:0}, lastProcessedId:Schema.Types.ObjectId, state:Schema.Types.Mixed,
+    version:{type:Number,default:0}, lastProcessedId:Schema.Types.ObjectId, state:Schema.Types.Mixed, v3:Schema.Types.Mixed, v4:Schema.Types.Mixed,
   handoffPending:Schema.Types.Mixed, handoffRetryAt:Date, assignmentError:String, draft:Schema.Types.Mixed, handoffReason:String, needsHuman:Boolean, priority:Boolean,
   consecutive:{type:Number,default:0}, returnedBy:String, sendLease:Date,
 } });
@@ -47,7 +47,7 @@ const message = new Schema({
 }, { timestamps: true });
 message.add({ mentions: [{ type: Schema.Types.ObjectId, ref: 'Staff' }], mentionsPending: Boolean, routingPhoneId: String, 'media.asset': ref('InboxMedia'), reactions: { type: Map, of: new Schema({ emoji: String, name: String, timestamp: Number, providerId: String, status: String }, { _id: false }) }, reactionLease: Date });
 message.index({ 'media.id': 1, 'media.asset': 1 });
-message.add({ automation: {version:Number, inputId:Schema.Types.ObjectId, configRevision:Number, handoff:Boolean, followup:Schema.Types.ObjectId} });
+message.add({ automation: {version:Number, inputId:Schema.Types.ObjectId, configRevision:Number, handoff:Boolean, followup:Schema.Types.ObjectId, question:Schema.Types.Mixed, delivery:Schema.Types.Mixed, engineVersion:String} });
 message.index({ conversation: 1, createdAt: -1, _id: -1 });
 message.index({ conversation: 1, updatedAt: 1, _id: 1 });
 message.index({ mentionsPending: 1 });

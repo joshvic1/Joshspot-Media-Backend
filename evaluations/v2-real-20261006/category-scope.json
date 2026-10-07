@@ -1,0 +1,10 @@
+{
+ "purpose":"Reporting scope only. Frozen expected outcomes and raw judge outputs remain unchanged. Prevents classifying assistant handoff as CUSTOMER deferral, or unchanged service on every unrelated message as course-switch success.",
+ "Deferrals/refusals":["deferral","sent-refusal"],
+ "Course/service switching":["course","course-detour","course-switch","course-return"],
+ "Corrections":["correction","course-return"],
+ "Multi-question coverage":["multiple-questions","multi-question","service-question","sent-service-question"],
+ "Knowledge retrieval":["semantic-retrieval","updated-retrieval","business-questions","service-question","sent-service-question","interruption","privacy","course","course-detour","course-switch","course-return"],
+ "Budget interpretation":["budget","all-inclusive-budget","budget-semantics","budget-advice","multi-fact","multi-question","message-burst","recommendation","correction","reported-failure"],
+ "Duration interpretation":["sent-duration","multi-fact","multi-question","message-burst","budget","budget-semantics","recommendation","correction","reported-failure"]
+}

@@ -1,0 +1,61 @@
+{
+  "conversations": 8,
+  "plannedTurns": 30,
+  "turnsAttempted": 21,
+  "turnsCompleted": 14,
+  "unreachedTurns": 9,
+  "interpreterCalls": 21,
+  "composerCalls": 28,
+  "composerRepairs": 10,
+  "totalCalls": 49,
+  "inputTokens": 78984,
+  "cachedInputTokens": 42202,
+  "outputTokens": 17045,
+  "totalTokens": 96029,
+  "estimatedUSD": 0.124131695,
+  "callsWithoutUsage": 0,
+  "byModel": {
+    "gpt-6.1-sol": {
+      "calls": 21,
+      "inputTokens": 33563,
+      "cachedInputTokens": 25140,
+      "outputTokens": 9319,
+      "totalTokens": 42882,
+      "estimatedUSD": 0.11673000000000001,
+      "reasoning": "medium",
+      "cacheWriteTokens": 8360
+    },
+    "gpt-6-luna": {
+      "calls": 28,
+      "inputTokens": 45421,
+      "cachedInputTokens": 17062,
+      "outputTokens": 7726,
+      "totalTokens": 53147,
+      "estimatedUSD": 0.007401695,
+      "reasoning": "medium",
+      "cacheWriteTokens": 21287
+    }
+  },
+  "cacheWriteTokens": 29647,
+  "returnedModels": [
+    "gpt-6.1-sol",
+    "gpt-6-luna"
+  ],
+  "runElapsedSeconds": 349.262,
+  "averageCostPerCompletedTurn": 0.008866549642857142,
+  "averageCostPerConversation": 0.015516461875,
+  "averageAttemptLatencyMs": 16611.190476190477,
+  "medianAttemptLatencyMs": 15401,
+  "averageCompletedLatencyMs": 16659.64285714286,
+  "slowestTurn": {
+    "scenario": "D",
+    "turn": 1,
+    "latencyMs": 27376
+  },
+  "highestCostTurn": {
+    "scenario": "D",
+    "turn": 1,
+    "cost": 0.009218400000000002
+  },
+  "costNote": "Observed returned usage at the frozen adapter standard rates; unreported usage is unknown, not assumed free. Average/completed includes failed-attempt spend."
+}

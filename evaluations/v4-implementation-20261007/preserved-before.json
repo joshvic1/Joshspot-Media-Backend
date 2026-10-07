@@ -1,0 +1,1054 @@
+[
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\catalogue.js",
+    "Hash": "5AF4FAC1795A3F635A16DB45767DC491919B9B037C0A9C7A9A52BACAEE9856E9"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\context.js",
+    "Hash": "03C6D5203A3E734698701034C1BA219D251056FF03121154616AE09FFD96C632"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\contracts.js",
+    "Hash": "3942E28E33766D615CD191C1C65D146A06D73C52BE4393BC4E922A0A33B99538"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\conversation.test.js",
+    "Hash": "B2AC7C8BC338CD16076CA9D234A31D6B56F766F1D1C97A09A999170B6047D47B"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\core.test.js",
+    "Hash": "AE5E89BCDE98D37946108A213280E8EA0D3CCE93999EF027B8252A497FDAF1AC"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\cost.js",
+    "Hash": "417B58431148644E2E72ACF46677E4B711B29B1EE93C0D834860881C29A6E4DD"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\fakeOpenai.test-helper.js",
+    "Hash": "073B18072C17B194A36ADF8170D5E47EE242A5783A151D460D1BEC8E20DB926B"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\financial.js",
+    "Hash": "D21D04500DFC8B5CAC63A464D9CA0FA723C62EBFCB32B84AF1C98959435230B7"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\index.js",
+    "Hash": "F60C9D7B77F6A1A782A7502B778E32CFE8D7D5EF85BB1D83052263C5A57428A6"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\instructions.js",
+    "Hash": "A0A973139A4A6D79BC52FDAACD0BF1B9E1277E074DADD33EB870FAF764B04FBD"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\integration.test.js",
+    "Hash": "91CC4E469AC83C98E32FD20F22AA61598833444DFCBD76437877A4E97CC65C67"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\openai.js",
+    "Hash": "7BB73A92D2281171927DDC432916E1A2DB839EE7537B71D02310ACF467A678DB"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\pricing.js",
+    "Hash": "8AD1AB1EE4E82CDEFAD615D19EAFD3078B2E1BF7253D5D28A560C3F74D8A405C"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\provenance.js",
+    "Hash": "ED3ED29AA2894DDD320BF6B7540D078648FA6CB0E12CC68986BFEABC3B7A9811"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\README.txt",
+    "Hash": "CBEF86CFF506B123C6144E1F32CE8FC3834F4245B61BB8E1B3E4368FF2B95F14"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\repairs.test.js",
+    "Hash": "7D46485599944F4CB113BDF93EC9195E2F75275B2F6079E9BE06D12D651034E0"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\testAgent.js",
+    "Hash": "734D33819F5AF6CFB041CEACE22059E5B3F978F995D759DA626FEC94832A8DD3"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\tools.js",
+    "Hash": "B1E7D2A7FF9C785A4DD55FC2BC2408C948E522F5EAA85BF5E92D3FC6E7BC9536"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\turn.js",
+    "Hash": "90DAD044EBF8BA6C65B1AF6023AA1255B10076646CBAFF529765AF66A4043CC5"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\validation.js",
+    "Hash": "3F51D58D5997F43EAA34A764896A628D496A39A3DCEBCE0C2C9F8A73968278F9"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v3\\worker.js",
+    "Hash": "A22BE387ACFDEDDB36CD62D136DD9DD4199CA33000EC829BED3244925316FF23"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\architecture.test.js",
+    "Hash": "84EBCBD73C4FD382583F031428C7F95896A49CB743F283E740BB99C32F7D2094"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\authority.js",
+    "Hash": "EF4A60CB763CDA3A067C59765D5FBFFC34DEEAB7F2BD682E042E885E86846B03"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\budget.js",
+    "Hash": "FD9280CB8F709A2F1F8D733CA3848B2C8C663053BC20B8D8DC74F6A5D8F32D84"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\compose.js",
+    "Hash": "2359CBC43D34CC7AFFB77503427A3368D1697FA09095ECE335152F04881231D3"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\consent.js",
+    "Hash": "0A9325ACD5A09369409D6A4E51F270C22BB47E7B8B2B6082B21572690F240215"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\context.js",
+    "Hash": "0155ADC6774F96BAE1473E256D2D0AC0A4D8868DEC32DED0A0F51029A7AAE6F7"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\contracts.js",
+    "Hash": "CE2F6F1A3EAC4A1D50C1C378684005AB38D6948A6F90DD4FDEF30BCAF91D820F"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\core.test.js",
+    "Hash": "40AC885F1260D20D5F8AE0DACE0D7167B82E6D1EBA1806EC2248BCDF26786509"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\delivery.js",
+    "Hash": "54D86C74B06AB0B5AC31CE8B539D1FC6912B6880AF7FFCAFC1DD3B166B1A4997"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\fixtures.js",
+    "Hash": "15B450988A44572CBB46FD70A1C1FF7E2F8BC5548AB2A629824E77421EAD83BF"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\index.js",
+    "Hash": "3A7366E9D6E1ECC8255A53F7478645D181802653F6DD88D6735BAAC52E3F9644"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\integration.test.js",
+    "Hash": "1F0CE6A28669C414CA7948D00AEC182E81B4E3A009647DB67D6848DC9B7C05FF"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\knowledge.js",
+    "Hash": "31584D2E809F09704D667F3157DFC39BEEFD6AC7CCFDA56839DB065ACD66B92F"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\ledger.js",
+    "Hash": "B0A470AEF7080FFCC7D9DE1CD9EF6272EB90C4425C281305927A5565AE68FC6E"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\model.js",
+    "Hash": "8A946AC833C2A3F8BA1BFF2F94DAF93B67BB64CB93B6D4F3F3A22B33BB967E4A"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\planner.js",
+    "Hash": "BAFF0CA9D1965D52EC667529CF44F229BB23A5AD27C96926D93C8711D544ACA5"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\privacy.js",
+    "Hash": "4092417B4B2BF83650C71D1001C2A2C861C58BA85CF1C6E33BAF1B02C7D8CD45"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\README.md",
+    "Hash": "0324C04287C9943CE2ABFEC3AB71571EA03D71B71206A90682CAD0A7ED3F4E9B"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\runtime.js",
+    "Hash": "9A566A1B7D482C4FB857D4FAD00CFC50E69E83AD2219035D326A5631884FD094"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\shadow.js",
+    "Hash": "3043EFF4D58E4CA1D253D00DB85FE2925FD280D776F576880F4262D9DB92E2AD"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v2\\state.js",
+    "Hash": "CD617FCA0CE4A20801776C116ED135A0CCE1FF10C2D2AE1D56BAC84BCA927D98"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\evaluation-snapshot.json",
+    "Hash": "5C264FFABE7D525F1028770C1780471B8DBE611A662DF1648620A375B9819456"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\frozen-dataset.json",
+    "Hash": "A0C891690510A3D92B98CB5E85359627C934FAAA7C9B73BD6D71D8BF0B58A6AA"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G01-turn-01.json",
+    "Hash": "8F13EB0DD5F30AB98A2C8D64BCB270FF4140B8CA8EFB07F4A3D38E3273C4B086"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G01-turn-02.json",
+    "Hash": "42B00E8F656EC4EB7E729CB779E1FB5118CD1FB4CCA3219097E2585B9BCD4227"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G01-turn-03.json",
+    "Hash": "43AE2375AF3B946213818932F0AECDD8A56245D90B91F81BC9CD9ADBF084E1BA"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G01-turn-04.json",
+    "Hash": "781663DDC3AF7B48A0EB45AC2527E70CE1C7557923B8B0BD77CE700E263C1686"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G01-turn-05.json",
+    "Hash": "BA703BE46107198603A6D231822F4DC084DFF6E43B6C4FFE08C0CBB61BEDBE96"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G01.json",
+    "Hash": "047506EA2604161C5AE0D3A95929467AB7E5A95EAA53A671D212CBE80AD50EB1"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G02-turn-01.json",
+    "Hash": "6259ACFE55E60112BBF35E3E4842C978AA58E20C09193ECC337799A158D5F8D4"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G02-turn-02.json",
+    "Hash": "3D4C0E60D1DEF6E83A1FD3301DC14054FCC21F7CD0B8EBDA30F5642452B7AE44"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G02-turn-03.json",
+    "Hash": "3F0F5B6A5F65C8F45DA83390B2EFA60D7AFA5A07433B8E8692597E9D915BDA9A"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G02-turn-04.json",
+    "Hash": "BD90D689056CFF268A5D2F4CBF7C8B4B1BE007FAA4D2E23DFD0B975D9D307675"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G02-turn-05.json",
+    "Hash": "AEC1FF25471C6B4DC0717A1CBC392C347A189450912BD1FA5FF900FD2853337D"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G02.json",
+    "Hash": "72572FBEB949BCF74BC51C21F52F6503EFE8593FBC0FC8D0B822C2E99C290983"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G03-turn-01.json",
+    "Hash": "728908A6D3982DAA60AC9B6FB96068170CA6ACF54F0FCC05EDBEDA050C175A63"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G03-turn-02.json",
+    "Hash": "F996E8A28A4527800B29B6442F31BD7D9AEC518585DF19F28314EABB69DD32C2"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G03-turn-03.json",
+    "Hash": "000A59971AA72B4B6E02925A2E6F2CE263E3A1E696A9C76A3CE663C76E3D133F"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G03-turn-04.json",
+    "Hash": "5B1F225A40941D932531F8862AC314289A1FAB12AFC1A19CECC025DA5A54C356"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G03-turn-05.json",
+    "Hash": "096DA1EDA17359AE3CB24BF7C78EFD9DBD566950D9022DCD5B9B5E715359B376"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G03.json",
+    "Hash": "ED4D9BAF7B007288C2E03BE75C109DCC203AEC978586C36E56F12D513DC5288E"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G04-turn-01.json",
+    "Hash": "9AFE0A7AE8CF83C69FDD679F42F1A2625A2F3C549ABBB0A0366FE793F1C5B0A9"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G04-turn-02.json",
+    "Hash": "75F386F7AF97E80527DB654290AD82EF6EC064DBC801CFBDD5957A86BF8A8F10"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G04-turn-03.json",
+    "Hash": "9E617ECF74FFE90CA16BCEBF29DAC8D10D0C8362423FE2DF5F1BB8060AE66C29"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G04-turn-04.json",
+    "Hash": "281B1768712438270920E7FB0800777D7A9B90FA2DE12F3950BBA56BEB92510D"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G04-turn-05.json",
+    "Hash": "04115E30443882FBBBB8449A1E3E2B88D1A9E81B12D5325C8AF98A5AD642B9E1"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G04.json",
+    "Hash": "EFC47B47385914D7B8EDBEECEAF416FD9F8CC2711E7D00AB31CAC631D9453333"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G05-turn-01.json",
+    "Hash": "FDD652DDD3A3471D83B647CA08898ACEECB3ABBFBDF2ED6207B02BC72F2C512F"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G05-turn-02.json",
+    "Hash": "9B5E36875CC748B001FDE3D683F11A656F32FE28E0C01E3608DDEEBC9AA2A22F"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G05-turn-03.json",
+    "Hash": "A0B39E9F8565DB158A25B9494223E91DD71F82856CBB11FD2D11D60601939133"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G05-turn-04.json",
+    "Hash": "93A9EBB428BD5EAAC234068B19F7C6C865B730C80BBB3AFF0D4F099C654C1559"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G05-turn-05.json",
+    "Hash": "3225A67C95A14131B64D9951CEB23359F63064AD448659F109A19E53275FBCB3"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G05.json",
+    "Hash": "1F993FDF1E7167D68A619CCE9959991C92EFC846F0FFB1707F1D0D75A445FE8F"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G06-turn-01.json",
+    "Hash": "37D5070B0073F4F21290DF6E463AB1FAFCED85AB4BBA0FCE147DE2F952120D5E"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G06-turn-02.json",
+    "Hash": "0AF1F1D00FCEA999C663D7B714AF58C165C3877D312CF266DA13AE8C829A7DFE"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G06-turn-03.json",
+    "Hash": "431B22533529F68DB1D50E4E3A1609BE97031B11C768DA5DDF08BDD7DB1F9A0D"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G06-turn-04.json",
+    "Hash": "9CDA51D68921C3CA1DFBE36FA7DE3D879400E4AE1BD5ECB51D97B87697FA2F04"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G06-turn-05.json",
+    "Hash": "E73F90B24A40144B3405FCBC156060ABFDCE96EABDF7C0797A3D7372EE2D38C3"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G06.json",
+    "Hash": "B0CC25D593753F8B7992792E14843CE4F8E0A8391C4624B1DAEDFF78A6C1C6C4"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G07-turn-01.json",
+    "Hash": "3B686DA8831EE7D32304DF68EE9A9A36743D45BF22412309436843B70597CADF"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G07-turn-02.json",
+    "Hash": "3C50A28E0CD1B19A9D20CAED3BA61DE7738DE1BB274D77DB6237CEEA6BE5C943"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G07-turn-03.json",
+    "Hash": "1532D7C00E217DCBFC3A1F2CC9DB4C058D40536DEBB88360A4904CFF1648D64F"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G07-turn-04.json",
+    "Hash": "8424AC2250453441F8F80B5430D649B6E4EE19DA408AB41E0453A42266F9E82C"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G07-turn-05.json",
+    "Hash": "29E2B2ACFC78DBF4E62449777AF816D7819553F96D3DDE6F48F04B385F78CD2E"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G07.json",
+    "Hash": "A65E99B8BD513D73B2C0B645FB31CFCABD3E7BF9D5DA5E52011A4443B5BEFBD7"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G08-turn-01.json",
+    "Hash": "2193E3E6FCEB2A80D747512D9D05A1638FB9058B6B5173510F2EE0FE040E4C52"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G08-turn-02.json",
+    "Hash": "C4C9DB56B368D4A029F9ABD6754E6D33F7CF8BA85F4BCFB9E4E20B597E297426"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G08-turn-03.json",
+    "Hash": "D1C6E7AF56B1B0189AFE2FF325DB8A0649CC493C2ECBAB62A20E2FC0720C31FE"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G08-turn-04.json",
+    "Hash": "5FD22B036F4936018D0321A13B06634A8C3E27752E11EBF9500887F21963A27D"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G08-turn-05.json",
+    "Hash": "77D3B1B9F61BE6A69142F42D36AFF1D9ACB7D3FF7DB2F44D5BC1AF04F70B5D02"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G08.json",
+    "Hash": "DC33F82C21A88216FE310B818A53FE8973A63DFD72A5116C198B16374988C813"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G09-turn-01.json",
+    "Hash": "5307CCE5F34287BE499915BEC043A3BB850C2D6DA2C03255614306CD0E4854B8"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G09-turn-02.json",
+    "Hash": "F052E9983A9959131713A3C7FE9F6F70E0DFF5C2E9C71CDCD07F7C1B18DFB1A9"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G09-turn-03.json",
+    "Hash": "623E7117875BB54C5F4ED3FFDA88123A67245934B3F82950CCC8FE4C9A284E2B"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G09-turn-04.json",
+    "Hash": "D5EA898129EE4D1F8873A69A4CA84D040AFFC51523BFEC8BE20E06E642090FA8"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G09-turn-05.json",
+    "Hash": "85AC6074FE60F6741ED049D8D9B5F25847B04062B6B7CD6CCC7200E5B2654F7C"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G09.json",
+    "Hash": "23603FAE87530FAC3C8168A19DE966084591B0245A91B784BC2334B70927D6C8"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G10-turn-01.json",
+    "Hash": "C0D561BAF80773C6F5E1FAC81EBB5822E6C9D000B3F9320715ED5D09377F67E3"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G10-turn-02.json",
+    "Hash": "B060CDC95A7CBC0914B2F1E78357E6A163F3C86FD3BC0B07E84FC7787E35B0B0"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G10-turn-03.json",
+    "Hash": "D65C060D4CDE1B1B8B1E650D98A4AAACB5E425DFB1066BB7307673451EE05048"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G10-turn-04.json",
+    "Hash": "6F8010F15CCD3C250903979266C06AC902BFBCF35A3849EE0BD4037BDE75DBA8"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G10-turn-05.json",
+    "Hash": "A17611CDF819720729E4F8596326BD8B88B2AA7EF61A362585C546CB0D210038"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G10.json",
+    "Hash": "6E12255741C42FB14070693EFF519F3F9F9A725DDB9F0AAA02342505BD1EB82D"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G11-turn-01.json",
+    "Hash": "1174B0AF66B34032486E3C60168DC93FCFFCC72A0566AC13FEE34DCC23928083"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G11-turn-02.json",
+    "Hash": "13BFB871112A225C836E9751802F2788B071BFA359288E89EADC882806731108"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G11-turn-03.json",
+    "Hash": "3CDAC877554D572C057B94D2881C90C97F3C34D02B0F81C90D4738AB1E098368"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G11-turn-04.json",
+    "Hash": "BB349B0161501FF24A40B7661FD16C2FB06D26B696EA196C1BC78ED72DA140A6"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G11-turn-05.json",
+    "Hash": "130D8309FEBBFE7457079BDA66617AD1F04D5343C89777556626D976BF39FAAE"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G11.json",
+    "Hash": "C3829E05228BD8F631E26B0EAEE15C2A282EDC2DB8629E3F6E540E7163E43EB2"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G12-turn-01.json",
+    "Hash": "578F5267339ECED2FA7E02D81B35100DC4325855DE3E976376B04F614F6F8B41"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G12-turn-02.json",
+    "Hash": "213A4C257548C13DA9BE679951F922C7DBDAD0BACEB8D4582286FBCE47FCF120"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G12-turn-03.json",
+    "Hash": "3255B0CF8E238C849003FDDC80E7B4B2ACBB2165B887DD4207902CA501226AB7"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G12-turn-04.json",
+    "Hash": "4EAC07CF7EC0DC1475F0A61D73721FBF8FD1E999472F4D62FD066FC57C141E93"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G12-turn-05.json",
+    "Hash": "7C53A4424CBF717FDE299D61AD180B3D2C2075F2BE78C3D1D9DFE183E5A13EB4"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G12.json",
+    "Hash": "EDD846FF7A6CA11AE199A29F1DB0316B511391AB7ED9DA3988E3DDA77B3A735F"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G13-turn-01.json",
+    "Hash": "92BE2CDCBFFDDB0FB2CF899ACA9A353B7808FA13395BF7539562980FF5E525C6"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G13-turn-02.json",
+    "Hash": "A447755ACE8AC05C38555D95CFBEF4D1D4BD858A4A4051D509014C2CEF652577"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G13-turn-03.json",
+    "Hash": "4AB20137C1766663B01A6717612A16CD4D4EC818C7CB93A71A210D9243AA4ED6"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G13-turn-04.json",
+    "Hash": "B169826BAF3AE85F4E5F56D4EA613AD841B4C566D11B7196A5762EDA5199BB9A"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G13-turn-05.json",
+    "Hash": "5D0933F0EF20FD67D0C88B0004AD7B056827FC533C8690F62C5D60CA72330DD7"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G13.json",
+    "Hash": "0252AB78F87A06792B8A300F3AEB8EE3A52B3F944559C2EAD77DEDCE148F8622"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G14-turn-01.json",
+    "Hash": "C43DFB8E42F59D4F6BF49FC3EE5E4D1CCD58D78ED8BB305D06FB4461873C3EA8"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G14-turn-02.json",
+    "Hash": "AD3EAEA2080630AA4769CBE86CF630D314CF00EF0459286D9F956B3A7FDFB0A0"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G14-turn-03.json",
+    "Hash": "BF3FC28C473BBC48EBE3EABF99EF4ADFBAC7760A181A780B51F252F455B24426"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G14-turn-04.json",
+    "Hash": "F17C0CAC370256A55990CFFF975DDFFCCD9D5114D71B8FA047E6E835D766FA51"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G14-turn-05.json",
+    "Hash": "9923BD7804B5030ED98D9C9CDEFECCBE6048BBD24D96668FD1128D6ACBAF1992"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G14.json",
+    "Hash": "EEB7C36D3936B1F7EDFF8D916CD53D813265EE8ABA09445512C1984A90EA9EBA"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G15-turn-01.json",
+    "Hash": "8F46646F4B3059AC8B6AC8DEE8775CB7DF615E9A67AEF70CA3AD509A00880248"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G15-turn-02.json",
+    "Hash": "1CD4B3E8B8CC090637E3A4A5B2BA3D017633849F2B024E43AAD4AB024C4E985D"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G15-turn-03.json",
+    "Hash": "A9BCBD39856A939BB25FAF8CE2B94867632A9B5B785917532F56CA47212C0ED5"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G15-turn-04.json",
+    "Hash": "D0007CD6D719991963EA2B224751FB882CFB2273149392181EAB3059B070AA85"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G15-turn-05.json",
+    "Hash": "955B133C6DEBA6F3D6EF4381006B8291DCBA5AA8823432D3013A2024D7FF59C4"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G15.json",
+    "Hash": "30ADF2A0938F21E8FECDCBD8EC3C0B76D236B53B08FF3A2A71FE053154FA6EFB"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G16-turn-01.json",
+    "Hash": "A536520BB8AEB5CAE7EACC6208106FDF7907014F2386D8B8FBF69C107859F3C6"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G16-turn-02.json",
+    "Hash": "F4837BA666215AF4452C72F2C26C22C2D03471D5ABD610F7783EB43D49CF6D95"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G16-turn-03.json",
+    "Hash": "4B42677CA6F14F35BE1640923E178D13690B3D8F80DCFD307E7661BC7B8168AC"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G16-turn-04.json",
+    "Hash": "3448733BBC5EA9F965EE3F0483D4F1A3ACC078DDF1F9C63350F1B862D25F223B"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G16-turn-05.json",
+    "Hash": "0E42F940FBDC5F12CCBE9A1DC8E54967B8237CC567B026C8DB4D8FAD82E424B8"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G16.json",
+    "Hash": "138854614D21A8203EBEE0DAF1E9F8AB9242BAC466386306B70977160B313501"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G17-turn-01.json",
+    "Hash": "0A6E189CAE1C03977104C27D3877D38DA68743D511EE5CE4915056CFC22BD8CD"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G17-turn-02.json",
+    "Hash": "1227968EA375FC5A7AC865AD5968AB7568175631C8155DF3F0A8982023DF22A3"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G17-turn-03.json",
+    "Hash": "EE3DD0F7D6AA0DC701B4E8CB6955BC307C83FE53EE703ECFE20E8F74374B497C"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G17-turn-04.json",
+    "Hash": "89AEF27862C7F4489181E27ED73E2F45F26A3302EAFE9BF9DA05EA4912031086"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G17-turn-05.json",
+    "Hash": "6EA183C530174D5ECEEF5F5676F435C86802A012822D377BEDA80C28057A071A"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G17.json",
+    "Hash": "218D13A0ADA45656E66A1254DE3EA4309347FC13C06D66669019B172C11E6152"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G18-turn-01.json",
+    "Hash": "AF2A7145FD44D6DD794863402D9C9308B1D6051C57961763F0D068809641094C"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G18-turn-02.json",
+    "Hash": "39B61363AF4F0E72E608D3294FBA4554291DD25D392CB75A0066DDF8002BC3D1"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G18-turn-03.json",
+    "Hash": "D8C00A91BC6947E221F4937E836CED61F97ADEDD8BC4F77B56802FF9AA52CB78"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G18-turn-04.json",
+    "Hash": "DD69F005FD2942326D24A4F593FA5B0D77E8F955F6ACB1E3D223AD26EE6DA5AA"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G18-turn-05.json",
+    "Hash": "3DB2E56E63AFBE8B7560A565784639A609CFFD62E55179C32EF4A35E3AA43C93"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G18.json",
+    "Hash": "E3BC931DF5620C04F1039386D5CF8B1813BB4FD682C6A3A81123CAE65064CFF2"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G19-turn-01.json",
+    "Hash": "20A1743F7E772A49208CFB030172106111C0EC51F119DB170DFF765538E48483"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G19-turn-02.json",
+    "Hash": "C5C2367A14864D89CE71F09F9DB8DE2CF83FF9E2B37A1A3BB558398043623443"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G19-turn-03.json",
+    "Hash": "8B8275BEB722A909266C5FEF955BDD45B5F80C712CE2F9CA8084EB6D63072116"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G19-turn-04.json",
+    "Hash": "AE127C96708C33E3EC96BA59DAE8B28FA0855564C38B74923C2402AA907B6A19"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G19-turn-05.json",
+    "Hash": "04E80A35AC1AD739B2A8E8CD039C387BACEA7457621A5DA6E1DCAB1A28840D3F"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G19.json",
+    "Hash": "535118C867B67A94212498D0BFCDBB13E073E448D9CB7051C7670343E102E963"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G20-turn-01.json",
+    "Hash": "CC9E5AACEAD0575A9D448B199F57C8ED72A4467E962603E998E2A969DA6F4EFE"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G20-turn-02.json",
+    "Hash": "97C53E3A54AB7D0C1DAE4CE55A84143F49D81FB31C03C93FF11B562288C11F5D"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G20-turn-03.json",
+    "Hash": "CF8B77EE3F42E58157C454E974C97AC56509FE1F8EFB951F729ED54EE183966F"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G20-turn-04.json",
+    "Hash": "F19330AC00F2423E9C296039E9BA1F57E1F5F9A74BBC13921FE50BCFF409B115"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G20-turn-05.json",
+    "Hash": "40948C19204AEE263A56219488942AFCCF8672AE9EF7E3B091A5FAAB46843F70"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G20.json",
+    "Hash": "80CC8F5135A2399ACA5925FBDEA5B705C601A2E283542EBBD2D7FD95AF9CB02B"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G21-turn-01.json",
+    "Hash": "6DC9DB69EE00ED2E7B5F51960EDA2617E6AC4B9241B8BD8634D6B963EEBC1A73"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G21-turn-02.json",
+    "Hash": "AD3A616FF0BC5630CBF8EABB8C8D3011C7AFA2B79CC3D61E38E149445CC9E46C"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G21-turn-04.json",
+    "Hash": "B94E2F5AE303E3AEF1837BDBC070CDCF41CDFCFA5C83CD3BF1EAB48CC9F4986C"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G21-turn-05.json",
+    "Hash": "0B4B6F5A791466838BBBEF50348EBEEB2A5C40585B0EAEB99620807C8A811BA9"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G21.json",
+    "Hash": "0A6A6952B360353B29DD2EA00E681D4A0E4402FE2B231E3557BFC40FB2CC8F54"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G22-turn-01.json",
+    "Hash": "19DDF39D933C171714120DD8BA600D83DDD200CC2E52F0C6CABC88451D553730"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G22-turn-02.json",
+    "Hash": "ADAB5E1E524E514F29AB2256A350EA9995A7811D6E06B5F791723877ADD40DBF"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G22-turn-03.json",
+    "Hash": "0C520FD14E48838DCFEE014EAA9F1D4C777AFBEE5AE65E302FF6695779D56E2A"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G22-turn-04.json",
+    "Hash": "62CE1D437CCF744F0B67084E91A9FD600F2442696249A1A8A87BE2061956642F"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G22-turn-05.json",
+    "Hash": "7F8DBE080CBE44705C102C1CD334C43C0E6154609FA768978C73F934AD6E6AF7"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G22.json",
+    "Hash": "BD992FF3AE4BFD78343420FBDED07A7F3930D54812FFC1545BDBC46C8847D7F0"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G23-turn-01.json",
+    "Hash": "7160E9EB4E564083028223923B5865BDC96C4B2751DC71011163182DE4308A2B"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G23-turn-02.json",
+    "Hash": "7EC7940FB57252188455B24C947904BBF50909168817A6CC1409277DF5DC48C8"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G23-turn-03.json",
+    "Hash": "83EBBAAEDD19F75F2894AC9DBB0CDC51608E1D279907D28EA28409EC5C357D06"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G23-turn-04.json",
+    "Hash": "77E525852A635FB3581809235ED2394543199D2850D7C6889971EF08FC8D5EEA"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G23-turn-05.json",
+    "Hash": "561ADB4FCA6C0050F818C86897B4CFD213A78E4F9E2C2A269165C5A38439F107"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G23.json",
+    "Hash": "34C85A152CA4EF023B2C6FF3389D67C4DC362209640F80CA9D89886A4D7FABE9"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G24-turn-01.json",
+    "Hash": "2BB1BFECBA2609C89FF69A79CFA6EE9066BB1C30E079BF340F1DADC716F87FC7"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G24-turn-02.json",
+    "Hash": "B666D38DEB412E8D87A333814E829FE0938120EC8DD1D5B671105A616E96777F"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G24-turn-03.json",
+    "Hash": "3FE1220A9F5A883DF912D8AF2A9F2F7D5018DD76DF82235EDB7F5F9D79A25BE2"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G24-turn-04.json",
+    "Hash": "1B81FFC497D45BA46AD963E7A30FA80D4DF240F5CC7AD20BE585F4B7EC1B469D"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G24.json",
+    "Hash": "13A384A2798F28BF56A6D430837F72216E4AF23DFDBEC0124E26C34E1D8A016A"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G25-turn-01.json",
+    "Hash": "2FD7EAA86A2663767A596EB56043068592DB2F8218B3A6C51E5A49AE8FD4881E"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G25-turn-02.json",
+    "Hash": "D90047C0E9E1FF6A0BC07A89C95D25C3A2ECA375878E693F373C311FEE8B19A8"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G25-turn-03.json",
+    "Hash": "55B4A7F1D178284674FC8550BE5DB5F3BE9CFC8125EB246CE93E9065C76BB24A"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G25-turn-04.json",
+    "Hash": "34F211215E0EB99C7EABBF605FA19C24F590344409282B8FF7010F6B89613B47"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G25-turn-05.json",
+    "Hash": "B9B4F730890E9B3CEC550ED9138F50C76183A44704EE9E165CE05EBA6F4606B1"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G25.json",
+    "Hash": "F8D060B98733812A2A230C9F8266007926FD04BF4DFAA7422AE56189EC24C1FB"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G26-turn-01.json",
+    "Hash": "3AE38B52DAAD54F83461626C1DCC55C24A4FAB46A3381563C6551D352391E9C2"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G26-turn-02.json",
+    "Hash": "732F2EFE1D71DA9B7F7C4CBE823EB7222D63C8B0A48718DCAAA6CC445AB3206C"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G26-turn-03.json",
+    "Hash": "78B8F7ADC1D85A4407190D1B96460F1194E3FCE6F15367EFB7959B324D4C28F6"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G26-turn-04.json",
+    "Hash": "F013B6AF2DB15FC5A3F439881D1B58B61814E77D5228B97987B7D3FABEC85DFE"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G26-turn-05.json",
+    "Hash": "80F781D0C3BC7FF49ED68AC5BFA1C43D29C0B8EAAACD38FABBFC51743D086311"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G26.json",
+    "Hash": "92F0A1F08DD2F660BB5486CFE8D7C65297B2C41CE7E5DA94C09E9BC7FCC3FDA6"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G27-turn-01.json",
+    "Hash": "04C9B739195C70064F28BA918CAC34C288E4380C104BEBEF3B85CEBB1F942925"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G27-turn-02.json",
+    "Hash": "188EAD9C773D030FBAB3AA354B891A030D61636DC763A169D005E541994D184B"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G27-turn-03.json",
+    "Hash": "61E73B7384AB71F5E91C678FD68EC544E6EDEB3A35904ADC6949C65FCFC845C3"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G27-turn-04.json",
+    "Hash": "950A1A0B98384C7ADCADD16E1D9723DE16A4EB0B9176F7FC7929D4F3E5148145"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G27-turn-05.json",
+    "Hash": "385A25D37ACC0C67DB3CCF0789899D933DC1885EBC10A2ADD3D85C87078BFB6C"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G27.json",
+    "Hash": "C04B802DA27A85F7E396AE6376E14C02733FD580CBF9346BCE88ACD397C691B8"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G28-turn-01.json",
+    "Hash": "AFD1D02B587EC8858C6E59B3564911073B833E89900D00EC963AC3482FD1BD5E"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G28-turn-02.json",
+    "Hash": "B5CEC72DC39CD1EEC6698F2E6F6A6A6D131128526EE51C07AD62AF0D6F4A4D03"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G28-turn-03.json",
+    "Hash": "8121AFC4AB59141FAE85DEA5CC3E238A98B49B0F4010001A61A7C6C96BE43ABF"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G28-turn-04.json",
+    "Hash": "FF3C30D89A75BF0041706F408816DAC43D35BE09379810BFD070DE2204B5E011"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G28-turn-05.json",
+    "Hash": "21F1D275D4BFB09F45B776466A51695426966411E2FCF625EF4B705B02AD1582"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G28.json",
+    "Hash": "D53BF6D185963953A38DE0D236410D194382781B6E0DCDA2D2FE0E7372517574"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G29-turn-01.json",
+    "Hash": "D94090168F32B3DA34322F7FE9EAF71612C0F8960CE8D74FB7FCF3C99D1CE634"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G29-turn-02.json",
+    "Hash": "2AE924C39856E0998C2774E947037470885CE5F43C4FEE5B2E92FB3FA2E72151"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G29-turn-03.json",
+    "Hash": "67996CC4325AC0EF1FE41F12FEA01366D25DF11A0D380F2CD0DE0FF1D5914CA2"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G29-turn-04.json",
+    "Hash": "30FAC5CA71E6451F0E32A0CCF755788A480A7F1C55A35DE1D9E55F225925753C"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G29-turn-05.json",
+    "Hash": "4AEE6E976B7AFD1742468882463D44BE5E47A00F6ACEB87C07F6F4A60565A5A8"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G29.json",
+    "Hash": "5C124E69A783EBB54FFC20C0177BF3D4C34BED41717A6952F54B4402126C789A"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G30-turn-01.json",
+    "Hash": "2CC87324E3F6CE921EF679EA11748AFF3631F59272B7C0DB037C149C6DB912E7"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G30-turn-02.json",
+    "Hash": "D373B4977D46CB872588BF90F2030DCFB7327484A5B0315E7A93FB01E57CA0F2"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G30-turn-03.json",
+    "Hash": "66EC27EF8D1BE35F2EE8D51C9F827C2864C6F34A11A3776EB1133CF3C8689960"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G30-turn-04.json",
+    "Hash": "276B406E655AF6C662B019444046B2025267AAACA5DBD70B556054F9D552098F"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G30-turn-05.json",
+    "Hash": "62191F5CA06D49684776D6DFCE986E8D275BC30D32B4FCB60542E3422A7D35E2"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\G30.json",
+    "Hash": "0F0C405549D36FCCD9C5BEB8E18E47208B9ACF1AE1E565F639D5338EFA500683"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\preflight.cjs",
+    "Hash": "E9E28F18E9019C983A746A9DC1CDCF0322EC5904E7252A40C12B55308945CBC0"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\price-resolution.txt",
+    "Hash": "2F07DA87830EE05EF3F37C6E45AC34F6DED23DD94F1A880D7AB6E10BFB3264D5"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\production-price-findings.json",
+    "Hash": "6CBBC3FA43E395F9E4C66BEB284EB3E730B698FCE8E0C76A4E40D599589DB173"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\production-snapshot.json",
+    "Hash": "89A13D31C37F7513739A9CC52E195B0A250962E782AF95A33E3DF041331F4FDA"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\report.cjs",
+    "Hash": "10503A57CA1CD6F684534F83237F3883B3614AC337F84F0397AF60DBF63233B5"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\REPORT.txt",
+    "Hash": "2E617FB21197FFA82B50244A71B300B30E524CCD43DF07B342C6E7298E84002E"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\review-notes.json",
+    "Hash": "26D136FCAC968D1E0A66093DE368C4A2AB26534AEF013861A107336BDA97E67C"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\review.html",
+    "Hash": "23F05B77CA565EB1E7FE684539C0513081130D2FEDF9EF977FC0EBA4EF154068"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\RUN_STARTED.json",
+    "Hash": "3464B737CF99A1A434376DA1904B50559B2E8606166ED17F7747A4F999305F1F"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\run-manifest.json",
+    "Hash": "5827B4E1C6EB1F73E3C65B1BF43140A117C536BA9E9FFE01AE61D5FCE3D907E8"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\run.cjs",
+    "Hash": "36955107A56C499B92181F0B0FCFCAFE2D32B855EC4E98754B63292286109EA8"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\summary.json",
+    "Hash": "DB5D5E68008E2F1BF6D61429AA591AD8221FBF230043B5282919474079E2D7BE"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-golden-20261007\\totals.json",
+    "Hash": "58145C31E0ED8A4D8064165A445CA7199DC65CC01D7D0A65A84B7504A9444B5E"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\HUMAN-REVIEW.html",
+    "Hash": "9A74DA7C85F61E93318FA6F12A66FD9F25CEB3E7B841BB1F1DD8216F056BBC7D"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\local-business-snapshot.json",
+    "Hash": "596372B53298C2FED49D8D28C8BA67EA36CC8173A06B2C33095888D2F5E501EE"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\manifest.json",
+    "Hash": "FED65B10ACE287A7F30453F319B0E7E2DFF8EFB84FDDCD8B671C504955EC6690"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\observations.json",
+    "Hash": "37CFC5DFD06D35F21471B9453229E0B90BD80AA27FDBB09D2010BD27679AB037"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\preflight.cjs",
+    "Hash": "01666F4C34ABB012BCCA593770A06F1557AFA3200502139771BE470F7EF5E4CD"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\preflight.json",
+    "Hash": "E5083DB748A9ED02D33047A905042D044C6F9BEFB7472F76B3F196D66D81D45E"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\report.cjs",
+    "Hash": "E5A5D57DC6E09AFE6C312761E07DC5DFEA1CB36AF8CB467EFF5B84141485E080"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\REPORT.txt",
+    "Hash": "8F1EBB60DF812A6BC1D3F099A1E07F1F5C3449568F7EA5BFEC40C8EFC2F0946D"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\review-notes.json",
+    "Hash": "40242B2C673907EE88363551A167810E46136FC64EB33C6DC61BE1857512A2F8"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\RUN_STARTED.json",
+    "Hash": "56CA53EC8DFBC2015F5959BFEBDBA8A738DF4995933A52A1F4147782399B166D"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\run.cjs",
+    "Hash": "D93B3959DC44CCBD36B30E5095BD68DF8C5690518A028B06D7B811AC6F835B0C"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S1-turn-1.json",
+    "Hash": "27B3090F071236B5498FB48937F4633308B932DEDE507ED38B6AC34EF2C493FC"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S1-turn-2.json",
+    "Hash": "6253182BC90331C474FFC1FC068D1E1E7D8612CF560098473B016A014BE247B1"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S1.json",
+    "Hash": "6FA4AD7FE972DA53403D74FCDDD824A8713C10566FE0533780D87F85FE370452"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S2-turn-1.json",
+    "Hash": "D3B7BC1FCE805E2CA5160C02D2F60F509EB73EA03831D823EB7BC8BD02109396"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S2-turn-2.json",
+    "Hash": "F91ACAEA894424D1EA885F86099B6424BAEF5004426AAD1596CCAB54F8E5BA20"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S2.json",
+    "Hash": "96DCB03339BE4E88D227FF2C2D31DB4E2E2D62ADB86DFC92D23031A2921AB197"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S3-turn-1.json",
+    "Hash": "EB0860C5780F1CFA8D1757D12EB8AE912550ECC596A185E3A07F1726FA339417"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S3.json",
+    "Hash": "D6971F8FD65C302889C7D8AAB19DE11EA492D6E3581F093DA076B640549EB514"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S4-turn-1.json",
+    "Hash": "3925E67291157275ECD49F96C7D579D06C2665504F461A2B9CF46A2E019D5477"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S4.json",
+    "Hash": "64AFDF1C91A3261A11AD36C76E5ABB4467AF5D3E737B179C8132D52C18E98B21"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S5-turn-1.json",
+    "Hash": "1941FBFF60AD110409F310B0B7BE8D67C1895323CD7EE1C0DB7F908CEDDBA645"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S5.json",
+    "Hash": "558457CB3EDF28703F9A771418D65D09525DAB732671BCE3BE2CE8C942A266E6"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S6-turn-1.json",
+    "Hash": "3D017EF1DF8CB6A2FB4B181E886F52C8A674F4640241C6A5792943C6A121045C"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S6-turn-2.json",
+    "Hash": "1D2E60CB847A6EE4081CE9725BC3590ED624606906C89FC857C1D765D5A9EDFB"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\S6.json",
+    "Hash": "66AF6E7EB3381945329E3F2CA5A3CF9737C274645C1286538A6931E8B510C1E3"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\scenarios.json",
+    "Hash": "3E072359B28146894BA1ADCE3F58CE85033BF733F6A69A170AD7A8BA520A7311"
+  },
+  {
+    "Path": "C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\evaluations\\v3-smoke-20261007\\totals.json",
+    "Hash": "2CBB2F3E21ED54FAC41E60AAF02CBF1C4C4565DCA986E53BC60C02C909C70D07"
+  }
+]

@@ -1,0 +1,793 @@
+{
+  "samples": 496,
+  "turns": 505,
+  "reviewed": 275,
+  "statuses": {
+    "FAIL": 308,
+    "PASS": 66,
+    "NEEDS_REVIEW": 3,
+    "INCONCLUSIVE_PROVIDER": 4,
+    "UNREVIEWED": 124
+  },
+  "cost": [
+    {
+      "model": "gpt-4.1-mini",
+      "calls": 1864,
+      "input": 4856795,
+      "cached": 775296,
+      "output": 404921,
+      "estimatedUSD": 2.3580028000000004,
+      "missingUsage": 186,
+      "averageCallLatencyMs": 2944.4919527896996,
+      "executedTurnsIncludingRetries": 657,
+      "averageCostPerExecutedTurn": 0.003589045357686454,
+      "averageTurnLatencyMs": 8361.17199391172,
+      "phases": {
+        "interpretation": {
+          "calls": 657,
+          "input": 1626656,
+          "cached": 764800,
+          "output": 213838,
+          "estimatedUSD": 0.7633632,
+          "missingUsage": 179,
+          "averageCallLatencyMs": 3714.4718417047184
+        },
+        "selection": {
+          "calls": 478,
+          "input": 2102881,
+          "cached": 0,
+          "output": 88290,
+          "estimatedUSD": 0.9824164000000001,
+          "missingUsage": 1,
+          "averageCallLatencyMs": 2827.5251046025105
+        },
+        "grounding": {
+          "calls": 293,
+          "input": 309525,
+          "cached": 0,
+          "output": 56022,
+          "estimatedUSD": 0.2134452,
+          "missingUsage": 2,
+          "averageCallLatencyMs": 2711.7474402730377
+        },
+        "composition": {
+          "calls": 436,
+          "input": 817733,
+          "cached": 10496,
+          "output": 46771,
+          "estimatedUSD": 0.398778,
+          "missingUsage": 4,
+          "averageCallLatencyMs": 2068.8669724770643
+        }
+      }
+    },
+    {
+      "model": "gpt-5.4",
+      "calls": 143,
+      "input": 363791,
+      "cached": 5376,
+      "output": 30950,
+      "estimatedUSD": 1.3616315,
+      "missingUsage": 0,
+      "averageCallLatencyMs": 3854.6433566433566,
+      "executedTurnsIncludingRetries": 31,
+      "averageCostPerExecutedTurn": 0.04392359677419355,
+      "averageTurnLatencyMs": 16765.516129032258,
+      "phases": {
+        "interpretation": {
+          "calls": 34,
+          "input": 112928,
+          "cached": 0,
+          "output": 16396,
+          "estimatedUSD": 0.52826,
+          "missingUsage": 0,
+          "averageCallLatencyMs": 6439.764705882353
+        },
+        "selection": {
+          "calls": 34,
+          "input": 152052,
+          "cached": 0,
+          "output": 3607,
+          "estimatedUSD": 0.434235,
+          "missingUsage": 0,
+          "averageCallLatencyMs": 3296.176470588235
+        },
+        "composition": {
+          "calls": 37,
+          "input": 64783,
+          "cached": 5376,
+          "output": 2220,
+          "estimatedUSD": 0.1831615,
+          "missingUsage": 0,
+          "averageCallLatencyMs": 2033.5135135135135
+        },
+        "grounding": {
+          "calls": 38,
+          "input": 34028,
+          "cached": 0,
+          "output": 8727,
+          "estimatedUSD": 0.215975,
+          "missingUsage": 0,
+          "averageCallLatencyMs": 3814.5263157894738
+        }
+      }
+    }
+  ],
+  "judgeCost": {
+    "calls": 55,
+    "input": 1414862,
+    "cached": 594432,
+    "output": 159094,
+    "estimatedUSD": 4.586093,
+    "missingUsage": 0,
+    "averageCallLatencyMs": 34090
+  },
+  "high": [
+    {
+      "id": "frozen-production-3samples.jsonl:choice-5/3:0",
+      "customer": "I want the setup",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWould you like to proceed?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "System inferred TikTok platform though customer only chose setup.",
+      "evidence": "interpretation item platform:'tiktok' from text 'I want the setup'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-5/3:0",
+      "customer": "I want the setup",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWould you like to proceed?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Ambiguous service choice was merged into confirmed TikTok selection.",
+      "evidence": "stateAfter selectedPlatform:'tiktok'; purchase item 'tiktok:account_setup'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-5/3:0",
+      "customer": "I want the setup",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWould you like to proceed?",
+      "layer": "PRICING",
+      "severity": "HIGH",
+      "detail": "Quoted ₦20,000 TikTok setup without confirmed platform.",
+      "evidence": "response 'TikTok Ads Account Setup: ₦20,000'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-6/1:0",
+      "customer": "Teach me",
+      "response": "TikTok, Facebook and Instagram Ads Video Course\n\n₦8,000\nhttps://joshspotmedia.com/course",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Interpreted self-serve guidance as course selection, changing the intended service.",
+      "evidence": "Interpretation facts set services=course; expected account_setup."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-6/3:0",
+      "customer": "Teach me",
+      "response": "TikTok, Facebook and Instagram Ads Video Course\n\n₦8,000\nhttps://joshspotmedia.com/course",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "System selected course and platform facts not supported by the message.",
+      "evidence": "Interpretation facts set services=course and platforms=tiktok,meta."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-8/2:0",
+      "customer": "Just help me open the account",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Explicit service choice was rejected, so the assistant treated the answer as unresolved.",
+      "evidence": "stateChanges.rejected includes services account_setup reason: \"Unknown item\""
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-9/2:0",
+      "customer": "I’ll handle the ads myself",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Explicit service choice was rejected, so the assistant treated the answer as unresolved.",
+      "evidence": "stateChanges.rejected includes services account_setup reason: \"Unknown item\""
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-10/1:0",
+      "customer": "Help me set everything up first",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Recognized setup intent but failed to store selected service.",
+      "evidence": "Expected services account_setup; got undefined"
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-9/3:0",
+      "customer": "I’ll handle the ads myself",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Marked message as advertising decline despite setup meaning.",
+      "evidence": "decisions included DECLINED scope advertising for 'I’ll handle the ads myself'"
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-9/3:0",
+      "customer": "I’ll handle the ads myself",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Did not retain account_setup service selection.",
+      "evidence": "stateChanges rejected services as Unknown item"
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-10/3:0",
+      "customer": "Help me set everything up first",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nMeta Ads Account Setup: ₦30,000\n\nCombined total: ₦50,000\n\nWould you like to proceed?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Assumed both TikTok and Meta from a generic setup request.",
+      "evidence": "stateAfter selectedPlatforms: ['tiktok','meta'] from 'Help me set everything up first'"
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-10/3:0",
+      "customer": "Help me set everything up first",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nMeta Ads Account Setup: ₦30,000\n\nCombined total: ₦50,000\n\nWould you like to proceed?",
+      "layer": "PLANNER",
+      "severity": "HIGH",
+      "detail": "Skipped required platform clarification and moved to quote.",
+      "evidence": "Expected next need was platform; response quoted both setups and asked proceed"
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-11/1:0",
+      "customer": "The former",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Interpreted account_setup but failed to store/act on it due to unresolved platform/item handling.",
+      "evidence": "Interpretation captured service account_setup; stateChanges rejected it; stateAfter still had no selection."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-11/3:0",
+      "customer": "The former",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWould you like to proceed?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "The reply selected service only; it did not specify TikTok.",
+      "evidence": "Customer said “The former” in response to setup vs management, not platform choice."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-11/3:0",
+      "customer": "The former",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWould you like to proceed?",
+      "layer": "PLANNER",
+      "severity": "HIGH",
+      "detail": "Planner advanced to pricing instead of asking which platform for setup.",
+      "evidence": "Response quoted “TikTok Ads Account Setup: ₦20,000” and asked to proceed."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-11/3:0",
+      "customer": "The former",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWould you like to proceed?",
+      "layer": "PRICING",
+      "severity": "HIGH",
+      "detail": "Presented a specific setup price tied to an unconfirmed platform.",
+      "evidence": "TikTok setup price ₦20,000 was shown without any platform supplied by customer."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-11/2:0",
+      "customer": "The former",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWould you like to proceed?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "The message answered service choice, not platform choice.",
+      "evidence": "“The former” referred to setup vs management; interpretation also marked platform tiktok explicit."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-11/2:0",
+      "customer": "The former",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWould you like to proceed?",
+      "layer": "PLANNER",
+      "severity": "HIGH",
+      "detail": "System should have asked platform after confirming setup service.",
+      "evidence": "With setup chosen and no platform known, response instead quoted TikTok setup and asked to proceed."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-11/2:0",
+      "customer": "The former",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWould you like to proceed?",
+      "layer": "PRICING",
+      "severity": "HIGH",
+      "detail": "Specific platform price was fabricated from missing platform context.",
+      "evidence": "Response: “TikTok Ads Account Setup: ₦20,000” despite no TikTok mention by customer."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-12/1:0",
+      "customer": "Second",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Interpreted ads_management but failed to store/act on the answer.",
+      "evidence": "Interpretation captured service ads_management; stateChanges rejected it; no selection in stateAfter."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-12/3:0",
+      "customer": "Second",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Recognized ads_management but rejected it from state due to unresolved item logic.",
+      "evidence": "Interpretation had service ads_management; stateChanges rejected item and service; stateAfter empty."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-15/2:0",
+      "customer": "I don’t have time to do it myself",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Interpretation found ads_management but state rejected it and kept service unconfirmed.",
+      "evidence": "interpretation facts services=ads_management; stateChanges accepted empty, rejected service as unknown item."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-16/2:0",
+      "customer": "You people should handle everything",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nMeta Ads Account Setup: ₦30,000\n\nWhat is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Interpreted 'handle everything' as including account setup and both platforms without evidence.",
+      "evidence": "facts/services became [\"account_setup\",\"ads_management\"]; platforms became [\"tiktok\",\"meta\"]"
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-16/2:0",
+      "customer": "You people should handle everything",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nMeta Ads Account Setup: ₦30,000\n\nWhat is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Unsupported assumptions were committed into state and purchase items.",
+      "evidence": "purchaseItems added four items: tiktok/meta x setup/management"
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-17/2:0",
+      "customer": "I want management",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "System rejected service fact because platform was unresolved, blocking progression.",
+      "evidence": "stateChanges rejected service/item with reasons \"Platform unresolved\" and \"Unknown item\""
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-16/3:0",
+      "customer": "You people should handle everything",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nMeta Ads Account Setup: ₦30,000\n\nWhat is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Interpreted 'handle everything' as both services and both platforms without evidence.",
+      "evidence": "interpretation facts/services: account_setup,ads_management; platforms: tiktok,meta"
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-16/3:0",
+      "customer": "You people should handle everything",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nMeta Ads Account Setup: ₦30,000\n\nWhat is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Unsupported assumptions were written into final state and purchase items.",
+      "evidence": "stateAfter purchaseItems contained tiktok/meta account_setup and ads_management"
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-18/3:0",
+      "customer": "Do the advert yourselves",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Interpreted facts were rejected, leaving answered question unresolved and state unchanged.",
+      "evidence": "Interpretation had services='account_setup'; stateChanges accepted none, rejected as 'Unknown item'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-18/3:0",
+      "customer": "Do the advert yourselves",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Even tentative interpretation pointed to the wrong service meaning.",
+      "evidence": "Interpretation facts listed services='account_setup' and setupNeeded='yes' for 'Do the advert yourselves'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-20/1:0",
+      "customer": "Both",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nMeta Ads Account Setup: ₦30,000\n\nWhat is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Interpreted \"Both\" as both services and both platforms, which was not asked.",
+      "evidence": "state accepted tentative platforms [\"tiktok\",\"meta\"] from customer text \"Both\"."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-20/1:0",
+      "customer": "Both",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nMeta Ads Account Setup: ₦30,000\n\nWhat is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Stored uninstructed platforms and created four purchase items.",
+      "evidence": "stateAfter selectedPlatforms [\"tiktok\",\"meta\"]; purchaseItems for both platforms created."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-20/1:0",
+      "customer": "Both",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nMeta Ads Account Setup: ₦30,000\n\nWhat is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "PLANNER",
+      "severity": "HIGH",
+      "detail": "Should have asked platform before quoting platform-specific setup prices.",
+      "evidence": "Customer only answered service question; response quoted TikTok and Meta setup prices."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-20/3:0",
+      "customer": "Both",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nMeta Ads Account Setup: ₦30,000\n\nWhat is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Customer answered both service options, not both platforms.",
+      "evidence": "actual sent question asked setup vs management only; customer replied \"Both\"."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-20/3:0",
+      "customer": "Both",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nMeta Ads Account Setup: ₦30,000\n\nWhat is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Confirmed unsupported platforms and platform-specific items in state.",
+      "evidence": "stateAfter global:platforms [\"tiktok\",\"meta\"] and four platform items selected."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-20/3:0",
+      "customer": "Both",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nMeta Ads Account Setup: ₦30,000\n\nWhat is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "PLANNER",
+      "severity": "HIGH",
+      "detail": "Pricing should wait until platform choice is known.",
+      "evidence": "response quoted both setup services instead of asking platform first."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-21/2:0",
+      "customer": "I need the setup and I also want you to run it",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Did not persist explicit multi-service answer from customer's reply.",
+      "evidence": "Interpretation found both services, but stateChanges accepted none and response re-asked service question."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-22/1:0",
+      "customer": "Set everything up then manage it",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nMeta Ads Account Setup: ₦30,000\n\nWhat is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Inferred both TikTok and Meta although customer never specified a platform.",
+      "evidence": "Interpretation facts included platforms 'tiktok,meta' from 'Set everything up then manage it'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-29/3:0",
+      "customer": "yes please",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWould you like to proceed?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Bare 'yes please' was treated as account setup choice.",
+      "evidence": "interpretation selected service account_setup from 'yes please'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-29/3:0",
+      "customer": "yes please",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWould you like to proceed?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Platform TikTok was inferred without customer evidence.",
+      "evidence": "stateAfter selectedPlatform 'tiktok' despite no platform in message."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:choice-29/3:0",
+      "customer": "yes please",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWould you like to proceed?",
+      "layer": "COMPOSITION",
+      "severity": "HIGH",
+      "detail": "Quoted a specific TikTok setup offer without confirmed choice.",
+      "evidence": "response 'TikTok Ads Account Setup: ₦20,000' after ambiguous 'yes please'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:missing-account/2:0",
+      "customer": "I don’t have an account yet but I want you to run the campaign",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Explicit choice of ads management was not accepted semantically.",
+      "evidence": "Customer: \"I don’t have an account yet but I want you to run the campaign\"; response re-asks setup vs management."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:missing-account/2:0",
+      "customer": "I don’t have an account yet but I want you to run the campaign",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Recognized service fact was rejected, blocking progression.",
+      "evidence": "Interpretation had services=ads_management, but stateChanges rejected item/fact and response stayed at SERVICE."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:missing-account/3:0",
+      "customer": "I don’t have an account yet but I want you to run the campaign",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Customer's explicit managed-service choice was not operationalized.",
+      "evidence": "Customer said \"I want you to run the campaign\" yet response again asks setup or management."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:missing-account/3:0",
+      "customer": "I don’t have an account yet but I want you to run the campaign",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Service item remained unresolved, preventing stage advancement.",
+      "evidence": "Interpretation added ads_management item, but stateChanges rejected it as platform unresolved and nextObjective stayed SERVICE."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:multi-daily/1:0",
+      "customer": "I want TikTok, run it for me, 5k daily for 7 days.",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nTikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)\n\nCombined total: ₦80,000\n\nWould you like to proceed?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Assistant inferred account setup despite clear 'run it for me' management request.",
+      "evidence": "Interpretation added both account_setup and ads_management from 'I want TikTok, run it for me, 5k daily for 7 days.'"
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:multi-daily/1:0",
+      "customer": "I want TikTok, run it for me, 5k daily for 7 days.",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nTikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)\n\nCombined total: ₦80,000\n\nWould you like to proceed?",
+      "layer": "PRICING",
+      "severity": "HIGH",
+      "detail": "Quoted ₦80,000 by adding setup to management instead of ₦60,000 management total.",
+      "evidence": "Response included 'TikTok Ads Account Setup: ₦20,000' plus management quote and 'Combined total: ₦80,000'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:multi-daily/2:0",
+      "customer": "I want TikTok, run it for me, 5k daily for 7 days.",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nTikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)\n\nCombined total: ₦80,000\n\nWould you like to proceed?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Parsed one message as both account setup and ads management without basis.",
+      "evidence": "State accepted services for both account_setup and ads_management from same 'run it for me' request."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:multi-daily/2:0",
+      "customer": "I want TikTok, run it for me, 5k daily for 7 days.",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nTikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)\n\nCombined total: ₦80,000\n\nWould you like to proceed?",
+      "layer": "PRICING",
+      "severity": "HIGH",
+      "detail": "Presented ₦80,000 instead of correct ₦60,000 management total.",
+      "evidence": "Response showed setup ₦20,000 + management ₦60,000, 'Combined total: ₦80,000'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:multi-daily/3:0",
+      "customer": "I want TikTok, run it for me, 5k daily for 7 days.",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWhat is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Accepted item selection but rejected budget and duration facts as unknown items.",
+      "evidence": "State changes rejected platform/service/budget/duration for unknown items despite interpreted ads_management_tiktok/account_setup_tiktok."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:multi-daily/3:0",
+      "customer": "I want TikTok, run it for me, 5k daily for 7 days.",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWhat is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "PLANNER",
+      "severity": "HIGH",
+      "detail": "Asked for budget and duration although customer already supplied both.",
+      "evidence": "Response: 'What is your daily advertising budget, and how many days would you like to run the ads for?'"
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:multi-setup-management/1:0",
+      "customer": "I don’t have an account yet so set it up and run the ads for 10 days.",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "System recognized setup and management but did not preserve them into actionable selected items.",
+      "evidence": "Interpretation contained both services, yet state rejected all service items as 'Platform unresolved'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:multi-setup-management/1:0",
+      "customer": "I don’t have an account yet so set it up and run the ads for 10 days.",
+      "response": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?",
+      "layer": "PLANNER",
+      "severity": "HIGH",
+      "detail": "Asked which service was wanted instead of asking missing platform.",
+      "evidence": "Response asked setup-or-management choice after customer explicitly requested both."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:multi-setup-management/2:0",
+      "customer": "I don’t have an account yet so set it up and run the ads for 10 days.",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nTikTok ads management, 10 days: ₦100,000 advertising + ₦35,000 management = ₦135,000 total (₦10,000 daily ad spend)\n\nMeta Ads Account Setup: ₦30,000\n\nMeta ads management, 10 days: ₦100,000 advertising + ₦35,000 management = ₦135,000 total (₦10,000 daily ad spend)\n\nCombined total: ₦320,000\n\nWould you like to proceed?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Invented TikTok and Meta platform selections from no platform mention.",
+      "evidence": "Interpretation added four items across TikTok and Meta despite customer naming no platform."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:multi-setup-management/2:0",
+      "customer": "I don’t have an account yet so set it up and run the ads for 10 days.",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nTikTok ads management, 10 days: ₦100,000 advertising + ₦35,000 management = ₦135,000 total (₦10,000 daily ad spend)\n\nMeta Ads Account Setup: ₦30,000\n\nMeta ads management, 10 days: ₦100,000 advertising + ₦35,000 management = ₦135,000 total (₦10,000 daily ad spend)\n\nCombined total: ₦320,000\n\nWould you like to proceed?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Misread '10 days' as a tentative daily ad budget of 10.",
+      "evidence": "Interpretation budgets included DAILY_AD_SPEND amount 10 from 'run the ads for 10 days'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:multi-setup-management/2:0",
+      "customer": "I don’t have an account yet so set it up and run the ads for 10 days.",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nTikTok ads management, 10 days: ₦100,000 advertising + ₦35,000 management = ₦135,000 total (₦10,000 daily ad spend)\n\nMeta Ads Account Setup: ₦30,000\n\nMeta ads management, 10 days: ₦100,000 advertising + ₦35,000 management = ₦135,000 total (₦10,000 daily ad spend)\n\nCombined total: ₦320,000\n\nWould you like to proceed?",
+      "layer": "PRICING",
+      "severity": "HIGH",
+      "detail": "Generated ₦320,000 quote using fabricated platforms and ₦10,000 daily budgets.",
+      "evidence": "Response quoted TikTok and Meta setup plus 10-day management totals and 'Combined total: ₦320,000'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:multi-setup-management/2:0",
+      "customer": "I don’t have an account yet so set it up and run the ads for 10 days.",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nTikTok ads management, 10 days: ₦100,000 advertising + ₦35,000 management = ₦135,000 total (₦10,000 daily ad spend)\n\nMeta Ads Account Setup: ₦30,000\n\nMeta ads management, 10 days: ₦100,000 advertising + ₦35,000 management = ₦135,000 total (₦10,000 daily ad spend)\n\nCombined total: ₦320,000\n\nWould you like to proceed?",
+      "layer": "PLANNER",
+      "severity": "HIGH",
+      "detail": "Asked to proceed instead of collecting missing platform and real budget.",
+      "evidence": "Question asked 'Would you like to proceed?' with no customer platform or budget provided."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:multi-setup-management/3:0",
+      "customer": "I don’t have an account yet so set it up and run the ads for 10 days.",
+      "response": "TikTok Ads Account Setup: ₦20,000\n\nWhat is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Explicit duration was not carried into effective questioning.",
+      "evidence": "Customer said 'run the ads for 10 days' but assistant asked for budget and duration."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:correction-37/2:0",
+      "customer": "No, 100k is my total budget.",
+      "response": "TikTok ads management, 7 days: ₦100,000 advertising + ₦30,000 management = ₦130,000 total (₦14,285.71 daily ad spend)\n\nWould you like to proceed?",
+      "layer": "PRICING",
+      "severity": "HIGH",
+      "detail": "Quoted ₦130,000 after customer said ₦100k is the total budget, exceeding the all-in cap.",
+      "evidence": "Customer: \"No, 100k is my total budget.\" Response: \"... ₦130,000 total ...\""
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:correction-37/2:0",
+      "customer": "No, 100k is my total budget.",
+      "response": "TikTok ads management, 7 days: ₦100,000 advertising + ₦30,000 management = ₦130,000 total (₦14,285.71 daily ad spend)\n\nWould you like to proceed?",
+      "layer": "GROUNDING_VALIDATION",
+      "severity": "HIGH",
+      "detail": "Response violated explicit budget constraint despite corrected interpretation to total budget.",
+      "evidence": "State/interpretation shows budgetBasis total; output still priced above cap."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:correction-37/3:0",
+      "customer": "No, 100k is my total budget.",
+      "response": "TikTok ads management, 7 days: ₦100,000 advertising + ₦30,000 management = ₦130,000 total (₦14,285.71 daily ad spend)\n\nWould you like to proceed?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Budget amount updated, but budget basis remained daily instead of total.",
+      "evidence": "Customer: \"100k is my total budget.\" stateAfter kept global:budgetBasis = \"daily\"."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:budget-43/3:0",
+      "customer": "5k per day",
+      "response": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)\n\nShould I send the account details now?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Budget-only reply was incorrectly interpreted as readiness to proceed.",
+      "evidence": "Interpretation added READY_TO_PROCEED from customer text '5k per day'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:budget-45/2:0",
+      "customer": "My budget is 100k",
+      "response": "TikTok ads management, 7 days: ₦100,000 advertising + ₦30,000 management = ₦130,000 total (₦14,285.71 daily ad spend)\n\nWould you like to proceed?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Ambiguous amount should inherit daily basis from the actual sent question here.",
+      "evidence": "Expected daily basis; response quoted ₦100,000 advertising over 7 days instead of ₦100,000 per day."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:budget-47/2:0",
+      "customer": "150k for ads alone",
+      "response": "TikTok ads management, 7 days: ₦150,000 advertising + ₦30,000 management = ₦180,000 total (₦21,428.57 daily ad spend)\n\nWould you like to proceed?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Interpreted '150k for ads alone' as spend-only total instead of respecting likely all-in ceiling implication.",
+      "evidence": "Customer: '150k for ads alone'; response quoted ₦150,000 advertising + ₦30,000 management = ₦180,000 total."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:budget-47/2:0",
+      "customer": "150k for ads alone",
+      "response": "TikTok ads management, 7 days: ₦150,000 advertising + ₦30,000 management = ₦180,000 total (₦21,428.57 daily ad spend)\n\nWould you like to proceed?",
+      "layer": "PRICING",
+      "severity": "HIGH",
+      "detail": "Quoted total exceeded the customer-stated cap, violating all-in cap safety rule.",
+      "evidence": "Response total ₦180,000 after customer said '150k for ads alone'."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:inclusive-48/1:0",
+      "customer": "150k including your fee",
+      "response": "Sorry boss, it's not negotiable. That's the last price.\n\nTikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)\n\nWould you like to proceed?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "All-inclusive budget was treated as negotiation/refusal instead of a spending cap.",
+      "evidence": "Customer: \"150k including your fee\"; response: \"Sorry boss, it's not negotiable.\""
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:inclusive-48/1:0",
+      "customer": "150k including your fee",
+      "response": "Sorry boss, it's not negotiable. That's the last price.\n\nTikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)\n\nWould you like to proceed?",
+      "layer": "PRICING",
+      "severity": "HIGH",
+      "detail": "Quoted amount dropped to 60k, unrelated to customer's 150k cap.",
+      "evidence": "Response quoted \"₦35,000 advertising + ₦25,000 management = ₦60,000 total\"."
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:inclusive-48/2:0",
+      "customer": "150k including your fee",
+      "response": "TikTok ads management, 7 days: ₦120,000 advertising + ₦30,000 management = ₦150,000 total (₦17,142.86 daily ad spend)\n\nShould I send the account details now?",
+      "layer": "PLANNER",
+      "severity": "HIGH",
+      "detail": "System advanced to payment details without explicit consent to proceed.",
+      "evidence": "Customer only said \"150k including your fee\"; response asked \"Should I send the account details now?\""
+    },
+    {
+      "id": "frozen-production-3samples.jsonl:inclusive-48/2:0",
+      "customer": "150k including your fee",
+      "response": "TikTok ads management, 7 days: ₦120,000 advertising + ₦30,000 management = ₦150,000 total (₦17,142.86 daily ad spend)\n\nShould I send the account details now?",
+      "layer": "PAYMENT_GUARD",
+      "severity": "HIGH",
+      "detail": "Payment progression occurred without explicit current approval after quote acceptance.",
+      "evidence": "No separate proceed confirmation before offering account details."
+    },
+    {
+      "id": "frozen-production-provider-retry.jsonl:reach-66/3:0",
+      "customer": "How well will it perform?",
+      "response": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)\n\nWould you like to proceed?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "System failed to treat performance question as expected-results query needing direct answer.",
+      "evidence": "Customer: 'How well will it perform?' Final reply only quoted ₦60,000 and asked to proceed."
+    },
+    {
+      "id": "frozen-production-provider-retry.jsonl:reach-66/3:0",
+      "customer": "How well will it perform?",
+      "response": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)\n\nWould you like to proceed?",
+      "layer": "COMPOSITION",
+      "severity": "HIGH",
+      "detail": "Reply ignored retrieved expected-results knowledge and jumped to sales close.",
+      "evidence": "retrieval selected expected-results entry, but response was '...₦60,000 total... Would you like to proceed?'"
+    },
+    {
+      "id": "frozen-production-provider-retry.jsonl:plan-no-double-fee/3:0",
+      "customer": "A week on the minimum",
+      "response": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)\n\nShould I send the account details now?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Short duration-selection reply was incorrectly treated as explicit proceed consent.",
+      "evidence": "Interpretation added READY_TO_PROCEED from 'A week on the minimum'."
+    },
+    {
+      "id": "frozen-production-provider-retry.jsonl:plan-no-double-fee/3:0",
+      "customer": "A week on the minimum",
+      "response": "TikTok ads management, 7 days: ₦35,000 advertising + ₦25,000 management = ₦60,000 total (₦5,000 daily ad spend)\n\nShould I send the account details now?",
+      "layer": "PAYMENT_GUARD",
+      "severity": "HIGH",
+      "detail": "Assistant offered to send account details without explicit current consent to proceed.",
+      "evidence": "Response: 'Should I send the account details now?'"
+    },
+    {
+      "id": "supplemental-production.jsonl:supp-015/1:0",
+      "customer": "I don't have time to run it myself",
+      "response": "What is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "MODEL_INTERPRETATION",
+      "severity": "HIGH",
+      "detail": "Platform was inferred as TikTok from a service-choice statement with no platform evidence.",
+      "evidence": "interpretation item platform='tiktok' from text 'I don't have time to run it myself'"
+    },
+    {
+      "id": "supplemental-production.jsonl:supp-015/1:0",
+      "customer": "I don't have time to run it myself",
+      "response": "What is your daily advertising budget, and how many days would you like to run the ads for?",
+      "layer": "STATE_MERGE",
+      "severity": "HIGH",
+      "detail": "Unfounded TikTok platform was stored as confirmed state.",
+      "evidence": "stateAfter selectedPlatform='tiktok' global:platforms=['tiktok']"
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "customer": [
+    {
+      "_id": "G26-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "what can 60k get me",
+      "createdAt": "2026-10-07T09:21:51.164Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G26-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "run TikTok for me",
+      "createdAt": "2026-10-07T09:21:46.423Z"
+    },
+    {
+      "_id": "G26-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for your interest in running TikTok ads with us! To get started, could you please let me know if you want us to fully manage your TikTok ad campaigns for you, or would you prefer we just help set up the TikTok ads account so you can run the ads yourself?\n\nAlso, it would help to know your advertising budget and how long you want the campaign to run.\n\nThis info will help me prepare the best options and quote for you.",
+      "createdAt": "2026-10-07T09:21:51.161Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330",
+    "seenMessageIds": [
+      "G26-in-0"
+    ],
+    "contextCharacters": 146,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3553,
+    "output_tokens": 109,
+    "total_tokens": 3662,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0015956
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=100&order=asc&after=msg_6ac60f3122d881959ce43134b44ddec9059b221db6e6e330"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items/msg_059b221db6e6e330006ac60f323f808195879ff6f72772e3f6"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items/msg_059b221db6e6e330006ac60f3290c48195982953aa09245fdf"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330/items?limit=100&order=asc&after=msg_6ac60f3122d881959ce43134b44ddec9059b221db6e6e330"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_059b221db6e6e330006ac60f32174881959d6221fa63e3700c",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3553,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 109,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3662
+      },
+      "output": [
+        {
+          "id": "msg_059b221db6e6e330006ac60f3290c48195982953aa09245fdf",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "With a 60,000 budget for TikTok ads, the exact services and campaign duration depend on what you want:\n\n- Do you want Joshspot to fully manage and run the TikTok ad campaigns for you?  \n- Or just help set up the TikTok ads account so you can run ads yourself?\n\nAlso, how long would you like to run the ads? This helps me provide a detailed quote showing what 60,000 can cover in setup and management. Let me know these details, and I’ll prepare your options."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3302,
+      "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330"
+    },
+    "action": "reply",
+    "response": "With a 60,000 budget for TikTok ads, the exact services and campaign duration depend on what you want:\n\n- Do you want Joshspot to fully manage and run the TikTok ad campaigns for you?  \n- Or just help set up the TikTok ads account so you can run ads yourself?\n\nAlso, how long would you like to run the ads? This helps me provide a detailed quote showing what 60,000 can cover in setup and management. Let me know these details, and I’ll prepare your options.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 5166,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60f2c16088195bb0ced873b8dbfa0059b221db6e6e330",
+    "seenMessageIds": [
+      "G26-in-0",
+      "G26-out-0",
+      "G26-in-1"
+    ],
+    "contextCharacters": 861,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

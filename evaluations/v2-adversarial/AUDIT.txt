@@ -1,0 +1,382 @@
+JOSHSPOT V2 — ADVERSARIAL READINESS AUDIT
+Date: 6 October 2026
+Decision: NO-GO for replacing LIVE. Evaluation only; no implementation fixes or deployment.
+
+Scope and evidence
+------------------
+This audit follows the supplied attachment through Phase 19. Its final heading is
+"PHASE 20", with no following requirements. No missing requirements were invented.
+The evaluation folder contains new test/report files only. V2, V1, frontend,
+production settings, database records and customer messages were not changed.
+
+There was no safe local anonymized production-log export in the searched backend.
+The replay set reconstructs patterns the owner described in this conversation,
+without customer names or phone numbers. These are NOT exact production replays.
+All model runs use local default records/seeds plus five explicitly synthetic KB
+entries (requirements, timing, management, expected results). They do not certify
+the current production catalogue. A read-only, anonymized production export is a
+remaining acceptance prerequisite, not something this report claims to have tested.
+
+Files:
+ dataset.cjs / dataset.json: 94 scenario definitions and expected invariants.
+ run.cjs: actual V2 calls with real OpenAI interpretation/retrieval/composition.
+ offline.cjs / offline-results.json: controlled interpretation and direct probes.
+ results-*.json: full anonymized traces, input, state, answer, timings and errors.
+ grade.cjs / adjudicated-results.json: corrected scoring and provider separation.
+
+The initial parallel model batch hit HTTP 429. Its 77 affected scenarios are
+INCONCLUSIVE, including apparent passes that merely avoided an unsafe action by
+failing. They must not be counted as semantic successes or semantic failures.
+Subsequent runs were paced and stop after a provider rate-limit rejection.
+Original raw scores are preserved. Adjudication correctly allows single-item
+facts to override globals and equivalent approved KB sources to satisfy retrieval.
+Assertions do not measure every aspect of quality; passing them is not proof of
+general conversational competence. No automatic LLM judge was used.
+
+Offline probes: 34 targeted probes; 11 invariants held, 23 did not.
+This is an intentionally adversarial selection, NOT a production failure rate.
+Three existing ephemeral-database integration tests passed: shadow isolation,
+Test Agent no business side effects, and queued-V2 suppression after rollback.
+Final adjudicated GPT-4.1 outcomes across the 94 defined scenarios: 53 passed the
+specified checks, 17 failed, 24 remain provider-inconclusive. The ten-scenario
+GPT-4.1-mini comparison had 3 passes and 7 failures. These are small selected
+samples with generally one attempt per scenario, not reliable population rates.
+Full totals and trace provenance are in adjudicated-results.json and
+EVALUATION-SUMMARY.txt. There were 230 API call attempts across all recorded runs.
+The final serial run reported credit_balance_exhausted / insufficient_quota, not
+merely a transient rate limit. Further API evaluation stopped; the initial batch
+did not capture its 429 subtype, so it is not assigned that explanation retroactively.
+
+1. What the actual runtime does
+------------------------------
+worker.js:94–145 acquires a lease, snapshots latest inbound, rejects human-owned
+chats, collects at most 201 inbound records and loads history/catalogue/invoice.
+More than 200 messages safely hands off rather than silently skipping messages.
+It also has pre-core service-window and consecutive-turn guards. These are
+operational policies, not semantic interpretation, but affect every response.
+
+v2/context.js builds the turn, includes only actually sent outbound history and
+the latest sent question. This is substantially better than using unsent drafts.
+However, model.clean -> privacy.redact cuts EVERY string to 6000 characters before
+the aggregate 24000-character check. A long single message loses its tail silently
+(D07). A benign question mentioning "password" becomes a redaction marker (D06).
+
+v2/index.js:14 applies media/payment/privacy early guards. These safety exceptions
+are legitimate in principle. The privacy test occurs after redaction, so its
+keyword check no longer reliably sees the original sensitive message.
+
+index.js:18 interprets the current turn, validates structured shape and evidence,
+then state.merge applies facts, then state.projection builds compatibility state.
+Knowledge catalogue filtering happens AFTER this merge (index.js:27). The old
+retrieval-before-update bug is structurally fixed for eligible questions.
+
+But semantic selection runs ONLY if interpretation.questions is nonempty (:28).
+Statements, recommendations without explicit question extraction, objections and
+mandatory KB triggers can bypass knowledge entirely (D05/D20). This is not the
+universal structured-knowledge authority described in the design.
+
+planner.js applies policies, financial facts and next-step rules. It does NOT let
+the model freely calculate prices. That boundary works for tested daily budgets
+and the seven-day package. However, course, unsupported-question, unresolved-
+reference, allocation and setup-consent early returns can dominate other questions.
+
+index.js:42 can bypass composition if there is a required fact but no selected
+factual source, EVEN when the customer asked questions. Backend financial facts
+then replace answering those questions (D04/D12). Invoice intentions skip the
+composer entirely, so questions bundled with an invoice request have no guaranteed
+answer step before the payment-template executor.
+
+compose.js enforces references, amounts, length, duplicates and some handoff
+phrases. It does not deterministically validate every factual assertion. On any
+rendering error index.js:53 hands off; there is no repair/recomposition attempt.
+Actual model runs reproduced handoffs caused by duplicated response components.
+
+worker.js rechecks config revision, lease, ownership and latest inbound before
+side effects. It calls the existing invoice generator on LIVE invoice intentions.
+It then persists state/draft BEFORE queueing/sending the reply. Saving customer
+facts early is reasonable; marking PRICE_PRESENTED before delivery is not the same
+thing. core.quote and currentSalesStage are advanced before outbound success.
+Question anchoring is correctly gated on actual sent Message records. Stage and
+quote delivery semantics are not. A pending invoice can be projected back to
+PRICE_PRESENTED by index.js:47, confusing stage-dependent knowledge/followups.
+This stage regression was reproduced by D31; D32 verified that the actual existing
+invoice amount still takes precedence over recalculated catalogue pricing.
+
+The invoice executor preserves amount/consent checks and unique automation keys.
+Ownership changes during an asynchronous invoice call are guarded before queuing,
+but invoice generation itself is not transactionally coupled to that final guard.
+This race is a static audit risk, not a reproduced production incident here.
+
+Logs contain context, changes, selection, plan, usage and failures. Successful
+traces are useful. Provider errors are flattened to error.message in the core;
+HTTP 429 subtype/retry metadata is not retained. These should not all be treated
+as indistinguishable permanent human handoff decisions.
+
+2. Blocking findings, with reproducible evidence
+-----------------------------------------------
+A. Old consent defeats new deferral — HIGH
+ state.js:45 sets deferred, then :58 sets ready whenever old proceed=yes exists.
+ D02 produces "Should I send the account details now?" after "Let me think".
+ D27 includes old paymentRequested=yes and returns action=invoice after a fresh
+ evidenced deferral. No real invoice was created by these tests.
+ D03/D10 also show explicit no is not a durable stop to repeated sales questions.
+ D30 repeats PAYMENT on every one of twelve correctly interpreted deferrals.
+ Required correction: consent/refusal events with recency, revocation, scope and
+ explicit resume; never let historical assent overwrite a later refusal.
+
+B. Purchase items cannot express mixed platform/service intent — HIGH
+ state.js:50 takes a Cartesian product of global services and platforms.
+ D01: setup TikTok + manage Meta becomes four items, not the requested two.
+ Real-model mixed-platform-services instead demonstrated another failure: correct
+ separate service facts compete for one global slot; management is rejected as a
+ non-correction, leaving TikTok AND Meta setup quoted at 50000.
+ Required correction: propose explicit purchase items and per-item facts, resolve
+ relationships before pricing. Do not add regexes for "both" or "all".
+
+C. All-inclusive budget cannot be represented — HIGH
+ contracts.js budgetBasis is only daily/total; pricing treats total as AD SPEND.
+ D21 documents absence of package-total/including-fee semantics.
+ Real-model inclusive-49: "100k for the whole thing" produced 130000 total.
+ Required correction: separate daily_ad_spend, total_ad_spend, all_in_cap,
+ package_selection and counteroffer. Validate interpretation before calculator use.
+
+D. Financial/safety output guard is not comprehensive — HIGH
+ D08 accepts "We guarantee that every campaign will bring sales."
+ D09 accepts "Your payment has been received successfully."
+ D24 accepts a bare invented payment domain without https://.
+ These are deliberately injected composer outputs proving validator gaps, not
+ claims that OpenAI spontaneously generated those phrases in production.
+ D13 does block ordinary numeric price invention; payment-claim routing also works.
+ Required correction: typed payment/guarantee/financial assertions with verified
+ provenance, approved link references and complete output validation; do not grow
+ a synonym regex list and call it a guarantee.
+
+E. Retrieval/composition still compete with meaning — HIGH
+ Selection gate in index.js:28 skips non-question knowledge triggers (D05/D20).
+ completeApprovedReply can ignore correctly extracted questions (D04/D12).
+ Course early return can prevent answering the rest of a multi-topic turn.
+ Required correction: track every customer request and an explicit disposition;
+ retrieve for semantic needs, not punctuation/question-list presence alone.
+ Require coverage or justified deferral of each request before final rendering.
+
+F. Stale projections and destructive item invalidation — MEDIUM/HIGH
+ D11 changing one item's duration deletes every item's selected plan.
+ D26 corrected selection clears core.quote but leaves old quotedAmount if there is
+ no invoice. Single-item overrides can produce a correct quote while global
+ budget/duration and staff-facing compatibility fields remain old.
+ D22 legacy state is not promoted without evidence; this is safer financially,
+ but six-message history can make established customers restart qualification.
+ Required correction: scoped invalidation, authoritative effective-state projection,
+ and read-only reconstruction from relevant historical evidence. Preserve invoice
+ records; quarantine unresolved financial contradictions for review. Do not wipe
+ production state or treat legacy guesses as newly confirmed consent.
+
+G. Privacy and completeness — MEDIUM/HIGH
+ D06 whole-message keyword redaction erases harmless account-safety questions.
+ D07 silently clips a long turn before the advertised size limit checks it.
+ Required correction: field/span redaction and explicit over-limit handling;
+ preserve safe meaning and stable evidence offsets.
+
+H. Response authorities remain fragmented — MEDIUM
+ planner.question reads keyed preferredResponse without eligibility/priority checks
+ and bypasses semantic selection. D23 injects a stale-price template and it is
+ rendered without financial validation. Normal admin validation mitigates this,
+ but migrated/legacy data still crosses the rendering trust boundary.
+ Hardcoded negotiation, deferral, recommendations, quotes and course formatting
+ compete with editable knowledge. GUIDANCE, requiredQuestion, nextObjective and
+ stateUpdates are not consistently executed from selected KB records.
+ Required correction: one validated planner-template authority with clear scope;
+ template validation both at write time and rendering, especially legacy records.
+
+I. STRICT composition can block otherwise valid answers — MEDIUM
+ contracts.js:45–46 removes ALL free-text parts when any quoteable STRICT source
+ is selected. D28 shows this also prevents explaining another KNOWLEDGE source.
+ The financial regex rejects all digits, including harmless nonfinancial numbers.
+ Minor duplication/format errors cause immediate handoff instead of safe repair.
+ Required correction: strictness per response segment; bounded repair; do not
+ interpret a formatting failure as absence of business knowledge.
+
+J. Known catalogue/calculator disagreement — BLOCKS AFFECTED SALES
+ D19 selecting fifteen days hits "Plan price differs from calculator" and hands
+ off. The advertised 285000 plan does not match the calculator preset. The safe
+ rejection is appropriate, but the offered plan is not operationally sellable.
+ Commercial owner must resolve the authoritative breakdown; no price was changed.
+
+3. Response authority map (allowed / prohibited / current concern)
+----------------------------------------------------------------
+OpenAI interpretation — v2/model.js, contracts.js
+ Allowed: infer meaning, resolve actual question references, propose evidenced facts.
+ Must not: authorize payment, compute final prices, fabricate evidence or consent.
+ Concern: global-slot contract cannot express some valid meanings.
+
+Evidence/state — v2/state.js
+ Allowed: validate provenance/types, merge corrections, preserve unrelated facts.
+ Must not: override a later refusal with old assent or synthesize unwanted items.
+ Concern: D01/D02/D11/D26, evidence is substring presence, not proof of entailment.
+
+Actual sent question — v2/context.js, worker.js, routes.js draft approval
+ Allowed: disambiguate first/second/yes using delivered/sent text.
+ Must not: assume draft/failed text was seen; insist obsolete question is active.
+ Good: unsent question exclusion. Gap: answer tracking needs confirmed fact and
+ model question ID; answered unknown-budget/recommendation states are not durable.
+
+Knowledge eligibility — v2/knowledge.js -> structuredKnowledge.eligible
+ Allowed: use updated state, enabled/excluded conditions, semantic catalogue IDs.
+ Must not: silently miss usable facts because old compatibility projection is wrong.
+ Concern: only questions invoke selection; 500-record ceiling; no scalable retrieval
+ or relevance testing beyond that ceiling; mixed-service projection loses specificity.
+
+Knowledge contents — AI Record database, defaults.js, structuredKnowledge.js
+ Allowed: approved factual content, contextual guidance, scoped strict wording.
+ Must not: replace prices, consent, verified payments, permissions.
+ Concern: legacy mixed instructions, ignored behavior fields, competing planner keys.
+
+Service records — AI Record service entries
+ Allowed: service availability, platform applicability, setup price, requirements,
+ course price/link and payment-enabled flags.
+ Must not: infer which service the customer chose from price/catalogue existence.
+
+Plan records — AI Record plan entries
+ Allowed: published package totals/durations/platforms.
+ Must not: be reinterpreted as ad-only budget or silently double management fees.
+ Concern: parallel calculator presets disagree for fifteen days.
+
+Calculator — pricing.js -> vendor/adsPricingConfig.mjs
+ Allowed: authoritative validated calculation and breakdown.
+ Must not: choose budget semantics, platform or customer consent.
+ Good: tested daily/custom and seven-day package calculations.
+
+Backend planner — v2/planner.js
+ Allowed: decide feasible next actions from validated state and policy.
+ Must not: ignore questions, treat exploration as selection, impose rigid redundant
+ questions or silently assign all services to all platforms.
+ Concern: ordered early branches, fixed wording and incomplete budget representation.
+
+Course routing — planner.js, state.js purchaseChange/savedPurchases
+ Allowed: separate exploration from explicit purchase switch and retain ads facts.
+ Must not: consume unrelated questions or permanently suppress ads support.
+ Concern: early return plus topic value has no independent evidence constraint.
+
+Tone — config tone/writingStyle -> composer model
+ Allowed: style and concise wording only.
+ Must not: change facts, price, consent or tool permissions.
+ Concern: deterministic replies bypass tone entirely.
+
+Composer — model.js composition, compose.js
+ Allowed: combine approved facts, answer questions, preserve per-source strictness.
+ Must not: invent guarantees, payment claims, destinations or financial figures.
+ Concern: validated shape is not validated meaning; D08/D09/D24.
+
+Legacy helpers — privacy.js, responsePolicy.js, structuredKnowledge.js, pricing.js
+ Allowed: redaction, explicit safety detection, state eligibility, calculator reuse.
+ Must not: act as another general language interpreter after semantic extraction.
+ V2 does not call V1's lexical knowledge ranker/structured conversational classifier.
+ It DOES reuse keyword redaction and handoff-promise regexes that can affect answers.
+
+Handoff policy — planner.js, worker.handoff/finishHandoff
+ Allowed: mandatory safety, actual human requests, unsupported scope, staff assignment.
+ Must not: handoff for ordinary paraphrases or mere formatting defects.
+ Good: persisted assignment recovery. Concern: model/provider/render failures all
+ take a handoff path; statement-only KB mandatory rules can be skipped.
+
+Invoice executor — invoices.js -> invoiceController
+ Allowed: real invoice/account generation from authorized backend totals/consent.
+ Must not: create invoices after latest refusal, invent account numbers or mutate paid records.
+ Good: idempotency/existing invoice checks. Concern: bad consent state reaches it.
+
+Invoice/payment message — config.paymentTemplate + legacy engine.render
+ Allowed: render verified invoice amount/account/bank/link.
+ Must not: claim paid while invoice remains pending; ignore concurrent questions.
+ It is a separate response authority, bypassing the normal V2 composer.
+
+Payment verification — payments.js + provider/invoice records
+ Allowed: verify actual financial status and trigger fulfilment/handoff.
+ Must not: trust a customer saying "paid". Controlled payment-claim test upheld this.
+
+Ownership/queue — worker.js + sending worker eligibility
+ Allowed: stop stale output on takeover/new input/config revision/rollback.
+ Must not: decide customer service meaning. Existing guard reuse is appropriate.
+
+Followups — followups.js/payment reconciliation
+ Allowed: separately configured reminders with current ownership/payment checks.
+ Must not: pressure a deferred/paid customer. salesPaused compatibility depends on
+ the defective readiness projection; end-to-end reminder cancellation after these
+ new deferrals remains a required regression test.
+
+Test Agent — routes.js /test, frontend AIAgent.js
+ Allowed: same core with simulated sent history/invoice intentions, no financial effects.
+ Must not: imply parity with live history/delivery/worker conditions.
+ Concern: up to 24 test history entries versus live default 6, synthetic delivery,
+ no real invoice lifecycle, manually provided verifiedPayment flag for simulation.
+
+Shadow — v2/shadow.js
+ Allowed: separate hypothetical state, logs, counted model usage.
+ Must not: execute financial/send/assignment effects. Isolation test passed.
+ Concern: counterfactual state uses V1's actual questions, not V2's unsent questions;
+ shadow cannot prove autonomous closed-loop success. Readiness needs closed-loop
+ sandbox replay as well as shadow. Shared call quotas can affect LIVE capacity.
+
+Config/rollout — config.js, defaults.js, v2/runtime.js
+ Allowed: engine/model/mode and approved rollout controls.
+ Must not: auto-promote based on passing a few tests. LIVE explicit gate exists.
+ Shadow is the local default on deployment; no deployment occurred in this task.
+
+4. Phase coverage and limits
+----------------------------
+1–2: runtime order and all identified response authorities audited above.
+3: user-reported patterns reconstructed anonymously; actual production export absent.
+4–5: service paraphrases, ordinals, short ambiguous answers and actual sent question.
+6: multi-fact single-platform and deliberately mixed platform/service requests.
+7: corrections, scoped state, stale consent/quote; not all invoice races simulated.
+8: interruptions at service/platform/budget/duration/quote/payment-offer stages.
+   Existing-invoice amount/stage behavior is probed offline (D31/D32). Real-model
+   invoice-already-sent and concurrent financial behavior are not fully accepted.
+9–10: course detours and deferral/support scenarios, including prior assent.
+11: daily/total/inclusive/counteroffer variants and direct calculator assertions.
+12: recommendation paraphrases; unknown-budget memory is not a first-class field.
+13: multi-question interpretation/response coverage probes.
+14: same-turn requirements lookup for newly selected TikTok/Meta.
+15: seven expected-results paraphrases with approved knowledge present.
+16: old global state, contradictory consent, scoped corrections; safe migration
+   strategy proposed, no production repair performed.
+17: a real-model 15-turn scenario definition plus a controlled 12-turn deferral
+   replay; any earlier handoff blocks continuation and is reported, not skipped
+   as a success. No claim of a completed real-model 20-turn acceptance journey.
+18: answers and formatting manually sampled. Automated content checks are not a
+   calibrated human quality panel. Corporate wording, excess precision and long
+   plan listings remain concerns; maxResponseLength is 4000 in this harness versus
+   local default 1500. Production-length acceptance must be tested separately.
+19: deterministic output attacks, payment-claim control, calculator tests, existing
+   rollback/shadow integration checks. Full concurrent invoice/payment/ownership
+   adversarial acceptance remains incomplete.
+
+5. Safe remediation and acceptance sequence — not executed
+---------------------------------------------------------
+First fix consent-event precedence and item/budget representation. Then retrieval
+coverage and response validation, scoped state projection, sensitive-span handling,
+and error repair. Resolve the fifteen-day commercial configuration deliberately.
+Retain old financial records and V1 rollback. Avoid new phrase dictionaries.
+
+Freeze this dataset before fixes. Add regressions for each concrete failure,
+including simultaneous payment request + question, partial answer + correction,
+delayed send, human takeover during invoice creation, failed delivery and resume.
+Extend it with authorized anonymized production logs and the real enabled catalogue.
+Run with production model, limits, history settings and knowledge version; repeat
+each semantic variation across several samples to measure variance. Separate
+provider errors, assertion failures, groundedness, naturalness and side effects.
+
+Release gates: zero observed unauthorized invoice/payment/guarantee/ownership
+violations in the release set; all fixed failures regress; no unexplained repeated
+confirmed-field questions; all supported questions addressed; stable paraphrase
+performance; operator-reviewed pricing catalogue; proven rollback and no duplicate
+side effects under fault injection. These are evidence gates, not a promise of
+universal perfect language understanding.
+
+Continue shadow only after those blockers are repaired, then supervised DRAFT,
+then explicitly approved limited LIVE. This report does not authorize promotion.
+
+Evaluation methodology reference:
+https://developers.openai.com/api/docs/guides/evaluation-best-practices
+Official guidance calls for typical, edge and adversarial cases and recognizes
+that model variability makes ordinary deterministic tests insufficient. The
+findings in this report come from local code/tests, not that external document.

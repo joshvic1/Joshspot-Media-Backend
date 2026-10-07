@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "test:ai-v4": "node --test inbox/ai/v4/core.test.js inbox/ai/v4/integration.test.js",
+    "test:ai-v3": "node --test inbox/ai/v3/core.test.js inbox/ai/v3/conversation.test.js inbox/ai/v3/integration.test.js inbox/ai/v3/repairs.test.js",
+    "test:ai-v2": "node --test inbox/ai/v2/core.test.js inbox/ai/v2/architecture.test.js inbox/ai/v2/integration.test.js",
+    "eval:ai-v2": "node scripts/evaluateConversationV2.cjs --live-model",
     "test:inbox": "node --test inbox/policy.test.js inbox/integration.test.js inbox/media.test.js inbox/ai/engine.test.js inbox/ai/structured.test.js",
     "inbox:indexes": "node inbox/createIndexes.js",
     "dev": "nodemon server.js",

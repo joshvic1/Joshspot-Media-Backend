@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G24-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I want TikTok setup and how much is it does that include ads money",
+      "createdAt": "2026-10-07T09:21:23.828Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3388,
+    "output_tokens": 107,
+    "total_tokens": 3495,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0015264
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60f15864c8190834e9667501140cc0c1a4524356086f3/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f15864c8190834e9667501140cc0c1a4524356086f3/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f15864c8190834e9667501140cc0c1a4524356086f3/items?limit=100&order=asc&after=msg_6ac60f15e7108190bef28dc46e6502630c1a4524356086f3"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f15864c8190834e9667501140cc0c1a4524356086f3/items/msg_0c1a4524356086f3006ac60f1701b08190a897ef5cfc21dce8"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60f15864c8190834e9667501140cc0c1a4524356086f3/items/msg_0c1a4524356086f3006ac60f1773808190840a1ff725c64fc6"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60f15864c8190834e9667501140cc0c1a4524356086f3/items?limit=100&order=asc&after=msg_6ac60f15e7108190bef28dc46e6502630c1a4524356086f3"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0c1a4524356086f3006ac60f16c0288190868976512adaebf3",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3388,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 107,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3495
+      },
+      "output": [
+        {
+          "id": "msg_0c1a4524356086f3006ac60f1773808190840a1ff725c64fc6",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "The TikTok account setup service covers creating and configuring your TikTok advertising account so you can run ads. However, the setup fee does not include the actual money spent on ads (ad spend). You will need to budget separately for the ads money you want to spend on your campaigns.\n\nTo give you an exact price for the setup service, could you please confirm how long you want to run your ads or if you want any additional management services? Or do you just want the setup done so you can run the ads yourself?"
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3565,
+      "openaiConversationId": "conv_6ac60f15864c8190834e9667501140cc0c1a4524356086f3"
+    },
+    "action": "reply",
+    "response": "The TikTok account setup service covers creating and configuring your TikTok advertising account so you can run ads. However, the setup fee does not include the actual money spent on ads (ad spend). You will need to budget separately for the ads money you want to spend on your campaigns.\n\nTo give you an exact price for the setup service, could you please confirm how long you want to run your ads or if you want any additional management services? Or do you just want the setup done so you can run the ads yourself?",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 5091,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60f15864c8190834e9667501140cc0c1a4524356086f3",
+    "seenMessageIds": [
+      "G24-in-0"
+    ],
+    "contextCharacters": 195,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

@@ -1,0 +1,429 @@
+JOSHSPOT V4 SIMPLIFIED — LOCAL IMPLEMENTATION REPORT
+7 October 2026
+
+Status: Implemented locally for deterministic testing. Not approved for LIVE.
+No deployment, production configuration change, production customer/database
+write, calculator edit, or paid model evaluation was performed.
+
+This directory contains new results. Prior V2/V3 evaluation artifacts were not
+overwritten. File paths below are relative to the backend repository unless
+explicitly prefixed frontend.
+
+1. V4 ARCHITECTURE
+
+Actual inbound batch + bounded delivered history + small trusted state
+  -> Responses API interpreter with strict Structured Outputs
+  -> deterministic resolver using approved catalogue and existing calculator
+  -> Answer Pack
+  -> Responses API composer with strict Structured Outputs
+  -> deterministic validation, at most one composer repair
+  -> existing guarded draft/outbox/handoff infrastructure.
+
+There is no model business-tool loop, model-selected database key, LLM judge,
+or backend customer-sentence classifier. Ordinary interpretation belongs to the
+first model. Business record lookup/calculation/action authorization belongs to
+the backend. The second model writes from the Answer Pack.
+
+Normal text turn: two model calls. Failed composition: at most three calls in
+total. Interpreter/provider failure does not enter a tool-recovery loop.
+Unsupported media/sensitive input can hand off before either model call.
+
+Entry points: inbox/ai/v4/index.js, resolver.js, model.js, worker.js.
+The existing pure V3 pricing adapter and read-only catalogue loader are reused;
+the V3 conversational loop is not invoked.
+
+2. EXACT INTERPRETER SCHEMA
+
+See interpreter-schema.json, exported directly from inbox/ai/v4/schema.js.
+All object fields are required; optional values are explicitly null; extra
+properties are rejected. The backend independently checks the same shape.
+
+Top-level fields:
+current_requests[], facts[], purchase_change, readiness, whole_purchase_cap,
+knowledge_needs[], clarification.
+
+Request/fact/selection evidence is {messageId,text}; text must be an exact,
+nonempty substring of a current inbound message. Old history cannot be used
+as current authorization. This checks provenance, not the correctness of the
+model's interpretation of that text.
+
+3. EXACT INTERPRETER PROMPT
+
+See interpreter-prompt.txt, exported directly from inbox/ai/v4/prompts.js.
+It contains no prices, database keys, giant business document or tool schemas.
+The complete literal prompt is in that annex, not an abbreviated paraphrase.
+
+4. SEMANTIC VOCABULARY
+
+Platforms: TIKTOK, META, FACEBOOK, INSTAGRAM, UNKNOWN.
+Services: ACCOUNT_SETUP, ADS_MANAGEMENT, COURSE, GENERAL_SUPPORT, UNKNOWN.
+Requests: ASK_PRICE, ASK_QUOTE, ASK_RECOMMENDATION, ASK_BREAKDOWN,
+ASK_REQUIREMENTS, ASK_SERVICE_INCLUSIONS, ASK_EXPECTED_RESULTS,
+ASK_CREATIVE_REQUIREMENTS, ASK_TECHNICAL_HELP, ASK_COURSE_DETAILS,
+ASK_PAYMENT_DETAILS, CLAIM_PAYMENT, REQUEST_HUMAN, NEGOTIATE, OTHER.
+Budget basis: DAILY_AD_SPEND, TOTAL_AD_SPEND, ALL_IN_MAXIMUM, PACKAGE,
+COUNTEROFFER, UNKNOWN.
+Readiness: EXPLORING, INTERESTED, READY_TO_PAY, DEFERRED, DECLINED, UNKNOWN.
+Purchase operations: KEEP, ADD, REPLACE, REMOVE, NONE.
+Question fields: service, platform, budget, budget_basis, duration, package,
+allocation, proceed, payment, clarification.
+
+Facebook and Instagram normalize to a single Meta platform. Canonically
+identical purchase pairs are deduplicated; mixed platform/service pairs are
+not expanded into a cross-product.
+
+5. RESOLVER ROUTING TABLE
+
+ASK_PRICE / ACCOUNT_SETUP -> unique enabled service price; setup quote.
+ASK_QUOTE / ADS_MANAGEMENT -> validated scoped inputs -> existing calculator.
+ASK_RECOMMENDATION -> configured plans that pass calculator verification.
+Package duration / ASK_BREAKDOWN -> plan lookup + calculator verification.
+ASK_REQUIREMENTS -> service requirements + eligible approved knowledge.
+ASK_SERVICE_INCLUSIONS -> eligible approved knowledge/service descriptions.
+ASK_EXPECTED_RESULTS -> eligible expected-results knowledge.
+ASK_CREATIVE_REQUIREMENTS -> eligible creative knowledge, otherwise unresolved.
+ASK_TECHNICAL_HELP -> applicable approved technical knowledge.
+ASK_COURSE_DETAILS -> course record/link + applicable knowledge.
+ASK_PAYMENT_DETAILS -> quote/readiness/ownership/configuration guards -> invoice.
+CLAIM_PAYMENT -> trusted payment status; never a model-created PAID state.
+REQUEST_HUMAN -> existing assignment/handoff workflow before composition.
+NEGOTIATE -> owner-approved non-negotiable policy; never lower the price.
+OTHER -> available approved context and necessary clarification.
+
+Explicit new budget/duration/package facts can also trigger recalculation.
+Setup does not require campaign budget or duration. A multi-item all-inclusive
+cap with one management item subtracts setup fees before using the existing
+inverse calculator; several management items require allocation clarification.
+The model does not invent an allocation.
+
+6. KNOWLEDGE RETRIEVAL
+
+inbox/ai/v4/knowledge.js uses semantic-topic and platform/service eligibility,
+exclusions, priority, mandatory priority and lightweight query-word ranking.
+At most three records per need and nine unique records per Answer Pack.
+It does not embed or inject the entire catalogue.
+
+The existing Knowledge Base editor now exposes an advanced V4 retrieval group:
+v4Topics, v4Platforms, v4Services, v4ExcludedServices, v4Mandatory.
+These are stored on the existing records, not in a duplicate knowledge system.
+No production metadata was populated automatically.
+
+A small explicit compatibility registry maps known existing record keys to
+semantic topics. It maps business records, not customer phrases. Unknown old
+records are not silently imported as behavioral authority. Legacy workflow
+state updates, required questions and handoff flags do not drive V4.
+
+The local saved snapshot contains 57 knowledge records; 12 have a compatibility
+topic mapping. See local-knowledge-metadata.json for every record. Many of the
+other records are old flow/template rules; approved factual records still need
+owner-reviewed metadata. Mapping is not proof that a record will be retrieved:
+scope, unresolved placeholders and financial-prose checks also apply.
+
+Unresolved template placeholders and obvious currency-bearing knowledge prose
+are excluded so service/plan/calculator records remain price authority. This
+is conservative and can omit useful explanations. Missing or conflicting
+knowledge must be reviewed before LIVE; this task did not modify production KB.
+
+7. SMALL PURCHASE STATE
+
+Namespaced at Conversation.ai.v4; no old engine state is deleted.
+purchaseItems[] contains platform, service, confirmed status and current
+evidence, plus scoped budget/duration/package facts when supplied.
+Other fields: currentQuote, activeInvoice, verifiedPayment, readiness,
+purchaseCap, unresolvedRequests, ownership and simulated-invoice retry metadata.
+
+KEEP retains items; ADD merges exact pairs; REPLACE replaces selections;
+REMOVE removes only named pairs. A different REPLACE clears the previous
+whole-purchase cap. New facts and catalogue changes invalidate stale quotes.
+Counteroffers never become accepted advertising budgets.
+
+8. ANSWER PACK CONTRACT
+
+The resolver constructs this internal object; it is not generated by a model:
+
+{
+  requests: current structured requests[],
+  priorUnresolved: prior unresolved requests[],
+  purchase: confirmed purchase items[],
+  customerFacts: current evidenced facts[],
+  facts: [{type: MONEY|FACT, role, value, source, field, platform, service}],
+  knowledge: [{source, revision, topic, title, facts, explanation, scope,
+               exclusions, mandatory}],
+  plans: verified authoritative plan results[],
+  quote: authoritative calculator quote | null,
+  actions: {payment?: trusted status, invoice?: action result,
+            handoff?: {accepted, pending?, simulation?, reason}},
+  missing: question-field names[],
+  allowedQuestions: question-field names[],
+  readiness: readiness enum,
+  verifiedPayment: trusted paid record | null,
+  unresolvedRequests?: unresolved current requests[],
+  resolutionError?: controlled backend failure/review code
+}
+
+The early human-handoff path deliberately avoids unnecessary knowledge/pricing
+work. Composer receives the pack, not an independent raw-history instruction.
+
+9. EXACT COMPOSER PROMPT
+
+See composer-prompt.txt, exported directly from inbox/ai/v4/prompts.js.
+See composer-schema.json for its exact structured output contract:
+message, covered_request_ids[], questions_asked[{purpose,field}].
+Internal IDs stay in metadata; customers receive only message.
+
+10. FINAL VALIDATION
+
+inbox/ai/v4/validation.js checks response size, declared request coverage,
+allowed question fields, internal-envelope leakage, approved URLs, canonical
+payment instructions, account substitutions, unsupported monetary role/value
+claims, false payment/invoice confirmations, result guarantees and discounts.
+It accepts numeric and basic English number wording and allows ordinary
+customer budget/duration/count references. Financial roles distinguish setup,
+management, advertising spend, course and total.
+
+Only one composer repair is permitted. A second invalid response fails closed
+and the worker prepares/performs safe technical handoff according to mode.
+The core does not issue another interpretation call to chase a passing reply.
+
+Limits: declared coverage/questions are model metadata, not independent proof
+of semantic coverage. Lightweight financial/guarantee checks cannot recognize
+every possible English implication. Cross-platform contextual attachment of
+otherwise approved numbers is not a complete semantic theorem. Real-model
+review is required; these checks must not be described as perfect guarantees.
+
+11. PAYMENT FLOW
+
+Current ASK_PAYMENT_DETAILS + READY_TO_PAY + authoritative valid quote + no
+missing action inputs + enabled invoices + valid ownership/configuration are
+required. New DEFERRED/DECLINED state blocks invoice creation.
+Paid/conflicting/expired invoices require review, not silent replacement.
+
+TEST and DRAFT simulate invoice results and have no financial port invocation.
+Simulation cache cannot substitute for a real LIVE action. LIVE requires the
+explicit backend gate and saved mode/auto-reply settings. The V4 financial
+adapter reuses the existing invoice generator with V4-prefixed idempotency and
+quote fingerprint. Ownership is checked before sensitive writes/provider work.
+
+Payment claims read/refresh trusted invoice status. They do not mark paid.
+Composer receives exact persisted account/link text. Existing unpaid invoices
+do not force those details into every unrelated answer.
+If composition fails after a real invoice has been created, the invoice remains
+idempotently recorded for staff review; the customer is not sent invented data.
+
+12. HANDOFF FLOW
+
+Current human request is resolved before optional business lookup. In LIVE the
+worker invokes the existing durable assignment/notification workflow before
+composition. V4 alone defers that workflow's acknowledgment until composition.
+Composer sees whether assignment succeeded or is pending because no staff is
+available. The acknowledgment uses the existing handoff outbox key and guard.
+Other engine handoff behavior is unchanged.
+
+The transferred conversation is rechecked for version, assignment, latest
+inbound, configuration and engine before acknowledgment. A further human change
+or engine switch cancels it. Pending assignment uses existing recovery.
+TEST/DRAFT simulate the handoff; they do not assign real staff.
+Unsupported media/sensitive input uses the safe configured acknowledgment.
+
+Remaining edge: a process crash after assignment but before V4 acknowledgment
+can leave the customer without that acknowledgment, even though assignment is
+durable. This failure window needs an explicit recovery acceptance test before
+LIVE. Do not confuse paused/queued/assigned states in operational review.
+
+13. DEFERRAL FLOW
+
+Latest evidenced readiness updates the small state. DEFERRED/DECLINED blocks
+invoice creation and payment/proceed pressure. Existing purchase facts remain
+available for legitimate questions. A later explicit READY_TO_PAY plus current
+payment request can resume. No customer phrase matching is used in backend.
+
+14. COURSE DETOUR FLOW
+
+ASK_COURSE_DETAILS with KEEP answers course questions without erasing ads work.
+An explicit REPLACE with COURSE changes the purchase. Returning to advertising
+uses actual history/new interpretation and preserves no guessed V1/V2/V3 state.
+It does not restore an archived management object automatically; facts must be
+re-established from actual available context when needed.
+
+15. MULTI-QUESTION / RAPID-MESSAGE FLOW
+
+Existing debounce/batching supplies one current inbound batch to interpreter.
+Each current request carries evidence. Resolver collects independent facts and
+knowledge; unsupported questions are listed separately instead of discarding
+supported ones. Composer must declare coverage for every request, including
+explaining an unavailable answer. Semantic completeness still needs human review.
+
+16. OLD-CONVERSATION MIGRATION
+
+First V4 processing creates only ai.v4 state. It seeds bounded actual inbound
+and successfully sent/delivered/read outbound messages, not unsent drafts.
+Trusted invoice/payment/ownership data is loaded separately. V1/V2/V3 inferred
+states and V3 remote conversation IDs are not conversational truth for V4.
+Engine switches preserve data. Returning V4 sees intervening actual history;
+longer gaps outside the history bound remain a real-model acceptance concern.
+
+17. V1 / V2 / V3 / V4 SELECTOR
+
+Admin -> AI Agent -> Settings -> AI Engine.
+Choices: V1 Current/legacy, V2 Structured, V3 Conversational, V4 Simplified.
+Existing V1+V2 shadow option remains available. Change requires Save settings;
+warning explains that records/messages are preserved. V1 remains the default.
+Saved backend engineVersion determines new eligible processing. Configuration
+revision and queued-message guards prevent the old engine sending after switch.
+No redeployment is needed to switch once this implementation is deployed later.
+
+V4 supports OFF, TEST, DRAFT, LIVE. TEST is Test Agent only; pending real chats
+are not consumed. LIVE requires AI_V4_LIVE_APPROVED=1 plus explicit saved LIVE
+and automatic reply settings. This task did not set that production variable
+or save any production setting. Earlier engine LIVE gates remain intact.
+
+18. TEST AGENT
+
+Select V4 in the existing Test Agent. Sessions are server-owned, actor-scoped,
+expire after one hour, and preserve multi-turn simulated delivered history.
+Client-submitted state/IDs cannot attach tests to real customer conversations.
+Reset conversation clears the selected test session. A simulated handoff stops
+further AI turns until reset. Restarting backend expires in-memory test sessions.
+
+State and decision exposes interpreter output, merged state, selected backend
+operations, knowledge, quote, simulated actions, Answer Pack, composer attempts,
+validation errors and per-pass model/tokens/cache/cost/latency. Input and final
+response are displayed in the transcript. Test logs/usage accounting can be
+stored; customer messages/invoices/assignments/payments are never test effects.
+Clicking Test Agent later WILL use paid OpenAI calls unless a mock is supplied
+by tests. No such paid request was made in this implementation task.
+
+19. MODEL / COST / CACHE SETTINGS
+
+Interpreter: gpt-6.1-sol, medium. Composer: gpt-6-luna, medium.
+Settings -> V4 Simplified configures each independently. Composer may be set
+to gpt-6.1-sol for later acceptance testing. Unknown model availability is not
+proved by a syntactically valid model name. API errors remain observable.
+
+Default history: 40 actual messages; configurable 4-80.
+Default output limit: 4,000 tokens per pass; configurable 1,000-12,000.
+Existing maxResponseLength applies to final text (default 1,500 characters).
+Input batch bounded at 200 messages/40,000 serialized characters; history over
+60,000 serialized characters fails safely rather than silently sending a dump.
+Responses API store:false; no persistent remote V4 conversation or tool loop.
+Stable instructions/schema precede changing payload to support provider caching.
+Caching is measured when returned, not assumed or guaranteed.
+
+Current standard estimate per million tokens (USD):
+gpt-6.1-sol: input 2.00; cached input 0.10; output 10.00; cache write 2.50.
+gpt-6-luna: input 0.10; cached input 0.01; output 0.50; cache write 0.125.
+Unknown/custom model cost is null rather than guessed. Provider failures count
+as attempted passes with unknown cost when usage is unavailable.
+This task's paid-model calls: zero. Paid-model cost: $0.
+
+Official references checked for implementation:
+https://developers.openai.com/api/docs/models/gpt-6.1-sol
+https://developers.openai.com/api/docs/models/gpt-6-luna
+https://developers.openai.com/api/docs/guides/structured-outputs
+
+20. FILES CHANGED FOR THIS TASK
+
+New core directory inbox/ai/v4/:
+schema.js, prompts.js, model.js, knowledge.js, resolver.js, validation.js,
+index.js, financial.js, worker.js, testAgent.js, core.test.js,
+integration.test.js.
+
+Shared integration changes:
+inbox/ai/defaults.js — V4 defaults.
+inbox/ai/config.js — selector/mode/model validation and V4 knowledge metadata.
+inbox/ai/runtime.js — V4 selection/gate.
+inbox/ai/engine.js — V4 dispatch.
+inbox/ai/worker.js — V4 dispatch, TEST/OFF exclusion, queued-engine guards,
+  V4-only acknowledgment ordering and legacy follow-up exclusion.
+inbox/ai/invoices.js — trusted V4 quote authorization/idempotency branch.
+inbox/ai/routes.js — V4 Test Agent/configuration/draft safety/delivery logs.
+inbox/models.js — namespaced ai.v4.
+package.json — test:ai-v4 command.
+frontend/components/admin/AIAgent.js — engine selector, V4 settings,
+  Test Agent and advanced knowledge metadata fields.
+
+New documentation/results are under evaluations/v4-implementation-20261007/.
+Frontend build logs are frontend/v4-build.txt and v4-build-final.txt.
+The workspace already contained other changes. This list does not attribute
+every dirty Git file to this task.
+
+21. TESTS AND RESULTS
+
+Focused V4 run: 36/36 passed (v4-final.txt). Mocked interpretation/composition,
+ephemeral MongoDB, stubbed invoice provider; no real customer or payment effects.
+It includes resolver/pricing/scopes, deferral, course changes, evidence, one
+repair, takeover/switch cancellation, Test Agent isolation, assignment-before-
+composition and idempotent invoice creation.
+
+Initial full regressions: 306 tests, 304 passed, 2 failed
+(regressions-first.txt). Failures are in existing Inbox reaction/mention tests:
+reaction expected provider-error 502 but got lease-conflict 409;
+mention expected access 200 but got 404 under assigned-only CSS visibility.
+Neither test expectation was changed and staff visibility was not relaxed.
+
+The later parallel full run encountered an ephemeral MongoDB startup fassert
+failure and was stopped; regressions-final.txt retains that infrastructure run.
+The first serial run also encountered startup errors (regressions-serial.txt).
+The final serial run with database diagnostics completed: 312 tests,
+311 passed, 1 failed (regressions-serial-diagnostic.txt). All 36 V4 tests pass.
+The remaining failure is the old mention-access expectation (200 versus 404).
+The earlier reaction lease-conflict failure did not recur. No expectations
+were rewritten. See FINAL-RESULTS.txt for the final verification record.
+
+Final frontend production build: passed (v4-build-final.txt), with existing
+multiple-lockfile/workspace-root and middleware-deprecation warnings.
+No interactive LIVE settings or paid Test Agent calls were used for UI checks.
+
+preservation-final.json verifies 263 baseline V2/V3 core/evaluation files are
+byte-for-byte unchanged and the calculator hash is unchanged.
+V1 source paths received additive dispatcher/shared integration branches;
+its conversational implementation was not replaced. Regression evidence, not
+a claim of byte-identical shared files, supports rollback preservation.
+
+22. REMAINING RISKS / BUSINESS DATA
+
+This is NOT a real-model readiness score or LIVE approval. Deterministic mocks
+prove contracts/guards, not Nigerian language understanding or natural replies.
+Run a small paid acceptance test only after explicit owner authorization.
+
+Key review items: knowledge metadata coverage; legacy conflicting policy;
+scope-sensitive numeric wording; model-declared question/coverage fidelity;
+compound negation/guarantee language; long-history truncation; state recovery
+after engine gaps; incomplete provider output; assigned-before-ack crash window;
+existing reaction/mention regression mismatches. No claim of perfect safety.
+
+Local/test 15-day total remains 265,000 = 200,000 ads + 65,000 fee, verified by
+the unchanged calculator. Historical audit reported production record:
+database test, collection inboxairecords, _id 6ac17d26f2f0297bebf4a75a,
+key plan_15, revision 0, data.amount 285000. This was NOT re-read or changed
+in this task. A later authorized production migration must verify that row and
+set its total to 265000, with calculator-derived breakdown. Do not claim the
+live value was freshly checked. A conflicting plan fails calculator agreement.
+
+23. SMALLEST RECOMMENDED PAID ACCEPTANCE TEST — PROPOSAL ONLY
+
+Eight short closed-loop conversations, approximately 3-5 turns each, once each,
+using the configured interpreter/composer pair, synthetic names/messages and
+simulated actions. No judge, model comparison, old 94-scenario evaluation or
+automatic retries for passing scores.
+
+A. Greeting -> ambiguous ads -> actual option answer -> TikTok setup price.
+B. Management -> 5k daily for 7 days -> breakdown -> payment request.
+C. Recommendation -> 15-day selection -> authoritative 265k breakdown.
+D. TikTok setup + Meta management -> all-inclusive cap -> correction.
+E. Course side question -> stay with management -> explicit course switch.
+F. Consent -> wait/deferral -> legitimate question -> later resume.
+G. Expected reach + creative question in one turn; verify actual KB coverage.
+H. Human request and payment claim; verify honest simulation/ownership stop.
+
+Keep full messages, interpreter, Answer Pack, composer attempts and usage.
+Manually review question repetition, scope, naturalness, missed requests and
+financial wording. Stop and report failures; do not repair halfway through.
+Estimated cost must be calculated from observed tokens; no paid budget is
+committed by this proposal. Do not activate LIVE on the basis of mock tests.
+
+FINAL CONFIRMATION
+
+No deployment. No LIVE activation. No production writes. No calculator change.
+No paid evaluation. Existing V1/V2/V3 engines remain available. Work stops after
+deterministic verification and this report.

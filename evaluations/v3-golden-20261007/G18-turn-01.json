@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G18-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I want to learn Facebook ads",
+      "createdAt": "2026-10-07T09:20:05.420Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3379,
+    "output_tokens": 68,
+    "total_tokens": 3447,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0014604000000000002
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e/items?limit=100&order=asc&after=msg_6ac60ec770fc8194be46385fb6a1ed440c6ef5b5f2cf1f0e"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e/items/msg_0c6ef5b5f2cf1f0e006ac60ec8aa5081948319fd06f19de1ac"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e/items/msg_0c6ef5b5f2cf1f0e006ac60ec901908194a0b6426b89548ea4"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e/items?limit=100&order=asc&after=msg_6ac60ec770fc8194be46385fb6a1ed440c6ef5b5f2cf1f0e"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0c6ef5b5f2cf1f0e006ac60ec8821c8194938a9ba182bcb691",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3379,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 68,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3447
+      },
+      "output": [
+        {
+          "id": "msg_0c6ef5b5f2cf1f0e006ac60ec901908194a0b6426b89548ea4",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Great! To help you learn Facebook ads, could you please clarify if you want to:\n\n1. Learn how to run and manage Facebook ads yourself with guidance and setup support, or\n2. Have Joshspot Media run and manage the Facebook ad campaigns for you?\n\nThis will help me recommend the right service or course for you."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3009,
+      "openaiConversationId": "conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e"
+    },
+    "action": "reply",
+    "response": "Great! To help you learn Facebook ads, could you please clarify if you want to:\n\n1. Learn how to run and manage Facebook ads yourself with guidance and setup support, or\n2. Have Joshspot Media run and manage the Facebook ad campaigns for you?\n\nThis will help me recommend the right service or course for you.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4770,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60ec705d48194a15a828f94d39e9d0c6ef5b5f2cf1f0e",
+    "seenMessageIds": [
+      "G18-in-0"
+    ],
+    "contextCharacters": 157,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

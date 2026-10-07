@@ -1,0 +1,10 @@
+{
+  "candidate": "gpt-5.4",
+  "reason": "Documented Responses API and strict structured outputs, stronger professional reasoning capability than the current GPT-4.1 mini; default reasoning none permits the frozen API parameters. Availability will be evidenced by calls, not presumed.",
+  "documentation": ["https://developers.openai.com/api/docs/models/gpt-5.4", "https://developers.openai.com/api/docs/models/gpt-4.1-mini"],
+  "pricesPerMillion": {"gpt-4.1-mini":{"input":0.4,"cached":0.1,"output":1.6},"gpt-5.4":{"input":2.5,"cached":0.25,"output":15}},
+  "frozenIds": ["choice-1","choice-6","choice-12","choice-20","choice-23","choice-27","missing-account","platform-31","multi-daily","multi-total","mixed-platform-services","correction-35","budget-41","inclusive-48","negotiation-51","recommend-54","reach-60","interruption-service","interruption-proceed","three-questions","requirements-same-turn","unknown-platform","existing-page","plan-no-double-fee","plan-15-day","payment-claim","human-request","injection-price","benign-password-question","two-days-daily","course-detour","deferral-support","suggestion-daily","long-journey"],
+  "frozenSamples": 3,
+  "supplementalSelection": "First case of every supplemental group, plus all four closed-loop journeys. Match each baseline scenario's predeclared sample count.",
+  "noChanges": "Same code hash, snapshot, prompts, limits, initial state and expected outcomes. No temperature or reasoning overrides. No fixes during evaluation. Baseline completes first."
+}

@@ -1,0 +1,237 @@
+JOSHSPOT V3 COMPLETION REPORT — 6 OCTOBER 2026
+LOCAL IMPLEMENTATION ONLY. STOPPED BEFORE PAID VALIDATION.
+
+1. Inbound-to-outbound flow
+The existing webhook stores messages. The existing debounce/lease worker collects
+eligible inbound messages and dispatches the saved engine. V3 synchronizes actual
+delivered history, asks OpenAI through Responses, executes validated tools, and
+gets one final model-written reply. Financial checks run before the existing
+draft/outbox/handoff flow. Ownership and configuration are rechecked throughout.
+
+2. APIs
+Responses supplies function calling and final composition. Conversations stores
+continuity; item APIs append actual messages and remove unsent generation work.
+These replace neither WhatsApp nor the existing invoice/payment infrastructure.
+The API contract was checked against official documentation. Real-model schema
+compatibility is NOT established by mocks. No model was permanently hardcoded.
+
+3. Continuity
+The server persists an OpenAI conversation ID. Each turn adds only unseen actual
+messages. Draft/queued/failed replies are not treated as messages the customer saw.
+After generation, temporary model/tool work is removed; actual sent wording is
+imported next time. Interrupted cleanup marks context dirty for reconstruction.
+
+4. Local state
+Separate ai.v3 metadata: openaiConversationId, previousConversationIds (last five),
+seenMessageIds, contextCharacters, dirty, summary, recoveryReason, quote,
+lastOperationId and invoiceId. Quote contains ID/fingerprint, NGN total, item
+inputs, calculator lines, purchaseCap, timestamps/expiry and catalogueRevision.
+This is operational context and authoritative quote data, not a sales-stage or
+intent state machine. Shared worker lease/draft/ownership fields remain shared.
+V1/V2 ai.state is preserved, not imported as conversational truth.
+
+5. Tools
+Read-only: get_services, get_service_details, get_recommended_ads_plans,
+get_business_knowledge, get_invoice_status.
+calculate_ads_quote performs trusted math and stores V3 quote metadata only.
+check_payment_status can refresh trusted provider status in LIVE; DRAFT/TEST
+cannot refresh real financial state. Customer text cannot mark an invoice paid.
+create_invoice is a guarded financial side effect in LIVE, simulation otherwise.
+handoff_to_human records intent; the eligible LIVE worker executes assignment,
+whereas TEST/DRAFT only simulates unless staff explicitly approves a draft.
+All schemas are strict and revalidated server-side. No arbitrary query/code/URL
+execution tool exists. Caller never supplies another customer's invoice ID.
+
+6. Reuse
+WhatsApp, storage, batching, worker lease, outbox, ownership, services/plans,
+existing calculator, invoice generator/idempotency, Paystack verification,
+assignment/notifications, Admin auth/settings/KB editor and logging are reused.
+
+7. Excluded conversational authorities
+No V2 interpretation/merge/planner, phrase option validators, course-detour state,
+salesPaused state, rigid funnel or master prompt drives V3. Model context resolves
+first/second/both/yes. Existing deterministic money/security helpers remain useful.
+There is no independent LLM judge of ordinary replies. Only invoice authorization
+has a narrow additional model check, followed by deterministic backend gates.
+
+8. Knowledge
+A compact enabled knowledge index is supplied; the model chooses IDs and requests
+details semantically. No exact keyword match is required. Legacy execution fields
+are ignored. Legacy STRICT flags project as preferred GUIDED wording for V3;
+stored records and old engines are unchanged. Financial blocks remain exact.
+The model can combine approved facts; unavailable/conflicting facts require review.
+
+9. Quotes and recommendations
+Plans come from enabled records and are checked against the existing calculator.
+Custom inputs distinguish daily spend, total advertising spend, inclusive item
+budget and package. Setup prices come from Services. Package fees are not added
+twice. Counteroffers are instructed to preserve the existing purchase, not become
+advertising spend. Natural-language compliance remains untested until approval.
+
+10. Inclusive caps
+An item cap is inverted using the existing calculator, not copied fee formulas.
+purchaseCap is the confirmed maximum across the WHOLE purchase. Total cannot
+exceed it, including setup and multiple platforms. Mixed inclusive items without
+an overall cap reject pending clarification. The cap is in the quote fingerprint
+and recalculated before an invoice. Failed revisions clear the old quote.
+Backend can enforce supplied caps; correct extraction/allocation of a customer's
+spoken cap still depends on model understanding and requires golden validation.
+
+11. Mixed representation
+One item per explicit platform/service pair; duplicate pairs reject. TikTok setup
+plus Meta management stays two items. Shared/per-platform ambiguity must be
+clarified. The backend never expands a request into all combinations.
+
+12. Invoice authorization/idempotency
+Latest message ID/exact evidence, complete current quote, expiry, catalogue,
+recalculated fingerprint/amount/cap and ownership must pass. A narrow model check
+reads the full latest batch and actual preceding history for current permission.
+Old consent does not authorize a new request. The existing invoice automation key
+uses the quote fingerprint, preventing duplicate invoice creation on retries.
+Existing mismatched/paid/expired invoices require review. Model cannot supply an
+amount, account, URL or arbitrary contact to create_invoice.
+
+13. Payment verification
+Server-scoped existing invoice/provider records determine status. Receipts and
+customer claims cannot mark PAID. DRAFT/TEST fixtures cannot mutate real payments.
+Pending/unavailable verification must not become confirmed wording.
+
+14. Final financial validation
+Exact trusted paymentText must retain amount/account/bank/name/link/reference.
+Corruption falls back to the existing trusted template; this can omit accompanying
+prose and is logged. A small final check rejects untrusted literal currency values,
+URLs, account numbers, obvious payment claims and guarantees. It is NOT a complete
+semantic proof: indirect language, number words and mislabelled valid figures need
+real-model adversarial review. No claim of production clearance is made.
+
+15. Takeover
+Worker lease, latest-message/version, active/unassigned ownership and configuration
+revision are checked before sensitive work and send. Staff takeover wins; stale
+output is cancelled. An external financial request already in flight cannot be
+undone, but its reply must not send after takeover; staff can inspect its record.
+
+16. Batching
+Existing short debounce collects rapid inbound messages into one V3 customer turn.
+No new long artificial delay or competing per-message conversational worker.
+
+17. Old conversations
+First V3 use seeds at most 80 actual recent received/sent messages. It does not
+require starting over or import V1/V2 inferred intentions. Trusted invoices remain
+separate. Large gaps after engine switches trigger bounded resynchronization.
+
+18. Recovery
+Missing/404/dirty remote conversation rebuilds bounded history. Context rotation
+uses an advisory summary plus recent actual messages; summary is never financial
+authority. This is explicit summary rotation, not assumed native compact support.
+Retired remote Conversations are not purged automatically; retention remains work.
+
+19. Cost/limits
+Six response iterations, sixteen tools, 70-second transport deadline, per-request
+25 seconds; configurable model/output tokens (default1800). Existing response
+character and usage limits remain. Knowledge index bounded500 records/70000chars;
+retrieved details45000chars. Rotation after70000contextchars/140seen IDs.
+Usage includes cached/input/output tokens, authorization and summaries. Estimates
+support verified GPT4.1/mini rates; unknown models show unknown, not free. Persistent
+Conversations still incur context token costs. No paid calls were made here.
+
+20. Logs
+Conversation/model/input IDs, tools/arguments/results, knowledge, final response,
+errors, handoff, usage/cost/latency and delivery state are inspectable. Secrets and
+financial fields are redacted. Live outbox state distinguishes queued from sent.
+Logs do not contain or require hidden model reasoning or another LLM judge.
+
+21. Selector
+Existing Admin AI Engine section shows V1/V2/V3 with explicit Save/change notice.
+Saved setting overrides the legacy environment fallback. V1 remains default.
+Revision changes invalidate stale work. Switching preserves engine metadata and
+business records; returning to V3 resynchronizes actual messages.
+
+22. Modes
+OFF stops eligible processing. TEST uses an isolated server session. DRAFT prepares
+responses/actions without automatic financial/customer effects. Ordinary drafts
+can be approved; simulated invoice drafts cannot masquerade as real invoices.
+LIVE additionally requires AI_V3_LIVE_APPROVED=1 and explicit LIVE configuration.
+Neither was enabled. After release setup, selector changes need no redeployment.
+Legacy autonomous follow-up/payment replies are suppressed under V3 to avoid a
+second conversational authority; V3 autonomous replacements are not implemented.
+
+23. Test isolation
+Opaque actor-owned sessions (one-hour TTL, max40), same context between turns.
+No production conversation ID accepted. No WhatsApp, real invoice/account,
+assignment, customer mutation or follow-up ports. Read-only business data is used;
+test usage/logs can persist. Restart/reset loses local test session mapping.
+
+24. Tests
+37 V3 deterministic/mock tests pass, including temporary MongoDB and a stub payment
+provider. 122 existing V1/V2 regression tests also pass (159 combined). These are not semantic
+language scores. Earlier broader Inbox run was84/85: unchanged mention-access test
+expects CSS access to another owner's chat, contradicting assigned-only policy.
+That unrelated policy/test was not changed. No dotenv/production DB/model calls.
+
+25. Golden set
+golden-conversations.cjs contains30 multi-turn scenarios, prepared NOT RUN.
+It includes actual-question references, mixed services/platforms, budgets/caps,
+course detours, negotiation, deferral/resume, payment, questions and Nigerian wording.
+Data only; no runner/autostart. Future execution requires explicit approval, one
+configured model, one sample/conversation, mocks for financial effects, deterministic
+safety checks and owner quality review. No judge or repeated/model-comparison runs.
+
+26. Conflicts
+Saved catalogue snapshot (not a fresh production query):57 enabled knowledge
+entries, four with template placeholders,22legacy STRICT entries and18legacy
+handoff flags. Read-only V3 projection ignores old execution fields but cannot
+erase contradictory prose. Full findings in knowledge-audit.json; no records edited.
+OWNER DECISION REQUIRED:15-day plan285000 vs calculator265000 =200000ads+65000fee.
+Source: plan_15 record and unchanged vendor/adsPricingConfig.mjs. No quote/invoice
+for the conflicting package; owner must choose a commercial correction later.
+
+27. Risks/release
+Model understanding, schema compatibility, repeated questions, financial phrasing,
+retrieval, long conversations and real latency still require the approved golden
+run. Narrow payment authorization is model-dependent. Remote retention, context
+cleanup latency, in-flight external requests, and absent autonomous V3 follow-ups
+are explicit limits. This local implementation is NOT approved for LIVE.
+Next: owner review -> explicitly approved small golden run -> fixes -> DRAFT ->
+explicit limited LIVE approval -> full LIVE only after evidence. V1 rollback stays.
+
+28. Exact V3-related files
+Paths below are relative to C:/Users/pc/Desktop/joshspot-media/:
+backend/inbox/ai/runtime.js
+backend/inbox/ai/config.js
+backend/inbox/ai/defaults.js
+backend/inbox/ai/engine.js
+backend/inbox/ai/invoices.js
+backend/inbox/ai/routes.js
+backend/inbox/ai/worker.js
+backend/inbox/models.js
+backend/models/Invoice.js
+backend/package.json
+backend/inbox/ai/v3/catalogue.js
+backend/inbox/ai/v3/context.js
+backend/inbox/ai/v3/contracts.js
+backend/inbox/ai/v3/cost.js
+backend/inbox/ai/v3/financial.js
+backend/inbox/ai/v3/index.js
+backend/inbox/ai/v3/instructions.js
+backend/inbox/ai/v3/openai.js
+backend/inbox/ai/v3/pricing.js
+backend/inbox/ai/v3/testAgent.js
+backend/inbox/ai/v3/tools.js
+backend/inbox/ai/v3/validation.js
+backend/inbox/ai/v3/worker.js
+backend/inbox/ai/v3/core.test.js
+backend/inbox/ai/v3/conversation.test.js
+backend/inbox/ai/v3/integration.test.js
+backend/inbox/ai/v3/fakeOpenai.test-helper.js
+backend/inbox/ai/v3/README.txt
+backend/scripts/auditV3Knowledge.cjs
+backend/evaluations/v3-implementation-20261006/knowledge-audit.json
+backend/evaluations/v3-implementation-20261006/v3-tests.tap (earlier32-test artifact)
+backend/evaluations/v3-implementation-20261006/golden-conversations.cjs
+backend/evaluations/v3-implementation-20261006/completion-report.txt
+frontend/components/admin/AIAgent.js
+Other pre-existing dirty files are not claimed as V3 changes. Original evaluations
+were not overwritten. V1/V2 shared integration remains; their cores are intact.
+
+CONFIRMED: No deployment, V3 LIVE activation, production data writes, business-price
+changes, paid golden/model-comparison/LLM-judge evaluation. V1 and V2 remain intact.

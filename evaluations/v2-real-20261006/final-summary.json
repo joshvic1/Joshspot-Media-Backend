@@ -1,0 +1,1779 @@
+{
+  "decision": "NO-GO",
+  "completion": "PARTIAL: production-model generation complete; candidate and independent judging interrupted by provider credit exhaustion",
+  "pending": [
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "requirements-same-turn",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "requirements-same-turn",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "unknown-platform",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "unknown-platform",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "unknown-platform",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "existing-page",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "existing-page",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "existing-page",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "plan-no-double-fee",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "plan-no-double-fee",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "plan-no-double-fee",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "plan-15-day",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "plan-15-day",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "plan-15-day",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "payment-claim",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "payment-claim",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "payment-claim",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "human-request",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "human-request",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "human-request",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "injection-price",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "injection-price",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "injection-price",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "benign-password-question",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "benign-password-question",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "benign-password-question",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "two-days-daily",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "two-days-daily",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "two-days-daily",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "course-detour",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "course-detour",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "course-detour",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "deferral-support",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "deferral-support",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "deferral-support",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "suggestion-daily",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "suggestion-daily",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "suggestion-daily",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "long-journey",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "long-journey",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "long-journey",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    }
+  ],
+  "independentJudgeReviewedTurns": 444,
+  "offlineReviewedTurns": 126,
+  "at": "2026-10-06T21:33:10.737Z",
+  "freezeUnchanged": true,
+  "preflight": {
+    "at": "2026-10-06T20:43:57.869Z",
+    "baseCommit": "b5d818af1122ed67cdab42f355d83cd49eb7d13d",
+    "workingTreeHash": "42822e841c970fa1a2b0c121934f3b9556ee4013cb58589faeafebf865261d69",
+    "hashes": {
+      "inbox/ai/businessPack.js": "0cba1e8bfa132b4b2f1075809cff669d214d9120414f2cc21659169f30a226be",
+      "inbox/ai/config.js": "ada3d80671037965beb3d43dde2edf83d67ddcf780a892fe0be72959446e9f17",
+      "inbox/ai/course.js": "b0bad61b7a3a09bc96836f468cac671bf8dd99cfa6f9574f44649d10fda4b648",
+      "inbox/ai/defaults.js": "c3ff99788e0c871b3e4cb868fe45629a3c81f40e6a489d3d9db94da81a54f76c",
+      "inbox/ai/engine.js": "b2ab8bc6d7119f22fd9baef0936bdc2370f28ec954e62ca212dd378b805a5b5f",
+      "inbox/ai/engine.test.js": "d82b06cfdbc147c0c12fd7a70f386ec0210cdee7e38b87ab0359b466deacfc39",
+      "inbox/ai/errors.js": "45f7d718105ae712f892ddcc2ef80d3970e180f0e76a61177084e91ac55c263d",
+      "inbox/ai/followups.js": "8a3a33b9c9d79ab6e911ea20b357033129aa72d10f91736f2f7201b49e520ff9",
+      "inbox/ai/installBusinessPack.js": "88f4cb47176a4ecd6d4fd991095f6c2487ee0c9807c9d6895f8278689001464e",
+      "inbox/ai/invoices.js": "777636f86ff81efa0f98fa85e96fd44d845966d2ea75708f30e491657af3f06a",
+      "inbox/ai/masterKnowledge.js": "15cd9d88c2eb57e3ae57f7d24a58a91e78fb992837dd0f609c5a2f12278c6f06",
+      "inbox/ai/models.js": "2d5d4b884a7456f7aa13d22265e41f35551600e33a631c30b8198fc771ca231e",
+      "inbox/ai/payments.js": "c369df7bb24c7754aacf8f7a6886df2b643338700087517cd1c1ac5d03e80a7d",
+      "inbox/ai/pricing.js": "67a7ee4c9d1e43af16aef981f0a08944fae987b67926e437b31196433ec94d44",
+      "inbox/ai/privacy.js": "4defc24dd16e0de9815012032ec7218bd1ab1f923bc537232f5fd297336c7526",
+      "inbox/ai/provider.js": "ac5f364aabbd0c3eb4c48905db07b9bd3b463c29bfc73e9da8ae4b01fbd6352a",
+      "inbox/ai/qualification.js": "44e94d9152cb9a0747d5f5825038058f6f7b8198becac07e94428e7cc156319d",
+      "inbox/ai/README.md": "d91862c333bdde145561b15bf7baf2ba87f8c7c3c4fd263569bee0afc4644b8c",
+      "inbox/ai/responsePolicy.js": "db9b4de6cf2ce5fe81d75d9182b144151d0366993d9fd3a53f6330d7539bdf96",
+      "inbox/ai/routes.js": "559ef3efe0e5578617855b0377354a1c9352784b9bfb256df888e7be33a88fe9",
+      "inbox/ai/salesSummary.js": "d84d1e274961e1d271d7644d3706edd2b96f17083ecdd58286416098daa131c9",
+      "inbox/ai/structured.test.js": "a4024d6b3ee94229bea3f560111472f3de98efa9457a124333a5f45fc658d15d",
+      "inbox/ai/structuredEngine.js": "4c710e87b86a4ceae9aa3ce36936454269cc18c21bad4940ddfee27d42b1c1b7",
+      "inbox/ai/structuredKnowledge.js": "eeda899f2254412a2b9cac49cb9b64d62535cbf2f70dfc6696edfd6b28a3b522",
+      "inbox/ai/structuredMigration.js": "39e608f5a7d9f292413d1abb03217890b822a7ae0841506a2469e8e89180332a",
+      "inbox/ai/v2/architecture.test.js": "84ebcbd73c4fd382583f031428c7f95896a49cb743f283e740bb99c32f7d2094",
+      "inbox/ai/v2/authority.js": "ef4a60cb763cda3a067c59765d5fbffc34deeab7f2bd682e042e885e86846b03",
+      "inbox/ai/v2/budget.js": "fd9280cb8f709a2f1f8d733ca3848b2c8c663053bc20b8d8dc74f6a5d8f32d84",
+      "inbox/ai/v2/compose.js": "2359cbc43d34cc7affb77503427a3368d1697fa09095ece335152f04881231d3",
+      "inbox/ai/v2/consent.js": "0a9325acd5a09369409d6a4e51f270c22bb47e7b8b2b6082b21572690f240215",
+      "inbox/ai/v2/context.js": "0155adc6774f96bae1473e256d2d0ac0a4d8868dec32ded0a0f51029a7aae6f7",
+      "inbox/ai/v2/contracts.js": "ce2f6f1a3eac4a1d50c1c378684005ab38d6948a6f90dd4fdef30bcaf91d820f",
+      "inbox/ai/v2/core.test.js": "40ac885f1260d20d5f8ae0dace0d7167b82e6d1eba1806ec2248bcdf26786509",
+      "inbox/ai/v2/delivery.js": "54d86c74b06ab0b5ac31ce8b539d1fc6912b6880af7ffcafc1dd3b166b1a4997",
+      "inbox/ai/v2/fixtures.js": "15b450988a44572cbb46fd70a1c1ff7e2f8bc5548ab2a629824e77421ead83bf",
+      "inbox/ai/v2/index.js": "3a7366e9d6e1ecc8255a53f7478645d181802653f6dd88d6735baac52e3f9644",
+      "inbox/ai/v2/integration.test.js": "1f0ce6a28669c414ca7948d00aec182e81b4e3a009647db67d6848dc9b7c05ff",
+      "inbox/ai/v2/knowledge.js": "31584d2e809f09704d667f3157dfc39beefd6ac7ccfda56839db065acd66b92f",
+      "inbox/ai/v2/ledger.js": "b0a470aef7080ffcc7d9de1cd9ef6272eb90c4425c281305927a5565ae68fc6e",
+      "inbox/ai/v2/model.js": "8a946ac833c2a3f8ba1bff2f94daf93b67bb64cb93b6d4f3f3a22b33bb967e4a",
+      "inbox/ai/v2/planner.js": "baff0ca9d1965d52ec667529cf44f229bb23a5ad27c96926d93c8711d544aca5",
+      "inbox/ai/v2/privacy.js": "4092417b4b2bf83650c71d1001c2a2c861c58ba85cf1c6e33baf1b02c7d8cd45",
+      "inbox/ai/v2/README.md": "0324c04287c9943ce2abfec3ab71571ea03d71b71206a90682cad0a7ed3f4e9b",
+      "inbox/ai/v2/runtime.js": "9a566a1b7d482c4fb857d4fad00cfc50e69e83ad2219035d326a5631884fd094",
+      "inbox/ai/v2/shadow.js": "3043eff4d58e4ca1d253d00db85fe2925fd280d776f576880f4262d9db92e2ad",
+      "inbox/ai/v2/state.js": "cd617fca0ce4a20801776c116ed135a0cce1ff10c2d2ae1d56bac84bca927d98",
+      "inbox/ai/vendor/adsPricingConfig.mjs": "75f07e07a7b9d58fa9fb14547aed26d7aebaee1b2da2bc52284df2bba12736e8",
+      "inbox/ai/worker.js": "f70d575773d936825b67349e62217b1cbf391eba9d0f10bd1415e29b4e1fe00f",
+      "inbox/service.js": "68a697d442a0ed09d3cecf3d98103c76edbce028f987bb553492b06a41fc2eec",
+      "inbox/models.js": "0cd4d7a3d0c83513ce08a0115c573267996a25ae7c41b562e87f1f4466947e9c",
+      "inbox/createIndexes.js": "7682ce2466a3cc0bd153dca96a1a1f6380d3221b4eb8383e7bd2a3b91de49817",
+      "inbox/deleteChat.js": "fd3b7c54f283537e4e76b31a6475c603a7dd5f26897e4f9d61e4e39c7a340021",
+      "package.json": "936995eb9d3ddf29674382c11ebfb6a7249bc2f39bedbade2d3a7b23088deda4",
+      "evaluations/v2-adversarial/adjudicated-results.json": "191fa3faf60a5c45a380b2f6bb7860c55ebe723db401b76a56c7a19636ac0175",
+      "evaluations/v2-adversarial/AUDIT.txt": "b9ab9c41b501420e24c6eabf22100c96b4d736516d18f9aae6d877304a0d1830",
+      "evaluations/v2-adversarial/dataset.cjs": "40c08574c817f8a2d080afdfa8d58255dc971838d0a787d148e1384e5b5edd6d",
+      "evaluations/v2-adversarial/dataset.json": "04518828cf851aeddfb1ba077354bb0e0fc549acdafab4a98ec7fa237412051e",
+      "evaluations/v2-adversarial/EVALUATION-SUMMARY.txt": "5485203ce6278f7c2d174a50ba7ab1e1998da91275ec9b062b4f236d2953024a",
+      "evaluations/v2-adversarial/grade.cjs": "83516111b55ac5a3893f1c1e97ae88c387c21bf676eb0257e0d0482f89146932",
+      "evaluations/v2-adversarial/offline-results.json": "7b9706055cf82b73a12d66f5c1d8d64023ae11d8dccba6d80a4183cc2b4f9add",
+      "evaluations/v2-adversarial/offline.cjs": "d054f2a40def41fa7e3b863085c212ad528da597a3b96ef0b5d82184970710fb",
+      "evaluations/v2-adversarial/results-gpt-4.1-mini-comparison.json": "a3bbf5e5343c3289295b59b827ee60f4e388e826aaf911296e25284f60b94741",
+      "evaluations/v2-adversarial/results-gpt-4.1-paced.json": "32d90df8ad182591fc0df7b48825f1946dbd0fbe35ae1dd06bee3184bde16839",
+      "evaluations/v2-adversarial/results-gpt-4.1-serial.json": "0326a6a3fbc422b5986457c4765559a20f2a1bf76a750535d7e8af7a4ffe9de0",
+      "evaluations/v2-adversarial/results-gpt-4.1.json": "b15cd90e2a17a4f46e810340eb242f8fb6f0b8249a213e821d8a536eaefdfcfc",
+      "evaluations/v2-adversarial/run.cjs": "57b89faf46da39d6b9ae74fe9c28e7d6c62088fcd9ce25881c1ec6aa5da61dcc",
+      "evaluations/v2-adversarial/summarize.cjs": "ce13b7b8523d7c21ea2559d86110c2e679672e7b7c1fe34da998c5aa990157f7"
+    },
+    "catalogueHash": "72a273156d0ce856810184a4133a826ae9a4f57534038ad62c60f447dcdae8bf",
+    "configRevision": 30,
+    "catalogueCount": 84,
+    "modelSettings": {
+      "database": "",
+      "localEnv": "gpt-4.1-mini"
+    },
+    "modelEvidence": [
+      {
+        "mode": "LIVE",
+        "model": "gpt-4.1-mini",
+        "configRevision": 30,
+        "createdAt": "2026-10-06T19:44:26.730Z"
+      },
+      {
+        "mode": "LIVE",
+        "model": "gpt-4.1-mini",
+        "configRevision": 30,
+        "createdAt": "2026-10-06T19:44:02.168Z"
+      },
+      {
+        "mode": "LIVE",
+        "model": "gpt-4.1-mini",
+        "configRevision": 30,
+        "createdAt": "2026-10-06T19:42:36.803Z"
+      },
+      {
+        "mode": "LIVE",
+        "model": "gpt-4.1-mini",
+        "configRevision": 30,
+        "createdAt": "2026-10-06T19:42:05.025Z"
+      },
+      {
+        "mode": "LIVE",
+        "model": "gpt-4.1-mini",
+        "configRevision": 30,
+        "createdAt": "2026-10-06T19:42:02.277Z"
+      },
+      {
+        "mode": "LIVE",
+        "model": "gpt-4.1-mini",
+        "configRevision": 30,
+        "createdAt": "2026-10-06T19:41:36.791Z"
+      },
+      {
+        "mode": "LIVE",
+        "model": "gpt-4.1-mini",
+        "configRevision": 30,
+        "createdAt": "2026-10-06T19:41:26.342Z"
+      },
+      {
+        "mode": "LIVE",
+        "model": "gpt-4.1-mini",
+        "configRevision": 30,
+        "createdAt": "2026-10-06T19:40:47.064Z"
+      },
+      {
+        "mode": "LIVE",
+        "model": "gpt-4.1-mini",
+        "configRevision": 30,
+        "createdAt": "2026-10-06T19:37:52.224Z"
+      },
+      {
+        "mode": "LIVE",
+        "model": "gpt-4.1-mini",
+        "configRevision": 30,
+        "createdAt": "2026-10-06T19:34:01.863Z"
+      }
+    ],
+    "limits": {
+      "history": 6,
+      "responseCharacters": 1500,
+      "modelOutputTokens": 6000,
+      "turnCharacters": 24000,
+      "modelTimeoutMs": 22000,
+      "totalDeadlineMs": 65000
+    },
+    "live": {
+      "databaseMode": "LIVE",
+      "localV2LiveGate": "unset"
+    },
+    "readCommands": [
+      "find",
+      "find",
+      "find",
+      "endSessions"
+    ],
+    "isolation": "Runner uses saved snapshot, loads only OpenAI key; no MongoDB connection or side-effect executors. Financial actions and deliveries simulated.",
+    "oldResults": "All old evidence included in hash manifest; new output directory only."
+  },
+  "scorecard": {
+    "gpt-4.1-mini": [
+      {
+        "category": "Service understanding",
+        "pass": 412,
+        "fail": 28,
+        "unknown": 29,
+        "notApplicable": 4,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Platform understanding",
+        "pass": 338,
+        "fail": 18,
+        "unknown": 35,
+        "notApplicable": 82,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Budget interpretation",
+        "pass": 158,
+        "fail": 9,
+        "unknown": 29,
+        "notApplicable": 277,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Duration interpretation",
+        "pass": 150,
+        "fail": 3,
+        "unknown": 27,
+        "notApplicable": 293,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Actual-sent-question understanding",
+        "pass": 390,
+        "fail": 49,
+        "unknown": 26,
+        "notApplicable": 8,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Corrections",
+        "pass": 57,
+        "fail": 5,
+        "unknown": 1,
+        "notApplicable": 410,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Deferrals/refusals",
+        "pass": 72,
+        "fail": 176,
+        "unknown": 2,
+        "notApplicable": 223,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Course/service switching",
+        "pass": 370,
+        "fail": 10,
+        "unknown": 0,
+        "notApplicable": 93,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Multi-question coverage",
+        "pass": 242,
+        "fail": 97,
+        "unknown": 1,
+        "notApplicable": 133,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Knowledge retrieval",
+        "pass": 394,
+        "fail": 37,
+        "unknown": 25,
+        "notApplicable": 17,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Pricing correctness",
+        "pass": 134,
+        "fail": 19,
+        "unknown": 66,
+        "notApplicable": 254,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Invoice safety",
+        "pass": 210,
+        "fail": 4,
+        "unknown": 0,
+        "notApplicable": 259,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Payment safety",
+        "pass": 231,
+        "fail": 3,
+        "unknown": 0,
+        "notApplicable": 239,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Guarantee/result safety",
+        "pass": 268,
+        "fail": 5,
+        "unknown": 0,
+        "notApplicable": 200,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Repetition avoidance",
+        "pass": 343,
+        "fail": 77,
+        "unknown": 23,
+        "notApplicable": 30,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Long-conversation stability",
+        "pass": 0,
+        "fail": 7,
+        "unknown": 0,
+        "unit": "complete journey"
+      },
+      {
+        "category": "Natural response quality",
+        "pass": 186,
+        "fail": 285,
+        "unknown": 2,
+        "notApplicable": 0,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Handoff correctness",
+        "pass": 14,
+        "fail": 242,
+        "unknown": 7,
+        "notApplicable": 210,
+        "unit": "judged applicable turn"
+      }
+    ],
+    "gpt-5.4": [
+      {
+        "category": "Service understanding",
+        "pass": 43,
+        "fail": 2,
+        "unknown": 44,
+        "notApplicable": 8,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Platform understanding",
+        "pass": 39,
+        "fail": 0,
+        "unknown": 44,
+        "notApplicable": 14,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Budget interpretation",
+        "pass": 9,
+        "fail": 2,
+        "unknown": 44,
+        "notApplicable": 42,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Duration interpretation",
+        "pass": 5,
+        "fail": 0,
+        "unknown": 44,
+        "notApplicable": 48,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Actual-sent-question understanding",
+        "pass": 28,
+        "fail": 4,
+        "unknown": 45,
+        "notApplicable": 20,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Corrections",
+        "pass": 4,
+        "fail": 0,
+        "unknown": 0,
+        "notApplicable": 93,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Deferrals/refusals",
+        "pass": 5,
+        "fail": 8,
+        "unknown": 0,
+        "notApplicable": 84,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Course/service switching",
+        "pass": 11,
+        "fail": 0,
+        "unknown": 0,
+        "notApplicable": 86,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Multi-question coverage",
+        "pass": 8,
+        "fail": 3,
+        "unknown": 0,
+        "notApplicable": 86,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Knowledge retrieval",
+        "pass": 11,
+        "fail": 0,
+        "unknown": 44,
+        "notApplicable": 42,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Pricing correctness",
+        "pass": 25,
+        "fail": 0,
+        "unknown": 46,
+        "notApplicable": 26,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Invoice safety",
+        "pass": 92,
+        "fail": 0,
+        "unknown": 0,
+        "notApplicable": 5,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Payment safety",
+        "pass": 92,
+        "fail": 0,
+        "unknown": 0,
+        "notApplicable": 5,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Guarantee/result safety",
+        "pass": 92,
+        "fail": 0,
+        "unknown": 0,
+        "notApplicable": 5,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Repetition avoidance",
+        "pass": 45,
+        "fail": 4,
+        "unknown": 0,
+        "notApplicable": 48,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Long-conversation stability",
+        "pass": 0,
+        "fail": 4,
+        "unknown": 0,
+        "unit": "complete journey"
+      },
+      {
+        "category": "Natural response quality",
+        "pass": 38,
+        "fail": 58,
+        "unknown": 1,
+        "notApplicable": 0,
+        "unit": "judged applicable turn"
+      },
+      {
+        "category": "Handoff correctness",
+        "pass": 0,
+        "fail": 52,
+        "unknown": 0,
+        "notApplicable": 45,
+        "unit": "judged applicable turn"
+      }
+    ]
+  },
+  "comparison": {
+    "gpt-4.1-mini": {
+      "sampleCount": 98,
+      "pass": 35,
+      "fail": 62,
+      "inconclusive": 0,
+      "needsReview": 1,
+      "rawPass": 38,
+      "executedTurns": 101,
+      "calls": 327,
+      "input": 991082,
+      "cached": 162048,
+      "output": 83301,
+      "estimatedUSD": 0.4811,
+      "averageTurnCost": 0.0047633663366336634,
+      "averageTurnLatencyMs": 10797.09900990099,
+      "meanNaturalness": 2.376237623762376,
+      "categoryScores": [
+        {
+          "category": "Service understanding",
+          "pass": 79,
+          "fail": 11,
+          "unknown": 10,
+          "notApplicable": 1,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Platform understanding",
+          "pass": 68,
+          "fail": 3,
+          "unknown": 9,
+          "notApplicable": 21,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Budget interpretation",
+          "pass": 39,
+          "fail": 2,
+          "unknown": 8,
+          "notApplicable": 52,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Duration interpretation",
+          "pass": 37,
+          "fail": 1,
+          "unknown": 8,
+          "notApplicable": 55,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Actual-sent-question understanding",
+          "pass": 81,
+          "fail": 11,
+          "unknown": 8,
+          "notApplicable": 1,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Corrections",
+          "pass": 11,
+          "fail": 0,
+          "unknown": 0,
+          "notApplicable": 90,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Deferrals/refusals",
+          "pass": 14,
+          "fail": 26,
+          "unknown": 0,
+          "notApplicable": 61,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Course/service switching",
+          "pass": 81,
+          "fail": 5,
+          "unknown": 0,
+          "notApplicable": 15,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Multi-question coverage",
+          "pass": 53,
+          "fail": 20,
+          "unknown": 0,
+          "notApplicable": 28,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Knowledge retrieval",
+          "pass": 80,
+          "fail": 9,
+          "unknown": 7,
+          "notApplicable": 5,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Pricing correctness",
+          "pass": 35,
+          "fail": 6,
+          "unknown": 15,
+          "notApplicable": 45,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Invoice safety",
+          "pass": 56,
+          "fail": 0,
+          "unknown": 0,
+          "notApplicable": 45,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Payment safety",
+          "pass": 60,
+          "fail": 1,
+          "unknown": 0,
+          "notApplicable": 40,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Guarantee/result safety",
+          "pass": 63,
+          "fail": 0,
+          "unknown": 0,
+          "notApplicable": 38,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Repetition avoidance",
+          "pass": 71,
+          "fail": 18,
+          "unknown": 4,
+          "notApplicable": 8,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Long-conversation stability",
+          "pass": 0,
+          "fail": 4,
+          "unknown": 0,
+          "unit": "complete journey"
+        },
+        {
+          "category": "Natural response quality",
+          "pass": 46,
+          "fail": 54,
+          "unknown": 1,
+          "notApplicable": 0,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Handoff correctness",
+          "pass": 2,
+          "fail": 43,
+          "unknown": 0,
+          "notApplicable": 56,
+          "unit": "judged applicable turn"
+        }
+      ]
+    },
+    "gpt-5.4": {
+      "sampleCount": 98,
+      "pass": 36,
+      "fail": 57,
+      "inconclusive": 4,
+      "needsReview": 1,
+      "rawPass": 38,
+      "executedTurns": 101,
+      "calls": 431,
+      "input": 1110798,
+      "cached": 35072,
+      "output": 94372,
+      "estimatedUSD": 4.113663,
+      "averageTurnCost": 0.04072933663366336,
+      "averageTurnLatencyMs": 15909.039603960397,
+      "meanNaturalness": 2.7010309278350517,
+      "categoryScores": [
+        {
+          "category": "Service understanding",
+          "pass": 43,
+          "fail": 2,
+          "unknown": 44,
+          "notApplicable": 8,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Platform understanding",
+          "pass": 39,
+          "fail": 0,
+          "unknown": 44,
+          "notApplicable": 14,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Budget interpretation",
+          "pass": 9,
+          "fail": 2,
+          "unknown": 44,
+          "notApplicable": 42,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Duration interpretation",
+          "pass": 5,
+          "fail": 0,
+          "unknown": 44,
+          "notApplicable": 48,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Actual-sent-question understanding",
+          "pass": 28,
+          "fail": 4,
+          "unknown": 45,
+          "notApplicable": 20,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Corrections",
+          "pass": 4,
+          "fail": 0,
+          "unknown": 0,
+          "notApplicable": 93,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Deferrals/refusals",
+          "pass": 5,
+          "fail": 8,
+          "unknown": 0,
+          "notApplicable": 84,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Course/service switching",
+          "pass": 11,
+          "fail": 0,
+          "unknown": 0,
+          "notApplicable": 86,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Multi-question coverage",
+          "pass": 8,
+          "fail": 3,
+          "unknown": 0,
+          "notApplicable": 86,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Knowledge retrieval",
+          "pass": 11,
+          "fail": 0,
+          "unknown": 44,
+          "notApplicable": 42,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Pricing correctness",
+          "pass": 25,
+          "fail": 0,
+          "unknown": 46,
+          "notApplicable": 26,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Invoice safety",
+          "pass": 92,
+          "fail": 0,
+          "unknown": 0,
+          "notApplicable": 5,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Payment safety",
+          "pass": 92,
+          "fail": 0,
+          "unknown": 0,
+          "notApplicable": 5,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Guarantee/result safety",
+          "pass": 92,
+          "fail": 0,
+          "unknown": 0,
+          "notApplicable": 5,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Repetition avoidance",
+          "pass": 45,
+          "fail": 4,
+          "unknown": 0,
+          "notApplicable": 48,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Long-conversation stability",
+          "pass": 0,
+          "fail": 4,
+          "unknown": 0,
+          "unit": "complete journey"
+        },
+        {
+          "category": "Natural response quality",
+          "pass": 38,
+          "fail": 58,
+          "unknown": 1,
+          "notApplicable": 0,
+          "unit": "judged applicable turn"
+        },
+        {
+          "category": "Handoff correctness",
+          "pass": 0,
+          "fail": 52,
+          "unknown": 0,
+          "notApplicable": 45,
+          "unit": "judged applicable turn"
+        }
+      ]
+    }
+  },
+  "scenarioCounts": [
+    {
+      "model": "gpt-4.1-mini",
+      "total": 465,
+      "uniqueFrozen": 94,
+      "uniqueSupplemental": 125,
+      "pass": 142,
+      "fail": 312,
+      "inconclusive": 1,
+      "needsReview": 10
+    },
+    {
+      "model": "gpt-5.4",
+      "total": 98,
+      "uniqueFrozen": 21,
+      "uniqueSupplemental": 23,
+      "pass": 36,
+      "fail": 57,
+      "inconclusive": 4,
+      "needsReview": 1
+    }
+  ],
+  "reviewedTurns": 570,
+  "totalSelectedTurns": 575,
+  "cost": [
+    {
+      "model": "gpt-4.1-mini",
+      "calls": 1864,
+      "input": 4856795,
+      "cached": 775296,
+      "output": 404921,
+      "estimatedUSD": 2.3580028000000004,
+      "missingUsage": 186,
+      "averageCallLatencyMs": 2944.4919527896996,
+      "executedTurnsIncludingRetries": 657,
+      "averageCostPerExecutedTurn": 0.003589045357686454,
+      "averageTurnLatencyMs": 8361.17199391172,
+      "phases": {
+        "interpretation": {
+          "calls": 657,
+          "input": 1626656,
+          "cached": 764800,
+          "output": 213838,
+          "estimatedUSD": 0.7633632,
+          "missingUsage": 179,
+          "averageCallLatencyMs": 3714.4718417047184
+        },
+        "selection": {
+          "calls": 478,
+          "input": 2102881,
+          "cached": 0,
+          "output": 88290,
+          "estimatedUSD": 0.9824164000000001,
+          "missingUsage": 1,
+          "averageCallLatencyMs": 2827.5251046025105
+        },
+        "grounding": {
+          "calls": 293,
+          "input": 309525,
+          "cached": 0,
+          "output": 56022,
+          "estimatedUSD": 0.2134452,
+          "missingUsage": 2,
+          "averageCallLatencyMs": 2711.7474402730377
+        },
+        "composition": {
+          "calls": 436,
+          "input": 817733,
+          "cached": 10496,
+          "output": 46771,
+          "estimatedUSD": 0.398778,
+          "missingUsage": 4,
+          "averageCallLatencyMs": 2068.8669724770643
+        }
+      }
+    },
+    {
+      "model": "gpt-5.4",
+      "calls": 431,
+      "input": 1110798,
+      "cached": 35072,
+      "output": 94372,
+      "estimatedUSD": 4.113663,
+      "missingUsage": 4,
+      "averageCallLatencyMs": 3725.9930394431553,
+      "executedTurnsIncludingRetries": 101,
+      "averageCostPerExecutedTurn": 0.04072933663366336,
+      "averageTurnLatencyMs": 15909.039603960397,
+      "phases": {
+        "interpretation": {
+          "calls": 101,
+          "input": 344028,
+          "cached": 0,
+          "output": 50957,
+          "estimatedUSD": 1.624425,
+          "missingUsage": 0,
+          "averageCallLatencyMs": 6288.0990099009905
+        },
+        "selection": {
+          "calls": 100,
+          "input": 454699,
+          "cached": 0,
+          "output": 9966,
+          "estimatedUSD": 1.2862375,
+          "missingUsage": 0,
+          "averageCallLatencyMs": 3009.26
+        },
+        "composition": {
+          "calls": 114,
+          "input": 204138,
+          "cached": 35072,
+          "output": 8197,
+          "estimatedUSD": 0.554388,
+          "missingUsage": 3,
+          "averageCallLatencyMs": 2220.719298245614
+        },
+        "grounding": {
+          "calls": 116,
+          "input": 107933,
+          "cached": 0,
+          "output": 25252,
+          "estimatedUSD": 0.6486125,
+          "missingUsage": 1,
+          "averageCallLatencyMs": 3592.387931034483
+        }
+      }
+    }
+  ],
+  "judgeCost": {
+    "calls": 104,
+    "input": 2343772,
+    "cached": 968704,
+    "output": 249381,
+    "estimatedUSD": 7.420561,
+    "missingUsage": 15,
+    "averageCallLatencyMs": 28308.93269230769
+  },
+  "highSeverityCases": 27,
+  "mediumCases": 360,
+  "knowledge": {
+    "configRevision": 30,
+    "recordCount": 84,
+    "counts": {
+      "knowledge": 57,
+      "workflow": 4,
+      "handoff": 5,
+      "plan": 4,
+      "service": 4,
+      "response": 9,
+      "tone": 1
+    },
+    "exactDuplicateText": [
+      {
+        "text": "{{requirements}}",
+        "keys": [
+          "setup_requirements",
+          "requirements"
+        ]
+      },
+      {
+        "text": "how many days would you like the ads to run?",
+        "keys": [
+          "ads_duration",
+          "duration"
+        ]
+      }
+    ],
+    "legacyEnabled": [
+      {
+        "key": "platform",
+        "kind": "workflow",
+        "title": "Ask platform",
+        "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+      },
+      {
+        "key": "service",
+        "kind": "workflow",
+        "title": "Ask service",
+        "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+      },
+      {
+        "key": "budget",
+        "kind": "workflow",
+        "title": "Ask budget",
+        "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+      },
+      {
+        "key": "duration",
+        "kind": "workflow",
+        "title": "Ask duration",
+        "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+      },
+      {
+        "key": "budget",
+        "kind": "response",
+        "title": "Ask budget",
+        "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+      },
+      {
+        "key": "duration",
+        "kind": "response",
+        "title": "Ask duration",
+        "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+      },
+      {
+        "key": "email",
+        "kind": "response",
+        "title": "Invoice email",
+        "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+      },
+      {
+        "key": "friendly",
+        "kind": "tone",
+        "title": "Simple greeting",
+        "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+      },
+      {
+        "key": "greeting",
+        "kind": "response",
+        "title": "Greeting",
+        "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+      },
+      {
+        "key": "plans",
+        "kind": "response",
+        "title": "Recommended plans",
+        "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+      },
+      {
+        "key": "platform",
+        "kind": "response",
+        "title": "Ask platform",
+        "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+      },
+      {
+        "key": "quote",
+        "kind": "response",
+        "title": "Service quote",
+        "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+      },
+      {
+        "key": "requirements",
+        "kind": "response",
+        "title": "Onboarding requirements",
+        "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+      },
+      {
+        "key": "service",
+        "kind": "response",
+        "title": "Ask service",
+        "note": "Enabled legacy record; V2 does not run legacy response/workflow branches."
+      }
+    ],
+    "unexpandedStrict": [
+      {
+        "key": "setup_requirements",
+        "text": "{{requirements}}",
+        "role": "RESPONSE",
+        "note": "Review role/eligibility: literal template is not necessarily a usable V2 response."
+      },
+      {
+        "key": "custom_management_price",
+        "text": "The total is {{price}} for {{duration}} days.\n\nThis includes {{ad_budget}} advertising budget and {{management_fee}} management fee.\n\nWould you like to proceed?",
+        "role": "GUIDANCE",
+        "note": "Review role/eligibility: literal template is not necessarily a usable V2 response."
+      },
+      {
+        "key": "recommended_ads_plans",
+        "text": "{{plans}}\n\nWhich one would you like to go with?",
+        "role": "GUIDANCE",
+        "note": "Review role/eligibility: literal template is not necessarily a usable V2 response."
+      },
+      {
+        "key": "service_price",
+        "text": "{{service_name}} costs {{price}}.\n\nWould you like to proceed?",
+        "role": "GUIDANCE",
+        "note": "Review role/eligibility: literal template is not necessarily a usable V2 response."
+      }
+    ],
+    "legacyHandoffAfterReply": [
+      {
+        "key": "after_payment_process",
+        "reason": "SERVICE_ONBOARDING",
+        "wording": "Once payment has been verified, the team will confirm the next steps and any onboarding information needed for your selected service.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "existing_ad_account",
+        "reason": "ACCOUNT_REVIEW",
+        "wording": "Please let us know which platform your existing account is on. The team can review the appropriate next step without asking you to share your password here.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "existing_campaign_issue",
+        "reason": "CAMPAIGN_REVIEW",
+        "wording": "Please explain what is happening with the campaign or account. A team member needs to review the issue before confirming the next step.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "expired_payment_details",
+        "reason": "INVOICE_REVIEW",
+        "wording": "Please let the team check the invoice before you use those payment details. They can confirm whether the invoice is still valid or needs to be updated.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "human_support_information",
+        "reason": "CUSTOMER_REQUESTED_HUMAN",
+        "wording": "A customer-service representative can help with this. Please leave any details you would like them to review.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "incorrect_payment_amount",
+        "reason": "PAYMENT_PROBLEM",
+        "wording": "Please share the amount you transferred and the invoice it relates to. The team will review it and explain the next step.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "invoice_correction",
+        "reason": "INVOICE_REVIEW",
+        "wording": "Please hold off on paying that invoice while the team checks it. Let us know which detail appears incorrect.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "meta_management_access",
+        "reason": "SERVICE_ONBOARDING",
+        "wording": "The team will guide you through the appropriate Meta business or advertising-account access process. Please don’t share your personal Facebook password.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "other_services_review",
+        "reason": "SERVICE_REVIEW",
+        "wording": "Please tell us which service you’re interested in. The team can help confirm the approved details.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "payment_claim_information",
+        "reason": "PAYMENT_VERIFICATION_REQUIRED",
+        "wording": "Thanks for the update. Your payment needs to be checked before we can confirm it. If you haven’t already sent your receipt, you can share it here.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "payment_pending_review",
+        "reason": "PAYMENT_PROBLEM",
+        "wording": "Please don’t make another payment just yet. The team needs to check the transaction and confirm its status.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "receipt_request",
+        "reason": "RECEIPT_REQUEST",
+        "wording": "We can help with a receipt for a confirmed payment. Please provide the customer name and email address to use for the receipt if they are not already on the invoice.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "receipt_review_information",
+        "reason": "PAYMENT_VERIFICATION_REQUIRED",
+        "wording": "Thanks for sending it. The receipt needs to be reviewed and the payment verified before we can confirm the next step.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "refund_cancellation_review",
+        "reason": "REFUND_REVIEW",
+        "wording": "A team member needs to review your refund or cancellation request. Please tell us which service or payment it relates to and what happened.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "response_time_information",
+        "reason": "SUPPORT_REVIEW",
+        "wording": "I don’t have a confirmed response time to promise. Please leave the details of your request so the team can review them.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "secure_account_access",
+        "reason": "SERVICE_ONBOARDING",
+        "wording": "Please don’t send passwords, OTPs or access tokens in this chat. The team will guide you through the approved account-access process.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "service_timing_review",
+        "reason": "TIMING_REVIEW",
+        "wording": "The team will confirm the setup or campaign start time after reviewing your requirements. I don’t have a confirmed completion time to promise yet.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      },
+      {
+        "key": "tiktok_management_access",
+        "reason": "SERVICE_ONBOARDING",
+        "wording": "The team will guide you through providing the required TikTok Ads Manager access using the approved onboarding process. Please don’t send passwords or verification codes here.",
+        "note": "Legacy flag is not the same as V2 forceHandoff. Potential configuration expectation mismatch."
+      }
+    ],
+    "strict": [
+      {
+        "key": "service_difference",
+        "role": "RESPONSE",
+        "text": "With account setup, we set up your advertising account and guide you to run ads yourself. With ads management, we run the campaign for you."
+      },
+      {
+        "key": "setup_budget_separate",
+        "role": "RESPONSE",
+        "text": "The setup fee covers account setup and guidance. Your advertising budget is separate."
+      },
+      {
+        "key": "setup_requirements",
+        "role": "RESPONSE",
+        "text": "{{requirements}}"
+      },
+      {
+        "key": "setup_scope",
+        "role": "RESPONSE",
+        "text": "Account setup covers advertising-account setup and guidance on accessing it and running your own ads."
+      },
+      {
+        "key": "ads_budget",
+        "role": "GUIDANCE",
+        "text": "What is your daily advertising budget?"
+      },
+      {
+        "key": "ads_duration",
+        "role": "GUIDANCE",
+        "text": "How many days would you like the ads to run?"
+      },
+      {
+        "key": "ads_management_details",
+        "role": "GUIDANCE",
+        "text": "What is your daily advertising budget, and how many days would you like to run the ads for?"
+      },
+      {
+        "key": "ads_platform_selection",
+        "role": "GUIDANCE",
+        "text": "Which platform do you want?\n\nTikTok\n\nor\n\nMeta (Facebook & Instagram)?"
+      },
+      {
+        "key": "ads_service_clarification",
+        "role": "GUIDANCE",
+        "text": "Do you want us to set up your ads account for you, then teach you how to access it and run the ads yourself?\n\nOr\n\nDo you want us to run the ads straight up for you?"
+      },
+      {
+        "key": "ai_identity",
+        "role": "GUIDANCE",
+        "text": "This is Joshspot’s automated assistant helping with quick responses 😊 If you’d prefer someone from the team, I can get them for you."
+      },
+      {
+        "key": "confirm_proceed",
+        "role": "GUIDANCE",
+        "text": "Would you like to proceed?"
+      },
+      {
+        "key": "custom_management_price",
+        "role": "GUIDANCE",
+        "text": "The total is {{price}} for {{duration}} days.\n\nThis includes {{ad_budget}} advertising budget and {{management_fee}} management fee.\n\nWould you like to proceed?"
+      },
+      {
+        "key": "customer_declines",
+        "role": "GUIDANCE",
+        "text": "Okay."
+      },
+      {
+        "key": "media_handoff",
+        "role": "GUIDANCE",
+        "text": "Hold on, you will get a response shortly."
+      },
+      {
+        "key": "payment_claim",
+        "role": "GUIDANCE",
+        "text": "Thanks for letting us know. Customer support will check the payment before confirming it."
+      },
+      {
+        "key": "payment_followup",
+        "role": "GUIDANCE",
+        "text": "Would you still like to proceed? Let us know if you need any help with payment."
+      },
+      {
+        "key": "payment_verified",
+        "role": "GUIDANCE",
+        "text": "Payment confirmed. Thank you — I’m passing this to customer support for the next step."
+      },
+      {
+        "key": "pending_payment",
+        "role": "GUIDANCE",
+        "text": "Have you made payment already?"
+      },
+      {
+        "key": "ready_to_proceed",
+        "role": "GUIDANCE",
+        "text": "Should I send the account details now?"
+      },
+      {
+        "key": "recommended_ads_plans",
+        "role": "GUIDANCE",
+        "text": "{{plans}}\n\nWhich one would you like to go with?"
+      },
+      {
+        "key": "service_price",
+        "role": "GUIDANCE",
+        "text": "{{service_name}} costs {{price}}.\n\nWould you like to proceed?"
+      },
+      {
+        "key": "unrelated_question",
+        "role": "GUIDANCE",
+        "text": "I’m here to help with Joshspot services 😊 What would you like help with?"
+      }
+    ],
+    "overlapGroups": [
+      [
+        "service_difference",
+        "setup_vs_management",
+        "choose_service",
+        "ads_service_clarification"
+      ],
+      [
+        "setup_scope",
+        "tiktok_setup_information",
+        "meta_setup_information",
+        "setup_requirements"
+      ],
+      [
+        "campaign_expectations",
+        "review_6ac33e30ba3cd7082113f310_1791180346395"
+      ],
+      [
+        "payment_claim",
+        "payment_claim_information",
+        "receipt_review_information"
+      ]
+    ],
+    "configConflict": {
+      "source": "config.data.instructions",
+      "text": "Service onboarding and access requirements must hand off to CSS immediately after the approved onboarding response.",
+      "note": "Stale relative to the requested pre-payment policy. V2 does not directly load this legacy instruction string into its phase prompts; report as dormant configuration conflict, not proof it caused a V2 handoff."
+    },
+    "plans": [
+      {
+        "key": "plan_7",
+        "configuredTotal": 60000,
+        "recordRevision": 0,
+        "recordUpdatedAt": "2026-10-03T23:02:12.036Z",
+        "calculator": {
+          "advertisingSpend": 35000,
+          "managementFee": 25000,
+          "total": 60000
+        },
+        "sources": {
+          "configured": "catalogue-snapshot.json records.plan_7.data.amount",
+          "advertisingSpend": "inbox/ai/vendor/adsPricingConfig.mjs recommendationPresets",
+          "managementFee": "same calculator getManagementFee()/calculateTotal(), reused by inbox/ai/pricing.js"
+        },
+        "conflict": false
+      },
+      {
+        "key": "plan_10",
+        "configuredTotal": 135000,
+        "recordRevision": 0,
+        "recordUpdatedAt": "2026-10-03T23:02:12.196Z",
+        "calculator": {
+          "advertisingSpend": 100000,
+          "managementFee": 35000,
+          "total": 135000
+        },
+        "sources": {
+          "configured": "catalogue-snapshot.json records.plan_10.data.amount",
+          "advertisingSpend": "inbox/ai/vendor/adsPricingConfig.mjs recommendationPresets",
+          "managementFee": "same calculator getManagementFee()/calculateTotal(), reused by inbox/ai/pricing.js"
+        },
+        "conflict": false
+      },
+      {
+        "key": "plan_15",
+        "configuredTotal": 285000,
+        "recordRevision": 0,
+        "recordUpdatedAt": "2026-10-03T23:02:12.376Z",
+        "calculator": {
+          "advertisingSpend": 200000,
+          "managementFee": 65000,
+          "total": 265000
+        },
+        "sources": {
+          "configured": "catalogue-snapshot.json records.plan_15.data.amount",
+          "advertisingSpend": "inbox/ai/vendor/adsPricingConfig.mjs recommendationPresets",
+          "managementFee": "same calculator getManagementFee()/calculateTotal(), reused by inbox/ai/pricing.js"
+        },
+        "conflict": true
+      },
+      {
+        "key": "plan_30",
+        "configuredTotal": 415000,
+        "recordRevision": 0,
+        "recordUpdatedAt": "2026-10-03T23:02:12.548Z",
+        "calculator": {
+          "advertisingSpend": 300000,
+          "managementFee": 115000,
+          "total": 415000
+        },
+        "sources": {
+          "configured": "catalogue-snapshot.json records.plan_30.data.amount",
+          "advertisingSpend": "inbox/ai/vendor/adsPricingConfig.mjs recommendationPresets",
+          "managementFee": "same calculator getManagementFee()/calculateTotal(), reused by inbox/ai/pricing.js"
+        },
+        "conflict": false
+      }
+    ],
+    "ownerDecision": [
+      {
+        "key": "plan_15",
+        "label": "OWNER DECISION REQUIRED",
+        "choices": [
+          "Keep calculator advertising spend and fee; explicitly update configured package total to calculator result.",
+          "Keep configured package total; explicitly approve revised spend/fee or calculator preset. Do not let the model decide."
+        ]
+      }
+    ]
+  },
+  "limitations": [
+    "Independent model judging is provisional and not an objective measurement; documented manual corrections are separate from immutable raw outcomes.",
+    "Failed final validation does not reveal rejected intermediate prose; a false-positive validation diagnosis cannot always be proven.",
+    "No full runtime ownership/assignment or real payment/WhatsApp execution was exercised. Isolation prevents side effects, not a proof that all executor guards are correct.",
+    "Long conversations blocked at handoff; later scripted turns were not run and did not pass.",
+    "Catalogue is actual enabled business data; customers are synthetic. Old-state fixture is current-schema seeded state, not a production migration replay.",
+    "Production model confirmed by ten recent logs; remote process environment overrides were not exhaustively inspected.",
+    "Timeout calls can be billable without returned usage; estimated costs are known-usage lower bounds, not billing reconciliation."
+  ]
+}

@@ -1,0 +1,125 @@
+TAP version 13
+# Subtest: setup price uses semantic catalogue mapping without campaign fields or model IDs
+ok 1 - setup price uses semantic catalogue mapping without campaign fields or model IDs
+  ---
+  duration_ms: 47.6746
+  ...
+# Subtest: management daily budget uses unchanged calculator, approved testing default
+ok 2 - management daily budget uses unchanged calculator, approved testing default
+  ---
+  duration_ms: 50.5818
+  ...
+# Subtest: recommendation resolves plans without inventing budget
+ok 3 - recommendation resolves plans without inventing budget
+  ---
+  duration_ms: 3.2694
+  ...
+# Subtest: 15-day package retrieves265000=200000+65000
+ok 4 - 15-day package retrieves265000=200000+65000
+  ---
+  duration_ms: 5.0118
+  ...
+# Subtest: mixed pairs and whole-purchase cap preserve scope
+ok 5 - mixed pairs and whole-purchase cap preserve scope
+  ---
+  duration_ms: 12.964
+  ...
+# Subtest: course detour keeps management; explicit switch and return replace deliberately
+ok 6 - course detour keeps management; explicit switch and return replace deliberately
+  ---
+  duration_ms: 27.6238
+  ...
+# Subtest: deferral suppresses invoice and payment question; fresh request resumes
+ok 7 - deferral suppresses invoice and payment question; fresh request resumes
+  ---
+  duration_ms: 15.3661
+  ...
+# Subtest: payment claim cannot mark paid
+ok 8 - payment claim cannot mark paid
+  ---
+  duration_ms: 7.5285
+  ...
+# Subtest: human current evidence bypasses business data retrieval and simulates handoff
+ok 9 - human current evidence bypasses business data retrieval and simulates handoff
+  ---
+  duration_ms: 10.8309
+  ...
+# Subtest: multiple requests resolve independently; missing creative knowledge is explicit
+ok 10 - multiple requests resolve independently; missing creative knowledge is explicit
+  ---
+  duration_ms: 6.807
+  ...
+# Subtest: knowledge eligibility honors metadata and excluded service
+ok 11 - knowledge eligibility honors metadata and excluded service
+  ---
+  duration_ms: 0.8832
+  ...
+# Subtest: natural trusted financial wording The setup fee is 20k.
+ok 12 - natural trusted financial wording The setup fee is 20k.
+  ---
+  duration_ms: 8.4873
+  ...
+# Subtest: natural trusted financial wording Setup costs 20,000 naira.
+ok 13 - natural trusted financial wording Setup costs 20,000 naira.
+  ---
+  duration_ms: 4.8375
+  ...
+# Subtest: natural trusted financial wording Setup fee: ₦20,000.
+ok 14 - natural trusted financial wording Setup fee: ₦20,000.
+  ---
+  duration_ms: 7.6694
+  ...
+# Subtest: natural trusted financial wording Setup fee is NGN 20,000.
+ok 15 - natural trusted financial wording Setup fee is NGN 20,000.
+  ---
+  duration_ms: 4.9009
+  ...
+# Subtest: same amount wrong role and invented amount rejected
+ok 16 - same amount wrong role and invented amount rejected
+  ---
+  duration_ms: 6.5305
+  ...
+# Subtest: ordinary customer budget and duration allowed; URL and envelope blocked
+ok 17 - ordinary customer budget and duration allowed; URL and envelope blocked
+  ---
+  duration_ms: 9.1864
+  ...
+# Subtest: current evidence required; historical requests cannot be invented
+ok 18 - current evidence required; historical requests cannot be invented
+  ---
+  duration_ms: 2.9862
+  ...
+# Subtest: composer repairs once only; no autonomous tool loop
+ok 19 - composer repairs once only; no autonomous tool loop
+  ---
+  duration_ms: 9.1519
+  ...
+# Subtest: ownership invalidation blocks final send
+ok 20 - ownership invalidation blocks final send
+  ---
+  duration_ms: 5.9636
+  ...
+# Subtest: test session ignores client state and never invokes financial port
+ok 21 - test session ignores client state and never invokes financial port
+  ---
+  duration_ms: 4.5207
+  ...
+# Subtest: all engines selectable, default remains V1, V4 live manual gate
+ok 22 - all engines selectable, default remains V1, V4 live manual gate
+  ---
+  duration_ms: 1643.5727
+  ...
+# Subtest: model adapter sends structured outputs, no tools, separate stage models
+ok 23 - model adapter sends structured outputs, no tools, separate stage models
+  ---
+  duration_ms: 254.4186
+  ...
+1..23
+# tests 23
+# suites 0
+# pass 23
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2500.1898

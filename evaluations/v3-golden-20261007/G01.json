@@ -1,0 +1,995 @@
+{
+  "id": "G01",
+  "category": "greeting",
+  "expected": [
+    "Clarify service only while unknown; recommend from tool rather than demand a budget."
+  ],
+  "plannedCustomerTurns": [
+    "good evenin boss",
+    "i wan run ads",
+    "the one u people run for me",
+    "tiktok",
+    "i no sabi budget o suggest for me"
+  ],
+  "turns": [
+    {
+      "customer": [
+        {
+          "_id": "G01-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "good evenin boss",
+          "createdAt": "2026-10-07T09:15:51.147Z"
+        }
+      ],
+      "historyBefore": [],
+      "stateBefore": {},
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3377,
+        "output_tokens": 29,
+        "total_tokens": 3406,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0013972000000000001
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "post",
+          "path": "/conversations"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=100&order=asc&after=msg_6ac60dcaab948194b100be3ea3990ed7099c7e9810555719"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items/msg_099c7e9810555719006ac60dccab3081948764923130abd947"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items/msg_099c7e9810555719006ac60dcd3d6c81949fea96ced6609246"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=100&order=asc&after=msg_6ac60dcaab948194b100be3ea3990ed7099c7e9810555719"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_099c7e9810555719006ac60dcc84408194a63a69ea316836e4",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3377,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 29,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3406
+          },
+          "output": [
+            {
+              "id": "msg_099c7e9810555719006ac60dcd3d6c81949fea96ced6609246",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Good evening! How can I assist you today? Are you interested in advertising services like account setup, ads management, or something else?"
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 5362,
+          "openaiConversationId": "conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719"
+        },
+        "action": "reply",
+        "response": "Good evening! How can I assist you today? Are you interested in advertising services like account setup, ads management, or something else?",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 7671,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719",
+        "seenMessageIds": [
+          "G01-in-0"
+        ],
+        "contextCharacters": 145,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G01-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "i wan run ads",
+          "createdAt": "2026-10-07T09:15:58.821Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G01-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "good evenin boss",
+          "createdAt": "2026-10-07T09:15:51.147Z"
+        },
+        {
+          "_id": "G01-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Good evening! How can I assist you today? Are you interested in advertising services like account setup, ads management, or something else?",
+          "createdAt": "2026-10-07T09:15:58.818Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719",
+        "seenMessageIds": [
+          "G01-in-0"
+        ],
+        "contextCharacters": 145,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3480,
+        "output_tokens": 71,
+        "total_tokens": 3551,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0015056
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=100&order=asc&after=msg_6ac60dd15d74819484d32ed665854265099c7e9810555719"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items/msg_099c7e9810555719006ac60dd2948481949136a6410e48a028"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items/msg_099c7e9810555719006ac60dd2fd948194ae022e3e779c5a76"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=100&order=asc&after=msg_6ac60dd15d74819484d32ed665854265099c7e9810555719"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_099c7e9810555719006ac60dd26cf88194b1e27380b73c0f55",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3480,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 71,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3551
+          },
+          "output": [
+            {
+              "id": "msg_099c7e9810555719006ac60dd2fd948194ae022e3e779c5a76",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "You want to run ads—great! Do you want us to help set up your ad account and guide you to run the ads yourself, or would you prefer Joshspot to manage the entire ad campaign for you? Also, please let me know which platform you want to advertise on—TikTok, Meta (Facebook/Instagram), or both?"
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 3778,
+          "openaiConversationId": "conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719"
+        },
+        "action": "reply",
+        "response": "You want to run ads—great! Do you want us to help set up your ad account and guide you to run the ads yourself, or would you prefer Joshspot to manage the entire ad campaign for you? Also, please let me know which platform you want to advertise on—TikTok, Meta (Facebook/Instagram), or both?",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 5575,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719",
+        "seenMessageIds": [
+          "G01-in-0",
+          "G01-out-0",
+          "G01-in-1"
+        ],
+        "contextCharacters": 560,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G01-in-2",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "the one u people run for me",
+          "createdAt": "2026-10-07T09:16:04.397Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G01-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "good evenin boss",
+          "createdAt": "2026-10-07T09:15:51.147Z"
+        },
+        {
+          "_id": "G01-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Good evening! How can I assist you today? Are you interested in advertising services like account setup, ads management, or something else?",
+          "createdAt": "2026-10-07T09:15:58.818Z"
+        },
+        {
+          "_id": "G01-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "i wan run ads",
+          "createdAt": "2026-10-07T09:15:58.821Z"
+        },
+        {
+          "_id": "G01-out-1",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "You want to run ads—great! Do you want us to help set up your ad account and guide you to run the ads yourself, or would you prefer Joshspot to manage the entire ad campaign for you? Also, please let me know which platform you want to advertise on—TikTok, Meta (Facebook/Instagram), or both?",
+          "createdAt": "2026-10-07T09:16:04.396Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719",
+        "seenMessageIds": [
+          "G01-in-0",
+          "G01-out-0",
+          "G01-in-1"
+        ],
+        "contextCharacters": 560,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3628,
+        "output_tokens": 118,
+        "total_tokens": 3746,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.00164
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=100&order=asc&after=msg_6ac60dd6db4081949b918d9b06ff7c29099c7e9810555719"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items/msg_099c7e9810555719006ac60dd8540c819497e33dfc0ec42aa0"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items/msg_099c7e9810555719006ac60dd8ef308194baec4b595bf4e8b2"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=100&order=asc&after=msg_6ac60dd6db4081949b918d9b06ff7c29099c7e9810555719"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_099c7e9810555719006ac60dd825488194967a0300d2429409",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3628,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 118,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3746
+          },
+          "output": [
+            {
+              "id": "msg_099c7e9810555719006ac60dd8ef308194baec4b595bf4e8b2",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "You want Joshspot to run your ads for you—that means you're interested in ads management.\n\nTo proceed, I'll need to know:\n\n1. The advertising platform you want to use: TikTok, Meta (Facebook/Instagram), or both?\n2. Your budget for the ads (daily spend, total spend, or an all-inclusive cap).\n3. How long you want the campaign to run (duration in days).\n4. How many creatives or ad variations you want us to manage or test.\n\nLet me know these details, and I can prepare a quote or plan for you."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 4632,
+          "openaiConversationId": "conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719"
+        },
+        "action": "reply",
+        "response": "You want Joshspot to run your ads for you—that means you're interested in ads management.\n\nTo proceed, I'll need to know:\n\n1. The advertising platform you want to use: TikTok, Meta (Facebook/Instagram), or both?\n2. Your budget for the ads (daily spend, total spend, or an all-inclusive cap).\n3. How long you want the campaign to run (duration in days).\n4. How many creatives or ad variations you want us to manage or test.\n\nLet me know these details, and I can prepare a quote or plan for you.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 6917,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719",
+        "seenMessageIds": [
+          "G01-in-0",
+          "G01-out-0",
+          "G01-in-1",
+          "G01-out-1",
+          "G01-in-2"
+        ],
+        "contextCharacters": 1141,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G01-in-3",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "tiktok",
+          "createdAt": "2026-10-07T09:16:11.319Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G01-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "good evenin boss",
+          "createdAt": "2026-10-07T09:15:51.147Z"
+        },
+        {
+          "_id": "G01-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Good evening! How can I assist you today? Are you interested in advertising services like account setup, ads management, or something else?",
+          "createdAt": "2026-10-07T09:15:58.818Z"
+        },
+        {
+          "_id": "G01-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "i wan run ads",
+          "createdAt": "2026-10-07T09:15:58.821Z"
+        },
+        {
+          "_id": "G01-out-1",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "You want to run ads—great! Do you want us to help set up your ad account and guide you to run the ads yourself, or would you prefer Joshspot to manage the entire ad campaign for you? Also, please let me know which platform you want to advertise on—TikTok, Meta (Facebook/Instagram), or both?",
+          "createdAt": "2026-10-07T09:16:04.396Z"
+        },
+        {
+          "_id": "G01-in-2",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "the one u people run for me",
+          "createdAt": "2026-10-07T09:16:04.397Z"
+        },
+        {
+          "_id": "G01-out-2",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "You want Joshspot to run your ads for you—that means you're interested in ads management.\n\nTo proceed, I'll need to know:\n\n1. The advertising platform you want to use: TikTok, Meta (Facebook/Instagram), or both?\n2. Your budget for the ads (daily spend, total spend, or an all-inclusive cap).\n3. How long you want the campaign to run (duration in days).\n4. How many creatives or ad variations you want us to manage or test.\n\nLet me know these details, and I can prepare a quote or plan for you.",
+          "createdAt": "2026-10-07T09:16:11.315Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719",
+        "seenMessageIds": [
+          "G01-in-0",
+          "G01-out-0",
+          "G01-in-1",
+          "G01-out-1",
+          "G01-in-2"
+        ],
+        "contextCharacters": 1141,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3826,
+        "output_tokens": 72,
+        "total_tokens": 3898,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0016455999999999999
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=100&order=asc&after=msg_6ac60dde1a808194b715907c8a8a6b87099c7e9810555719"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items/msg_099c7e9810555719006ac60ddf8f748194b1139528655e847f"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items/msg_099c7e9810555719006ac60de0c2688194809a24c6a1ba442c"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=100&order=asc&after=msg_6ac60dde1a808194b715907c8a8a6b87099c7e9810555719"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_099c7e9810555719006ac60ddf6ad48194b7b48aedb8d92b38",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3826,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 72,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3898
+          },
+          "output": [
+            {
+              "id": "msg_099c7e9810555719006ac60de0c2688194809a24c6a1ba442c",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "You want Joshspot to run your TikTok ads.\n\nPlease let me know your budget for the ads (daily spend, total spend, or an all-inclusive cap), how many days you want the campaign to run, and how many different creatives or ad variations you want us to manage or test. This info will help me prepare a quote for you."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 5974,
+          "openaiConversationId": "conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719"
+        },
+        "action": "reply",
+        "response": "You want Joshspot to run your TikTok ads.\n\nPlease let me know your budget for the ads (daily spend, total spend, or an all-inclusive cap), how many days you want the campaign to run, and how many different creatives or ad variations you want us to manage or test. This info will help me prepare a quote for you.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 8210,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719",
+        "seenMessageIds": [
+          "G01-in-0",
+          "G01-out-0",
+          "G01-in-1",
+          "G01-out-1",
+          "G01-in-2",
+          "G01-out-2",
+          "G01-in-3"
+        ],
+        "contextCharacters": 1921,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    },
+    {
+      "customer": [
+        {
+          "_id": "G01-in-4",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "i no sabi budget o suggest for me",
+          "createdAt": "2026-10-07T09:16:19.531Z"
+        }
+      ],
+      "historyBefore": [
+        {
+          "_id": "G01-in-0",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "good evenin boss",
+          "createdAt": "2026-10-07T09:15:51.147Z"
+        },
+        {
+          "_id": "G01-out-0",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "Good evening! How can I assist you today? Are you interested in advertising services like account setup, ads management, or something else?",
+          "createdAt": "2026-10-07T09:15:58.818Z"
+        },
+        {
+          "_id": "G01-in-1",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "i wan run ads",
+          "createdAt": "2026-10-07T09:15:58.821Z"
+        },
+        {
+          "_id": "G01-out-1",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "You want to run ads—great! Do you want us to help set up your ad account and guide you to run the ads yourself, or would you prefer Joshspot to manage the entire ad campaign for you? Also, please let me know which platform you want to advertise on—TikTok, Meta (Facebook/Instagram), or both?",
+          "createdAt": "2026-10-07T09:16:04.396Z"
+        },
+        {
+          "_id": "G01-in-2",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "the one u people run for me",
+          "createdAt": "2026-10-07T09:16:04.397Z"
+        },
+        {
+          "_id": "G01-out-2",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "You want Joshspot to run your ads for you—that means you're interested in ads management.\n\nTo proceed, I'll need to know:\n\n1. The advertising platform you want to use: TikTok, Meta (Facebook/Instagram), or both?\n2. Your budget for the ads (daily spend, total spend, or an all-inclusive cap).\n3. How long you want the campaign to run (duration in days).\n4. How many creatives or ad variations you want us to manage or test.\n\nLet me know these details, and I can prepare a quote or plan for you.",
+          "createdAt": "2026-10-07T09:16:11.315Z"
+        },
+        {
+          "_id": "G01-in-3",
+          "direction": "inbound",
+          "type": "text",
+          "status": "received",
+          "text": "tiktok",
+          "createdAt": "2026-10-07T09:16:11.319Z"
+        },
+        {
+          "_id": "G01-out-3",
+          "direction": "outbound",
+          "type": "text",
+          "status": "sent",
+          "text": "You want Joshspot to run your TikTok ads.\n\nPlease let me know your budget for the ads (daily spend, total spend, or an all-inclusive cap), how many days you want the campaign to run, and how many different creatives or ad variations you want us to manage or test. This info will help me prepare a quote for you.",
+          "createdAt": "2026-10-07T09:16:19.529Z"
+        }
+      ],
+      "stateBefore": {
+        "openaiConversationId": "conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719",
+        "seenMessageIds": [
+          "G01-in-0",
+          "G01-out-0",
+          "G01-in-1",
+          "G01-out-1",
+          "G01-in-2",
+          "G01-out-2",
+          "G01-in-3"
+        ],
+        "contextCharacters": 1921,
+        "dirty": false
+      },
+      "usage": {
+        "calls": 1,
+        "input_tokens": 3977,
+        "output_tokens": 78,
+        "total_tokens": 4055,
+        "cached_input_tokens": 0,
+        "estimated_cost_usd": 0.0017155999999999999
+      },
+      "httpCalls": 8,
+      "http": [
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719"
+        },
+        {
+          "method": "post",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=1&order=desc"
+        },
+        {
+          "method": "post",
+          "path": "/responses"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=100&order=asc&after=msg_6ac60de5c2e8819490682ab2c09dccd8099c7e9810555719"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items/msg_099c7e9810555719006ac60de709e88194aaa03fa80ecb9a2f"
+        },
+        {
+          "method": "delete",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items/msg_099c7e9810555719006ac60de7c28081949ed73921445911b5"
+        },
+        {
+          "method": "get",
+          "path": "/conversations/conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719/items?limit=100&order=asc&after=msg_6ac60de5c2e8819490682ab2c09dccd8099c7e9810555719"
+        }
+      ],
+      "rawResponses": [
+        {
+          "id": "resp_099c7e9810555719006ac60de6dabc8194b35241bcd0c1c5f7",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3977,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 78,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 4055
+          },
+          "output": [
+            {
+              "id": "msg_099c7e9810555719006ac60de7c28081949ed73921445911b5",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "To suggest a suitable budget for running TikTok ads managed by us, could you please share:\n\n1. How many days you want the campaign to run?\n2. Approximately how many ad creatives or variations you want us to handle or test?\n\nThis helps me recommend a budget range that fits your needs and duration. No worries if you're unsure; I can guide you step-by-step."
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      ],
+      "providerErrors": [],
+      "safetyFailures": [],
+      "simulated": true,
+      "result": {
+        "engineVersion": "v3",
+        "state": {},
+        "model": "gpt-4.1-mini",
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "cached_input_tokens": 0,
+          "calls": 0,
+          "estimated_cost_usd": 0
+        },
+        "debug": {
+          "engineVersion": "v3",
+          "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+          "simulation": true,
+          "paymentFallback": false,
+          "tools": [],
+          "latency": 3717,
+          "openaiConversationId": "conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719"
+        },
+        "action": "reply",
+        "response": "To suggest a suitable budget for running TikTok ads managed by us, could you please share:\n\n1. How many days you want the campaign to run?\n2. Approximately how many ad creatives or variations you want us to handle or test?\n\nThis helps me recommend a budget range that fits your needs and duration. No worries if you're unsure; I can guide you step-by-step.",
+        "wouldGenerateInvoice": false
+      },
+      "finalAction": "reply",
+      "status": "COMPLETED",
+      "elapsedMs": 5736,
+      "stateAfter": {
+        "openaiConversationId": "conv_6ac60dca09788194ad9f888d579b7746099c7e9810555719",
+        "seenMessageIds": [
+          "G01-in-0",
+          "G01-out-0",
+          "G01-in-1",
+          "G01-out-1",
+          "G01-in-2",
+          "G01-out-2",
+          "G01-in-3",
+          "G01-out-3",
+          "G01-in-4"
+        ],
+        "contextCharacters": 2532,
+        "dirty": false
+      },
+      "knowledge": [],
+      "simulatedActions": []
+    }
+  ],
+  "completeHistory": [
+    {
+      "_id": "G01-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "good evenin boss",
+      "createdAt": "2026-10-07T09:15:51.147Z"
+    },
+    {
+      "_id": "G01-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Good evening! How can I assist you today? Are you interested in advertising services like account setup, ads management, or something else?",
+      "createdAt": "2026-10-07T09:15:58.818Z"
+    },
+    {
+      "_id": "G01-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "i wan run ads",
+      "createdAt": "2026-10-07T09:15:58.821Z"
+    },
+    {
+      "_id": "G01-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "You want to run ads—great! Do you want us to help set up your ad account and guide you to run the ads yourself, or would you prefer Joshspot to manage the entire ad campaign for you? Also, please let me know which platform you want to advertise on—TikTok, Meta (Facebook/Instagram), or both?",
+      "createdAt": "2026-10-07T09:16:04.396Z"
+    },
+    {
+      "_id": "G01-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "the one u people run for me",
+      "createdAt": "2026-10-07T09:16:04.397Z"
+    },
+    {
+      "_id": "G01-out-2",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "You want Joshspot to run your ads for you—that means you're interested in ads management.\n\nTo proceed, I'll need to know:\n\n1. The advertising platform you want to use: TikTok, Meta (Facebook/Instagram), or both?\n2. Your budget for the ads (daily spend, total spend, or an all-inclusive cap).\n3. How long you want the campaign to run (duration in days).\n4. How many creatives or ad variations you want us to manage or test.\n\nLet me know these details, and I can prepare a quote or plan for you.",
+      "createdAt": "2026-10-07T09:16:11.315Z"
+    },
+    {
+      "_id": "G01-in-3",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "tiktok",
+      "createdAt": "2026-10-07T09:16:11.319Z"
+    },
+    {
+      "_id": "G01-out-3",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "You want Joshspot to run your TikTok ads.\n\nPlease let me know your budget for the ads (daily spend, total spend, or an all-inclusive cap), how many days you want the campaign to run, and how many different creatives or ad variations you want us to manage or test. This info will help me prepare a quote for you.",
+      "createdAt": "2026-10-07T09:16:19.529Z"
+    },
+    {
+      "_id": "G01-in-4",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "i no sabi budget o suggest for me",
+      "createdAt": "2026-10-07T09:16:19.531Z"
+    },
+    {
+      "_id": "G01-out-4",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "To suggest a suitable budget for running TikTok ads managed by us, could you please share:\n\n1. How many days you want the campaign to run?\n2. Approximately how many ad creatives or variations you want us to handle or test?\n\nThis helps me recommend a budget range that fits your needs and duration. No worries if you're unsure; I can guide you step-by-step.",
+      "createdAt": "2026-10-07T09:16:25.267Z"
+    }
+  ],
+  "usage": {
+    "calls": 5,
+    "input_tokens": 18288,
+    "output_tokens": 368,
+    "total_tokens": 18656,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.007904
+  }
+}

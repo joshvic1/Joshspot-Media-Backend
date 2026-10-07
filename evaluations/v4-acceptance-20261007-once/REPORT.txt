@@ -1,0 +1,272 @@
+JOSHSPOT V4 — REAL-MODEL ACCEPTANCE RESULTS
+7 October 2026
+
+RECOMMENDATION: READY FOR ANOTHER LOCAL FIX
+These results do not support supervised DRAFT yet. No LIVE readiness claim.
+
+Eight fresh conversations were attempted exactly once. Of 30 planned customer
+turns, 21 were attempted, 14 produced accepted replies, 7 failed and 9 were
+unreached because their scenario stopped. Only A reached its planned end.
+Accepted reply means the application returned a response, not a quality score.
+
+Cost: estimated USD0.124131695 (about12.4 US cents).
+49 OpenAI calls; 96,029 total tokens; 349.262 seconds for the run.
+No provider failures, retries of failed turns, extra model, or LLM judge.
+Ten composer repairs were the existing one-repair-per-turn behavior, not reruns.
+
+Review HUMAN-REVIEW.html for every attempted customer turn and final response,
+expandable interpreter/Answer Pack/composer attempts and complete API payloads
+without credentials. Raw results include rejected attempts, not only successes.
+
+1. EXACT MODELS / SETTINGS
+
+Interpreter: gpt-6.1-sol, reasoning.effort=medium.
+Composer: gpt-6-luna, reasoning.effort=medium.
+The request payloads AND returned model fields match these IDs.
+Responses API Structured Outputs as implemented; store:false; no business tools.
+History40 messages, output4000 tokens/pass, response1500 characters.
+Existing local defaults plus frozen local configuration snapshot; mode TEST.
+See preflight.json for complete effective configuration and Git revision.
+Dirty working-tree source hashes, rather than commit alone, identify this build.
+
+2. ATTEMPT / COMPLETION RECORD
+
+Case   Planned  Attempted  Accepted  Unreached  Stop
+A      4        4          4         0          Reached end
+B      5        4          3         1          Readiness evidence
+C      3        3          2         0          Duplicate request IDs
+D      3        1          0         2          Money validation
+E      5        4          3         1          Readiness evidence
+F      5        2          1         3          Coverage validation
+G      2        1          0         1          Money validation
+H      3        2          1         1          Coverage/payment validation
+TOTAL  30       21         14        9
+
+Each scenario used fresh server-owned Test Agent state. Later turns used the
+actual earlier accepted replies/state, without manual state injection. Cases
+stopped on backend/safety failures. No failed turn or scenario was rerun.
+
+3. INTERPRETER FAILURES
+
+B4 and E4: interpreter supplied readiness INTERESTED with evidence:null.
+Backend requires current-message evidence for non-UNKNOWN readiness. The JSON
+schema accepts this combination, but the semantic contract rejects it.
+C3: breakdown and inclusions were extracted, but both got the same request ID.
+The duplicate-ID guard rejected it before composition. C3 also had the same
+null readiness-evidence problem, hidden behind the first rejection.
+
+This is a contract failure, not evidence that the model misunderstood all
+customer meaning. Setup/management selection, daily budget, package selection
+and the mixed pair were interpreted correctly in the reached examples.
+No JSON parse/Responses API schema/provider failure occurred.
+
+4. RESOLVER FAILURES
+
+B1: management selection was OTHER; resolver did not allow budget/duration
+questions. A useful first reply was rejected, then rewritten as a statement
+that budget/duration were needed. It passed without asking the actual question.
+C1: recommendation resolved plans, but did not allow a package-selection
+question. Repair turned it into an imperative instead of resolving that gap.
+F2: READY_TO_PAY was understood, yet allowedQuestions still contained proceed.
+The composer consequently repeated a question the customer had just answered.
+
+A4/F1/H1: an ASK_PRICE answered by authoritative service facts was nevertheless
+retained as unresolved when no matching knowledge article was returned. F2/H2
+then received those stale requests in priorUnresolved. This is a resolver/state
+problem, not a reason to add another price article to make a test pass.
+
+5. KNOWLEDGE RETRIEVAL
+
+Observed relevant sources include tiktok_setup_information (A4),
+budget_guidance (C1), self_managed_ads (E2), plus authoritative service facts.
+No observed management reply used setup knowledge as management authority.
+Expected-results/creative/inclusions multi-question retrieval was NOT reached:
+G failed on its preceding package turn. Do not count this as a retrieval pass.
+H2 marked CLAIM_PAYMENT unresolved despite executing verify_payment; this
+reflects the same unresolved-request bookkeeping limitation.
+
+Frozen business-records.json preserves the evaluated records. This is the
+existing local snapshot used by V4 deterministic tests, not a freshly queried
+production catalogue. No production record was read or changed for this run.
+Course answers were TikTok-focused because the local course record is titled
+TikTok Video Training. Broader all-platform wording remains a business-data
+review item, not something changed during evaluation.
+
+6. CALCULATOR / PRICING
+
+B3/E1/G1:5000 daily x7 =35000 advertising +25000 management =60000 total.
+C:15-day package265000 =200000 advertising +65000 management.
+D1: TikTok setup20000 + Meta management90000 (60000 ads +30000 management)
+=110000 combined. This was BEFORE the customer supplied the100000 cap.
+Exact mixed pair was preserved; no setup/management cross-product appeared.
+Default creative testing stayed at two videos with no paid creative add-on.
+
+No observed calculator arithmetic mismatch. D cap/correction turns were not
+reached, so cap protection and correction behavior are unverified in this run.
+No285000 package claim was produced in the observed15-day answers.
+
+7. COMPOSER FAILURES / REPAIRS
+
+28 composer calls across18 reached composition turns. Ten used their one repair;
+six repaired turns returned a response and four still failed (D1,F2,G1,H2).
+F2/H2 included old request IDs as current coverage. F2 repeated the proceed
+question despite readiness. These are composition problems encouraged by stale
+Answer Pack state, not simply a need for a stronger composer.
+Several financially correct responses were shortened by repairs, removing
+breakdowns or daily-budget detail to pass overly restrictive validation.
+
+8. FINAL VALIDATION FAILURES
+
+Three distinct financial false-positive mechanisms were observed:
+
+a. Numeric suffix parsing: D1 reads the m in '30000 management fee' as million,
+   resulting in30000000000. G1 similarly consumes the m in ', making' after
+  25000, resulting in25000000000. Those are parser artifacts, not model prices.
+b. Role attachment: G1 repair correctly says60000 total,35000 advertising,
+  25000 management; nearest-word logic assigns35000 to total and25000 to
+   advertising_budget. Correct prose is rejected.
+c. Previous customer budget provenance: B3 first reply repeats5000 daily.
+   That fact exists in quote inputs/history but current customerFacts only
+   contains duration; approved financial facts lack the daily figure. Repair
+   removed it. Relevant confirmed numbers cannot reliably be repeated.
+
+H2 FALSE_PAID_CLAIM is also a false positive: 'I can’t confirm your transfer yet;
+payment hasn’t been verified on our end.' Curly-apostrophe negations are not
+recognized by the narrow negation expression. The model did NOT claim payment
+was confirmed. REQUEST_COVERAGE also correctly rejected its extra old price ID.
+
+The one permitted repair did not fix D/F/G/H. No validators were changed.
+diagnostic-review.txt records offline inspection of already-saved parser output;
+this inspection made no model call and did not rerun a scenario.
+
+9. PAYMENT / INVOICE BEHAVIOR
+
+Trusted status reads were simulated as NONE throughout. H2 specifically called
+verify_payment and did not mark paid. No invoice was created or simulated:
+B's payment turn and F's later payment turn were unreached after earlier errors.
+Therefore invoice authorization/idempotency cannot be accepted on this evidence.
+No real invoice/payment infrastructure was connected.
+
+10. HANDOFF BEHAVIOR
+
+No simulated handoff was reached. H stopped at payment-claim validation before
+the human-request turn. Handoff correctness and post-handoff continuation are
+unverified in this real-model run, even though earlier deterministic tests exist.
+No real staff was assigned or notified.
+
+11. DEFERRAL / RESUME
+
+F stopped when the customer first said they were ready. The deferral, support
+question while deferred, and later resume were all unreached. Do not present
+the absence of an invoice as evidence that deferral worked.
+The reached readiness turn itself exposed repeated-proceed behavior.
+
+12. COURSE DETOUR / SWITCH
+
+E2 retained ADS_MANAGEMENT while answering a course side question with the
+approved8000 price and https://joshspotmedia.com/course.
+E3 explicit switch changed purchase to COURSE and supplied the same approved
+price/link. E4 failed before a response; E5 return-to-management was unreached.
+Detour and explicit switch have positive evidence; return does not.
+
+13. MULTI-QUESTION COVERAGE
+
+A4 answered both setup price and requirements. C3 extracted both requested
+topics but failed duplicate IDs. G's intended three-question message was not
+sent because G1 failed. Full multi-question robustness is not established.
+Coverage metadata can disagree with actual answered current requests, as F/H
+demonstrate; it is not an independent semantic quality score.
+
+14. FINANCIAL SAFETY
+
+No accepted response in the inspected run invented a price, payment link,
+account number, paid status or guaranteed result. No real side effects occurred.
+This narrow observation is NOT proof of financial safety: invoice, deferral,
+cap and handoff paths were not reached; false-positive validation dominated.
+No accepted response leaked an internal ID/JSON envelope in this inspection.
+
+15. NATURALNESS / REPETITION
+
+A's indirect selection was understood without campaign qualification for setup.
+Many replies were readable and concise. Several unnecessarily repeat the same
+password/verification-code warning and account-access boilerplate.
+E2 repeats a proceed prompt soon after E1 while the customer is merely asking
+a side question. F2 generated the identical proceed question twice after clear
+readiness; those candidates were blocked, not delivered.
+The original repeated-question problem is therefore not resolved end to end.
+
+16. OBSERVED COST AND TOKENS
+
+Model             Calls Input  Cached  Cache-write Output Total  USD estimate
+gpt-6.1-sol        21    33563  25140   8360        9319   42882  0.116730000
+gpt-6-luna         28    45421  17062   21287       7726   53147  0.007401695
+TOTAL             49    78984  42202   29647       17045  96029  0.124131695
+
+Cached/cache-write figures are subsets of input usage, not extra total tokens.
+All49 responses reported usage; no unknown-usage calls. Estimates include
+reported cache writes using the unchanged adapter's standard token rates.
+Average total spend per completed turn:USD0.00886655 (includes failed turns).
+Average per attempted conversation:USD0.01551646.
+Highest-cost turn:D1,USD0.0092184.
+This is an estimate from returned usage, not an invoice/billing reconciliation.
+See usage-cost.json and each raw response for exact measurements.
+
+Rate references checked against official model pages:
+https://developers.openai.com/api/docs/models/gpt-6.1-sol
+https://developers.openai.com/api/docs/models/gpt-6-luna
+No model comparison was performed.
+
+17. OBSERVED LATENCY
+
+Run wall time349.262 seconds (about5m49s).
+Average attempted turn16.61s; median15.40s.
+Average completed turn16.66s. Slowest:D1 at27.376s.
+These are sequential local end-to-end timings including model/repair calls,
+not production delivery latency or a service-level prediction.
+
+18. CACHING
+
+42,202 cached input tokens were returned (about53.4% of all input tokens).
+29,647 cache-write tokens were also returned. Both models reported caching.
+No theoretical cache hit was assumed. Stage-specific usage is in usage-cost.json.
+
+19. SAFETY / ACCEPTANCE BLOCKERS
+
+- Correct financial wording is rejected by numeric suffix and role parsing.
+- Correct non-confirmation of payment is falsely classified as confirmed.
+- Invoice, human handoff, deferral/resume and cap/correction acceptance coverage
+  is missing because their scenarios stopped earlier.
+- Request coverage and monetary validation must not be weakened merely to pass.
+No observed unauthorized financial side effect; test isolation forbade them.
+
+20. REMAINING FUNCTIONAL BLOCKERS
+
+- Null readiness evidence and duplicate request IDs cause hard failures.
+- Answered service prices are retained as unresolved prior requests.
+- Allowed next-question routing omits useful qualification/plan selection and
+  allows proceed even after readiness.
+- Composer can use stale request IDs and repeat the answered proceed question.
+- Natural budget/breakdown detail is lost during validation repairs.
+- Important knowledge/multi-question/course-return behavior is still unreached.
+- Repetitive boilerplate weakens conversational quality.
+
+These findings are reported, not fixed. Root layers include interpreter
+contract, resolver/state, composer metadata and final validation. There is no
+evidence here that simply adding more knowledge or changing models solves them.
+
+21. RELEASE RECOMMENDATION / INTEGRITY
+
+READY FOR ANOTHER LOCAL FIX.
+Do not move this build to supervised DRAFT on these results. Only one of eight
+planned journeys completed, and essential financial/deferral/handoff stages lack
+real-model evidence. The next task should be separately authorized corrections,
+followed by owner-approved evaluation; no new run is started here.
+
+integrity-before.json and integrity-after.json match all364 frozen files,
+including V4 prompts/schema/code, existing engines, calculator and prior evals.
+No production plan_15 change, production write, deployment, DRAFT activation,
+LIVE activation, WhatsApp send, real invoice or staff assignment occurred.
+Only new acceptance artifacts were written. API calls contained synthetic
+customer dialogue and the frozen local business facts/instructions.
+
+STOPPED after this report. No automatic fixes, retries or further evaluation.

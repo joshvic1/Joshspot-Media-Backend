@@ -1,0 +1,422 @@
+{
+  "note": "No automatic resumption. Preserve all previous files. Verify preflight hash before any paid call. Resume only listed samples with new output names; do not rerun conclusive generations.",
+  "generation": [
+    {
+      "model": "gpt-4.1-mini",
+      "suite": "supplemental",
+      "id": "supp-100",
+      "sample": 2,
+      "source": "supplemental-production-provider-retry2.jsonl",
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "timeout of 22000ms exceeded"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "three-questions",
+      "sample": 1,
+      "source": "frozen-candidate-3samples.jsonl",
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "three-questions",
+      "sample": 3,
+      "source": "frozen-candidate-3samples.jsonl",
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "three-questions",
+      "sample": 2,
+      "source": "frozen-candidate-3samples.jsonl",
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "requirements-same-turn",
+      "sample": 1,
+      "source": "frozen-candidate-3samples.jsonl",
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Evaluation provider stop"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "requirements-same-turn",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "requirements-same-turn",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "unknown-platform",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "unknown-platform",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "unknown-platform",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "existing-page",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "existing-page",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "existing-page",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "plan-no-double-fee",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "plan-no-double-fee",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "plan-no-double-fee",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "plan-15-day",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "plan-15-day",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "plan-15-day",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "payment-claim",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "payment-claim",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "payment-claim",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "human-request",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "human-request",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "human-request",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "injection-price",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "injection-price",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "injection-price",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "benign-password-question",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "benign-password-question",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "benign-password-question",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "two-days-daily",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "two-days-daily",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "two-days-daily",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "course-detour",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "course-detour",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "course-detour",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "deferral-support",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "deferral-support",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "deferral-support",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "suggestion-daily",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "suggestion-daily",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "suggestion-daily",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "long-journey",
+      "sample": 1,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "long-journey",
+      "sample": 2,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    },
+    {
+      "model": "gpt-5.4",
+      "suite": "frozen",
+      "id": "long-journey",
+      "sample": 3,
+      "status": "INCONCLUSIVE_PROVIDER",
+      "reason": "Not attempted after credit_balance_exhausted circuit stop",
+      "file": "frozen-candidate-3samples.jsonl"
+    }
+  ],
+  "independentJudging": "Some outputs received offline assistant review after credits exhausted. Missing independent judge reviews are not failed agent generations; do not regenerate customer turns just to judge them.",
+  "codeHash": "42822e841c970fa1a2b0c121934f3b9556ee4013cb58589faeafebf865261d69",
+  "catalogueHash": "72a273156d0ce856810184a4133a826ae9a4f57534038ad62c60f447dcdae8bf"
+}

@@ -8,6 +8,8 @@ function validate(data) {
   const out = {schemaVersion:1};
   for (const key of textFields) { const value=data[key] ?? ''; if(typeof value!=='string'||value.length>6000)fail(`Invalid ${key}`);out[key]=value; }
   out.responseMode=data.responseMode || 'KNOWLEDGE';
+  out.contentRole=data.contentRole||(out.responseMode==='STRICT'?'RESPONSE':'KNOWLEDGE');
+  if(!['KNOWLEDGE','RESPONSE','GUIDANCE'].includes(out.contentRole))fail('Choose knowledge, response or guidance.');
   if(!['STRICT','GUIDED','KNOWLEDGE'].includes(out.responseMode))fail('Choose STRICT, GUIDED or KNOWLEDGE.');
   out.nextObjective=data.nextObjective || 'ANSWER';if(!objectives.includes(out.nextObjective))fail('Choose a supported next objective.');
   for(const key of ['allowContext','forceHandoff']) {out[key]=data[key]??false;if(typeof out[key]!=='boolean')fail(`Invalid ${key}`);}

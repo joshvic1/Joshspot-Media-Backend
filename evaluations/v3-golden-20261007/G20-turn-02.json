@@ -1,0 +1,159 @@
+{
+  "customer": [
+    {
+      "_id": "G20-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "how much",
+      "createdAt": "2026-10-07T09:20:40.073Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G20-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "set up Meta for me",
+      "createdAt": "2026-10-07T09:20:34.870Z"
+    },
+    {
+      "_id": "G20-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "I can help set up your Meta advertising account for you. To get started, could you please share your budget and the duration you want the setup to cover? This helps me prepare an accurate plan and cost for you. Also, do you already have a Meta (Facebook and Instagram) business account, or do you need help creating one from scratch?",
+      "createdAt": "2026-10-07T09:20:40.070Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c",
+    "seenMessageIds": [
+      "G20-in-0"
+    ],
+    "contextCharacters": 147,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3522,
+    "output_tokens": 68,
+    "total_tokens": 3590,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0015175999999999998
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c/items?limit=100&order=asc&after=msg_6ac60eea38ec81979099b735c8b839060fd3a84995528f2c"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c/items/msg_0fd3a84995528f2c006ac60eeb72948197855151a7abe6013d"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c/items/msg_0fd3a84995528f2c006ac60eebc1048197a4c3668886c3b5d6"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c/items?limit=100&order=asc&after=msg_6ac60eea38ec81979099b735c8b839060fd3a84995528f2c"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0fd3a84995528f2c006ac60eeb490c81978f2a7f28b276c422",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3522,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 68,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3590
+      },
+      "output": [
+        {
+          "id": "msg_0fd3a84995528f2c006ac60eebc1048197a4c3668886c3b5d6",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Setting up a Meta advertising account typically involves a setup fee plus any ad spend you plan to invest.\n\nTo give you an accurate price, could you please tell me how much you want to budget for ads and the duration (in days) you want this setup to cover? This info helps me calculate the full cost clearly for you."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3107,
+      "openaiConversationId": "conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c"
+    },
+    "action": "reply",
+    "response": "Setting up a Meta advertising account typically involves a setup fee plus any ad spend you plan to invest.\n\nTo give you an accurate price, could you please tell me how much you want to budget for ads and the duration (in days) you want this setup to cover? This info helps me calculate the full cost clearly for you.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4937,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60ee475b481978edf3cae732c80e30fd3a84995528f2c",
+    "seenMessageIds": [
+      "G20-in-0",
+      "G20-out-0",
+      "G20-in-1"
+    ],
+    "contextCharacters": 751,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

@@ -1,0 +1,179 @@
+{
+  "customer": [
+    {
+      "_id": "G04-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "what do i need",
+      "createdAt": "2026-10-07T09:16:36.036Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G04-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "set up facebook ads account for me I will run it myself",
+      "createdAt": "2026-10-07T09:16:25.271Z"
+    },
+    {
+      "_id": "G04-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing Facebook ads account setup where you’ll run the ads yourself.\n\nTo proceed with setting up your Facebook ads account, could you please share your budget and how long you plan to run the ads? This helps me prepare an accurate setup quotation for you.",
+      "createdAt": "2026-10-07T09:16:31.198Z"
+    },
+    {
+      "_id": "G04-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "instagram too",
+      "createdAt": "2026-10-07T09:16:31.200Z"
+    },
+    {
+      "_id": "G04-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for confirming you want setup for both Facebook and Instagram ads accounts to run yourself.\n\nCould you please share your budget and the duration (in days) you plan to run ads? This will help me provide an accurate setup quote for both platforms.",
+      "createdAt": "2026-10-07T09:16:36.033Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8",
+    "seenMessageIds": [
+      "G04-in-0",
+      "G04-out-0",
+      "G04-in-1"
+    ],
+    "contextCharacters": 732,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3638,
+    "output_tokens": 154,
+    "total_tokens": 3792,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0017016
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8/items?limit=100&order=asc&after=msg_6ac60df604388197b666f61811c0448a04c50c70569ab6b8"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8/items/msg_04c50c70569ab6b8006ac60df7303c81978437aee1300ac2ed"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8/items/msg_04c50c70569ab6b8006ac60df78ea481979d67f47ae565f401"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8/items?limit=100&order=asc&after=msg_6ac60df604388197b666f61811c0448a04c50c70569ab6b8"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_04c50c70569ab6b8006ac60df7054c8197866a8ff82f8fd03f",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3638,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 154,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3792
+      },
+      "output": [
+        {
+          "id": "msg_04c50c70569ab6b8006ac60df78ea481979d67f47ae565f401",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "To set up your Facebook and Instagram ads accounts for you to run the ads yourself, you'll need the following:\n\n- Access to your Facebook Business Manager or a Facebook account with admin rights to create and manage your ads account.\n- A payment method to link to your ad account for funding your advertising campaigns.\n- Basic information about your business and advertising goals to configure the account correctly.\n- Your Instagram account connected to your Facebook page if you want to run Instagram ads from the same Meta platform.\n\nOnce the accounts are set up, you will have full control to run and manage your own campaigns.\n\nWould you like me to prepare a quote for the setup services for both Facebook and Instagram accounts? If yes, please share your budget and how long you plan to run ads."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3505,
+      "openaiConversationId": "conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8"
+    },
+    "action": "reply",
+    "response": "To set up your Facebook and Instagram ads accounts for you to run the ads yourself, you'll need the following:\n\n- Access to your Facebook Business Manager or a Facebook account with admin rights to create and manage your ads account.\n- A payment method to link to your ad account for funding your advertising campaigns.\n- Basic information about your business and advertising goals to configure the account correctly.\n- Your Instagram account connected to your Facebook page if you want to run Instagram ads from the same Meta platform.\n\nOnce the accounts are set up, you will have full control to run and manage your own campaigns.\n\nWould you like me to prepare a quote for the setup services for both Facebook and Instagram accounts? If yes, please share your budget and how long you plan to run ads.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 5235,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60deb469c819791e0444a40e0a44804c50c70569ab6b8",
+    "seenMessageIds": [
+      "G04-in-0",
+      "G04-out-0",
+      "G04-in-1",
+      "G04-out-1",
+      "G04-in-2"
+    ],
+    "contextCharacters": 1265,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

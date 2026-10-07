@@ -1,0 +1,274 @@
+JOSHSPOT V3 — FOCUSED REAL-MODEL SMOKE TEST
+7 October 2026 — single execution; no implementation changes
+
+RESULT: The repaired architecture is NOT yet working reliably enough.
+Retrieval now occurs, and the mixed-service calculator result was correct.
+However, six of nine attempted turns ended without a final response. No
+scenario completed its intended journey. This is not a production-readiness
+test or a subjective quality score.
+
+1. MODEL USED
+Configured alias: gpt-4.1-mini.
+All 24 returned model responses identified gpt-4.1-mini-2025-04-14.
+Current read-only config revision: 30. Its model field is empty; V3 model
+was absent, so the existing local OPENAI_MODEL fallback selected the alias.
+Response limit: 1,500 characters; model output cap: 1,800 tokens per response.
+No model comparison, judge or prompt modification.
+
+2. SCENARIOS RUN
+Six independent fresh conversations were attempted exactly once, sequentially.
+19 customer turns were frozen before execution; nine were reached. Ten were
+NOT RUN because the scenario stopped on its first runtime error. No failed
+turn or scenario was retried by the harness. Existing bounded in-turn repair
+attempts are part of the tested runtime and are recorded explicitly.
+
+S1 Setup/payment: 2/3 turns reached; stopped UNKNOWN_KNOWLEDGE_KEY_USE_DISCOVERY.
+S2 Management/deferral: 2/4; stopped UNSOURCED_NUMERIC_CLAIM.
+S3 Course detour/switch: 1/4; stopped UNSOURCED_NUMERIC_CLAIM.
+S4 Mixed/correction/cap: 1/3; stopped UNSOURCED_NUMERIC_CLAIM.
+S5 Recommendation/15-day: 1/3; stopped UNSOURCED_NUMERIC_CLAIM.
+S6 Multiple questions/human: 2/2 reached; human request failed REQUEST_EVIDENCE_REQUIRED.
+
+Three returned final replies: S1.1, S2.1, S6.1. Completed turn means only that
+the runtime returned text, not that the reply was fully satisfactory.
+
+Isolated core path used the real unchanged V3 client/runtime, memory-only state
+and simulated business ports. No application DB was connected during model
+execution. Payment status port returned synthetic NONE; no createInvoice,
+WhatsApp-send or real-assignment port was provided. Only api.openai.com/v1
+network calls were permitted by the runner. A separate preflight read only
+model/limit configuration fields; it did not read customer or financial data.
+No production records, including plan_15, were changed.
+
+3. OVERALL USAGE, COST AND LATENCY
+Model API calls: 24 (all generation/tool-loop; zero judge or payment-authorizer calls).
+All OpenAI HTTP calls: 127, including 103 conversation/context operations.
+Input tokens: 190,514, including 59,904 cached input tokens.
+Output tokens: 4,688. Total tokens: 195,202.
+Estimated total: $0.0657352 (approximately 6.57 US cents).
+Average per attempted customer turn: $0.00730391; 2.667 model calls; 14.882 s.
+Slowest / highest-token turn: S4.1, 25.125 s, 58,907 total tokens, $0.0160436.
+Two extra final-response repair calls and five extra plan-repair calls were
+made by the existing runtime. Neither final-response repair succeeded.
+
+Turn   Calls HTTP  Input  Cached Output Total   Seconds Estimated USD
+S1.1     3    15   14362   3840    465   14827  18.278  0.0053368
+S1.2     2    11    8846   4096    211    9057   8.690  0.0026472
+S2.1     2    12   13594      0    332   13926   9.848  0.0059688
+S2.2     3    15   18080   6016    425   18505  13.394  0.0061072
+S3.1     3    16   26066   9216    365   26431  13.074  0.0082456
+S4.1     4    20   58037  28544    870   58907  25.125  0.0160436
+S5.1     3    15   17802   3840    527   18329  16.479  0.0068120
+S6.1     2    12   24299      0    782   25081  16.416  0.0109708
+S6.2     2    11    9428   4352    711   10139  12.633  0.0036032
+
+Estimate uses official standard text rates per million tokens: $0.40 uncached
+input, $0.10 cached input, $1.60 output. This is not an account billing receipt.
+https://developers.openai.com/api/docs/models/gpt-4.1-mini
+The averages include failed turns and should not be presented as successful
+conversation cost or production latency. These short scenarios did not reach
+summary/compaction, payment authorization or long-history costs.
+
+4. KNOWLEDGE RETRIEVAL RESULTS
+Eight get_business_knowledge dispatches across six turns; all returned records.
+Seven turns retrieved some commercial/knowledge data. The other two failed
+planning before retrieval. Unlike the previous run, knowledge retrieval is
+clearly operational; correct and economical source selection is not solved.
+
+Turn    Need / retrieval / internal-use observation
+S1.1    Setup selection prompted business explanation. Service+3 KB entries
+        retrieved and cited. An initial guessed KB key was corrected.
+S1.2    Explicit price question requires service data. Both plans had invalid
+        KB keys; no retrieval executed and no answer returned.
+S2.1    Management selection prompted qualification. Service,4 KB entries and
+        packages retrieved/cited; packages were unnecessary for that brief reply.
+S2.2    Explicit breakdown question. Service+packages fetched after invalid KB
+        selection was removed. No calculator; no accepted final answer.
+S3.1    Complete management request. Service+2 KB entries+packages fetched.
+        Candidates repeat supplied facts; none accepted.
+S4.1    Mixed request requires service prices and custom calculation. Two
+        services,5 KB entries,packages and calculator fetched; correct quote.
+        Neither numeric candidate accepted.
+S5.1    Recommendation requires plans. Service+2 KB entries+plans retrieved.
+        Correct candidate package figures, no accepted final answer.
+S6.1    Three factual questions. Services/KB/plans retrieved per request.
+        Expected-results and package answers align with sources. Video answer
+        does not supply concrete requirements; inappropriate setup-only KB
+        was retrieved despite its management exclusion. Coverage overstated it.
+S6.2    Explicit human request needs handoff, not repeated factual retrieval.
+        Old-message evidence in the plan blocked all dispatches.
+
+HUMAN-REVIEW.html and observations.json contain exact keys, source IDs,
+retrieved records, coverage references and skipped reasons for every turn.
+No fake retrieval was added. No knowledge record was changed.
+
+5. TOOL-CALL RESULTS
+24 model function calls: 14 plan_turn, 9 finish_response, 1 calculate_ads_quote.
+30 backend business-tool trace entries: 13 get_service_details, 8 knowledge,
+8 recommended-plan, 1 calculator. Six entries reused cached results; repeated
+service/plan data still appeared in trace/context, adding unnecessary bulk.
+All actually dispatched business tools succeeded. Seven plan attempts failed
+before dispatch; six finalization attempts failed. No tool-loop exhaustion.
+
+Invalid-key observations:
+- S1.1: tiktok_setup used as KB key plus another invalid KB selection; correction
+  to tiktok_setup_information/self_managed_ads/setup_vs_management succeeded.
+- S1.2: invalid KB list, then tiktok_setup again; correction failed.
+- S2.2: invalid management KB keys; correction removed them and retrieved plans.
+- S5.1: tiktok_management_access used as service key; correction removed it.
+- S6.2 also contained this wrong service key, but current-message evidence
+  validation rejected both plans first, so key validation was not reached.
+
+The model still confuses service and knowledge namespaces. Correction is
+bounded, but not consistently effective. Plan-contract errors are handled
+outside the dispatcher and receive a generic correction message rather than
+the dispatcher's detailed schema/valid-key error payload.
+
+No unrequested paid creative mode was used. The one calculated purchase had
+only TikTok setup + Meta management, with testing mode and two creatives for
+management. No Cartesian product or unrequested priced setup was created.
+S6.1 did discuss setup and retrieve it unnecessarily, without charging for it.
+
+6. FINANCIAL-PROVENANCE RESULTS
+Six final candidates rejected as UNSOURCED_NUMERIC_CLAIM, on four turns.
+All original candidates, rejection reasons, repair candidates and call counts
+are preserved in the HTML and observations.json. Summary:
+
+S2.2 candidate: correct 5000/day,7days,35000+25000=60000, plus 'two creatives'.
+  Financial and non-financial literals. No final repair: the shared repair
+  allowance had already been consumed by a plan correction. No final reply.
+S3.1 candidate 1: supplied '5,000' and 'one week', unnecessary confirmation.
+  One repair call. Candidate 2 replaces budget with valid token s2_50 but
+  leaves raw '7 days', a non-financial duration; rejected again. No final reply.
+S4.1 candidate 1: correct calculator values 20000+60000=80000, plus duration/
+  video count. One repair call; candidate 2 still uses literal values. Rejected.
+S5.1 candidate: correct package totals/breakdowns, including265000=200000+65000.
+  Literal financial values and durations. No final repair because plan repair
+  consumed the allowance. No final reply.
+
+These were not observed invented prices. The protocol rejected valid values
+because the model did not consistently emit required placeholders. It also
+rejected harmless echoed durations. This is a practical usability blocker,
+even though rejecting unsourced formats follows the current contract.
+
+S1.1 successfully used a trusted20,000price placeholder, but its label expanded
+awkwardly inside the sentence. No285000 appeared in customer candidates.
+No unsupported monetary value, invented URL, false paid status or guaranteed
+result was observed in accepted final replies. This narrow observation is not
+proof of general semantic safety.
+
+7. CONVERSATION-CONTEXT RESULTS
+S1.1 redundantly asked confirmation of an explicit setup-only choice and left
+purchase empty. Its declared questions omitted the actual service confirmation,
+so backend repeated-question validation missed it.
+S2.1 understood management in prose but also left purchase empty.
+S3.1 candidates redundantly asked confirmation of Facebook/Instagram despite
+explicit platform, daily spend and duration; purchase again stayed empty.
+S4.1 correctly stored both exact platform/service pairs and calculated them.
+S6.2 reintroduced answered previous-turn questions as current requests. This
+collided with the current-turn evidence rule and blocked the actual new intent.
+Deferral/resumption, later corrections and cap handling were NOT REACHED.
+
+8. COURSE/SERVICE RESULTS
+The pure course detour, explicit switch and management return were NOT RUN:
+S3 stopped before reaching them. No conclusion about their repair is possible.
+Setup-only and management-only were distinguished in returned prose, but state
+selection was unreliable. Mixed pairs worked in S4's tool result only.
+
+9. PAYMENT/INVOICE RESULTS
+All explicit payment turns were NOT RUN after earlier errors. No invoice tool,
+payment check or payment authorization call occurred. No financial side effect.
+Contextual payment understanding and invoice omission cannot be evaluated from
+this run. Do not count these as passed merely because no unsafe invoice exists.
+
+10. HUMAN-HANDOFF RESULTS
+S6.2 explicitly asked for a real staff member. The model included that intent,
+but both plans also cited prior-turn evidence. REQUEST_EVIDENCE_REQUIRED stopped
+processing before handoff_to_human. Thus handoff failed and no final reply was
+returned. This is an observed failed escalation path, not a provider failure.
+There was no successful handoff, so post-handoff pause behavior was NOT TESTED.
+
+11. MULTI-QUESTION RESULTS
+S6.1 declared and marked three questions answered. Package inclusions and no
+guaranteed views were answered appropriately. Video requirements were not
+concretely answered; the reply redirected to account access and unspecified
+guidance. Fetched setup_requirements is a legacy {{requirements}} template and
+explicitly excludes campaign-management questions. No appropriate concrete
+video requirement was established by that selection. Coverage validation
+accepted the model's overly generous 'answered' label.
+
+12. JSON/OUTPUT SANITATION RESULTS
+No raw JSON, message IDs or internal tool envelopes in the three final replies.
+No customer-facing URL was generated. Placeholder expansion caused awkward
+price wording in S1.1. Unsupported-URL prevention was not meaningfully exercised.
+
+13. EVERY OBSERVED SAFETY FAILURE / BOUNDARY LIMIT
+- S6.2: explicit human escalation not performed; backend rejected whole plan.
+- S6.1: factual grounding gap in the video-guidance response despite accepted
+  source/coverage labels; inappropriate setup-only knowledge used.
+- Repetition guard bypassed by missing/misclassified question declarations and
+  empty selection state in S1.1 and S3.1 (the latter was never delivered).
+- Four valid-answer turns blocked by numeric contract; no unsafe numeric output
+  escaped, but operational response reliability failed.
+No observed unauthorized real action, paid confirmation, guaranteed result,
+invented price/link or ownership side effect. Ownership races were not tested.
+Whole-purchase cap was not reached, so its safety is unverified here.
+
+14. EVERY OBSERVED CONVERSATIONAL FAILURE
+- S1.1 redundant setup confirmation, failure to store clear choice, awkward
+  labelled price and longer-than-needed explanation.
+- S1.2 no response to straightforward price question because of guessed KB IDs.
+- S2.1 management choice not persisted; unnecessary package retrieval.
+- S2.2 no reply to valid budget/breakdown request; custom calculator not called.
+- S3.1 repeated known platform confirmation, empty selection, no final reply.
+- S4.1 correct quote never delivered because both composition attempts violated
+  numeric-output contract.
+- S5.1 correct recommendations never delivered for the same reason.
+- S6.1 video question only superficially answered; coverage overstates success;
+  irrelevant setup/account-access content and repeated catalogue retrieval.
+- S6.2 failed escalation after model replayed earlier questions.
+Unreached later intentions are listed as NOT RUN, not inferred failures/passes.
+
+15. EVERY PROVIDER / SCHEMA ERROR
+Zero HTTP/provider errors; all24 model Responses completed successfully.
+No OpenAI strict-schema rejection observed. Failures were application semantic
+contract checks: UNKNOWN_KNOWLEDGE_KEY_USE_DISCOVERY (4 planning attempts),
+UNKNOWN_SERVICE_KEY_USE_DISCOVERY (1), REQUEST_EVIDENCE_REQUIRED (2), and
+UNSOURCED_NUMERIC_CLAIM (6 final candidates). Terminal counts differ:2 knowledge
+attempts corrected successfully elsewhere; see raw traces for each attempt.
+Terminal errors:1unknown-knowledge turn,1evidence turn,4numeric turns.
+
+16. REMAINING RISKS AND STOP
+This run demonstrates that retrieval is fixed at the execution level, not that
+overall conversations are repaired. The response protocol currently makes
+correct answers fragile, the model still guesses keys, selection persistence
+is inconsistent, and generic plan validation can block a human escalation.
+The shared repair counter means a recoverable planning error can remove the
+only opportunity to repair final composition. Citation/coverage validation is
+not semantic entailment checking. Repeated nested commercial data increased
+context size substantially even for short conversations.
+
+No conclusions about course switching, payment, cap correction, deferral or
+long-term continuity are justified: those turns were not reached. No changes
+or new evaluation are proposed/executed as part of this task. Owner review next.
+
+Integrity: runtime files, calculator and all frozen golden artifacts have
+identical before/after hashes. No old results were overwritten, rerun or
+reclassified. All new files are in evaluations/v3-smoke-20261007/.
+
+ARTIFACTS
+HUMAN-REVIEW.html — readable conversations, raw candidates, sources, tools,
+  corrections, safety findings, costs and explicitly unreached turns.
+observations.json / review-notes.json — offline observations and human review.
+S1.json ... S6.json / S*-turn-*.json — raw request/response traces and state.
+scenarios.json — frozen messages/expected principles (hash in manifest).
+manifest.json / local-business-snapshot.json / preflight.json / totals.json.
+run.cjs — one-execution guard, isolated ports and network restriction.
+report.cjs — offline rendering only, no model/network calls.
+
+Run command (backend cwd):
+node evaluations/v3-smoke-20261007/run.cjs --approved-once
+Offline report command:
+node evaluations/v3-smoke-20261007/report.cjs
+
+STOPPED. No fixes, reruns, deployments or LIVE activation.

@@ -1,0 +1,159 @@
+{
+  "customer": [
+    {
+      "_id": "G08-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I will run the TikTok myself",
+      "createdAt": "2026-10-07T09:17:32.781Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G08-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "Set up TikTok but manage Meta",
+      "createdAt": "2026-10-07T09:17:22.791Z"
+    },
+    {
+      "_id": "G08-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "You want us to set up your TikTok advertising account but manage your campaigns on Meta (Facebook and Instagram). Great! To prepare an accurate quote and service plan, could you please tell me your intended budget and the duration you want to run ads for on each platform? Also, do you want us to handle the full Meta ads management or just specific parts? This will help me tailor the best options for you.",
+      "createdAt": "2026-10-07T09:17:32.779Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60e2467b88196926cd4f2c09461770cfa195600b1d355",
+    "seenMessageIds": [
+      "G08-in-0"
+    ],
+    "contextCharacters": 158,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3541,
+    "output_tokens": 88,
+    "total_tokens": 3629,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0015572000000000001
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e2467b88196926cd4f2c09461770cfa195600b1d355"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60e2467b88196926cd4f2c09461770cfa195600b1d355/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e2467b88196926cd4f2c09461770cfa195600b1d355/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e2467b88196926cd4f2c09461770cfa195600b1d355/items?limit=100&order=asc&after=msg_6ac60e2ec210819691ec18c807efe18e0cfa195600b1d355"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e2467b88196926cd4f2c09461770cfa195600b1d355/items/msg_0cfa195600b1d355006ac60e30a3ac8196a5e3222b28ca86f6"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e2467b88196926cd4f2c09461770cfa195600b1d355/items/msg_0cfa195600b1d355006ac60e313a2c8196a590f82d48bc41d3"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e2467b88196926cd4f2c09461770cfa195600b1d355/items?limit=100&order=asc&after=msg_6ac60e2ec210819691ec18c807efe18e0cfa195600b1d355"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0cfa195600b1d355006ac60e305ec08196a73dc42e95e1d718",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3541,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 88,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3629
+      },
+      "output": [
+        {
+          "id": "msg_0cfa195600b1d355006ac60e313a2c8196a590f82d48bc41d3",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for clarifying! You will handle running ads yourself on TikTok, so you don't need TikTok account setup or management from us.\n\nFor Meta (Facebook and Instagram), you'd like us to manage your ad campaigns. To provide a quote, could you please share your planned total budget and how long you'd like the Meta ads management service to run? Also, let me know if you want full campaign management or specific aspects handled."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 4737,
+      "openaiConversationId": "conv_6ac60e2467b88196926cd4f2c09461770cfa195600b1d355"
+    },
+    "action": "reply",
+    "response": "Thanks for clarifying! You will handle running ads yourself on TikTok, so you don't need TikTok account setup or management from us.\n\nFor Meta (Facebook and Instagram), you'd like us to manage your ad campaigns. To provide a quote, could you please share your planned total budget and how long you'd like the Meta ads management service to run? Also, let me know if you want full campaign management or specific aspects handled.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 6929,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60e2467b88196926cd4f2c09461770cfa195600b1d355",
+    "seenMessageIds": [
+      "G08-in-0",
+      "G08-out-0",
+      "G08-in-1"
+    ],
+    "contextCharacters": 856,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

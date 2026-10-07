@@ -1,0 +1,133 @@
+{
+  "customer": [
+    {
+      "_id": "G23-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "TikTok setup please I will run it myself",
+      "createdAt": "2026-10-07T09:20:59.504Z"
+    }
+  ],
+  "historyBefore": [],
+  "stateBefore": {},
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3382,
+    "output_tokens": 70,
+    "total_tokens": 3452,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0014648
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "post",
+      "path": "/conversations"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8/items?limit=100&order=asc&after=msg_6ac60efd74c88190bdfdb98402d3a7590972999b3c8789f8"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8/items/msg_0972999b3c8789f8006ac60efe9f9881908b14702fe538069e"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8/items/msg_0972999b3c8789f8006ac60efef7a48190a97269e81be7b461"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8/items?limit=100&order=asc&after=msg_6ac60efd74c88190bdfdb98402d3a7590972999b3c8789f8"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0972999b3c8789f8006ac60efe5ad4819083871d37640fb7da",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3382,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 70,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3452
+      },
+      "output": [
+        {
+          "id": "msg_0972999b3c8789f8006ac60efef7a48190a97269e81be7b461",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for confirming TikTok account setup only, where you'll manage the ads yourself.\n\nTo provide you the setup details and pricing, could you please share the expected duration you want the account setup service for? Also, do you have a specific budget in mind for this setup, or should I provide the standard price for TikTok account setup alone?"
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3145,
+      "openaiConversationId": "conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8"
+    },
+    "action": "reply",
+    "response": "Thanks for confirming TikTok account setup only, where you'll manage the ads yourself.\n\nTo provide you the setup details and pricing, could you please share the expected duration you want the account setup service for? Also, do you have a specific budget in mind for this setup, or should I provide the standard price for TikTok account setup alone?",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4628,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60efd19e881908809c40951f5fd400972999b3c8789f8",
+    "seenMessageIds": [
+      "G23-in-0"
+    ],
+    "contextCharacters": 169,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

@@ -1,0 +1,35 @@
+✔ setup price uses semantic catalogue mapping without campaign fields or model IDs (80.8938ms)
+✔ management daily budget uses unchanged calculator, approved testing default (71.9575ms)
+✔ recommendation resolves plans without inventing budget (4.7849ms)
+✔ 15-day package retrieves265000=200000+65000 (8.7495ms)
+✔ mixed pairs and whole-purchase cap preserve scope (11.9606ms)
+✔ course detour keeps management; explicit switch and return replace deliberately (24.8131ms)
+✔ deferral suppresses invoice and payment question; fresh request resumes (18.022ms)
+✔ payment claim cannot mark paid (10.6887ms)
+✔ human current evidence bypasses business data retrieval and simulates handoff (7.8031ms)
+✔ multiple requests resolve independently; missing creative knowledge is explicit (6.7086ms)
+✔ knowledge eligibility honors metadata and excluded service (0.9471ms)
+✔ natural trusted financial wording The setup fee is 20k. (8.6677ms)
+✔ natural trusted financial wording Setup costs 20,000 naira. (7.6098ms)
+✔ natural trusted financial wording Setup fee: ₦20,000. (10.6594ms)
+✔ natural trusted financial wording Setup fee is NGN 20,000. (7.0219ms)
+✔ same amount wrong role and invented amount rejected (9.1313ms)
+✔ financial roles remain distinct in a natural combined sentence and word amounts (6.5477ms)
+✔ negation in another clause cannot authorize a guarantee or false payment claim (6.1272ms)
+✔ existing invoice does not force payment details into an unrelated answer (7.0555ms)
+✔ Facebook and Instagram normalize to one Meta purchase; a switch clears old whole-purchase cap (6.0738ms)
+✔ ordinary customer budget and duration allowed; URL and envelope blocked (7.2997ms)
+✔ current evidence required; historical requests cannot be invented (2.3555ms)
+✔ composer repairs once only; no autonomous tool loop (8.2231ms)
+✔ ownership invalidation blocks final send (8.252ms)
+✔ test session ignores client state and never invokes financial port (7.5488ms)
+✔ all engines selectable, default remains V1, V4 live manual gate (1294.9806ms)
+✔ model adapter sends structured outputs, no tools, separate stage models (155.9627ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2125.6573

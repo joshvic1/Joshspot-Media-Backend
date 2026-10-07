@@ -1,0 +1,219 @@
+{
+  "customer": [
+    {
+      "_id": "G13-in-4",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "send account",
+      "createdAt": "2026-10-07T09:19:02.571Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G13-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "manage TikTok ads for 7 days",
+      "createdAt": "2026-10-07T09:18:34.785Z"
+    },
+    {
+      "_id": "G13-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing TikTok ads management for 7 days. To provide a precise quote, could you please share your total advertising budget or daily ad spend for this period? This helps me calculate the full management cost including setup if needed. Also, do you want Joshspot to set up your TikTok ad account too, or do you already have one set up?",
+      "createdAt": "2026-10-07T09:18:39.309Z"
+    },
+    {
+      "_id": "G13-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I have 60k altogether including your fee",
+      "createdAt": "2026-10-07T09:18:39.310Z"
+    },
+    {
+      "_id": "G13-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for the budget info! Just to confirm, you want Joshspot to both set up your TikTok ad account and manage your ads for the 7 days within the total 60,000 Naira including all fees, correct? Or do you already have the TikTok ad account set up yourself? This helps me allocate the budget correctly for setup plus management.",
+      "createdAt": "2026-10-07T09:18:44.119Z"
+    },
+    {
+      "_id": "G13-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "dont let it pass that",
+      "createdAt": "2026-10-07T09:18:44.121Z"
+    },
+    {
+      "_id": "G13-out-2",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "For TikTok ads management including account setup, the setup fee requires a separate allocation beyond the ad spend itself. Could you please clarify how you want to split your 60,000 Naira total budget between setup fees and actual ad spend (the money spent running ads)? That way I can give you an accurate quote within your full budget.",
+      "createdAt": "2026-10-07T09:18:54.290Z"
+    },
+    {
+      "_id": "G13-in-3",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "how much goes to ads",
+      "createdAt": "2026-10-07T09:18:54.293Z"
+    },
+    {
+      "_id": "G13-out-3",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "The TikTok account setup service details are currently unavailable to me. Usually, the setup fee is a fixed cost, and the remaining budget goes to ads. \n\nTo best use your full 60,000 Naira total, would you prefer that I prioritize a larger ad spend and minimal setup work, or do you want a full official setup with some portion reserved for that? This will guide how we split your budget.",
+      "createdAt": "2026-10-07T09:19:02.568Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d",
+    "seenMessageIds": [
+      "G13-in-0",
+      "G13-out-0",
+      "G13-in-1",
+      "G13-out-1",
+      "G13-in-2",
+      "G13-out-2",
+      "G13-in-3"
+    ],
+    "contextCharacters": 2037,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3987,
+    "output_tokens": 116,
+    "total_tokens": 4103,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0017804000000000001
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items?limit=100&order=asc&after=msg_6ac60e888a6c81958721cd7aa3e93d800489a08f56f13d2d"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items/msg_0489a08f56f13d2d006ac60e89ae508195ac4fc9f509c78782"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items/msg_0489a08f56f13d2d006ac60e8a39fc8195bb4e64bc5bcc2c00"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d/items?limit=100&order=asc&after=msg_6ac60e888a6c81958721cd7aa3e93d800489a08f56f13d2d"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0489a08f56f13d2d006ac60e89783c8195abc4c3443a09fdf7",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3987,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 116,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 4103
+      },
+      "output": [
+        {
+          "id": "msg_0489a08f56f13d2d006ac60e8a39fc8195bb4e64bc5bcc2c00",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "To proceed with TikTok ads management including account setup within your total 60,000 Naira budget, I need to confirm a few details:\n\n- Do you want Joshspot to handle both the account setup and the full ad campaign management for 7 days?\n- Would you prefer we allocate most of the 60,000 Naira to the ad spend itself, with setup costs taken from that, or prioritize a complete setup and management service with a smaller portion for the ads?\n\nThis helps me allocate your budget correctly and get you the best quote. Let me know!"
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 8773,
+      "openaiConversationId": "conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d"
+    },
+    "action": "reply",
+    "response": "To proceed with TikTok ads management including account setup within your total 60,000 Naira budget, I need to confirm a few details:\n\n- Do you want Joshspot to handle both the account setup and the full ad campaign management for 7 days?\n- Would you prefer we allocate most of the 60,000 Naira to the ad spend itself, with setup costs taken from that, or prioritize a complete setup and management service with a smaller portion for the ads?\n\nThis helps me allocate your budget correctly and get you the best quote. Let me know!",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 10398,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60e6c69f08195bc4bf918eca86b210489a08f56f13d2d",
+    "seenMessageIds": [
+      "G13-in-0",
+      "G13-out-0",
+      "G13-in-1",
+      "G13-out-1",
+      "G13-in-2",
+      "G13-out-2",
+      "G13-in-3",
+      "G13-out-3",
+      "G13-in-4"
+    ],
+    "contextCharacters": 2704,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

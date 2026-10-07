@@ -16,6 +16,9 @@ async function pause(conversation,actor,reason='HUMAN_TAKEOVER',assign=false) {
 }
 async function eligible(message) {
   const config=await settings.getConfig();
+  const activeEngine=require('./runtime').version(config.data);
+  if(['v3','v4'].includes(activeEngine)&&message.automation.followup)return false;
+  if(!message.automation.followup&&(message.automation.engineVersion||'v1')!==(activeEngine==='shadow'?'v1':activeEngine))return false;
   if(message.automation.followup&&!await require('./followups').canSend(message,config.data))return false;
   const conversation=await Conversation.findOne({_id:message.conversation,status:{$ne:'resolved'},deleting:{$ne:true},...(message.automation.handoff?{'ai.active':false,'ai.needsHuman':true}:{'ai.active':{$ne:false},assignedTo:null}),'ai.version':message.automation.version,lastInboundId:message.automation.inputId}).lean();
   return Boolean(conversation && config.revision===message.automation.configRevision && config.data.enabled && config.data.autoReply && config.data.mode==='LIVE');
@@ -48,18 +51,18 @@ async function finishHandoff(conversation,configRow) {
     }
   }
   if(!assigned){
-    if(config.structuredSales&&pending.mode==='LIVE'&&config.mode==='LIVE'&&config.enabled&&config.autoReply&&policy.windowOpen(conversation.lastInboundAt))await queue(conversation,{response:result.response||config.fallbackResponse,handoff:true},configRow,pending.inputId,`ai-handoff:${conversation._id}:${pending.inputId}:${conversation.ai.version}`);
+    if(!(result.engineVersion==='v4'&&result.deferAcknowledgement)&&config.structuredSales&&pending.mode==='LIVE'&&config.mode==='LIVE'&&config.enabled&&config.autoReply&&policy.windowOpen(conversation.lastInboundAt))await queue(conversation,{response:result.response||config.fallbackResponse,handoff:true,engineVersion:result.engineVersion||result.debug?.engineVersion||'v1'},configRow,pending.inputId,`ai-handoff:${conversation._id}:${pending.inputId}:${conversation.ai.version}`);
     await Conversation.updateOne(guard,{$set:{'ai.state.assignmentStatus':'PENDING_HUMAN_ASSIGNMENT','ai.assignmentError':`No ${team} staff account is available. Add a representative; assignment will retry automatically.`,'ai.handoffRetryAt':new Date(Date.now()+30000)}});live.notify();return;}
   const claimed=await Conversation.findOneAndUpdate({...guard,assignedTo:conversation.assignedTo || null},{$set:{assignedTo:assigned,'ai.state.assignmentStatus':'ASSIGNED','ai.state.assignedAt':new Date().toISOString(),'ai.assignmentError':'','ai.handoffRetryAt':new Date(Date.now()+30000)}},{returnDocument:'after'});
   if(!claimed)return;
   const key=`ai-handoff:${conversation._id}:${pending.inputId}:${conversation.ai.version}`;
-  const note=await Message.findOneAndUpdate({clientKey:`${key}:activity`},{$setOnInsert:{conversation:conversation._id,type:'activity',direction:'internal',status:'internal',author:'ai',authorName:config.displayName,text:`AI assigned this conversation to customer support. Reason: ${result.handoff}\n${require('./salesSummary').summary(result.state || conversation.ai?.state || {})}`}},{upsert:true,returnDocument:'after'});
+  const note=await Message.findOneAndUpdate({clientKey:`${key}:activity`},{$setOnInsert:{conversation:conversation._id,type:'activity',direction:'internal',status:'internal',author:'ai',authorName:config.displayName,text:`AI assigned this conversation to customer support. Reason: ${result.handoff}\n${result.summary||require('./salesSummary').summary(result.state || conversation.ai?.state || {})}`}},{upsert:true,returnDocument:'after'});
   await Notification.updateOne({recipient:assigned,message:note._id},{$setOnInsert:{conversation:conversation._id,authorName:config.displayName,kind:'handoff'}},{upsert:true});
   await require('../push').record(`${key}:assignment`,'assignments',conversation._id,assigned,note._id);
   const fresh=String(claimed.lastInboundId)===String(pending.inputId) && pending.configRevision===configRow.revision;
   const response=result.response || config.fallbackResponse;
-  if(fresh && response && pending.mode==='LIVE' && config.mode==='LIVE' && config.enabled && config.autoReply && policy.windowOpen(claimed.lastInboundAt)) {
-    await queue(claimed,{response,handoff:true},configRow,pending.inputId,key);
+  if(!(result.engineVersion==='v4'&&result.deferAcknowledgement) && fresh && response && pending.mode==='LIVE' && config.mode==='LIVE' && config.enabled && config.autoReply && policy.windowOpen(claimed.lastInboundAt)) {
+    await queue(claimed,{response,handoff:true,engineVersion:result.engineVersion||result.debug?.engineVersion||'v1'},configRow,pending.inputId,key);
   } else if(fresh && response && pending.mode==='DRAFT') {
     await Conversation.updateOne(guard,{$set:{'ai.draft':{...result,response,action:'handoff',mode:'DRAFT',inputId:String(pending.inputId),version:claimed.ai.version,configRevision:configRow.revision,createdAt:new Date()}}});
   }
@@ -84,12 +87,15 @@ async function budget(config,conversationId) {
   catch(error){await Usage.updateOne({key:conversationKey},{$inc:{calls:-1}});throw error;}
 }
 async function queue(conversation,result,configRow,inputId,key) {
-  const message=await Message.findOneAndUpdate({clientKey:key},{$setOnInsert:{conversation:conversation._id,type:'text',direction:'outbound',status:'queued',text:result.response,author:'ai',authorName:configRow.data.displayName,routingPhoneId:process.env.WHATSAPP_PHONE_NUMBER_ID,automation:{version:conversation.ai.version,inputId,configRevision:configRow.revision,handoff:Boolean(result.handoff)}}},{upsert:true,returnDocument:'after'});
+  const message=await Message.findOneAndUpdate({clientKey:key},{$setOnInsert:{conversation:conversation._id,type:'text',direction:'outbound',status:'queued',text:result.response,author:'ai',authorName:configRow.data.displayName,routingPhoneId:process.env.WHATSAPP_PHONE_NUMBER_ID,automation:{version:conversation.ai.version,inputId,configRevision:configRow.revision,handoff:Boolean(result.handoff),engineVersion:result.engineVersion||(result.engineVersion||result.debug?.engineVersion||'v1'),...(result.question?{question:result.question}:{}),...(result.delivery?{delivery:result.delivery}:{})}}},{upsert:true,returnDocument:'after'});
   await Conversation.updateOne({_id:conversation._id},{$set:{lastMessageId:message._id,lastMessageAt:message.createdAt,preview:result.response.slice(0,160)}});
   live.notify();return message;
 }
 async function runOne(configRow) {
+  if(configRow.data.engineVersion==='v4'&&['OFF','TEST'].includes(configRow.data.mode))return false;
   const config={...configRow.data,mode:configRow.data.autoReply?configRow.data.mode:'DRAFT'};const token=randomUUID();
+  const engineVersion=require('./runtime').version(config);
+  if(engineVersion==='v2')config.structuredSales=true;
   // Older conversations predate AI state. Persist the version before acquiring
   // a lease: Mongoose's in-memory default cannot match a missing database field.
   await Conversation.updateMany({'ai.phoneId':process.env.WHATSAPP_PHONE_NUMBER_ID,'ai.pending':true,'ai.version':{$exists:false}},{$set:{'ai.version':0}});
@@ -99,29 +105,37 @@ async function runOne(configRow) {
   const guard={status:{$ne:'resolved'},deleting:{$ne:true},'ai.leaseToken':token,'ai.version':version,lastInboundId:latest};
   try {
     if(conversation.ai.active===false || conversation.assignedTo){await Conversation.updateOne({_id:conversation._id,status:{$ne:'resolved'},deleting:{$ne:true},...guard},{$set:{'ai.pending':false}});return true;}
-    const inputs=await Message.find({conversation:conversation._id,direction:'inbound',_id:{$lte:latest,...(conversation.ai.lastProcessedId?{$gt:conversation.ai.lastProcessedId}:{})}}).sort({_id:-1}).limit(20).lean();inputs.reverse();
+    const inputs=await Message.find({conversation:conversation._id,direction:'inbound',_id:{$lte:latest,...(conversation.ai.lastProcessedId?{$gt:conversation.ai.lastProcessedId}:{})}}).sort({_id:-1}).limit(engineVersion==='v1'?20:201).lean();inputs.reverse();
     if(!inputs.length){await Conversation.updateOne({_id:conversation._id,status:{$ne:'resolved'},deleting:{$ne:true},...guard},{$set:{'ai.pending':false}});return true;}
+    if(engineVersion==='v3')return await require('./v3/worker').run({conversation,inputs,guard,configRow});
+    if(engineVersion==='v4')return await require('./v4/worker').run({conversation,inputs,guard,configRow});
     const text=inputs.map(m=>m.text).join('\n');const media=inputs.find(m=>m.type!=='text');
     const prior=conversation.ai.state || {};
-    let result;
+    let result,turnArgs;
     try {
-      if(config.maxConsecutive>0 && conversation.ai.consecutive>=config.maxConsecutive) result={action:'handoff',handoff:'AI_TURN_LIMIT',state:prior};
+      if(inputs.length>200)result={action:'handoff',handoff:'TURN_TOO_LARGE_REQUIRES_REVIEW',state:prior};
+      else if(config.maxConsecutive>0 && conversation.ai.consecutive>=config.maxConsecutive) result={action:'handoff',handoff:'AI_TURN_LIMIT',state:prior};
       else if(!policy.windowOpen(conversation.lastInboundAt)) result={action:'handoff',handoff:'SERVICE_WINDOW_CLOSED',state:prior};
       else {
-        if(!media&&!config.structuredSales)await budget(config,conversation._id);
-        const [records,knowledge,history]=await Promise.all([settings.catalogue(config.structuredSales),media?[]:settings.knowledge(text,prior,config.structuredSales),Message.find({conversation:conversation._id,direction:{$in:['inbound','outbound']},type:'text',_id:{$lt:inputs[0]._id}}).sort({_id:-1}).limit(config.maxHistory || 1).lean()]);
+        if(!media&&!config.structuredSales&&engineVersion!=='v2')await budget(config,conversation._id);
+        const [records,knowledge,history,questionMessages,effectMessages]=await Promise.all([engineVersion==='v2'?require('./v2/knowledge').load():settings.catalogue(config.structuredSales),media||engineVersion==='v2'?[]:settings.knowledge(text,prior,config.structuredSales),Message.find({conversation:conversation._id,direction:{$in:['inbound','outbound']},type:'text',_id:{$lt:inputs[0]._id}}).sort({_id:-1}).limit(config.maxHistory || 1).lean(),engineVersion==='v1'?[]:Message.find({conversation:conversation._id,direction:'outbound',status:{$in:['sent','delivered','read']},'automation.question':{$exists:true},_id:{$lt:inputs[0]._id}}).sort({_id:-1}).limit(1).lean(),engineVersion==='v1'?[]:Message.find({conversation:conversation._id,direction:'outbound',status:{$in:['sent','delivered','read']},'automation.delivery.stage':{$in:['PRICE_PRESENTED','PAYMENT_OFFERED','PAYMENT_PENDING']},_id:{$lt:inputs[0]._id}}).sort({_id:-1}).limit(1).lean()]);
         const invoiceRecord=prior.invoiceId?await require('../../models/Invoice').findOne({_id:prior.invoiceId,inboxConversation:conversation._id,deletedAt:null}).select('amount status expiresAt').lean():null;
         const paymentVerified=invoiceRecord?.status==='paid';
-        result=await engine.decide({text,customerName:conversation.contact.name,type:media?.type || 'text',state:prior,config,records,knowledge,history:history.reverse(),paymentVerified,invoiceRecord,reserveModelCall:()=>budget(config,conversation._id)});
+        turnArgs={text,messages:inputs,questionMessages,effectMessages,customerName:conversation.contact.name,type:media?.type || 'text',state:prior,config,records,knowledge,history:history.reverse(),paymentVerified,invoiceRecord,reserveModelCall:()=>budget(config,conversation._id)};
+        result=await engine.decide(turnArgs);
       }
     } catch(error) { const detail=require('./errors').describe(error);result={action:'handoff',handoff:detail.code,state:prior,error:detail.message}; }
     const currentConfig=await settings.getConfig();
     if(currentConfig.revision!==configRow.revision || !currentConfig.data.enabled || currentConfig.data.mode==='OFF') return true;
     if(!await Conversation.exists({_id:conversation._id,...guard,'ai.active':{$ne:false},assignedTo:null}))return true;
+    if(engineVersion==='shadow'&&turnArgs){
+      // Persist a separate snapshot; shadow never blocks sending on an OpenAI call.
+      try{await require('./v2/shadow').enqueue({...turnArgs,records:await require('./v2/knowledge').load(),reserveModelCall:undefined},conversation._id,latest,configRow.revision,result);}catch{console.error('V2 shadow snapshot unavailable');}
+    }
     if(result.action==='handoff'&&!(config.structuredSales&&config.mode==='DRAFT')) await handoff(conversation,result,config,guard);
     else {
       if(result.action==='invoice' && config.mode==='LIVE') {
-        try { const payment=await require('./invoices').generate({conversation,contact:conversation.contact,result,config});result={...result,response:payment.response,state:{...result.state,...payment,response:undefined}}; }
+        try { const payment=await require('./invoices').generate({conversation,contact:conversation.contact,result,config,assertCurrent:async()=>{const fresh=await settings.getConfig();if(fresh.revision!==configRow.revision||!await Conversation.exists({_id:conversation._id,...guard,'ai.active':{$ne:false},assignedTo:null}))throw new Error('Invoice authorization changed');}});const v2=result.state.core?.version===2;result={...result,response:v2?[result.response,payment.response].filter(Boolean).join('\n\n'):payment.response,state:{...result.state,...payment,response:undefined,...(v2?{invoiceStatus:'prepared',currentSalesStage:'INVOICE_PREPARED',paymentDetailsSentAt:undefined}:{})},...(v2?{delivery:{...result.delivery,stage:'PAYMENT_PENDING',invoiceId:payment.invoiceId}}:{})}; }
         catch { result={...result,action:'handoff',handoff:'INVOICE_ERROR'};await handoff(conversation,result,config,guard); }
       }
       if(result.action!=='handoff'||config.structuredSales&&config.mode==='DRAFT') {
@@ -146,5 +160,5 @@ async function recover(config){
   for(const item of items){const draft=item.ai.draft;if(draft.response && String(item.lastInboundId)===draft.inputId && item.ai.version===draft.version)await queue(item,draft,config,draft.inputId,`ai:${item._id}:${draft.inputId}`);await Conversation.updateOne({_id:item._id,'ai.draft.inputId':draft.inputId},{$set:{'ai.draft':null}});}
 }
 let running=false,lastPaymentCheck=0;
-async function tick(){if(running || !require('../workerPolicy').workerEnabled())return;running=true;try{const config=await settings.getConfig();await recoverHandoffs(config);if(!config.data.enabled || config.data.mode==='OFF')return;await recover(config);if(Date.now()-lastPaymentCheck>30000){await require('./payments').reconcile(config);lastPaymentCheck=Date.now();}await require('./followups').tick(config);for(let i=0;i<3;i++)if(!await runOne(config))break;}catch{console.error('Inbox AI worker deferred; incoming messages are retained');}finally{running=false;}}
+async function tick(){if(running || !require('../workerPolicy').workerEnabled())return;running=true;try{const config=await settings.getConfig();await recoverHandoffs(config);if(!config.data.enabled || ['OFF','TEST'].includes(config.data.mode))return;const selected=require('./runtime').version(config.data);if(selected==='shadow')void require('./v2/shadow').tick();await recover(config);if(!['v3','v4'].includes(selected)){if(Date.now()-lastPaymentCheck>30000){await require('./payments').reconcile(config);lastPaymentCheck=Date.now();}await require('./followups').tick(config);}for(let i=0;i<3;i++)if(!await runOne(config))break;}catch{console.error('Inbox AI worker deferred; incoming messages are retained');}finally{running=false;}}
 module.exports={tick,runOne,pause,eligible,handoff,finishHandoff,recoverHandoffs,queue,budget};

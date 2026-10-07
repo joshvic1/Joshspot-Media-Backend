@@ -1,0 +1,170 @@
+TAP version 13
+# Subtest: all calls receive matching outputs, then ONE composed reply; no model work persists as delivered
+ok 1 - all calls receive matching outputs, then ONE composed reply; no model work persists as delivered
+  ---
+  duration_ms: 35.6382
+  ...
+# Subtest: generated DRAFT is removed; actual later sent wording is synchronized exactly once
+ok 2 - generated DRAFT is removed; actual later sent wording is synchronized exactly once
+  ---
+  duration_ms: 5.7851
+  ...
+# Subtest: missing/dirty remote context recovers from bounded actual messages, not old semantic state
+ok 3 - missing/dirty remote context recovers from bounded actual messages, not old semantic state
+  ---
+  duration_ms: 2.0723
+  ...
+# Subtest: compaction rotates with advisory summary and no consent flags
+ok 4 - compaction rotates with advisory summary and no consent flags
+  ---
+  duration_ms: 5.2371
+  ...
+# Subtest: a burst is ONE turn and includes every inbound message
+ok 5 - a burst is ONE turn and includes every inbound message
+  ---
+  duration_ms: 2.7298
+  ...
+# Subtest: tool loop stops within six model iterations
+ok 6 - tool loop stops within six model iterations
+  ---
+  duration_ms: 5.8779
+  ...
+# Subtest: takeover during model call discards response
+ok 7 - takeover during model call discards response
+  ---
+  duration_ms: 5.373
+  ...
+# Subtest: unsupported media and sensitive data require handoff before any model call
+ok 8 - unsupported media and sensitive data require handoff before any model call
+  ---
+  duration_ms: 1.1316
+  ...
+# Subtest: live cannot be entered accidentally by a test runner
+ok 9 - live cannot be entered accidentally by a test runner
+  ---
+  duration_ms: 1.5032
+  ...
+# Subtest: V1 remains default; saved selector overrides legacy environment; V3 LIVE is gated
+ok 10 - V1 remains default; saved selector overrides legacy environment; V3 LIVE is gated
+  ---
+  duration_ms: 8.2569
+  ...
+# Subtest: strict tool schemas reject extra IDs, invalid budget enums, missing keys and unsupported tools
+ok 11 - strict tool schemas reject extra IDs, invalid budget enums, missing keys and unsupported tools
+  ---
+  duration_ms: 4.9335
+  ...
+# Subtest: daily spend goes through existing calculator: 5k × 2 + 25k = 35k
+ok 12 - daily spend goes through existing calculator: 5k × 2 + 25k = 35k
+  ---
+  duration_ms: 126.0771
+  ...
+# Subtest: package total is not taxed with management fee twice
+ok 13 - package total is not taxed with management fee twice
+  ---
+  duration_ms: 4.5155
+  ...
+# Subtest: 15-day conflict remains visible and cannot become an invoice quote
+ok 14 - 15-day conflict remains visible and cannot become an invoice quote
+  ---
+  duration_ms: 3.8974
+  ...
+# Subtest: all-inclusive cap is inverted through calculator without exceeding cap
+ok 15 - all-inclusive cap is inverted through calculator without exceeding cap
+  ---
+  duration_ms: 6.7791
+  ...
+# Subtest: mixed platform/service relationships stay scoped; setup plus management supported
+ok 16 - mixed platform/service relationships stay scoped; setup plus management supported
+  ---
+  duration_ms: 5.266
+  ...
+# Subtest: unknown budget basis and invalid setup inputs fail, no guessing
+ok 17 - unknown budget basis and invalid setup inputs fail, no guessing
+  ---
+  duration_ms: 4.9704
+  ...
+# Subtest: V3 knowledge excludes legacy state-machine fields
+ok 18 - V3 knowledge excludes legacy state-machine fields
+  ---
+  duration_ms: 1.4741
+  ...
+# Subtest: DRAFT invoice intent is idempotent simulation, no financial port executes
+ok 19 - DRAFT invoice intent is idempotent simulation, no financial port executes
+  ---
+  duration_ms: 10.448
+  ...
+# Subtest: stale evidence, deferral and takeover all prevent financial action
+ok 20 - stale evidence, deferral and takeover all prevent financial action
+  ---
+  duration_ms: 6.5744
+  ...
+# Subtest: quote mutation invalidates authorization; new catalogue revision invalidates old quote
+ok 21 - quote mutation invalidates authorization; new catalogue revision invalidates old quote
+  ---
+  duration_ms: 8.4569
+  ...
+# Subtest: returning to an earlier quote restores the current quote rather than a stale cache entry
+ok 22 - returning to an earlier quote restores the current quote rather than a stale cache entry
+  ---
+  duration_ms: 9.7624
+  ...
+# Subtest: payment corruption falls back to trusted template while valid question answer survives
+ok 23 - payment corruption falls back to trusted template while valid question answer survives
+  ---
+  duration_ms: 2039.4382
+  ...
+# Subtest: small financial backstop rejects invented amount/link/payment/guarantee
+ok 24 - small financial backstop rejects invented amount/link/payment/guarantee
+  ---
+  duration_ms: 4.5463
+  ...
+# Subtest: Test Agent keeps server-owned multi-turn context, no real side effects
+ok 25 - Test Agent keeps server-owned multi-turn context, no real side effects
+  ---
+  duration_ms: 1975.7026
+  ...
+# Subtest: real worker routes V3 DRAFT; preserves V1 state and creates no outbound
+ok 26 - real worker routes V3 DRAFT; preserves V1 state and creates no outbound
+  ---
+  duration_ms: 244.771
+  ...
+# Subtest: simulated invoice draft cannot be approved as real payment details
+ok 27 - simulated invoice draft cannot be approved as real payment details
+  ---
+  duration_ms: 113.0688
+  ...
+# Subtest: worker discards a response after human takeover during model generation
+ok 28 - worker discards a response after human takeover during model generation
+  ---
+  duration_ms: 165.7717
+  ...
+# Subtest: V3 logs resolve current outbox delivery status without another response authority
+ok 29 - V3 logs resolve current outbox delivery status without another response authority
+  ---
+  duration_ms: 74.0505
+  ...
+# Subtest: switching engine while model runs discards stale response without deleting engine memory
+ok 30 - switching engine while model runs discards stale response without deleting engine memory
+  ---
+  duration_ms: 161.8929
+  ...
+# Subtest: V3 queued message cannot send after switching to V1; LIVE save requires explicit gate
+ok 31 - V3 queued message cannot send after switching to V1; LIVE save requires explicit gate
+  ---
+  duration_ms: 70.487
+  ...
+# Subtest: financial adapter reuses existing generator idempotently in ephemeral DB; provider is stubbed
+ok 32 - financial adapter reuses existing generator idempotently in ephemeral DB; provider is stubbed
+  ---
+  duration_ms: 646.1908
+  ...
+1..32
+# tests 32
+# suites 0
+# pass 32
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6494.1001

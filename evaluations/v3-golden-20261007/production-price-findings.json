@@ -1,0 +1,24 @@
+{
+  "dbName": "test",
+  "findings": [
+    {
+      "collection": "inboxairecords",
+      "id": "6ac17d26f2f0297bebf4a75a",
+      "kind": "plan",
+      "key": "plan_15",
+      "revision": 0,
+      "data": {
+        "duration": 15,
+        "amount": 285000,
+        "currency": "NGN",
+        "platforms": [
+          "tiktok",
+          "meta"
+        ],
+        "service": "ads_management",
+        "description": ""
+      }
+    }
+  ],
+  "changesMade": false
+}

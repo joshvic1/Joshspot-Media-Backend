@@ -1,0 +1,179 @@
+{
+  "customer": [
+    {
+      "_id": "G02-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "yes setup so I can run it myself",
+      "createdAt": "2026-10-07T09:16:04.098Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G02-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "I want TikTok ads",
+      "createdAt": "2026-10-07T09:15:51.156Z"
+    },
+    {
+      "_id": "G02-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing TikTok ads! \n\nTo assist you better, do you want us to set up your TikTok ad account so you can run ads yourself, or would you prefer Joshspot to manage and run the TikTok ad campaigns for you? Or both? \n\nAlso, could you share your planned budget and campaign duration? This will help me give you an accurate quote.",
+      "createdAt": "2026-10-07T09:15:58.977Z"
+    },
+    {
+      "_id": "G02-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "first one",
+      "createdAt": "2026-10-07T09:15:58.980Z"
+    },
+    {
+      "_id": "G02-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for confirming that you want TikTok account setup so you can run ads yourself.\n\nCould you please share your planned budget and campaign duration? This will help me provide an accurate quote for the account setup service.",
+      "createdAt": "2026-10-07T09:16:04.096Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18",
+    "seenMessageIds": [
+      "G02-in-0",
+      "G02-out-0",
+      "G02-in-1"
+    ],
+    "contextCharacters": 760,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3654,
+    "output_tokens": 49,
+    "total_tokens": 3703,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.00154
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18/items?limit=100&order=asc&after=msg_6ac60dd659f881938d5c00ebc91f87a8030c8836abd53b18"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18/items/msg_030c8836abd53b18006ac60dd7a52c8193a7925109285f57e0"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18/items/msg_030c8836abd53b18006ac60dd801888193a535b7c625fef4a4"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18/items?limit=100&order=asc&after=msg_6ac60dd659f881938d5c00ebc91f87a8030c8836abd53b18"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_030c8836abd53b18006ac60dd77878819399f8906ab0b5673b",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3654,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 49,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3703
+      },
+      "output": [
+        {
+          "id": "msg_030c8836abd53b18006ac60dd801888193a535b7c625fef4a4",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for confirming you want TikTok account setup so you can run ads yourself.\n\nCould you please provide your planned budget and how long you want the campaign to run? This will help me give you an accurate quote for the setup service."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 3162,
+      "openaiConversationId": "conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18"
+    },
+    "action": "reply",
+    "response": "Thanks for confirming you want TikTok account setup so you can run ads yourself.\n\nCould you please provide your planned budget and how long you want the campaign to run? This will help me give you an accurate quote for the setup service.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4921,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60dc9ec2c8193baa949625142b26a030c8836abd53b18",
+    "seenMessageIds": [
+      "G02-in-0",
+      "G02-out-0",
+      "G02-in-1",
+      "G02-out-1",
+      "G02-in-2"
+    ],
+    "contextCharacters": 1286,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

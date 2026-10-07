@@ -1,0 +1,199 @@
+{
+  "customer": [
+    {
+      "_id": "G17-in-3",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "last price nko",
+      "createdAt": "2026-10-07T09:19:53.996Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G17-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "TikTok setup only I will run it myself",
+      "createdAt": "2026-10-07T09:19:37.654Z"
+    },
+    {
+      "_id": "G17-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for confirming TikTok account setup only, where you will run the ads yourself.\n\nTo prepare an accurate quote, could you please let me know your planned budget for this TikTok setup service? Also, how soon do you want this setup done?",
+      "createdAt": "2026-10-07T09:19:43.872Z"
+    },
+    {
+      "_id": "G17-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "how much",
+      "createdAt": "2026-10-07T09:19:43.875Z"
+    },
+    {
+      "_id": "G17-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "For TikTok account setup only, where you will run the ads yourself, the setup service fee typically applies without ad spend included.\n\nTo give you an exact price, I'll prepare a quote based on this single TikTok setup service.\n\nWould you also want any guidance material or initial creatives included in the setup? If yes, how many creatives would you like? If not, I can price the basic setup alone.",
+      "createdAt": "2026-10-07T09:19:48.845Z"
+    },
+    {
+      "_id": "G17-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "can you do 10k for me",
+      "createdAt": "2026-10-07T09:19:48.847Z"
+    },
+    {
+      "_id": "G17-out-2",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for your offer of 10,000 for the TikTok account setup only service.\n\nTo clarify, are you proposing a total budget of 10,000 for the entire setup fee? Or do you want me to include some ad spend amount within this 10,000? Since you said you'll run the ads yourself, typically the setup fee is separate from ad spend.\n\nPlease confirm your exact intended budget or if you want me to prepare a quote strictly for the setup service alone without ad spend. This will help me give you the accurate pricing details.",
+      "createdAt": "2026-10-07T09:19:53.993Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a",
+    "seenMessageIds": [
+      "G17-in-0",
+      "G17-out-0",
+      "G17-in-1",
+      "G17-out-1",
+      "G17-in-2"
+    ],
+    "contextCharacters": 1374,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3863,
+    "output_tokens": 80,
+    "total_tokens": 3943,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0016732000000000001
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a/items?limit=100&order=asc&after=msg_6ac60ebbfa508197ae3baad0b079a3e60bde0b57fbd4286a"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a/items/msg_0bde0b57fbd4286a006ac60ebd2e5c8197a465d822f1a2390a"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a/items/msg_0bde0b57fbd4286a006ac60ebf315c819780f815f1dae6dcfe"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a/items?limit=100&order=asc&after=msg_6ac60ebbfa508197ae3baad0b079a3e60bde0b57fbd4286a"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0bde0b57fbd4286a006ac60ebd06088197826785c6c0453258",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3863,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 80,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3943
+      },
+      "output": [
+        {
+          "id": "msg_0bde0b57fbd4286a006ac60ebf315c819780f815f1dae6dcfe",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "The current price for TikTok account setup only, where you will run the ads yourself, is a fixed setup fee. \n\nTo provide the exact fee, I will prepare a quote for the TikTok account setup service alone. May I confirm if you want any additional support like initial creatives or guidance included, or just the basic setup? This will help me give you the precise last price."
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 4683,
+      "openaiConversationId": "conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a"
+    },
+    "action": "reply",
+    "response": "The current price for TikTok account setup only, where you will run the ads yourself, is a fixed setup fee. \n\nTo provide the exact fee, I will prepare a quote for the TikTok account setup service alone. May I confirm if you want any additional support like initial creatives or guidance included, or just the basic setup? This will help me give you the precise last price.",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 6577,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60eab3fe081978cb2bd6bcc3d10310bde0b57fbd4286a",
+    "seenMessageIds": [
+      "G17-in-0",
+      "G17-out-0",
+      "G17-in-1",
+      "G17-out-1",
+      "G17-in-2",
+      "G17-out-2",
+      "G17-in-3"
+    ],
+    "contextCharacters": 2172,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

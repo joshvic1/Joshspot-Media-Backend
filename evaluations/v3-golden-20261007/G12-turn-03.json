@@ -1,0 +1,179 @@
+{
+  "customer": [
+    {
+      "_id": "G12-in-2",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "not daily o total",
+      "createdAt": "2026-10-07T09:18:43.432Z"
+    }
+  ],
+  "historyBefore": [
+    {
+      "_id": "G12-in-0",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "Run Meta ads",
+      "createdAt": "2026-10-07T09:18:34.322Z"
+    },
+    {
+      "_id": "G12-out-0",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for choosing Meta ads! To get started, do you want us to set up the Meta advertising account for you, or do you already have an account and want us to manage your ad campaigns? Or both setup and management? Also, please share your planned budget and for how long you want to run the ads.",
+      "createdAt": "2026-10-07T09:18:38.719Z"
+    },
+    {
+      "_id": "G12-in-1",
+      "direction": "inbound",
+      "type": "text",
+      "status": "received",
+      "text": "100k just the ad money for 10 days",
+      "createdAt": "2026-10-07T09:18:38.721Z"
+    },
+    {
+      "_id": "G12-out-1",
+      "direction": "outbound",
+      "type": "text",
+      "status": "sent",
+      "text": "Thanks for confirming the budget and duration for Meta ads. Just to clarify, do you want us only to manage your Meta ad campaigns using your existing setup, or do you also want us to set up the Meta advertising account for you? Or both setup and management?",
+      "createdAt": "2026-10-07T09:18:43.429Z"
+    }
+  ],
+  "stateBefore": {
+    "openaiConversationId": "conv_6ac60e6bea5c8195997e38690f228f770ee5fc2d7acaaa8e",
+    "seenMessageIds": [
+      "G12-in-0",
+      "G12-out-0",
+      "G12-in-1"
+    ],
+    "contextCharacters": 732,
+    "dirty": false
+  },
+  "usage": {
+    "calls": 1,
+    "input_tokens": 3650,
+    "output_tokens": 77,
+    "total_tokens": 3727,
+    "cached_input_tokens": 0,
+    "estimated_cost_usd": 0.0015832
+  },
+  "httpCalls": 8,
+  "http": [
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e6bea5c8195997e38690f228f770ee5fc2d7acaaa8e"
+    },
+    {
+      "method": "post",
+      "path": "/conversations/conv_6ac60e6bea5c8195997e38690f228f770ee5fc2d7acaaa8e/items"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e6bea5c8195997e38690f228f770ee5fc2d7acaaa8e/items?limit=1&order=desc"
+    },
+    {
+      "method": "post",
+      "path": "/responses"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e6bea5c8195997e38690f228f770ee5fc2d7acaaa8e/items?limit=100&order=asc&after=msg_6ac60e7561bc8195a53096f3a678c1480ee5fc2d7acaaa8e"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e6bea5c8195997e38690f228f770ee5fc2d7acaaa8e/items/msg_0ee5fc2d7acaaa8e006ac60e7683c88195878e5c3665b4dcec"
+    },
+    {
+      "method": "delete",
+      "path": "/conversations/conv_6ac60e6bea5c8195997e38690f228f770ee5fc2d7acaaa8e/items/msg_0ee5fc2d7acaaa8e006ac60e76dba88195b26aa47686cd7cf6"
+    },
+    {
+      "method": "get",
+      "path": "/conversations/conv_6ac60e6bea5c8195997e38690f228f770ee5fc2d7acaaa8e/items?limit=100&order=asc&after=msg_6ac60e7561bc8195a53096f3a678c1480ee5fc2d7acaaa8e"
+    }
+  ],
+  "rawResponses": [
+    {
+      "id": "resp_0ee5fc2d7acaaa8e006ac60e765a248195988b2bff1b3f8432",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3650,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 77,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3727
+      },
+      "output": [
+        {
+          "id": "msg_0ee5fc2d7acaaa8e006ac60e76dba88195b26aa47686cd7cf6",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "Thanks for clarifying the budget is for the total ad spend, not daily.\n\nTo proceed with running Meta ads for 10 days with a total ad spend of 100,000, do you want us just to manage your ad campaigns using your existing Meta account, or do you also want us to set up the Meta advertising account for you? Or both setup and management?"
+            }
+          ],
+          "role": "assistant"
+        }
+      ]
+    }
+  ],
+  "providerErrors": [],
+  "safetyFailures": [],
+  "simulated": true,
+  "result": {
+    "engineVersion": "v3",
+    "state": {},
+    "model": "gpt-4.1-mini",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cached_input_tokens": 0,
+      "calls": 0,
+      "estimated_cost_usd": 0
+    },
+    "debug": {
+      "engineVersion": "v3",
+      "catalogueRevision": "9aefe1544684e19d34e28e98c598ef1f1ae0e28b7f583f68c6cce76590233a18",
+      "simulation": true,
+      "paymentFallback": false,
+      "tools": [],
+      "latency": 2935,
+      "openaiConversationId": "conv_6ac60e6bea5c8195997e38690f228f770ee5fc2d7acaaa8e"
+    },
+    "action": "reply",
+    "response": "Thanks for clarifying the budget is for the total ad spend, not daily.\n\nTo proceed with running Meta ads for 10 days with a total ad spend of 100,000, do you want us just to manage your ad campaigns using your existing Meta account, or do you also want us to set up the Meta advertising account for you? Or both setup and management?",
+    "wouldGenerateInvoice": false
+  },
+  "finalAction": "reply",
+  "status": "COMPLETED",
+  "elapsedMs": 4655,
+  "stateAfter": {
+    "openaiConversationId": "conv_6ac60e6bea5c8195997e38690f228f770ee5fc2d7acaaa8e",
+    "seenMessageIds": [
+      "G12-in-0",
+      "G12-out-0",
+      "G12-in-1",
+      "G12-out-1",
+      "G12-in-2"
+    ],
+    "contextCharacters": 1269,
+    "dirty": false
+  },
+  "knowledge": [],
+  "simulatedActions": []
+}

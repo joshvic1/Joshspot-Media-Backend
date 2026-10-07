@@ -1,0 +1,37 @@
+{
+  "finishedAt": "2026-10-07T09:23:08.327Z",
+  "model": "gpt-4.1-mini",
+  "scenarios": 30,
+  "turns": 148,
+  "totals": {
+    "calls": 159,
+    "input_tokens": 592498,
+    "output_tokens": 12932,
+    "total_tokens": 605430,
+    "cached_input_tokens": 59520,
+    "estimated_cost_usd": 0.23983440000000003,
+    "http_calls": 1225
+  },
+  "implementationUnchanged": true,
+  "after": {
+    "catalogue.js": "5af4fac1795a3f635a16db45767dc491919b9b037c0a9c7a9a52bacaee9856e9",
+    "context.js": "61a29cebb80a06d5f2d51f0ddb1387c7975047e8270f8f183da3ddff091d485f",
+    "contracts.js": "2c3201001386be1871222b8c11f8686b6ff89212fbcdb15ffedda4bf73decd5f",
+    "conversation.test.js": "bece8b9ddf1fc27b5520fcd0d7470dcd8364d8ed5154d25fa90aa929f01c06e2",
+    "core.test.js": "78b0cefa02068effccbf6b12bfe3cc498c1739681010d67f63917f61ffa2a384",
+    "cost.js": "417b58431148644e2e72acf46677e4b711b29b1ee93c0d834860881c29a6e4dd",
+    "fakeOpenai.test-helper.js": "d3559e0ee276c7d39046c96865aad586ccb832b53412c00aeb77a9c6d429bf78",
+    "financial.js": "d21d04500dfc8b5cac63a464d9ca0fa723c62ebfcb32b84af1c98959435230b7",
+    "index.js": "81240f8c9c56e8657a272ddf9f758da9810e9d0ac6b95278de610462f4ece57d",
+    "instructions.js": "6d5841bd63ef65f52195bd05087a8ee4e3d105840a94a7e3b28a3790420e2017",
+    "integration.test.js": "488a85c0978c540419e47a85b5a10fabe3d4ee320b288f1ca9c4b961563e8873",
+    "openai.js": "7bb73a92d2281171927ddc432916e1a2db839ee7537b71d02310acf467a678db",
+    "pricing.js": "8ad1ab1ee4e82cdefad615d19eafd3078b2e1bf7253d5d28a560c3f74d8a405c",
+    "testAgent.js": "51bbcc3327ce4d9f61d4b0931fc9b63be28aec638bbb889c00ffe16b347e1141",
+    "tools.js": "44f7bc6b4c1a50ba809938a06f14d99e09a1066e9128b1d9cf94deed24e6d8be",
+    "validation.js": "9a58d342fbae29b0d5caa345829f1aeb92e62bdc600532a019facca828829c4c",
+    "worker.js": "a22be387acfdeddb36cd62d136dd9dd4199ca33000ec829bed3244925316ff23",
+    "defaults.js": "d33dcb46f8eb1d71d23384c5810d97efec9bc72f11063fb965fe5c49516668ad",
+    "calculator": "75f07e07a7b9d58fa9fb14547aed26d7aebaee1b2da2bc52284df2bba12736e8"
+  }
+}

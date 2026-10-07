@@ -1,0 +1,1849 @@
+[
+  {
+    "file": "results-gpt-4.1-mini-comparison.json",
+    "model": "gpt-4.1-mini",
+    "calls": 29,
+    "summary": {
+      "total": 10,
+      "pass": 3,
+      "fail": 7,
+      "inconclusive": 0
+    },
+    "scenarios": [
+      {
+        "id": "multi-daily",
+        "group": "multi-fact",
+        "status": "FAIL",
+        "errors": [
+          "Expected amount 60000, got 80000"
+        ],
+        "turnsExecuted": 1,
+        "questions": [
+          "PAYMENT"
+        ]
+      },
+      {
+        "id": "mixed-platform-services",
+        "group": "multi-fact",
+        "status": "FAIL",
+        "errors": [
+          "Wrong service/platform association"
+        ],
+        "turnsExecuted": 1,
+        "questions": [
+          "BUDGET_DURATION"
+        ]
+      },
+      {
+        "id": "inclusive-48",
+        "group": "all-inclusive-budget",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "BASIS"
+        ]
+      },
+      {
+        "id": "reach-62",
+        "group": "semantic-retrieval",
+        "status": "FAIL",
+        "errors": [
+          "Engine error: Uncontrolled financial content or question",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_expected_results"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "requirements-same-turn",
+        "group": "updated-retrieval",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "existing-page",
+        "group": "reported-failure",
+        "status": "FAIL",
+        "errors": [
+          "Engine error: Unsafe or unavailable knowledge template",
+          "Expected question SERVICE, got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "plan-no-double-fee",
+        "group": "reported-failure",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "course-detour",
+        "group": "course",
+        "status": "FAIL",
+        "errors": [
+          "Engine error: Uncontrolled financial content or question",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected response content: 8,000",
+          "Remaining turns blocked by handoff"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "deferral-support",
+        "group": "deferral",
+        "status": "FAIL",
+        "errors": [
+          "Expected response content: 5,000"
+        ],
+        "turnsExecuted": 3,
+        "questions": []
+      },
+      {
+        "id": "suggestion-daily",
+        "group": "reported-failure",
+        "status": "FAIL",
+        "errors": [
+          "Expected response content: 60,000",
+          "Expected response content: 5,000"
+        ],
+        "turnsExecuted": 2,
+        "questions": [
+          "BUDGET_DURATION"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "results-gpt-4.1-paced.json",
+    "model": "gpt-4.1",
+    "calls": 21,
+    "summary": {
+      "total": 7,
+      "pass": 5,
+      "fail": 2,
+      "inconclusive": 0
+    },
+    "scenarios": [
+      {
+        "id": "reach-60",
+        "group": "semantic-retrieval",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "reach-61",
+        "group": "semantic-retrieval",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "reach-62",
+        "group": "semantic-retrieval",
+        "status": "FAIL",
+        "errors": [
+          "Engine error: Repeated response component",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_expected_results"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "reach-63",
+        "group": "semantic-retrieval",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "reach-64",
+        "group": "semantic-retrieval",
+        "status": "FAIL",
+        "errors": [
+          "Engine error: Invalid result.parts",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_expected_results"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "reach-65",
+        "group": "semantic-retrieval",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "reach-66",
+        "group": "semantic-retrieval",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "results-gpt-4.1-serial.json",
+    "model": "gpt-4.1",
+    "calls": 84,
+    "summary": {
+      "total": 48,
+      "pass": 32,
+      "fail": 15,
+      "inconclusive": 1
+    },
+    "scenarios": [
+      {
+        "id": "choice-23",
+        "group": "service-question",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "CLARIFY_REFERENCE"
+        ]
+      },
+      {
+        "id": "choice-24",
+        "group": "service-question",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "SELECT_PLAN"
+        ]
+      },
+      {
+        "id": "choice-25",
+        "group": "service-question",
+        "status": "FAIL",
+        "errors": [
+          "Exploration became a purchase selection",
+          "Missing separate question interpretation"
+        ],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-26",
+        "group": "service-question",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "CLARIFY_REFERENCE"
+        ]
+      },
+      {
+        "id": "multi-daily",
+        "group": "multi-fact",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "multi-setup-management",
+        "group": "multi-fact",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "multi-total",
+        "group": "multi-fact",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "DURATION"
+        ]
+      },
+      {
+        "id": "mixed-platform-services",
+        "group": "multi-fact",
+        "status": "FAIL",
+        "errors": [
+          "Wrong service/platform association"
+        ],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "correction-35",
+        "group": "correction",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "correction-36",
+        "group": "correction",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "correction-37",
+        "group": "correction",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "correction-38",
+        "group": "correction",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "BUDGET_DURATION"
+        ]
+      },
+      {
+        "id": "correction-39",
+        "group": "correction",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "correction-40",
+        "group": "correction",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "budget-41",
+        "group": "budget",
+        "status": "FAIL",
+        "errors": [
+          "Effective budgetBasis: expected \"daily\", got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": [
+          "BASIS"
+        ]
+      },
+      {
+        "id": "budget-42",
+        "group": "budget",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "budget-43",
+        "group": "budget",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "budget-44",
+        "group": "budget",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "budget-45",
+        "group": "budget",
+        "status": "FAIL",
+        "errors": [
+          "Effective budgetBasis: expected \"daily\", got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": [
+          "BASIS"
+        ]
+      },
+      {
+        "id": "budget-46",
+        "group": "budget",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "budget-47",
+        "group": "budget",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "BASIS"
+        ]
+      },
+      {
+        "id": "inclusive-48",
+        "group": "all-inclusive-budget",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "BASIS"
+        ]
+      },
+      {
+        "id": "inclusive-49",
+        "group": "all-inclusive-budget",
+        "status": "FAIL",
+        "errors": [
+          "Inclusive cap exceeded: 130000 > 100000"
+        ],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "inclusive-50",
+        "group": "all-inclusive-budget",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "BASIS"
+        ]
+      },
+      {
+        "id": "negotiation-51",
+        "group": "negotiation",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "negotiation-52",
+        "group": "negotiation",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "negotiation-53",
+        "group": "negotiation",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "recommend-54",
+        "group": "recommendation",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "SELECT_PLAN"
+        ]
+      },
+      {
+        "id": "recommend-55",
+        "group": "recommendation",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "SELECT_PLAN"
+        ]
+      },
+      {
+        "id": "recommend-56",
+        "group": "recommendation",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "SELECT_PLAN"
+        ]
+      },
+      {
+        "id": "recommend-57",
+        "group": "recommendation",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "SELECT_PLAN"
+        ]
+      },
+      {
+        "id": "recommend-58",
+        "group": "recommendation",
+        "status": "FAIL",
+        "errors": [
+          "Engine error: Uncontrolled financial content or question",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected response content: 60,000"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "recommend-59",
+        "group": "recommendation",
+        "status": "FAIL",
+        "errors": [
+          "Expected response content: 60,000"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "interruption-service",
+        "group": "interruption",
+        "status": "FAIL",
+        "errors": [
+          "Engine error: Repeated response component",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_management",
+          "Expected response content: campaign"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "interruption-platform",
+        "group": "interruption",
+        "status": "FAIL",
+        "errors": [
+          "Engine error: Repeated response component",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_management",
+          "Expected response content: campaign"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "interruption-budget",
+        "group": "interruption",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "BUDGET_DURATION"
+        ]
+      },
+      {
+        "id": "interruption-duration",
+        "group": "interruption",
+        "status": "FAIL",
+        "errors": [
+          "Engine error: Repeated response component",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_management",
+          "Expected response content: campaign"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "interruption-quote",
+        "group": "interruption",
+        "status": "FAIL",
+        "errors": [
+          "Engine error: Repeated response component",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_management",
+          "Expected response content: campaign"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "interruption-proceed",
+        "group": "interruption",
+        "status": "FAIL",
+        "errors": [
+          "Engine error: Repeated response component",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_management",
+          "Expected response content: campaign"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "three-questions",
+        "group": "multiple-questions",
+        "status": "FAIL",
+        "errors": [
+          "Engine error: Incomplete V2 model response",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_setup_timing",
+          "Expected response content: separate"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "requirements-same-turn",
+        "group": "updated-retrieval",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "meta-requirements",
+        "group": "updated-retrieval",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "unknown-platform",
+        "group": "reported-failure",
+        "status": "FAIL",
+        "errors": [
+          "Engine error: Unsafe or unavailable knowledge template"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "existing-page",
+        "group": "reported-failure",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "SERVICE"
+        ]
+      },
+      {
+        "id": "plan-no-double-fee",
+        "group": "reported-failure",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "plan-15-day",
+        "group": "catalogue-conflict",
+        "status": "FAIL",
+        "errors": [
+          "Engine error: Plan price differs from calculator; review configuration",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected amount 285000, got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "payment-claim",
+        "group": "safety",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "human-request",
+        "group": "safety",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      }
+    ]
+  },
+  {
+    "file": "results-gpt-4.1.json",
+    "model": "gpt-4.1",
+    "calls": 96,
+    "summary": {
+      "total": 94,
+      "pass": 17,
+      "fail": 0,
+      "inconclusive": 77
+    },
+    "scenarios": [
+      {
+        "id": "choice-3",
+        "group": "service-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-2",
+        "group": "service-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-1",
+        "group": "service-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-4",
+        "group": "service-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-5",
+        "group": "service-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-6",
+        "group": "service-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-8",
+        "group": "service-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-9",
+        "group": "service-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-10",
+        "group": "service-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-11",
+        "group": "service-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-7",
+        "group": "service-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-14",
+        "group": "service-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective services: expected [\"ads_management\"], got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-12",
+        "group": "service-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-13",
+        "group": "service-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-15",
+        "group": "service-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective services: expected [\"ads_management\"], got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-16",
+        "group": "service-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective services: expected [\"ads_management\"], got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-17",
+        "group": "service-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective services: expected [\"ads_management\"], got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-18",
+        "group": "service-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective services: expected [\"ads_management\"], got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-20",
+        "group": "service-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective services: expected [\"account_setup\",\"ads_management\"], got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-21",
+        "group": "service-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective services: expected [\"account_setup\",\"ads_management\"], got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-22",
+        "group": "service-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective services: expected [\"account_setup\",\"ads_management\"], got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-24",
+        "group": "service-question",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Missing separate question interpretation"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-23",
+        "group": "service-question",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Missing separate question interpretation"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-19",
+        "group": "service-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PLATFORM"
+        ]
+      },
+      {
+        "id": "choice-25",
+        "group": "service-question",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Missing separate question interpretation"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-26",
+        "group": "service-question",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Missing separate question interpretation"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-27",
+        "group": "ambiguous-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-28",
+        "group": "ambiguous-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-29",
+        "group": "ambiguous-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "choice-30",
+        "group": "ambiguous-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "missing-account",
+        "group": "service-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective services: expected [\"ads_management\"], got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "platform-31",
+        "group": "platform-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective platforms: expected [\"tiktok\",\"meta\"], got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "platform-33",
+        "group": "platform-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective platforms: expected [\"tiktok\",\"meta\"], got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "platform-34",
+        "group": "platform-choice",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective platforms: expected [\"tiktok\",\"meta\"], got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "platform-32",
+        "group": "platform-choice",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "BUDGET_DURATION"
+        ]
+      },
+      {
+        "id": "multi-daily",
+        "group": "multi-fact",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected amount 60000, got undefined",
+          "Effective duration: expected 7, got undefined",
+          "Effective budget: expected 5000, got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "multi-setup-management",
+        "group": "multi-fact",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Effective services: expected [\"account_setup\",\"ads_management\"], got undefined",
+          "Effective duration: expected 10, got undefined",
+          "Expected question PLATFORM, got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "mixed-platform-services",
+        "group": "multi-fact",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Wrong service/platform association"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "multi-total",
+        "group": "multi-fact",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Effective platforms: expected [\"meta\"], got undefined",
+          "Effective budget: expected 100000, got undefined",
+          "Effective budgetBasis: expected \"total\", got undefined",
+          "Expected question DURATION, got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "correction-35",
+        "group": "correction",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective platforms: expected [\"meta\"], got [\"tiktok\"]"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "correction-36",
+        "group": "correction",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective budget: expected 10000, got 5000"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "correction-37",
+        "group": "correction",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective budgetBasis: expected \"total\", got \"daily\""
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "correction-39",
+        "group": "correction",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective platforms: expected [\"meta\"], got [\"tiktok\"]"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "correction-40",
+        "group": "correction",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective duration: expected 15, got 7"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "correction-38",
+        "group": "correction",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective services: expected [\"ads_management\"], got [\"account_setup\"]"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "budget-41",
+        "group": "budget",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective budget: expected 5000, got undefined",
+          "Effective budgetBasis: expected \"daily\", got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "budget-42",
+        "group": "budget",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective budget: expected 5000, got undefined",
+          "Effective budgetBasis: expected \"daily\", got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "budget-45",
+        "group": "budget",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective budget: expected 100000, got undefined",
+          "Effective budgetBasis: expected \"daily\", got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "budget-44",
+        "group": "budget",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective budget: expected 35000, got undefined",
+          "Effective budgetBasis: expected \"total\", got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "budget-46",
+        "group": "budget",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective budget: expected 10000, got undefined",
+          "Effective budgetBasis: expected \"daily\", got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "budget-43",
+        "group": "budget",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "budget-47",
+        "group": "budget",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Effective budget: expected 150000, got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "inclusive-48",
+        "group": "all-inclusive-budget",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "inclusive-50",
+        "group": "all-inclusive-budget",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "inclusive-49",
+        "group": "all-inclusive-budget",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "negotiation-51",
+        "group": "negotiation",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected amount 20000, got undefined",
+          "Expected response content: not negotiable"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "negotiation-53",
+        "group": "negotiation",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected amount 20000, got undefined",
+          "Expected response content: not negotiable"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "negotiation-52",
+        "group": "negotiation",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected amount 20000, got undefined",
+          "Expected response content: not negotiable"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "recommend-56",
+        "group": "recommendation",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected response content: 60,000"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "recommend-54",
+        "group": "recommendation",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected response content: 60,000"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "recommend-55",
+        "group": "recommendation",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected response content: 60,000"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "recommend-59",
+        "group": "recommendation",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected response content: 60,000"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "recommend-58",
+        "group": "recommendation",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected response content: 60,000"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "reach-61",
+        "group": "semantic-retrieval",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_expected_results"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "reach-60",
+        "group": "semantic-retrieval",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_expected_results"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "recommend-57",
+        "group": "recommendation",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected response content: 60,000"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "reach-63",
+        "group": "semantic-retrieval",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_expected_results"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "reach-62",
+        "group": "semantic-retrieval",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_expected_results"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "reach-64",
+        "group": "semantic-retrieval",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_expected_results"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "reach-65",
+        "group": "semantic-retrieval",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_expected_results"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "reach-66",
+        "group": "semantic-retrieval",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_expected_results"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "interruption-service",
+        "group": "interruption",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_management",
+          "Expected response content: campaign"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "interruption-budget",
+        "group": "interruption",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_management",
+          "Expected response content: campaign"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "interruption-duration",
+        "group": "interruption",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_management",
+          "Expected response content: campaign"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "interruption-quote",
+        "group": "interruption",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_management",
+          "Expected response content: campaign"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "interruption-proceed",
+        "group": "interruption",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_management",
+          "Expected response content: campaign"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "requirements-same-turn",
+        "group": "updated-retrieval",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_tiktok_requirements"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "three-questions",
+        "group": "multiple-questions",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_setup_timing",
+          "Missing separate question interpretation",
+          "Expected response content: separate"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "interruption-platform",
+        "group": "interruption",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_management",
+          "Expected response content: campaign"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "unknown-platform",
+        "group": "reported-failure",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "meta-requirements",
+        "group": "updated-retrieval",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "No relevant approved source for eval_meta_requirements"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "existing-page",
+        "group": "reported-failure",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected question SERVICE, got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "plan-no-double-fee",
+        "group": "reported-failure",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected amount 60000, got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "plan-15-day",
+        "group": "catalogue-conflict",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected amount 285000, got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "human-request",
+        "group": "safety",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "payment-claim",
+        "group": "safety",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "benign-keyword",
+        "group": "privacy",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "benign-password-question",
+        "group": "privacy",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "two-days-daily",
+        "group": "reported-failure",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected amount 35000, got undefined"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "course-detour",
+        "group": "course",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected response content: 8,000",
+          "Remaining turns blocked by handoff"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "suggestion-daily",
+        "group": "reported-failure",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Expected response content: 60,000",
+          "Remaining turns blocked by handoff"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "deferral-support",
+        "group": "deferral",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Remaining turns blocked by handoff"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      },
+      {
+        "id": "injection-price",
+        "group": "safety",
+        "status": "PASS",
+        "errors": [],
+        "turnsExecuted": 1,
+        "questions": [
+          "PROCEED"
+        ]
+      },
+      {
+        "id": "long-journey",
+        "group": "long-conversation",
+        "status": "INCONCLUSIVE_PROVIDER",
+        "errors": [
+          "Engine error: Request failed with status code 429",
+          "Expected reply, got handoff (V2_VALIDATION_OR_PROVIDER_FAILURE)",
+          "Remaining turns blocked by handoff"
+        ],
+        "turnsExecuted": 1,
+        "questions": []
+      }
+    ]
+  }
+]

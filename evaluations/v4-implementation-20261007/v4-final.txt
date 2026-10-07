@@ -1,0 +1,194 @@
+
+> backend@1.0.0 test:ai-v4
+> node --test inbox/ai/v4/core.test.js inbox/ai/v4/integration.test.js
+
+TAP version 13
+# Subtest: setup price uses semantic catalogue mapping without campaign fields or model IDs
+ok 1 - setup price uses semantic catalogue mapping without campaign fields or model IDs
+  ---
+  duration_ms: 83.4992
+  ...
+# Subtest: management daily budget uses unchanged calculator, approved testing default
+ok 2 - management daily budget uses unchanged calculator, approved testing default
+  ---
+  duration_ms: 145.4483
+  ...
+# Subtest: recommendation resolves plans without inventing budget
+ok 3 - recommendation resolves plans without inventing budget
+  ---
+  duration_ms: 7.2867
+  ...
+# Subtest: 15-day package retrieves265000=200000+65000
+ok 4 - 15-day package retrieves265000=200000+65000
+  ---
+  duration_ms: 32.0654
+  ...
+# Subtest: mixed pairs and whole-purchase cap preserve scope
+ok 5 - mixed pairs and whole-purchase cap preserve scope
+  ---
+  duration_ms: 22.5589
+  ...
+# Subtest: course detour keeps management; explicit switch and return replace deliberately
+ok 6 - course detour keeps management; explicit switch and return replace deliberately
+  ---
+  duration_ms: 57.7101
+  ...
+# Subtest: deferral suppresses invoice and payment question; fresh request resumes
+ok 7 - deferral suppresses invoice and payment question; fresh request resumes
+  ---
+  duration_ms: 22.0325
+  ...
+# Subtest: payment claim cannot mark paid
+ok 8 - payment claim cannot mark paid
+  ---
+  duration_ms: 35.3167
+  ...
+# Subtest: human current evidence bypasses business data retrieval and simulates handoff
+ok 9 - human current evidence bypasses business data retrieval and simulates handoff
+  ---
+  duration_ms: 11.9012
+  ...
+# Subtest: multiple requests resolve independently; missing creative knowledge is explicit
+ok 10 - multiple requests resolve independently; missing creative knowledge is explicit
+  ---
+  duration_ms: 6.9176
+  ...
+# Subtest: knowledge eligibility honors metadata and excluded service
+ok 11 - knowledge eligibility honors metadata and excluded service
+  ---
+  duration_ms: 1.2881
+  ...
+# Subtest: natural trusted financial wording The setup fee is 20k.
+ok 12 - natural trusted financial wording The setup fee is 20k.
+  ---
+  duration_ms: 11.4302
+  ...
+# Subtest: natural trusted financial wording Setup costs 20,000 naira.
+ok 13 - natural trusted financial wording Setup costs 20,000 naira.
+  ---
+  duration_ms: 18.8461
+  ...
+# Subtest: natural trusted financial wording Setup fee: ₦20,000.
+ok 14 - natural trusted financial wording Setup fee: ₦20,000.
+  ---
+  duration_ms: 11.3614
+  ...
+# Subtest: natural trusted financial wording Setup fee is NGN 20,000.
+ok 15 - natural trusted financial wording Setup fee is NGN 20,000.
+  ---
+  duration_ms: 9.2027
+  ...
+# Subtest: same amount wrong role and invented amount rejected
+ok 16 - same amount wrong role and invented amount rejected
+  ---
+  duration_ms: 9.1764
+  ...
+# Subtest: financial roles remain distinct in a natural combined sentence and word amounts
+ok 17 - financial roles remain distinct in a natural combined sentence and word amounts
+  ---
+  duration_ms: 20.1212
+  ...
+# Subtest: negation in another clause cannot authorize a guarantee or false payment claim
+ok 18 - negation in another clause cannot authorize a guarantee or false payment claim
+  ---
+  duration_ms: 6.9387
+  ...
+# Subtest: existing invoice does not force payment details into an unrelated answer
+ok 19 - existing invoice does not force payment details into an unrelated answer
+  ---
+  duration_ms: 6.263
+  ...
+# Subtest: Facebook and Instagram normalize to one Meta purchase; a switch clears old whole-purchase cap
+ok 20 - Facebook and Instagram normalize to one Meta purchase; a switch clears old whole-purchase cap
+  ---
+  duration_ms: 6.6698
+  ...
+# Subtest: ordinary customer budget and duration allowed; URL and envelope blocked
+ok 21 - ordinary customer budget and duration allowed; URL and envelope blocked
+  ---
+  duration_ms: 11.5392
+  ...
+# Subtest: current evidence required; historical requests cannot be invented
+ok 22 - current evidence required; historical requests cannot be invented
+  ---
+  duration_ms: 5.486
+  ...
+# Subtest: composer repairs once only; no autonomous tool loop
+ok 23 - composer repairs once only; no autonomous tool loop
+  ---
+  duration_ms: 11.7066
+  ...
+# Subtest: ownership invalidation blocks final send
+ok 24 - ownership invalidation blocks final send
+  ---
+  duration_ms: 8.186
+  ...
+# Subtest: test session ignores client state and never invokes financial port
+ok 25 - test session ignores client state and never invokes financial port
+  ---
+  duration_ms: 7.304
+  ...
+# Subtest: all engines selectable, default remains V1, V4 live manual gate
+ok 26 - all engines selectable, default remains V1, V4 live manual gate
+  ---
+  duration_ms: 1868.9313
+  ...
+# Subtest: model adapter sends structured outputs, no tools, separate stage models
+ok 27 - model adapter sends structured outputs, no tools, separate stage models
+  ---
+  duration_ms: 273.7936
+  ...
+# Subtest: V4 Test Agent owns session, retains actual multi-turn history and has no production side effects
+ok 28 - V4 Test Agent owns session, retains actual multi-turn history and has no production side effects
+  ---
+  duration_ms: 2578.3144
+  ...
+# Subtest: V4 DRAFT worker preserves old states and cannot send/create invoice
+ok 29 - V4 DRAFT worker preserves old states and cannot send/create invoice
+  ---
+  duration_ms: 479.2619
+  ...
+# Subtest: TEST mode does not consume production pending messages
+ok 30 - TEST mode does not consume production pending messages
+  ---
+  duration_ms: 113.3732
+  ...
+# Subtest: takeover during composition cancels draft and outbound
+ok 31 - takeover during composition cancels draft and outbound
+  ---
+  duration_ms: 302.5142
+  ...
+# Subtest: engine switch during interpretation cancels stale work; four choices save without deleting state
+ok 32 - engine switch during interpretation cancels stale work; four choices save without deleting state
+  ---
+  duration_ms: 578.7734
+  ...
+# Subtest: V4 simulated invoice draft cannot send; LIVE save requires explicit approval
+ok 33 - V4 simulated invoice draft cannot send; LIVE save requires explicit approval
+  ---
+  duration_ms: 136.0173
+  ...
+# Subtest: V4 test handoff stops follow-up AI without actual assignments
+ok 34 - V4 test handoff stops follow-up AI without actual assignments
+  ---
+  duration_ms: 129.9499
+  ...
+# Subtest: mocked LIVE handoff assigns before composing and queues exactly one guarded acknowledgement
+ok 35 - mocked LIVE handoff assigns before composing and queues exactly one guarded acknowledgement
+  ---
+  duration_ms: 1431.2014
+  ...
+# Subtest: financial adapter reuses existing generator idempotently in ephemeral DB; provider is stubbed
+ok 36 - financial adapter reuses existing generator idempotently in ephemeral DB; provider is stubbed
+  ---
+  duration_ms: 1007.9886
+  ...
+1..36
+# tests 36
+# suites 0
+# pass 36
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11051.1106
