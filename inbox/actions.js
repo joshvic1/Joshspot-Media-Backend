@@ -32,7 +32,7 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
   }));
   router.post('/conversations/:id/actions/payment', wrap(async (req, res) => {
     await rateLimit(req, 30); const c = await conversationFor(req);
-    const invoice = await Invoice.findOne({ deletedAt: null, $or: [{ inboxContact: c.contact._id }, { inboxConversation: c._id }, { customerPhone: { $in: [c.contact.phone, `+${c.contact.phone}`] } }] }).sort({ createdAt: -1, _id: -1 });
+    const invoice = await require('./latestInvoice')(c);
     if (!invoice) fail(404, 'No invoice found for this customer.');
     let checked; try { checked = await invoiceService.refreshInvoiceStatus(invoice, true); } catch { fail(502, 'Payment provider is unavailable. Try checking again; payment has not been confirmed.'); }
     res.json({ paid: checked.status === 'paid', status: checked.status, amount: checked.amount, checkedAt: new Date() });
@@ -62,7 +62,7 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
     if (!policy.canReply(req.actor, c) || !policy.windowOpen(c.lastInboundAt)) fail(409, 'Conversation ownership or reply window changed. Invoice retained; no message sent.');
     await require('./ai/worker').pause(c._id, req.actor, 'HUMAN_REPLY');
     const text = `Hi ${c.contact.name || 'there'},\nPay ₦${invoice.amount.toLocaleString('en-NG')} to the account below and send your receipt afterward.\n\nAccount number: ${invoice.accountNumber}\nBank: ${invoice.bankName}\nAccount name: ${invoice.accountName}\n\nOr pay through your invoice link below:\n${process.env.CLIENT_URL.replace(/\/$/, '')}/pay-invoice/${invoice.token}`;
-    let message; try { message = await Message.create({ conversation: c._id, clientKey, direction: 'outbound', type: 'text', text, author: req.actor.id, authorName: req.actor.name, status: 'queued', routingPhoneId: process.env.WHATSAPP_PHONE_NUMBER_ID }); } catch (e) { if (e.code !== 11000) throw e; message = await Message.findOne({ clientKey }); }
+    let message; try { message = await Message.create({ conversation: c._id, clientKey, direction: 'outbound', type: 'text', text, invoiceDelivery: invoice._id, author: req.actor.id, authorName: req.actor.name, status: 'queued', routingPhoneId: process.env.WHATSAPP_PHONE_NUMBER_ID }); } catch (e) { if (e.code !== 11000) throw e; message = await Message.findOne({ clientKey }); }
     await Conversation.updateOne({ _id: c._id, $or: [{ lastMessageId: { $lt: message._id } }, { lastMessageId: null }] }, { $set: { lastMessageId: message._id, lastMessageAt: message.createdAt, preview: text.slice(0, 160) } });
     res.json({ queued: true, messageId: message._id });
   }));

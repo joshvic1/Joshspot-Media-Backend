@@ -9,6 +9,6 @@ const log = new Schema({ kind: String, actor: String, conversation: { type: Sche
 log.index({ createdAt: -1 }); log.index({ conversation: 1, createdAt: -1 }); log.index({ intent: 1, createdAt: -1 });
 const usage = new Schema({ key: { type: String, unique: true }, calls: { type: Number, default: 0 }, tokens: { type: Number, default: 0 }, expiresAt: Date });
 usage.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
-const followup=new Schema({phoneId:String,conversation:{type:Schema.Types.ObjectId,ref:'InboxConversation'},invoice:{type:Schema.Types.ObjectId,ref:'Invoice'},sequence:Number,state:String,dueAt:Date,inputId:Schema.Types.ObjectId,version:Number,leaseUntil:Date,token:String,message:Schema.Types.ObjectId,reason:String},{timestamps:true});
+const followup=new Schema({source:String,sourceMessage:Schema.Types.ObjectId,assignedTo:Schema.Types.ObjectId,phoneId:String,conversation:{type:Schema.Types.ObjectId,ref:'InboxConversation'},invoice:{type:Schema.Types.ObjectId,ref:'Invoice'},sequence:Number,state:String,dueAt:Date,inputId:Schema.Types.ObjectId,version:Number,leaseUntil:Date,token:String,message:Schema.Types.ObjectId,reason:String},{timestamps:true});
 followup.index({conversation:1,invoice:1,sequence:1},{unique:true});followup.index({phoneId:1,state:1,dueAt:1});
 module.exports = { Followup:mongoose.model('InboxAIFollowup',followup), Config: mongoose.model('InboxAIConfig', config), Record: mongoose.model('InboxAIRecord', record), Log: mongoose.model('InboxAILog', log), Usage: mongoose.model('InboxAIUsage', usage) };

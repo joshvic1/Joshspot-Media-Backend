@@ -7,7 +7,7 @@ const phoneMatch=require('./crmPhoneMatch');
 const fail=message=>{throw Object.assign(new Error(message),{safe:true});};
 // This automation is independent of the conversational AI engine. No model calls.
 async function eligible(invoice){
- if(!invoice||invoice.deletedAt||invoice.product!=='ads-course'||!invoice.courseWhatsappConsentAt||invoice.status==='paid')return false;
+ if(!invoice||invoice.deletedAt||invoice.product!=='ads-course'||invoice.status==='paid')return false;
  if(!invoice.courseWhatsappDueAt||new Date(invoice.courseWhatsappDueAt)>new Date()||new Date(invoice.createdAt)<new Date(Date.now()-86400000))return false;
  const phone=policy.phone(invoice.customerPhone);
  if(await Contact.exists({phone,$or:[{deleting:true},{whatsappReminderOptOut:true}]}))return false;
@@ -41,7 +41,7 @@ async function tick(){
  if(running||Date.now()-lastRun<60000||!require('./workerPolicy').workerEnabled()||process.env.COURSE_WHATSAPP_REMINDERS_ENABLED==='false'||!provider.configuration().configured)return;
  running=true;lastRun=Date.now();
  try{
-  const invoices=await Invoice.find({product:'ads-course',deletedAt:null,status:{$ne:'paid'},courseWhatsappConsentAt:{$ne:null},courseWhatsappDueAt:{$lte:new Date()},courseWhatsappQueuedAt:null,createdAt:{$gte:new Date(Date.now()-86400000)}}).sort({createdAt:1}).limit(20);
+  const invoices=await Invoice.find({product:'ads-course',deletedAt:null,status:{$ne:'paid'},courseWhatsappDueAt:{$lte:new Date()},courseWhatsappQueuedAt:null,createdAt:{$gte:new Date(Date.now()-86400000)}}).sort({createdAt:1}).limit(20);
   const templates=await Template.find({name:'course',status:'APPROVED'}).lean();
   const template=process.env.COURSE_WHATSAPP_TEMPLATE_LANGUAGE?templates.find(t=>t.language===process.env.COURSE_WHATSAPP_TEMPLATE_LANGUAGE):templates.length===1?templates[0]:null;
   for(const invoice of invoices){

@@ -147,6 +147,10 @@ async function processOutbox() {
       const conversation = await Conversation.findById(message.conversation).populate('contact');
       if (!conversation || conversation.deleting || !conversation.contact || conversation.contact.deleting) throw Object.assign(new Error('Chat deleted or deletion in progress.'),{safe:true});
       if(message.courseReminder?.invoice)await require('./courseReminder').beforeSend(message);
+      if(message.automation?.followup){
+        const cfg=await require('./ai/config').getConfig();
+        if(cfg.revision!==message.automation.configRevision||!await require('./ai/followups').canSend(message,cfg.data))throw Object.assign(new Error('Invoice reminder cancelled: invoice or conversation changed.'),{safe:true});
+      }
       if (message.author === 'ai' && !await require('./ai/worker').eligible(message)) throw Object.assign(new Error('AI reply cancelled: ownership, input or settings changed.'), { safe: true });
       if (!['admin','ai'].includes(message.author) && !await require('../models/Staff').exists({ _id: message.author, role: { $in: ['SS', 'CSS'] } })) throw Object.assign(new Error('The sending representative no longer has messaging access.'), { safe: true });
       if (!conversation || (!['admin','ai'].includes(message.author) && String(conversation.assignedTo) !== message.author)) throw Object.assign(new Error('Assignment changed. Claim the conversation and try again.'), { safe: true });
@@ -155,6 +159,7 @@ async function processOutbox() {
       await Message.updateOne({ _id: message._id, status: { $in: ['sending', 'unknown'] } }, { $set: { status: 'sent', providerId: id, sentAt: new Date(), error: '' } });
       if(message.automation?.delivery)await require('./ai/v2/delivery').record({...message.toObject(),status:'sent',sentAt:new Date().toISOString()}).catch(()=>{});
       publish('message.sent', { messageId: String(message._id), conversationId: String(message.conversation) });
+      if(message.invoiceDelivery)await scheduleManualInvoice(await Message.findById(message._id)).catch(()=>console.error('Manual invoice reminder scheduling deferred'));
       if(message.author!=='ai'&&conversation.ai?.handoffReason)await Conversation.updateOne({_id:conversation._id,'ai.state.firstHumanResponseAt':null},{$set:{'ai.state.firstHumanResponseAt':new Date().toISOString()}}).catch(()=>{});
     } catch (error) {
       live.notify();
@@ -165,11 +170,27 @@ async function processOutbox() {
   }
 }
 let running = false;
+async function scheduleManualInvoice(message){
+ const c=await Conversation.findById(message.conversation);
+ if(c&&!c.deleting)await require('./ai/followups').schedule(c,message.invoiceDelivery,(await require('./ai/config').getConfig()).data,message);
+}
+let manualReminderRunning=false,lastManualReminder=0;
+async function manualInvoiceReminders(){
+ if(manualReminderRunning||Date.now()-lastManualReminder<60000)return;
+ manualReminderRunning=true;lastManualReminder=Date.now();
+ try{
+  // Recover the send/schedule crash window; scheduling is idempotent.
+  const rows=await Message.find({invoiceDelivery:{$ne:null},status:{$in:['sent','delivered','read']},createdAt:{$gte:new Date(Date.now()-86400000)}}).limit(100);
+  for(const row of rows)await scheduleManualInvoice(row);
+  await require('./ai/followups').tick(await require('./ai/config').getConfig(),'manual');
+ }finally{manualReminderRunning=false;}
+}
 async function tick() {
   if (!require('./workerPolicy').workerEnabled()) return;
   // Media transfers have their own lease/concurrency guard and never block message delivery.
   void require('./push').tick();
   void require('./media').tick();
+  void manualInvoiceReminders().catch(()=>console.error('Manual invoice reminder worker deferred'));
   void require('./courseReminder').tick().catch(()=>console.error('Course WhatsApp reminder worker deferred'));
   void require('./deleteChat').recover().catch(()=>console.error('Inbox deletion recovery unavailable'));
   void require('./ai/worker').tick();

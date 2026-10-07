@@ -913,7 +913,7 @@ test('paid invoice contact correction validates fields and preserves financial d
 
 test('course WhatsApp reminder queues once without AI and cancels when payment arrives',async()=>{
  const c=await fixture();const contact=await Contact.findById(c.contact);const createdAt=new Date(Date.now()-21*60000);
- const invoice=await Invoice.create({token:crypto.randomUUID(),amount:8000,product:'ads-course',paymentProvider:'flutterwave',status:'pending',customerPhone:contact.phone,createdAt,courseWhatsappConsentAt:createdAt,courseWhatsappDueAt:new Date(Date.now()-60000)});
+ const invoice=await Invoice.create({token:crypto.randomUUID(),amount:8000,product:'ads-course',paymentProvider:'flutterwave',status:'pending',customerPhone:contact.phone,createdAt,courseWhatsappDueAt:new Date(Date.now()-60000)});
  await Template.create({name:'course',language:'en',status:'APPROVED',components:[{type:'BODY',text:'Complete your course purchase.'},{type:'BUTTONS',buttons:[{type:'URL',text:'Get course',url:'https://joshspotmedia.com/course'}]}]});
  const reminder=require('./courseReminder'),old=process.env.INBOX_WORKER_ENABLED;process.env.INBOX_WORKER_ENABLED='true';
  try{
@@ -922,11 +922,37 @@ test('course WhatsApp reminder queues once without AI and cancels when payment a
   await Invoice.updateOne({_id:invoice._id},{$set:{status:'paid'}});await assert.rejects(reminder.beforeSend(msg),/cancelled/);
  }finally{if(old===undefined)delete process.env.INBOX_WORKER_ENABLED;else process.env.INBOX_WORKER_ENABLED=old;}
 });
-test('course reminders require consent, wait twenty minutes and respect newer checkouts and opt-outs',async()=>{
+test('course reminders work without checkbox consent, wait twenty minutes and respect newer checkouts and opt-outs',async()=>{
  const c=await fixture();const contact=await Contact.findById(c.contact),r=require('./courseReminder');
  const invoice=await Invoice.create({token:crypto.randomUUID(),amount:8000,product:'ads-course',status:'pending',customerPhone:contact.phone,createdAt:new Date(Date.now()-21*60000),courseWhatsappDueAt:new Date(Date.now()-60000)});
- assert.equal(await r.eligible(invoice),false);invoice.courseWhatsappConsentAt=new Date();await invoice.save();assert.equal(await r.eligible(invoice),true);
+ assert.equal(await r.eligible(invoice),true);
+ invoice.status='failed';assert.equal(await r.eligible(invoice),true);invoice.status='pending';
  invoice.courseWhatsappDueAt=new Date(Date.now()+60000);assert.equal(await r.eligible(invoice),false);invoice.courseWhatsappDueAt=new Date(Date.now()-60000);
  await Contact.updateOne({_id:contact._id},{$set:{whatsappReminderOptOut:true}});assert.equal(await r.eligible(invoice),false);await Contact.updateOne({_id:contact._id},{$set:{whatsappReminderOptOut:false}});
  await Invoice.create({token:crypto.randomUUID(),amount:8000,product:'ads-course',status:'pending',customerPhone:'+'+contact.phone});assert.equal(await r.eligible(invoice),false);
+});
+
+test('invoice reminders only consider newest customer invoice across phone formats',async()=>{
+ const c=await aiFixture('LIVE');const contact=await Contact.findById(c.contact);
+ const old=await Invoice.create({token:crypto.randomUUID(),amount:20000,status:'pending',inboxConversation:c._id,customerPhone:contact.phone,createdAt:new Date(Date.now()-60000),expiresAt:new Date(Date.now()+3600000)});
+ await Conversation.updateOne({_id:c._id},{$set:{'ai.state.invoiceId':String(old._id)}});
+ const cfg={...(await aiSettings.getConfig()).data,structuredSales:true,followupsEnabled:true};const f=require('./ai/followups');await f.schedule(await Conversation.findById(c._id),old._id,cfg);
+ const newer=await Invoice.create({token:crypto.randomUUID(),amount:30000,status:'paid',customerPhone:'+'+contact.phone});
+ assert.equal(String((await require('./latestInvoice')(c))._id),String(newer._id));
+ const job=await aiModels.Followup.findOne({invoice:old._id});assert.match((await f.eligibility(job,cfg)).reason,/newer invoice/);
+});
+test('manual invoice follow-ups work with human ownership and cancel after payment or newer invoice',async()=>{
+ const c=await aiFixture('LIVE');await Conversation.updateOne({_id:c._id},{$set:{assignedTo:agent._id,'ai.active':false,'ai.version':3}});const current=await Conversation.findById(c._id);
+ const contact=await Contact.findById(c.contact);const invoice=await Invoice.create({token:crypto.randomUUID(),amount:20000,status:'pending',inboxConversation:c._id,customerPhone:contact.phone,expiresAt:new Date(Date.now()+3600000)});
+ const source=await Message.create({conversation:c._id,type:'text',direction:'outbound',status:'sent',sentAt:new Date(Date.now()-22*3600000-1000),invoiceDelivery:invoice._id});
+ await require('./models').Template.create({name:'payment_reminder',language:'en',status:'APPROVED',components:[{type:'BODY',text:'Hi {{customer_name}}, are you still interested?'}]});
+ const cfg=await aiSettings.getConfig();cfg.data.followupsEnabled=true;const f=require('./ai/followups');await f.schedule(current,invoice._id,cfg.data,source);await f.schedule(current,invoice._id,cfg.data,source);
+ assert.equal(await aiModels.Followup.countDocuments({invoice:invoice._id}),1);
+ const job=await aiModels.Followup.findOne({invoice:invoice._id});assert.equal(job.source,'manual');assert.equal(job.dueAt.getTime(),source.sentAt.getTime()+22*3600000);assert.ok((await f.eligibility(job,cfg.data)).invoice);
+ await aiModels.Followup.updateOne({_id:job._id},{$set:{dueAt:new Date(0)}});await f.tick(cfg,'manual');const msg=await Message.findOne({'automation.followup':job._id});assert.ok(msg);assert.equal(msg.author,'admin');assert.equal(msg.type,'template');assert.equal(await f.canSend(msg,cfg.data),true);
+ await Conversation.updateOne({_id:c._id},{$set:{lastInboundAt:new Date(Date.now()-48*3600000)}});
+ await Invoice.updateOne({_id:invoice._id},{$set:{status:'expired',expiresAt:new Date(0)}});assert.equal(await f.canSend(msg,cfg.data),true);
+ await Message.updateOne({_id:source._id},{$set:{sentAt:new Date()}});assert.equal(await f.canSend(msg,cfg.data),false);
+ await Message.updateOne({_id:source._id},{$set:{sentAt:source.sentAt}});
+ await Invoice.updateOne({_id:invoice._id},{$set:{status:'paid'}});assert.equal(await f.canSend(msg,cfg.data),false);
 });
