@@ -164,7 +164,6 @@ exports.createInvoice = async (req, res) => {
       ...(coursePurchase && !whatsappCourse ? {courseWhatsappDueAt:new Date(Date.now()+20*60000)} : {}),
       product: whatsappCourse ? "whatsapp-course" : coursePurchase ? "ads-course" : "",
       ...(coursePurchase ? { attribution: sanitizeAttribution(req.body.attribution) } : {}),
-      ...(coursePurchase ? { supportAlertDueAt: new Date(Date.now() + 15 * 60 * 1000) } : {}),
       note: req.body.note || "",
       expiresAt: new Date(Date.now() + INVOICE_LIFETIME_HOURS * 60 * 60 * 1000),
     });

@@ -978,3 +978,13 @@ test('mark all notifications read is recipient scoped and includes unloaded page
  assert.equal(await Notification.countDocuments({recipient:agent._id,readAt:null}),0);assert.ok(!(await Notification.findById(other._id)).readAt);
  assert.equal((await request('/notifications/read-all',{role:'agent',method:'POST',body:{}})).data.updated,0);
 });
+test('voice recording converts in memory and uploads only to Meta with a scoped audio ticket',async()=>{
+ const c=await fixture();const wav=Buffer.alloc(44+16000);wav.write('RIFF',0);wav.writeUInt32LE(wav.length-8,4);wav.write('WAVEfmt ',8);wav.writeUInt32LE(16,16);wav.writeUInt16LE(1,20);wav.writeUInt16LE(1,22);wav.writeUInt32LE(8000,24);wav.writeUInt32LE(16000,28);wav.writeUInt16LE(2,32);wav.writeUInt16LE(16,34);wav.write('data',36);wav.writeUInt32LE(16000,40);
+ let uploads=0;provider.upload=async(buffer,mime,name)=>{uploads++;assert.equal(buffer.subarray(0,4).toString(),'OggS');assert.equal(mime,'audio/ogg');assert.equal(name,'voice-note.ogg');return 'voice-meta-id';};
+ const body={recording:true,data:wav.toString('base64')};
+ assert.equal((await request(`/conversations/${c._id}/media`,{role:'second',method:'POST',body})).status,404);
+ const result=await request(`/conversations/${c._id}/media`,{role:'agent',method:'POST',body});assert.equal(result.status,200);assert.equal(result.data.type,'audio');assert.equal(uploads,1);
+ const sent=await request(`/conversations/${c._id}/messages`,{role:'agent',method:'POST',body:{type:'audio',text:'',ticket:result.data.ticket,clientId:crypto.randomUUID()}});assert.equal(sent.status,201);
+ assert.equal((await request(`/conversations/${c._id}/media`,{role:'agent',method:'POST',body:{recording:true,data:Buffer.from('invalid audio').toString('base64')}})).status,400);assert.equal(uploads,1);
+ assert.equal(await Media.countDocuments(),0);
+});

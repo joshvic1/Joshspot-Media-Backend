@@ -300,11 +300,12 @@ router.post('/conversations/:id/media', wrap(async (req, res) => {
   await rateLimit(req, 60); const conversation = await conversationFor(req);
   if (!policy.canReply(req.actor, conversation)) fail(403, 'Claim this conversation before attaching files.');
   if (!policy.windowOpen(conversation.lastInboundAt)) fail(400, 'The reply window is closed. Send an approved template.');
-  const encoded = text(req.body.data, 7000000); const buffer = Buffer.from(encoded, 'base64');
+  const encoded = text(req.body.data, 7000000); let buffer = Buffer.from(encoded, 'base64');
   if (!buffer.length || buffer.length > 5 * 1024 * 1024) fail(400, 'Choose a file smaller than 5 MB.');
+  if(req.body.recording===true)buffer=await require('./recording')(buffer);
   const mime = buffer.subarray(0, 5).toString() === '%PDF-' ? 'application/pdf' : buffer.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10])) ? 'image/png' : buffer[0] === 255 && buffer[1] === 216 && buffer[2] === 255 ? 'image/jpeg' : buffer.subarray(4, 8).toString() === 'ftyp' ? 'video/mp4' : buffer.subarray(0, 4).toString() === 'OggS' ? 'audio/ogg' : buffer.subarray(0, 3).toString() === 'ID3' || (buffer[0] === 255 && (buffer[1] & 224) === 224) ? 'audio/mpeg' : null;
   if (!mime) fail(400, 'Choose a PNG, JPEG, PDF, MP4, MP3 or OGG file.');
-  const name = text(req.body.name || 'attachment', 120).replace(/[^\w. -]/g, '_');
+  const name = text(req.body.recording===true?'voice-note.ogg':req.body.name || 'attachment', 120).replace(/[^\w. -]/g, '_');
   const mediaId = await provider.upload(buffer, mime, name);
   const media = { id: mediaId, mime, name };
   const ticket = jwt.sign({ media, conversation: String(conversation._id), actor: req.actor.id, purpose: 'inbox-media' }, process.env.JWT_SECRET, { expiresIn: '1h' });
