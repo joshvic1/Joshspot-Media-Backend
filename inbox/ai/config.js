@@ -22,7 +22,6 @@ function validateConfig(input) {
   for(const stage of ['Interpreter','Composer']){if(!/^gpt-[a-z0-9.\-]+$/.test(out[`v4${stage}Model`]))fail('Enter a valid V4 model name.');if(!['none','low','medium','high','xhigh','max'].includes(out[`v4${stage}Reasoning`]))fail('Choose supported V4 reasoning.');if(out[`v4${stage}Model`]==='gpt-6.1-sol'&&out[`v4${stage}Reasoning`]==='none')fail('GPT-6.1 Sol requires low or higher reasoning.');}
   if(!Number.isInteger(out.v4HistoryMessages)||out.v4HistoryMessages<4||out.v4HistoryMessages>80||!Number.isInteger(out.v4MaxOutputTokens)||out.v4MaxOutputTokens<1000||out.v4MaxOutputTokens>12000)fail('V4 history must be 4–80 messages and output 1000–12000 tokens.');
   if(!Number.isInteger(out.v3MaxOutputTokens)||out.v3MaxOutputTokens<500||out.v3MaxOutputTokens>4000)fail('V3 output tokens must be between 500 and 4000.');
-  if(out.engineVersion==='v3'&&out.mode==='LIVE'&&process.env.AI_V3_LIVE_APPROVED!=='1')fail('V3 LIVE is not approved. Use Test Agent or DRAFT.');
   if (!['CSS','SS'].includes(out.handoffTeam) || !['least_loaded','round_robin','fallback'].includes(out.assignment)) fail('Invalid handoff strategy.');
   if (!['handoff','continue'].includes(out.outsideHours) || !['handoff','ignore'].includes(out.stickerAction) || !['handoff','ignore'].includes(out.contactAction)) fail('Invalid handling rule.');
   for (const key of ['fallbackAgent','paymentAgent']) if (out[key] && !/^[a-f0-9]{24}$/i.test(out[key])) fail('Choose a valid staff member.');

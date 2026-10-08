@@ -73,7 +73,7 @@ test('financial adapter reuses existing generator idempotently in ephemeral DB; 
  const invoiceController=require('../../../controllers/invoiceController'),originalGenerate=invoiceController.generateInvoiceTransfer;
  const names=['AI_V3_LIVE_APPROVED','PAYSTACK_SECRET','CLIENT_URL'],previous=Object.fromEntries(names.map(k=>[k,process.env[k]]));let calls=0;
  try{
-  process.env.AI_V3_LIVE_APPROVED='1';process.env.PAYSTACK_SECRET='synthetic-test-only';process.env.CLIENT_URL='https://example.test';
+  delete process.env.AI_V3_LIVE_APPROVED;process.env.PAYSTACK_SECRET='synthetic-test-only';process.env.CLIENT_URL='https://example.test';
   invoiceController.generateInvoiceTransfer=async row=>{calls++;row.accountNumber='1234567890';row.accountName='Synthetic Merchant';row.bankName='Synthetic Bank';row.reference='synthetic-ref';row.status='pending';await row.save();return row;};
   const {c}=await setup();await c.populate('contact');
   const q=await require('./pricing').quote([{platform:'tiktok',service:'account_setup',budgetBasis:null,budget:null,duration:null,planKey:null,creativeMode:'testing',creatives:1}],defaults.records);

@@ -6,13 +6,15 @@ async function decide({config,records,messages,history=[],state={},ports,api,sim
  if(current.length>200||JSON.stringify(current).length>40000)throw new Error('V4_INPUT_TOO_LARGE');
  if(messages.some(m=>m.type&&m.type!=='text'||sensitive(m.text))){await ports.assertCurrent();const reason=messages.some(m=>sensitive(m.text))?'SENSITIVE_CASE':'MEDIA_RECEIVED';const handoff=simulation?{accepted:true,simulation:true}:await ports.handoff({reason,summary:'Unsupported or sensitive inbound content.'});await ports.persist({...state,ownership:handoff.accepted?'HUMAN':'AI'});return {engineVersion:'v4',action:'handoff',handoff:reason,response:config.fallbackResponse,debug:{engineVersion:'v4',simulation,handoff}};}
  api||=require('./model').client({config,reserve:reserveModelCall});
- const actual=history.filter(m=>m.direction==='inbound'||['sent','delivered','read'].includes(m.status)).slice(-(config.v4HistoryMessages||40)).map(m=>({role:m.direction==='inbound'?'user':'assistant',text:redact(m.text||'')}));
+ const actual=require('../questionContinuity').history(history,config.v4HistoryMessages||40);
  if(JSON.stringify(actual).length>60000)throw new Error('V4_HISTORY_TOO_LARGE');
  const trusted={purchaseItems:state.purchaseItems||[],currentQuote:state.currentQuote||null,activeInvoice:await ports.invoiceStatus(false),readiness:state.readiness||'UNKNOWN',ownership:'AI',unresolvedRequests:state.unresolvedRequests||[]};
  const passes=[],debug={engineVersion:'v4',simulation,passes};
  try{
   const interpreted=await api.pass('interpreter',{history:actual,trusted,current:current.map(m=>({id:m._id,text:m.text}))});passes.push(interpreted.metrics);debug.interpreter=interpreted.value;
   const resolved=await require('./resolver').resolve({plan:interpreted.value,state,messages:current,records,ports,simulation,config});
+  resolved.pack.conversation={history:actual,current:current.map(m=>({id:m._id,text:m.text}))};
+  require('../questionContinuity').applyV4(resolved.pack);
   Object.assign(debug,{stateChanges:resolved.next,operations:resolved.operations,answerPack:resolved.pack,composition:[]});
   await ports.assertCurrent();await ports.persist(resolved.next);
   const knowledgeFallback=()=>({engineVersion:'v4',action:'handoff',handoff:'NO_APPROVED_KNOWLEDGE',response:config.fallbackResponse||'Hold on, please. You will receive a response shortly.',model:`${config.v4InterpreterModel} / ${config.v4ComposerModel}`,usage:aggregate(passes),debug});

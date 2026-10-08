@@ -14,8 +14,8 @@ function fixture({allow=true,simulation=true}={}){
  const api={authorizePayment:async()=>({decision:allow?'ALLOW':'NEEDS_CONFIRMATION'})};
  return {state,messages,ports,get writes(){return writes;},dispatch:dispatcher({catalogue:catalogue(records),state,messages,history:[],ports,api,simulation})};
 }
-test('V1 remains default; saved selector overrides legacy environment; V3 LIVE is gated',()=>{
- const runtime=require('../runtime');assert.equal(config.engineVersion,'v1');assert.equal(runtime.version({engineVersion:'v3',mode:'DRAFT'},{AI_ENGINE_VERSION:'v1'}),'v3');assert.throws(()=>runtime.version({engineVersion:'v3',mode:'LIVE'},{}));assert.equal(runtime.version({engineVersion:'v1',mode:'LIVE'},{}),'v1');
+test('V1 remains default; saved selector overrides legacy environment; V3 LIVE is manually selectable',()=>{
+ const runtime=require('../runtime');assert.equal(config.engineVersion,'v1');assert.equal(runtime.version({engineVersion:'v3',mode:'DRAFT'},{AI_ENGINE_VERSION:'v1'}),'v3');assert.equal(runtime.version({engineVersion:'v3',mode:'LIVE'},{}),'v3');assert.equal(require('../config').validateConfig({engineVersion:'v3',mode:'LIVE'}).mode,'LIVE');assert.equal(runtime.version({engineVersion:'v1',mode:'LIVE'},{}),'v1');
 });
 test('strict tool schemas reject extra IDs, invalid budget enums, missing keys and unsupported tools',()=>{
  assert.throws(()=>parse('get_invoice_status','{"invoiceId":"another-customer"}'));

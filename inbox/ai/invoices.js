@@ -7,7 +7,7 @@ async function generate({conversation,contact,result,config,assertCurrent=async(
   if(!process.env.PAYSTACK_SECRET || !/^https:\/\//.test(process.env.CLIENT_URL || '')) throw new Error('Configure Paystack and a public HTTPS CLIENT_URL');
   const v2=result.state.core?.version===2;
   const v4=result.engineVersion==='v4',v3=result.engineVersion==='v3'||v4;
-  if(v3){if(process.env[v4?'AI_V4_LIVE_APPROVED':'AI_V3_LIVE_APPROVED']!=='1'||config.mode!=='LIVE'||result.quote?.total!==result.amount||!result.quote?.fingerprint)throw new Error('V3 invoice authorization missing');await assertCurrent();}
+  if(v3){if((v4&&process.env.AI_V4_LIVE_APPROVED!=='1')||config.mode!=='LIVE'||result.quote?.total!==result.amount||!result.quote?.fingerprint)throw new Error('V3 invoice authorization missing');await assertCurrent();}
   if(v2){const current=require('./v2/consent').effective(result.state.core);if(!current.ready||!current.payment||current.blocked)throw new Error('Current purchase consent was revoked');await assertCurrent();}
   if(v2&&(!result.state.customerWantsToProceed||!result.state.paymentDetailsRequested||result.state.quotedAmount!==result.amount))throw new Error('V2 purchase consent or quote missing');
   const fingerprint=v2?require('node:crypto').createHash('sha256').update(JSON.stringify(result.state.core.quote?.items||[])).digest('hex').slice(0,24):'';

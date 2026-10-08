@@ -6,7 +6,7 @@ const {client}=require('./openai');
 const {sensitive,redact}=require('../privacy');
 const provenance=require('./provenance'),turn=require('./turn');
 async function decide({config,records,messages,history=[],state={},ports,api:injected,reserveModelCall,simulation=true}){
- if(!simulation&&(process.env.AI_V3_LIVE_APPROVED!=='1'||config.mode!=='LIVE'||!ports.createInvoice))throw new Error('V3_LIVE_NOT_RELEASED');
+ if(!simulation&&(config.mode!=='LIVE'||!ports.createInvoice))throw new Error('V3_LIVE_NOT_RELEASED');
  const started=Date.now(),usage={input_tokens:0,output_tokens:0,total_tokens:0,cached_input_tokens:0,calls:0};
  const unsupported=messages.some(m=>m.type&&m.type!=='text'||sensitive(m.text));
  const api=injected||(unsupported?{model:'not-called'}:client({config,reserve:reserveModelCall,onAttempt:()=>usage.calls++,onUsage:u=>{for(const k of ['input_tokens','output_tokens','total_tokens'])usage[k]+=u[k]||0;usage.cached_input_tokens+=u.input_tokens_details?.cached_tokens||0;}}));

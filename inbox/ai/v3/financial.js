@@ -21,7 +21,7 @@ async function invoiceStatus(conversationId,refresh=false){
  return result;
 }
 async function createInvoice({conversation,quote,config,assertCurrent}){
- if(process.env.AI_V3_LIVE_APPROVED!=='1'||config.mode!=='LIVE'||!config.autoReply)throw new Error('V3_LIVE_NOT_APPROVED');
+ if(config.mode!=='LIVE'||!config.autoReply)throw new Error('V3_LIVE_NOT_APPROVED');
  await assertCurrent();
  const existing=await invoiceStatus(conversation._id);
  if(existing.id&&(existing.quoteFingerprint!==quote.fingerprint||existing.status==='paid'||existing.status==='expired'))throw new Error('EXISTING_INVOICE_REQUIRES_REVIEW');

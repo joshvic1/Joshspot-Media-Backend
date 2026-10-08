@@ -5,7 +5,6 @@ function version(config = {}, env = process.env) {
   const value = config.engineVersion || env.AI_ENGINE_VERSION || 'v1';
   if (!['v1', 'shadow', 'v2', 'v3', 'v4'].includes(value)) throw new Error('Invalid AI_ENGINE_VERSION');
   if(value==='v4'&&config.mode==='LIVE'&&env.AI_V4_LIVE_APPROVED!=='1')throw new Error('Validate V4 before explicit AI_V4_LIVE_APPROVED=1 approval.');
-  if (value === 'v3' && config.mode === 'LIVE' && env.AI_V3_LIVE_APPROVED !== '1') throw new Error('Validate V3 in Test/DRAFT before explicitly authorizing AI_V3_LIVE_APPROVED=1 on the backend.');
   return value;
 }
 module.exports = { version };

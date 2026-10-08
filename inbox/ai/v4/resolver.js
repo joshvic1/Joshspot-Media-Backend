@@ -114,6 +114,7 @@ async function resolve({plan,state,messages,records,ports,simulation=true,config
  }
  pack.missing=[...missing];pack.allowedQuestions=[...missing].filter(f=>!(['payment','proceed'].includes(f)&&['DEFERRED','DECLINED'].includes(next.readiness)));
  if(!missing.size&&next.currentQuote&&!requestTypes.has('ASK_PAYMENT_DETAILS')&&!['DEFERRED','DECLINED'].includes(next.readiness)&&!next.verifiedPayment)pack.allowedQuestions.push('proceed');
+ require('../questionContinuity').applyV4(pack);
  return {pack,next,operations};
 }
 module.exports={resolve,validate,evidence};
