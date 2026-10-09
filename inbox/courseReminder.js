@@ -8,12 +8,12 @@ const phoneMatch=require('./crmPhoneMatch');
 const fail=message=>{throw Object.assign(new Error(message),{safe:true});};
 // This automation is independent of the conversational AI engine. No model calls.
 async function eligible(invoice){
- if(!invoice||invoice.deletedAt||invoice.product!=='ads-course'||invoice.status==='paid')return false;
+ if(!invoice||invoice.deletedAt||!['ads-course','whatsapp-course'].includes(invoice.product)||invoice.status==='paid')return false;
  if(!invoice.courseWhatsappDueAt||new Date(invoice.courseWhatsappDueAt)>new Date()||new Date(invoice.createdAt)<new Date(Date.now()-86400000))return false;
  const phone=policy.phone(invoice.customerPhone);
  if(await Contact.exists({phone,$or:[{deleting:true},{whatsappReminderOptOut:true}]}))return false;
  if(await require('./deleteChat').wasDeleted(phone,Math.floor(new Date(invoice.createdAt).getTime()/1000)))return false;
- const scope={customerPhone:phoneMatch(phone),product:'ads-course',deletedAt:null};
+ const scope={customerPhone:phoneMatch(phone),product:invoice.product,deletedAt:null};
  if(await Invoice.exists({...scope,status:'paid'}))return false;
  if(await Invoice.exists({...scope,_id:{$gt:invoice._id}}))return false;
  return true;
@@ -43,7 +43,7 @@ async function tick(){
  if(running||Date.now()-lastRun<60000||!require('./workerPolicy').workerEnabled()||process.env.COURSE_WHATSAPP_REMINDERS_ENABLED==='false'||!provider.configuration().configured)return;
  running=true;lastRun=Date.now();
  try{
-  const invoices=await Invoice.find({product:'ads-course',deletedAt:null,status:{$ne:'paid'},courseWhatsappDueAt:{$lte:new Date()},courseWhatsappQueuedAt:null,createdAt:{$gte:new Date(Date.now()-86400000)}}).sort({createdAt:1}).limit(20);
+  const invoices=await Invoice.find({product:{$in:['ads-course','whatsapp-course']},deletedAt:null,status:{$ne:'paid'},courseWhatsappDueAt:{$lte:new Date()},courseWhatsappQueuedAt:null,createdAt:{$gte:new Date(Date.now()-86400000)}}).sort({createdAt:1}).limit(20);
   const templates=await Template.find({name:'course',status:'APPROVED'}).lean();
   const template=process.env.COURSE_WHATSAPP_TEMPLATE_LANGUAGE?templates.find(t=>t.language===process.env.COURSE_WHATSAPP_TEMPLATE_LANGUAGE):templates.length===1?templates[0]:null;
   for(const invoice of invoices){

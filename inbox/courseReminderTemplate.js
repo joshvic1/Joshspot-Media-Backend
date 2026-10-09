@@ -9,7 +9,7 @@ module.exports=function courseReminderTemplate(template,invoice){
  const textTemplate={...template,components:components.filter(c=>!images.includes(c))};
  const fields=policy.templateFields(textTemplate);
  if(!fields||fields.some(f=>!['body.1','body.2'].includes(f.key)))fail('Course reminder contains unsupported variables or components.');
- const values={'body.1':String(invoice.customerName||'there').trim().slice(0,150)||'there','body.2':'TikTok, Facebook and Instagram Ads training'};
+ const values={'body.1':String(invoice.customerName||'there').trim().slice(0,150)||'there','body.2':invoice.product==='whatsapp-course'?'WhatsApp Status ads training':'TikTok, Facebook and Instagram Ads training'};
  const result=policy.templatePayload(textTemplate,values);
  if(images.length){
   // A durable public course image; Meta's approval sample URLs can expire.
@@ -20,7 +20,7 @@ module.exports=function courseReminderTemplate(template,invoice){
  }
  for(const group of components.filter(c=>c.type==='BUTTONS')){
   group.buttons.forEach((button,index)=>{
-   if(button.type==='QUICK_REPLY')result.payload.components.push({type:'button',sub_type:'quick_reply',index:String(index),parameters:[{type:'payload',payload:`course_reminder:${index}`}]});
+   if(button.type==='QUICK_REPLY')result.payload.components.push({type:'button',sub_type:'quick_reply',index:String(index),parameters:[{type:'payload',payload:invoice.product==='whatsapp-course'?`course_reminder:whatsapp-course:${index}`:`course_reminder:${index}`}]});
   });
  }
  return result;

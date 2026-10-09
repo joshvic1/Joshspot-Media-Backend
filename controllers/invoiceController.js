@@ -161,7 +161,7 @@ exports.createInvoice = async (req, res) => {
       customerName,
       customerEmail,
       customerPhone,
-      ...(coursePurchase && !whatsappCourse ? {courseWhatsappDueAt:new Date(Date.now()+20*60000)} : {}),
+      ...(coursePurchase ? {courseWhatsappDueAt:new Date(Date.now()+20*60000)} : {}),
       product: whatsappCourse ? "whatsapp-course" : coursePurchase ? "ads-course" : "",
       ...(coursePurchase ? { attribution: sanitizeAttribution(req.body.attribution) } : {}),
       note: req.body.note || "",

@@ -988,3 +988,15 @@ test('voice recording converts in memory and uploads only to Meta with a scoped 
  assert.equal((await request(`/conversations/${c._id}/media`,{role:'agent',method:'POST',body:{recording:true,data:Buffer.from('invalid audio').toString('base64')}})).status,400);assert.equal(uploads,1);
  assert.equal(await Media.countDocuments(),0);
 });
+test('WhatsApp course reminders use course-specific payment checks, wording and button link',async()=>{
+ const c=await fixture();const contact=await Contact.findById(c.contact);const r=require('./courseReminder');
+ const invoice=await Invoice.create({token:crypto.randomUUID(),amount:10000,product:'whatsapp-course',status:'failed',customerPhone:contact.phone,createdAt:new Date(Date.now()-21*60000),courseWhatsappDueAt:new Date(Date.now()-60000)});
+ await Invoice.create({token:crypto.randomUUID(),amount:8000,product:'ads-course',status:'paid',customerPhone:contact.phone});
+ assert.equal(await r.eligible(invoice),true);
+ const template={name:'course',language:'en',status:'APPROVED',components:[{type:'BODY',text:'Hi {{1}}, payment for {{2}} was not completed.'},{type:'BUTTONS',buttons:[{type:'QUICK_REPLY',text:'Get the training'}]}]};
+ const built=require('./courseReminderTemplate')(template,invoice);assert.ok(built.preview.includes('WhatsApp Status ads training'));
+ const payload=built.payload.components[1].parameters[0].payload;assert.equal(payload,'course_reminder:whatsapp-course:0');
+ const value=inbound('wamid.whatsapp-course-button');value.messages[0].type='button';delete value.messages[0].text;value.messages[0].button={text:'Get the training',payload};await service.receive(value);await service.receive(value);
+ const rows=await Message.find({clientKey:'course-link:wamid.whatsapp-course-button'});assert.equal(rows.length,1);assert.ok(rows[0].text.endsWith('https://joshspotmedia.com/whatsapp'));
+ await Invoice.create({token:crypto.randomUUID(),amount:10000,product:'whatsapp-course',status:'pending',customerPhone:contact.phone});assert.equal(await r.eligible(invoice),false);
+});
