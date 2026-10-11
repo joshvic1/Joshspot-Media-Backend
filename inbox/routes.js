@@ -79,6 +79,7 @@ router.use((req, res, next) => {
   next();
 });
 require('./push').routes(router,wrap,rateLimit);
+require('./earnings/routes').routes(router,wrap,rateLimit);
 router.use('/ai', require('./ai/routes'));
 router.post('/events-ticket', wrap(async (req, res) => {
   for (const [key, value] of tickets) if (value.until < Date.now()) tickets.delete(key);
@@ -422,6 +423,13 @@ router.get('/conversations/:id/messages/:messageId/media', wrap(async (req, res)
   try { file = asset.keep && asset.state === 'ready' && asset.key ? await mediaStorage.get(asset.key) : await provider.download(asset.providerId); }
   catch { fail(410, 'This media is no longer available from its provider.'); }
   const mime = String(file.mime || asset.mime).split(';')[0];
+  if(req.query.playback === 'mp3') {
+    if(!mime.startsWith('audio/')) fail(400, 'Compatible playback is only available for audio.');
+    await rateLimit(req, 30);
+    const buffer = await require('./playback')(file.buffer);
+    return res.set({'Content-Type':'audio/mpeg','Content-Disposition':'inline; filename="voice-note.mp3"','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'}).send(buffer);
+  }
+
   res.set({ 'Content-Type': ['image/jpeg', 'image/png', 'image/webp', 'audio/ogg', 'audio/mpeg', 'audio/mp4', 'audio/aac', 'audio/amr', 'video/mp4', 'video/3gpp'].includes(mime) ? mime : 'application/octet-stream', 'Content-Disposition': `attachment; filename="${(asset.name || 'attachment').replace(/[^\w.-]/g, '_')}"`, 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'private, no-store' }).send(file.buffer);
 }));
 router.get('/templates', wrap(async (req, res) => {

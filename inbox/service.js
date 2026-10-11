@@ -95,6 +95,7 @@ async function receive(value) {
     if (item.status !== 'failed') update[`${item.status}At`] = new Date(Number(item.timestamp) * 1000 || Date.now());
     const allowed = ['sending', 'unknown', 'sent', 'delivered', 'failed'].filter((status) => policy.statusCanAdvance(status, item.status));
     const receiptUpdate=await Message.updateOne({ _id: message._id, attempts: message.attempts, status: { $in: allowed } }, { $set: update });
+    if(receiptUpdate.matchedCount)await Conversation.updateOne({_id:message.conversation},{$set:{earningsDirty:true}});
     if(receiptUpdate.matchedCount&&message.automation?.delivery&&['sent','delivered','read','failed'].includes(item.status))await require('./ai/v2/delivery').record({...message.toObject(),...update,sentAt:message.sentAt?.toISOString()||update[`${item.status}At`]?.toISOString()}).catch(()=>{});
     live.notify();
   }
@@ -166,6 +167,7 @@ async function processOutbox() {
       const id = await provider.send(conversation.contact.phone, message);
       await Message.updateOne({ _id: message._id, status: { $in: ['sending', 'unknown'] } }, { $set: { status: 'sent', providerId: id, sentAt: new Date(), error: '' } });
       if(message.automation?.delivery)await require('./ai/v2/delivery').record({...message.toObject(),status:'sent',sentAt:new Date().toISOString()}).catch(()=>{});
+      await Conversation.updateOne({_id:message.conversation},{$set:{earningsDirty:true}});
       publish('message.sent', { messageId: String(message._id), conversationId: String(message.conversation) });
       if(message.invoiceDelivery)await scheduleManualInvoice(await Message.findById(message._id)).catch(()=>console.error('Manual invoice reminder scheduling deferred'));
       if(message.author!=='ai'&&conversation.ai?.handoffReason)await Conversation.updateOne({_id:conversation._id,'ai.state.firstHumanResponseAt':null},{$set:{'ai.state.firstHumanResponseAt':new Date().toISOString()}}).catch(()=>{});
@@ -197,6 +199,7 @@ async function tick() {
   if (!require('./workerPolicy').workerEnabled()) return;
   // Media transfers have their own lease/concurrency guard and never block message delivery.
   void require('./push').tick();
+  void require('./earnings/worker').tick().catch(()=>console.error('Earnings reconciliation deferred'));
   void require('./media').tick();
   void manualInvoiceReminders().catch(()=>console.error('Manual invoice reminder worker deferred'));
   void require('./courseReminder').tick().catch(()=>console.error('Course WhatsApp reminder worker deferred'));

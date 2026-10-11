@@ -21,6 +21,21 @@ const conversation = new Schema({
   reads: { type: Map, of: Schema.Types.ObjectId, default: {} }, lastInboundId: Schema.Types.ObjectId, resolvedAt: Date,
 }, { timestamps: true });
 conversation.index({ contact: 1, channel: 1 }, { unique: true });
+conversation.add({earningsDirty:{type:Boolean,default:true},earningsCheckedAt:Date,earningsLease:Date,earningsError:String,earningsOwnership:[{at:Date,from:String,to:String}]});
+conversation.index({earningsDirty:1,earningsCheckedAt:1});
+// Capture assignment changes in the same atomic update as the assignment itself.
+for(const operation of ['updateOne','findOneAndUpdate'])conversation.pre(operation,async function(){
+ const update=this.getUpdate();if(!update||Array.isArray(update))return;
+ update.$set={...update.$set,earningsDirty:true};
+ if(Object.prototype.hasOwnProperty.call(update.$set,'assignedTo')){
+  const previous=await this.model.findOne(this.getQuery()).select('assignedTo').lean();
+  if(previous&&String(previous.assignedTo||'')!==String(update.$set.assignedTo||'')){
+   this.where({assignedTo:previous.assignedTo||null});
+   update.$push={...update.$push,earningsOwnership:{at:new Date(),from:String(previous.assignedTo||''),to:String(update.$set.assignedTo||'')}};
+  }
+ }
+});
+
 conversation.index({ assignedTo: 1, status: 1, lastMessageAt: -1, _id: -1 });
 conversation.add({ collaborators: [{ type: Schema.Types.ObjectId, ref: 'Staff' }] });
 conversation.add({ ai: {
