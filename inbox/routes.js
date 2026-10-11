@@ -62,6 +62,7 @@ router.get('/events', wrap(async (req, res) => {
   req.on('close', () => { open.delete(res); if (!open.size) connections.delete(ticket.actor.id); clearInterval(heartbeat); clearTimeout(expiry); live.bus.off('change', changed); });
 }));
 router.use(staffAuth);
+router.use(require('./staffPermissions').inbox);
 router.use(wrap(async (req, res, next) => {
   if (req.staff.admin) req.actor = { id: 'admin', admin: true, name: 'Administrator', role: 'ADMIN' };
   else {

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
   const token = req.headers.authorization;
 
   if (!token) {
@@ -22,7 +22,9 @@ module.exports = (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    req.staff = decoded;
+    const staff = await require("../models/Staff").findById(decoded.staffId).select("name role permissions").lean();
+    if (!staff) return res.status(401).json({ message: "Account no longer exists" });
+    req.staff = { ...decoded, role: staff.role, name: staff.name, permissions: staff.permissions || {} };
     next();
   } catch {
     res.status(401).json({ message: "Invalid token" });

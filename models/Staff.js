@@ -26,6 +26,8 @@ const staffSchema = new mongoose.Schema({
     required: true,
   },
 
+  permissions: { type: Object, default: () => ({}) },
+
   createdAt: {
     type: Date,
     default: Date.now,

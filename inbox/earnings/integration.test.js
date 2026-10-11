@@ -130,3 +130,15 @@ test('staff creation is admin-only, hashes passwords and rejects duplicate email
  assert.equal((await request('/staff-management')).status,403);
  const list=await request('/staff-management',null,true);assert.equal(list.status,200);assert.ok(list.data.items.every(x=>!x.password));
 });
+
+test('staff editing validates permissions, preserves passwords and updates authenticated permissions',async()=>{
+ const body={name:'Edited staff',email:staff.email,role:'CSS',permissions:{invoice:false,'setup.edit':false}};
+ assert.equal((await request('/staff-management/'+staff._id,body,false,'PUT')).status,403);
+ const saved=await request('/staff-management/'+staff._id,body,true,'PUT');assert.equal(saved.status,200);assert.equal(saved.data.password,undefined);assert.equal(saved.data.permissions.invoice,false);
+ assert.equal((await Staff.findById(staff._id)).password,'test');
+ assert.equal((await request('/staff-management/'+staff._id,{...body,permissions:{invented:true}},true,'PUT')).status,400);
+ assert.equal((await request('/staff-management/'+staff._id,{...body,email:other.email},true,'PUT')).status,409);
+ const jwt=require('jsonwebtoken'),auth=require('../../middleware/staffAuth');
+ const req={headers:{authorization:jwt.sign({staffId:String(staff._id),role:'SS'},process.env.JWT_SECRET||'joshspotsecret')}};
+ let passed=false;await auth(req,{status(){throw Error('unexpected auth error')}},()=>{passed=true});assert.equal(passed,true);assert.equal(req.staff.role,'CSS');assert.equal(req.staff.permissions.invoice,false);
+});
