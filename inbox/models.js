@@ -21,8 +21,9 @@ const conversation = new Schema({
   reads: { type: Map, of: Schema.Types.ObjectId, default: {} }, lastInboundId: Schema.Types.ObjectId, resolvedAt: Date,
 }, { timestamps: true });
 conversation.index({ contact: 1, channel: 1 }, { unique: true });
-conversation.add({earningsDirty:{type:Boolean,default:true},earningsCheckedAt:Date,earningsLease:Date,earningsError:String,earningsOwnership:[{at:Date,from:String,to:String}]});
+conversation.add({earningsVersion: {type:Number,default:0}, earningsDirty:{type:Boolean,default:true},earningsCheckedAt:Date,earningsLease:Date,earningsError:String,earningsOwnership:[{at:Date,from:String,to:String}]});
 conversation.index({earningsDirty:1,earningsCheckedAt:1});
+conversation.index({earningsVersion:1,earningsCheckedAt:1});
 // Capture assignment changes in the same atomic update as the assignment itself.
 for(const operation of ['updateOne','findOneAndUpdate'])conversation.pre(operation,async function(){
  const update=this.getUpdate();if(!update||Array.isArray(update))return;
@@ -71,6 +72,7 @@ message.index({ conversation: 1, updatedAt: 1, _id: 1 });
 message.index({ mentionsPending: 1 });
 message.index({ 'reactions.business.providerId': 1 }, { sparse: true });
 message.index({ conversation: 1, _id: -1 });
+message.index({ conversation: 1, direction: 1, _id: 1 });
 message.index({ conversation: 1, type: 1, _id: -1 });
 message.index({ conversation: 1, direction: 1, occurredAt: -1 });
 message.index({ status: 1, createdAt: 1 });

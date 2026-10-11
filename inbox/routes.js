@@ -80,6 +80,7 @@ router.use((req, res, next) => {
 });
 require('./push').routes(router,wrap,rateLimit);
 require('./earnings/routes').routes(router,wrap,rateLimit);
+require('./staffRoutes')(router,wrap,rateLimit);
 router.use('/ai', require('./ai/routes'));
 router.post('/events-ticket', wrap(async (req, res) => {
   for (const [key, value] of tickets) if (value.until < Date.now()) tickets.delete(key);
@@ -176,6 +177,9 @@ router.get('/conversations', wrap(async (req, res) => {
   }
   const rows = await Conversation.find(filter).sort({ lastMessageAt: -1, _id: -1 }).limit(21).populate('contact').lean();
   const hasMore = rows.length > 20; const items = rows.slice(0, 20).map((row) => ({ ...row, unread: Boolean(row.lastInboundId && String(row.lastInboundId) > String(row.reads?.[req.actor.id] || '')), reads: undefined }));
+  const unreadFilters=rows.slice(0,20).filter(r=>r.lastInboundId&&String(r.lastInboundId)>String(r.reads?.[req.actor.id]||'')).map(r=>({conversation:r._id,_id:{$gt:r.reads?.[req.actor.id]||new mongoose.Types.ObjectId('000000000000000000000000'),$lte:r.lastInboundId}}));
+  const unreadCounts=unreadFilters.length?await Message.aggregate([{$match:{direction:'inbound',$or:unreadFilters}},{$group:{_id:'$conversation',count:{$sum:1}}}]):[];
+  for(const row of items)row.unreadCount=unreadCounts.find(c=>String(c._id)===String(row._id))?.count||0;
   const latestMessages = await Message.find({ _id: { $in: items.map(row => row.lastMessageId).filter(Boolean) }, conversation: { $in: items.map(row => row._id) } }).select('conversation direction type status').lean();
   const latestById = new Map(latestMessages.map(message => [String(message._id), message]));
   for (const row of items) {

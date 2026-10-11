@@ -9,7 +9,7 @@ test('working hours exclude nights and respect non-working days',()=>{
 test('completed five-minute blocks match owner examples exactly',()=>{
  for(const [mins,amount]of [[15,0],[19.99,0],[20,1000],[21,1000],[25,2000]])assert.equal(deduction(mins*60000,defaults),amount);
 });
-test('every inbound message counts; pending waits remain provisional',()=>{
+test('separate conversation waits contribute to averages; pending waits remain provisional',()=>{
  const rows=[{startedAt:at('10T08:00:00'),endedAt:at('10T08:25:00'),status:'answered'},{startedAt:at('10T08:10:00'),status:'pending'}];
  const [day]=summarize(rows,defaults,at('10T08:35:00'));assert.equal(day.averageMs,25*60000);assert.equal(day.deduction,2000);assert.equal(day.pending,1);assert.equal(day.provisional,true);
 });
@@ -59,4 +59,13 @@ test('offline pauses answered, pending and transferred waits without double subt
  const open=offlineIntervals([{day:'2026-10-12',intervals:[{start:at('12T17:10:00')}]}],end);
  assert.equal(responseMs(start,end,defaults,open),10*60000);
  assert.equal(responseMs(at('12T17:15:00'),at('12T17:25:00'),defaults,breaks),0);
+});
+
+test('consecutive customer messages count once from the latest message',()=>{
+ const messages=[0,5,10].map((minute,i)=>({_id:String(i),direction:'inbound',createdAt:new Date(+at('12T10:00:00')+minute*60000)}));
+ messages.push({_id:'reply',direction:'outbound',author:'A',status:'sent',createdAt:at('12T10:20:00')});
+ const rows=replay({assignedTo:'A'},messages,at('12T00:00:00'));
+ const [day]=summarize(rows,defaults,at('13T12:00:00'));assert.equal(day.answered,1);assert.equal(day.averageMs,10*60000);assert.equal(rows.filter(r=>r.status==='superseded').length,2);
+ messages.push({_id:'new',direction:'inbound',createdAt:at('12T10:25:00')});
+ const [next]=summarize(replay({assignedTo:'A'},messages,at('12T00:00:00')),defaults,at('12T10:35:00'));assert.equal(next.answered,1);assert.equal(next.pending,1);assert.equal(next.averageMs,10*60000);
 });

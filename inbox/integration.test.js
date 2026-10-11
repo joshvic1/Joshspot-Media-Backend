@@ -1000,3 +1000,14 @@ test('WhatsApp course reminders use course-specific payment checks, wording and 
  const rows=await Message.find({clientKey:'course-link:wamid.whatsapp-course-button'});assert.equal(rows.length,1);assert.ok(rows[0].text.endsWith('https://joshspotmedia.com/whatsapp'));
  await Invoice.create({token:crypto.randomUUID(),amount:10000,product:'whatsapp-course',status:'pending',customerPhone:contact.phone});assert.equal(await r.eligible(invoice),false);
 });
+
+test('conversation unread counts are per viewer and clear through read receipts',async()=>{
+ const c=await fixture();await service.receive(inbound('unread-two'));await service.receive(inbound('unread-three'));
+ let list=await request('/conversations',{role:'agent'});assert.equal(list.data.items[0].unreadCount,3);
+ const messages=await Message.find({conversation:c._id,direction:'inbound'}).sort({_id:1});
+ assert.equal((await request(`/conversations/${c._id}/read`,{role:'agent',method:'POST',body:{messageId:String(messages[1]._id)}})).status,200);
+ list=await request('/conversations',{role:'agent'});assert.equal(list.data.items[0].unreadCount,1);
+ assert.equal((await request('/conversations')).data.items[0].unreadCount,3);
+ await request(`/conversations/${c._id}/read`,{role:'agent',method:'POST',body:{messageId:String(messages[2]._id)}});
+ assert.equal((await request('/conversations',{role:'agent'})).data.items[0].unreadCount,0);
+});

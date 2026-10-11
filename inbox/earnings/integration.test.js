@@ -3,7 +3,7 @@ const {test,before,after}=require('node:test'),assert=require('node:assert/stric
 const mongoose=require('mongoose'),express=require('express');const {MongoMemoryServer}=require('mongodb-memory-server');
 const {Config,Sample,Month}=require('./models');const {routes,defaults}=require('./routes');const Staff=require('../../models/Staff');const {Conversation,Message,Contact}=require('../models');
 let mongo,server,url,staff,other;
-before(async()=>{mongo=await MongoMemoryServer.create();await mongoose.connect(mongo.getUri());await Promise.all([Config,Sample,Month,Staff,Conversation,Message,Contact].map(m=>m.init()));staff=await Staff.create({name:'First',email:'first@test.invalid',password:'test',role:'CSS'});other=await Staff.create({name:'Second',email:'second@test.invalid',password:'test',role:'CSS'});const app=express();app.use(express.json());app.use((req,res,next)=>{req.actor=req.headers['x-role']==='admin'?{id:'admin',admin:true}:{id:String(staff._id),admin:false};next()});routes(app,fn=>(req,res,next)=>Promise.resolve(fn(req,res,next)).catch(next),async()=>{});app.use((e,req,res,next)=>res.status(e.status||500).json({message:e.message}));server=app.listen(0);url=`http://127.0.0.1:${server.address().port}`;});
+before(async()=>{mongo=await MongoMemoryServer.create();await mongoose.connect(mongo.getUri());await Promise.all([Config,Sample,Month,Staff,Conversation,Message,Contact].map(m=>m.init()));staff=await Staff.create({name:'First',email:'first@test.invalid',password:'test',role:'CSS'});other=await Staff.create({name:'Second',email:'second@test.invalid',password:'test',role:'CSS'});const app=express();app.use(express.json());app.use((req,res,next)=>{req.actor=req.headers['x-role']==='admin'?{id:'admin',admin:true}:{id:String(staff._id),admin:false};next()});require('../staffRoutes')(app,fn=>(req,res,next)=>Promise.resolve(fn(req,res,next)).catch(next),async()=>{});routes(app,fn=>(req,res,next)=>Promise.resolve(fn(req,res,next)).catch(next),async()=>{});app.use((e,req,res,next)=>res.status(e.status||500).json({message:e.message}));server=app.listen(0);url=`http://127.0.0.1:${server.address().port}`;});
 after(async()=>{await new Promise(r=>server.close(r));await mongoose.disconnect();await mongo.stop()});
 async function request(path,body,admin=false,method){const r=await fetch(url+path,{method:method||(body?'POST':'GET'),headers:{'content-type':'application/json','x-role':admin?'admin':'staff'},...(body?{body:JSON.stringify(body)}:{})});return {status:r.status,data:await r.json()};}
 test('earnings permissions, cap, audited adjustment and finalization lock',async()=>{
@@ -32,7 +32,8 @@ test('reconciliation is idempotent and ownership is captured with assignment',as
  const inbound=await Message.create({conversation:c._id,direction:'inbound',type:'text',text:'Synthetic question',status:'received'});
  await Conversation.updateOne({_id:c._id},{$set:{assignedTo:other._id}});c=await Conversation.findById(c._id).lean();assert.equal(c.earningsOwnership[0].from,String(staff._id));
  const cfg=await Config.findById('main').lean(),worker=require('./worker');await worker.reconcile(c,cfg);await worker.reconcile(c,cfg);
- const rows=await Sample.find({inbound:inbound._id}).lean();assert.equal(rows.length,2);assert.equal(rows.find(r=>r.staff===String(other._id)).status,'pending');assert.equal(rows.find(r=>r.staff===String(staff._id)).status,'transferred');
+ await Sample.create({key:'legacy-transfer',conversation:c._id,inbound:inbound._id,staff:String(staff._id),startedAt:new Date(),status:'transferred'});await worker.reconcile(c,cfg);assert.equal((await Sample.findOne({key:'legacy-transfer'})).status,'superseded');
+ const rows=await Sample.find({inbound:inbound._id,key:{$ne:'legacy-transfer'}}).lean();assert.equal(rows.length,2);assert.equal(rows.find(r=>r.staff===String(other._id)).status,'pending');assert.equal(rows.find(r=>r.staff===String(staff._id)).status,'transferred');
  assert.equal((await Conversation.findById(c._id)).earningsDirty,false);
 });
 test('late replies are unique, paginated and hide names after reassignment',async()=>{
@@ -110,10 +111,22 @@ test('admin reset and persistent pause are audited, scoped and preserve offline 
   await Availability.create({_id:who+':2026-10-14',staff:who,day:'2026-10-14',intervals:[{start:new Date('2026-10-14T08:00:00+01:00'),end:new Date('2026-10-14T09:20:00+01:00')}]});
   data=(await request('/earnings?from=2026-10-14&to=2026-10-14')).data;assert.equal(data.averageMs,30*60000);
   assert.equal((await request('/earnings/control',{...body,action:'reset',from:'2026-10-14',to:'2026-10-14'},true)).status,200);
-  data=(await request('/earnings?from=2026-10-14&to=2026-10-14')).data;assert.equal(data.averageMs,0);assert.equal(data.pending,0);assert.equal(data.days[0].offlineDeduction,4000);assert.equal(data.deduction,4000);
+  data=(await request('/earnings?from=2026-10-14&to=2026-10-14')).data;assert.equal(data.averageMs,0);assert.equal(data.pending,1);assert.equal(data.days[0].offlineDeduction,4000);assert.equal(data.deduction,4000);
   assert.equal(await Sample.countDocuments({key:'admin-pause-example'}),1);
   t.mock.timers.setTime(new Date('2026-10-14T10:20:00+01:00').getTime());await Sample.create({key:'after-reset',staff:who,startedAt:new Date('2026-10-14T10:10:00+01:00'),endedAt:new Date('2026-10-14T10:20:00+01:00'),status:'answered'});
-  data=(await request('/earnings?from=2026-10-14&to=2026-10-14')).data;assert.equal(data.averageMs,10*60000);assert.equal(data.answered,1);
+  data=(await request('/earnings?from=2026-10-14&to=2026-10-14')).data;assert.equal(data.averageMs,15*60000);assert.equal(data.answered,1);assert.equal(data.pending,1);
   assert.equal((await request('/earnings/control',{...body,action:'reset',from:'2026-09-01',to:'2026-09-30'},true)).status,409);
  }finally{t.mock.timers.reset()}
+});
+
+
+test('staff creation is admin-only, hashes passwords and rejects duplicate email and roles',async()=>{
+ const body={name:'New Support',email:'NEW@EXAMPLE.TEST',password:'Synthetic-test-123',role:'CSS'};
+ assert.equal((await request('/staff-management',body)).status,403);
+ const created=await request('/staff-management',body,true);assert.equal(created.status,201);assert.equal(created.data.password,undefined);
+ const stored=await Staff.findOne({email:'new@example.test'});assert.ok(await require('bcryptjs').compare(body.password,stored.password));
+ assert.equal((await request('/staff-management',body,true)).status,409);
+ assert.equal((await request('/staff-management',{...body,email:'bad@example.test',role:'ADMIN'},true)).status,400);
+ assert.equal((await request('/staff-management')).status,403);
+ const list=await request('/staff-management',null,true);assert.equal(list.status,200);assert.ok(list.data.items.every(x=>!x.password));
 });

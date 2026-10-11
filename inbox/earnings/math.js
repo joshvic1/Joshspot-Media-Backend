@@ -43,6 +43,8 @@ function replay(conversation,messages,startAt){
   const m=e.message;
   if(m.direction==='inbound'){
    // Keep unassigned waiters so assigning a waiting conversation starts the staff clock.
+   // A new consecutive inbound replaces the previous unanswered start for this owner.
+   close(e.at,'superseded');
    const row={key:String(m._id),inbound:m._id,staff:owner,startedAt:e.at,status:'pending'};rows.push(row);waiting.push(row);
   }else if(m.direction==='outbound'&&['sent','delivered','read'].includes(m.status)){
    // Receipt confirms success; use staff submit time, excluding provider queue delay.
@@ -55,7 +57,7 @@ function summarize(rows,rule,now=new Date(),breaks=[]){
  const days={};
  for(const row of rows){const day=dayKey(row.startedAt);const d=days[day]||(days[day]={day,answered:0,pending:0,transferred:0,excluded:0,totalMs:0,maxMs:0,withinGrace:0});
   if(row.exclusion?.reason||!['answered','pending','transferred'].includes(row.status)){d.excluded++;continue;}
-  const ms=responseMs(row.startedAt,row.endedAt||now,rule,breaks);d.totalMs+=ms;d.maxMs=Math.max(d.maxMs,ms);d[row.status]++;
+  const ms=responseMs(row.timingStartedAt||row.startedAt,row.endedAt||now,rule,breaks);d.totalMs+=ms;d.maxMs=Math.max(d.maxMs,ms);d[row.status]++;
   if(ms<=rule.graceMinutes*60000)d.withinGrace++;
  }
  return Object.values(days).sort((a,b)=>b.day.localeCompare(a.day)).map(d=>({...d,averageMs:d.totalMs/(d.answered+d.pending+d.transferred||1),deduction:deduction(d.totalMs/(d.answered+d.pending+d.transferred||1),rule),provisional:Boolean(d.pending)||d.day===dayKey(now)}));
