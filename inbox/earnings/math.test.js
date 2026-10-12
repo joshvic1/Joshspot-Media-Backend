@@ -17,9 +17,9 @@ test('ownership transfer starts new clock and failed sends/notes do not answer',
  const c={assignedTo:'B',earningsOwnership:[{at:at('10T08:10:00'),from:'A',to:'B'}]};const msgs=[{_id:'1',direction:'inbound',createdAt:at('10T08:00:00')},{_id:'2',direction:'outbound',author:'B',status:'failed',createdAt:at('10T08:11:00')},{_id:'3',direction:'internal',author:'B',status:'internal',createdAt:at('10T08:12:00')},{_id:'4',direction:'outbound',author:'B',status:'sent',createdAt:at('10T08:20:00')}];
  const rows=replay(c,msgs,at('10T00:00:00'));assert.equal(rows[0].status,'transferred');assert.equal(rows[1].staff,'B');assert.equal(rows[1].status,'answered');assert.equal(+rows[1].endedAt-rows[1].startedAt,10*60000);
 });
-test('unassigned time and automated replies never become staff deductions',()=>{
+test('AI handoff adopts the customer timestamp and AI acknowledgment cannot end the wait',()=>{
  const rows=replay({assignedTo:'A',earningsOwnership:[{at:at('10T09:00:00'),from:'',to:'A'}]},[{_id:'1',direction:'inbound',createdAt:at('10T08:00:00')},{_id:'2',direction:'outbound',author:'ai',status:'sent',createdAt:at('10T09:05:00')}],at('10T00:00:00'));
- assert.equal(rows.length,1);assert.equal(rows[0].status,'covered_by_other');assert.equal(+rows[0].startedAt,+at('10T09:00:00'));
+ assert.equal(rows.length,1);assert.equal(rows[0].status,'pending');assert.equal(+rows[0].startedAt,+at('10T08:00:00'));
 });
 
 
@@ -68,4 +68,25 @@ test('consecutive customer messages count once from the latest message',()=>{
  const [day]=summarize(rows,defaults,at('13T12:00:00'));assert.equal(day.answered,1);assert.equal(day.averageMs,10*60000);assert.equal(rows.filter(r=>r.status==='superseded').length,2);
  messages.push({_id:'new',direction:'inbound',createdAt:at('12T10:25:00')});
  const [next]=summarize(replay({assignedTo:'A'},messages,at('12T00:00:00')),defaults,at('12T10:35:00'));assert.equal(next.answered,1);assert.equal(next.pending,1);assert.equal(next.averageMs,10*60000);
+});
+
+test('no staff timer before handoff; latest inbound survives handoff acknowledgment and course automation',()=>{
+ const start=at('12T00:00:00'),messages=[
+ {_id:'ai',direction:'outbound',author:'ai',status:'sent',createdAt:at('12T10:00:00')},
+ {_id:'first',direction:'inbound',createdAt:at('12T10:08:00')},
+ {_id:'latest',direction:'inbound',createdAt:at('12T10:10:00')},
+ {_id:'ack',direction:'outbound',author:'ai',automation:{handoff:true},status:'sent',createdAt:at('12T10:11:00')}];
+ assert.equal(replay({assignedTo:null},messages,start).length,0);
+ const c={assignedTo:'A',earningsOwnership:[{at:at('12T10:12:00'),from:'',to:'A'}]};
+ messages.push({_id:'course',direction:'outbound',author:'admin',clientKey:'course-link:example',status:'sent',createdAt:at('12T10:15:00')});
+ messages.push({_id:'reminder',direction:'outbound',author:'admin',courseReminder:{invoice:'test'},status:'sent',createdAt:at('12T10:16:00')});
+ messages.push({_id:'reply',direction:'outbound',author:'A',status:'sent',createdAt:at('12T10:30:00')});
+ const rows=replay(c,messages,start);assert.equal(rows.length,1);assert.equal(rows[0].status,'answered');assert.equal(+rows[0].startedAt,+at('12T10:10:00'));
+ assert.equal(summarize(rows,defaults,at('12T11:00:00'))[0].averageMs,20*60000);
+});
+test('normal AI answer before handoff leaves no unanswered period to charge',()=>{
+ const rows=replay({assignedTo:'A',earningsOwnership:[{at:at('12T10:12:00'),from:'',to:'A'}]},[
+ {_id:'q',direction:'inbound',createdAt:at('12T10:00:00')},
+ {_id:'a',direction:'outbound',author:'ai',status:'sent',createdAt:at('12T10:01:00')}
+ ],at('12T00:00:00'));assert.equal(rows.length,0);
 });

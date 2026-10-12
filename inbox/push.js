@@ -51,7 +51,7 @@ async function eligible(actor,event){
  if(event.recipient&&event.recipient!==actor.id)return false;
  const c=await Conversation.findOne({$and:[policy.visible(actor),{_id:event.conversation,deleting:{$ne:true}}]}).lean();
  if(!c)return false;
- if(event.kind==='assignments'&&String(c.assignedTo)!==actor.id)return false;
+ if(event.kind==='assignments'&&String(c.assignedTo)!==require('./adminIdentity').recipient(actor))return false;
  if(event.kind==='followups'&&(c.status!=='follow_up'||+new Date(c.followUpAt)!==+new Date(event.dueAt)))return false;
  return true;
 }
@@ -76,7 +76,7 @@ async function tick(){
  try{
   if(!await Subscription.exists({$or:kinds.map(k=>({['preferences.'+k]:true}))}))return;
   const due=Conversation.find({status:'follow_up',deleting:{$ne:true},followUpAt:{$lte:new Date(),$gte:new Date(Date.now()-86400000)}}).select('_id assignedTo followUpAt').lean().cursor();
-  for await(const c of due)await record(`followup:${c._id}:${+c.followUpAt}`,'followups',c._id,c.assignedTo||'admin',undefined,c.followUpAt);
+  for await(const c of due)await record(`followup:${c._id}:${+c.followUpAt}`,'followups',c._id,c.assignedTo?require('./adminIdentity').pushRecipient(c.assignedTo):'admin',undefined,c.followUpAt);
   const subs=await Subscription.find({$or:[{leaseUntil:null},{leaseUntil:{$lt:new Date()}}]}).sort({checkedAt:1}).limit(20).lean();
   for(const candidate of subs){
    const lease=new Date(Date.now()+60000);

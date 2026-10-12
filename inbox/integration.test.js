@@ -563,7 +563,7 @@ test('history is bounded by 24 hours and 50 messages, skips empty days and targe
   assert.equal((await request(`/conversations/${conversation._id}/messages?page=garbage`)).status, 400);
 });
 
-test('mentions are idempotent, private and grant read access without sending permission', async () => {
+test('mentions are idempotent and preserve customer-support assigned-only access', async () => {
   const conversation = await fixture();
   const payload = { type: 'note', text: 'Please review', mentions: [String(second._id)], clientId: crypto.randomUUID() };
   assert.equal((await request(`/conversations/${conversation._id}`, { role: 'second' })).status, 404);
@@ -574,8 +574,8 @@ test('mentions are idempotent, private and grant read access without sending per
   const list = await request('/notifications', { role: 'second' });
   assert.equal(list.data.unread, 1); assert.equal(list.data.items.length, 1);
   assert.equal((await request('/notifications', { role: 'agent' })).data.items.length, 0);
-  assert.equal((await request(`/conversations/${conversation._id}`, { role: 'second' })).status, 200);
-  assert.equal((await request(`/conversations/${conversation._id}/messages`, { role: 'second', method: 'POST', body: outgoing() })).status, 403);
+  assert.equal((await request(`/conversations/${conversation._id}`, { role: 'second' })).status, 404);
+  assert.equal((await request(`/conversations/${conversation._id}/messages`, { role: 'second', method: 'POST', body: outgoing() })).status, 404);
   const path = `/notifications/${list.data.items[0]._id}/read`;
   assert.equal((await request(path, { role: 'agent', method: 'POST', body: {} })).status, 404);
   const opened = await request(path, { role: 'second', method: 'POST', body: {} });
@@ -1010,4 +1010,32 @@ test('conversation unread counts are per viewer and clear through read receipts'
  assert.equal((await request('/conversations')).data.items[0].unreadCount,3);
  await request(`/conversations/${c._id}/read`,{role:'agent',method:'POST',body:{messageId:String(messages[2]._id)}});
  assert.equal((await request('/conversations',{role:'agent'})).data.items[0].unreadCount,0);
+});
+
+test('assigned staff transfer and Administrator mentions preserve ownership safeguards',async()=>{
+ const adminId=require('./adminIdentity').ID,c=await fixture();
+ assert.equal((await request('/session',{role:'agent'})).data.staff.some(p=>p._id===adminId),true);
+ const note=await request(`/conversations/${c._id}/messages`,{role:'agent',method:'POST',body:{type:'note',text:'@Administrator please check',mentions:[adminId],clientId:crypto.randomUUID()}});assert.equal(note.status,201,JSON.stringify(note.data));
+ assert.equal((await request('/notifications')).data.unread,1);
+ assert.equal((await request('/notifications/read-all',{method:'POST',body:{}})).status,200);
+ let row=await Conversation.findById(c._id);
+ assert.equal((await request(`/conversations/${c._id}`,{role:'agent',method:'PUT',body:{revision:row.revision,assignedTo:String(second._id)}})).status,200);
+ row=await Conversation.findById(c._id);assert.equal(row.ai.active,false);assert.equal(row.earningsOwnership.at(-1).from,String(agent._id));
+ assert.ok([403,404].includes((await request(`/conversations/${c._id}`,{role:'agent',method:'PUT',body:{revision:row.revision,assignedTo:adminId}})).status));
+ assert.equal((await request(`/conversations/${c._id}`,{role:'second',method:'PUT',body:{revision:row.revision-1,assignedTo:adminId}})).status,409);
+ assert.equal((await request(`/conversations/${c._id}`,{role:'second',method:'PUT',body:{revision:row.revision,assignedTo:adminId}})).status,200);
+ assert.equal((await request(`/conversations/${c._id}`,{role:'second'})).status,404);
+ assert.equal((await request('/conversations?view=mine')).data.items.length,1);
+ assert.equal((await request('/counts')).data.mine,1);
+});
+
+test('opening unread history targets viewer first unread and keeps newer pages',async()=>{
+ const c=await fixture();const old=await Message.findOne({conversation:c._id,direction:'inbound'});
+ const msgs=[];for(let i=0;i<62;i++)msgs.push(await Message.create({_id:new mongoose.Types.ObjectId((BigInt('0x'+String(old._id))+BigInt(i+1)).toString(16).padStart(24,'0')),conversation:c._id,direction:'inbound',type:'text',text:'Unread '+i,status:'received'}));
+ await Conversation.updateOne({_id:c._id},{$set:{['reads.'+agent._id]:old._id,'reads.admin':msgs[9]._id}});
+ const staff=await request(`/conversations/${c._id}/messages?unread=1`,{role:'agent'});assert.equal(staff.data.firstUnread,String(msgs[0]._id));assert.ok(staff.data.newer);assert.ok(staff.data.items.some(m=>m._id===String(msgs[0]._id)));
+ const admin=await request(`/conversations/${c._id}/messages?unread=1`);assert.equal(admin.data.firstUnread,String(msgs[10]._id));
+ const explicit=await request(`/conversations/${c._id}/messages?unread=1&target=${old._id}`,{role:'agent'});assert.equal(explicit.data.target,String(old._id));assert.equal(explicit.data.firstUnread,null);
+ await request(`/conversations/${c._id}/read`,{role:'agent',method:'POST',body:{messageId:String(msgs.at(-1)._id)}});
+ assert.equal((await request(`/conversations/${c._id}/messages?unread=1`,{role:'agent'})).data.firstUnread,null);
 });

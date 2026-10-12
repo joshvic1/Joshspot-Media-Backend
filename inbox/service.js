@@ -115,7 +115,7 @@ async function deliverMentions(message) {
     await Conversation.updateOne({ _id: message.conversation }, { $addToSet: { collaborators: { $each: recipients } } });
     await Notification.bulkWrite(recipients.map(recipient => ({ updateOne: { filter: { recipient, message: message._id }, update: { $setOnInsert: { recipient, message: message._id, conversation: message.conversation, authorName: message.authorName } }, upsert: true } })));
   }
-  for(const recipient of recipients)await require('./push').record(`mention:${message._id}:${recipient}`,'mentions',message.conversation,recipient,message._id);
+  for(const recipient of recipients)await require('./push').record(`mention:${message._id}:${recipient}`,'mentions',message.conversation,require('./adminIdentity').pushRecipient(recipient),message._id);
   await Message.updateOne({ _id: message._id }, { $set: { mentionsPending: false } });
   live.notify();
 }

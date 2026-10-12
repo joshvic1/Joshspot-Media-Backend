@@ -114,7 +114,7 @@ function routes(router,wrap,rateLimit){
   const today=dayKey(new Date()),from=req.query.from||`${today.slice(0,7)}-01`,to=req.query.to||today;
   if(!/^\d{4}-\d{2}-\d{2}$/.test(from)||!/^\d{4}-\d{2}-\d{2}$/.test(to)||!Number.isFinite(+dayStart(from))||!Number.isFinite(+dayStart(to))||from>to||(+dayStart(to)-dayStart(from))/DAY>366||to>today)fail(400,'Choose a valid date range of at most one year, ending today or earlier.');
   if(req.query.latePage!==undefined&&(!/^\d+$/.test(req.query.latePage)||Number(req.query.latePage)>1000))fail(400,'Invalid late-response page.');
-  const {Conversation}=require('../models');const outstanding=await Conversation.countDocuments({$or:[{earningsDirty:true},{earningsVersion:{$ne:2}}],deleting:{$ne:true},...(req.actor.admin?{}:{assignedTo:staff})});
+  const {Conversation}=require('../models');const outstanding=await Conversation.countDocuments({$or:[{earningsDirty:true},{earningsVersion:{$ne:3}}],deleting:{$ne:true},...(req.actor.admin?{}:{assignedTo:staff})});
   const data=staff&&cfg.startsAt?await report(staff,from,to,cfg,{actor:req.actor,latePage:req.query.latePage===undefined?undefined:Number(req.query.latePage)}):{days:[],months:[],samples:[],answered:0,pending:0,averageMs:0,deduction:0};
   res.json({...data,staff,people,config:cfg,from,to,outstanding});
  }));
@@ -149,7 +149,7 @@ function routes(router,wrap,rateLimit){
    const updated=await Month.updateOne({_id:ledger._id,finalizedAt:null},{$push:{adjustments:{amount,reason:reason.trim(),at:new Date(),by:req.actor.id}}});if(!updated.matchedCount)fail(409,'Month has already been finalized.');
   }else if(action==='finalize'){
    if(month>=dayKey(new Date()).slice(0,7))fail(400,'Only a completed month can be finalized.');
-   const {Conversation}=require('../models');if(await Conversation.exists({$or:[{earningsDirty:true},{earningsVersion:{$ne:2}}],deleting:{$ne:true}}))fail(409,'Wait for response tracking to finish reconciling before finalizing.');
+   const {Conversation}=require('../models');if(await Conversation.exists({$or:[{earningsDirty:true},{earningsVersion:{$ne:3}}],deleting:{$ne:true}}))fail(409,'Wait for response tracking to finish reconciling before finalizing.');
    const to=new Date(Date.UTC(Number(month.slice(0,4)),Number(month.slice(5)),0)).toISOString().slice(0,10);const data=await report(staff,`${month}-01`,to,cfg);
    if(data.pending)fail(409,'This month still has unanswered messages. Resolve or review them before finalizing.');
    const changed=await Month.updateOne({_id:ledger._id,finalizedAt:null,updatedAt:ledger.updatedAt},{$set:{finalizedAt:new Date(),finalizedBy:req.actor.id,finalTotal:data.deduction,snapshot:{days:data.days,answered:data.answered,excluded:data.excluded}}});if(!changed.matchedCount)fail(409,'Statement changed. Refresh and review before finalizing.');

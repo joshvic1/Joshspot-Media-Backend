@@ -37,16 +37,24 @@ function replay(conversation,messages,startAt){
  function close(at,status,reply){for(const row of waiting){row.endedAt=at;row.status=status;row.reply=reply||null;}waiting=[];}
  for(const e of events){
   if(e.kind==='owner'){
-   if(owner!==e.owner){const pending=waiting.map(r=>r.inbound);close(e.at,'transferred');owner=e.owner;for(const inbound of pending){const row={key:`${inbound}:${e.at.toISOString()}`,inbound,staff:owner,startedAt:e.at,status:'pending'};rows.push(row);waiting.push(row);}}
+   if(owner!==e.owner){
+    const previousOwner=owner,pending=waiting.map(r=>({inbound:r.inbound,startedAt:r.startedAt}));
+    close(e.at,'transferred');owner=e.owner;
+    for(const item of pending){const row={key:`${item.inbound}:${e.at.toISOString()}`,inbound:item.inbound,staff:owner,startedAt:previousOwner?e.at:item.startedAt,status:'pending'};rows.push(row);waiting.push(row);}
+   }
    continue;
   }
   const m=e.message;
   if(m.direction==='inbound'){
-   // Keep unassigned waiters so assigning a waiting conversation starts the staff clock.
+   // Keep unassigned waiters without charging anyone; assignment adopts the latest inbound time.
    // A new consecutive inbound replaces the previous unanswered start for this owner.
    close(e.at,'superseded');
    const row={key:String(m._id),inbound:m._id,staff:owner,startedAt:e.at,status:'pending'};rows.push(row);waiting.push(row);
   }else if(m.direction==='outbound'&&['sent','delivered','read'].includes(m.status)){
+   const automated=m.author==='ai'||Boolean(m.automation)||Boolean(m.courseReminder)||String(m.clientKey||'').startsWith('course-link:');
+   // Automated acknowledgments never discharge an assigned human response obligation.
+   // A handoff acknowledgment before assignment must also retain the customer wait.
+   if(automated&&(owner||m.automation?.handoff))continue;
    // Receipt confirms success; use staff submit time, excluding provider queue delay.
    close(e.at,String(m.author)===owner&&owner?'answered':'covered_by_other',m._id);
   }

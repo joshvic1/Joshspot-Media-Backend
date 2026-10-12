@@ -1,3 +1,4 @@
+const adminIdentity = require('./adminIdentity');
 const express = require('express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
@@ -97,23 +98,20 @@ router.use((req, res, next) => {
 });
 router.use(require('./actions')({ wrap, fail, id, conversationFor, rateLimit }));
 router.get('/notifications', wrap(async (req, res) => {
-  if (req.actor.admin) return res.json({ items: [], unread: 0, next: null });
-  const query = { recipient: req.actor.id, ...(req.query.before ? { _id: { $lt: id(req.query.before) } } : {}) };
+  const query = { recipient: adminIdentity.recipient(req.actor), ...(req.query.before ? { _id: { $lt: id(req.query.before) } } : {}) };
   const rows = await Notification.find(query).sort({ _id: -1 }).limit(21).lean();
-  const unread = await Notification.countDocuments({ recipient: req.actor.id, readAt: null });
+  const unread = await Notification.countDocuments({ recipient: adminIdentity.recipient(req.actor), readAt: null });
   const conversations = await Conversation.find({ _id: { $in: rows.slice(0, 20).map(row => row.conversation) }, deleting: { $ne: true } }).select('contact').populate({ path: 'contact', select: 'name', match: { deleting: { $ne: true } } }).lean();
   const names = new Map(conversations.map(row => [String(row._id), row.contact?.name?.trim() || 'Unnamed contact']));
   const items = rows.slice(0, 20).map(row => ({ ...row, contactName: names.get(String(row.conversation)) || 'Unavailable contact' }));
   res.json({ items, unread, next: rows.length > 20 ? String(rows[19]._id) : null });
 }));
 router.post('/notifications/read-all', wrap(async (req, res) => {
-  if (req.actor.admin) return res.json({ updated: 0 });
-  const result = await Notification.updateMany({ recipient: req.actor.id, readAt: null }, { $set: { readAt: new Date() } });
+  const result = await Notification.updateMany({ recipient: adminIdentity.recipient(req.actor), readAt: null }, { $set: { readAt: new Date() } });
   res.json({ updated: result.modifiedCount });
 }));
 router.post('/notifications/:notificationId/read', wrap(async (req, res) => {
-  if (req.actor.admin) fail(404, 'Notification not found.');
-  const item = await Notification.findOneAndUpdate({ _id: id(req.params.notificationId), recipient: req.actor.id }, { $set: { readAt: new Date() } }, { returnDocument: 'after' });
+  const item = await Notification.findOneAndUpdate({ _id: id(req.params.notificationId), recipient: adminIdentity.recipient(req.actor) }, { $set: { readAt: new Date() } }, { returnDocument: 'after' });
   if (!item) fail(404, 'Notification not found.');
   res.json({ conversation: item.conversation, message: item.message });
 }));
@@ -121,7 +119,7 @@ router.get('/session', wrap(async (req, res) => {
   const config = provider.configuration();
   const staff = await Staff.find({ role: { $in: ['SS', 'CSS'] } }).select('name role').sort({ name: 1 }).lean();
   const failedJobs = req.actor.admin ? await WebhookJob.countDocuments({ state: { $in: ['dead', 'blocked'] } }) : undefined;
-  res.json({ actor: req.actor, staff, provider: { configured: config.configured, ...(req.actor.admin ? { missing: config.missing, failedJobs } : {}) } });
+  res.json({ actor: req.actor, staff: [adminIdentity.person,...staff], provider: { configured: config.configured, ...(req.actor.admin ? { missing: config.missing, failedJobs } : {}) } });
 }));
 router.get('/diagnostics', wrap(async (req, res) => {
   if (!req.actor.admin) fail(403, 'Administrator access required.');
@@ -144,7 +142,7 @@ router.post('/webhooks/retry', wrap(async (req, res) => {
 router.get('/conversations', wrap(async (req, res) => {
   const filter = { $and: [policy.visible(req.actor), { deleting: { $ne: true } }] };
   const view = String(req.query.view || 'inbox');
-  if (view === 'mine') filter.$and.push(req.actor.admin ? { _id: null } : { assignedTo: req.actor.id });
+  if (view === 'mine') filter.$and.push({ assignedTo: adminIdentity.recipient(req.actor) });
   if (view === 'unassigned') filter.$and.push({ assignedTo: null });
   if (view === 'follow_up') filter.$and.push({ status: 'follow_up' });
   else if (view === 'resolved') filter.$and.push({ status: 'resolved' });
@@ -191,10 +189,10 @@ router.get('/conversations', wrap(async (req, res) => {
   res.json({ items, next: hasMore ? Buffer.from(JSON.stringify({ date: last.lastMessageAt, id: last._id })).toString('base64url') : null });
 }));
 router.get('/counts', wrap(async (req, res) => {
-  const filters = { inbox: { status: { $ne: 'resolved' } }, mine: { assignedTo: req.actor.admin ? null : req.actor.id, status: { $ne: 'resolved' } }, unassigned: { assignedTo: null, status: { $ne: 'resolved' } }, unread: { status: { $ne: 'resolved' }, $expr: { $gt: ['$lastInboundId', { $ifNull: [`$reads.${req.actor.id}`, new mongoose.Types.ObjectId('000000000000000000000000')] }] } }, follow_up: { status: 'follow_up' }, resolved: { status: 'resolved' } };
+  const filters = { inbox: { status: { $ne: 'resolved' } }, mine: { assignedTo: adminIdentity.recipient(req.actor), status: { $ne: 'resolved' } }, unassigned: { assignedTo: null, status: { $ne: 'resolved' } }, unread: { status: { $ne: 'resolved' }, $expr: { $gt: ['$lastInboundId', { $ifNull: [`$reads.${req.actor.id}`, new mongoose.Types.ObjectId('000000000000000000000000')] }] } }, follow_up: { status: 'follow_up' }, resolved: { status: 'resolved' } };
   // One permission-scoped aggregation instead of six independent count queries.
   const actorScope = policy.visible({ ...req.actor, id: req.actor.admin ? req.actor.id : new mongoose.Types.ObjectId(req.actor.id) });
-  if (!req.actor.admin) filters.mine.assignedTo = new mongoose.Types.ObjectId(req.actor.id);
+  filters.mine.assignedTo = new mongoose.Types.ObjectId(adminIdentity.recipient(req.actor));
   const [counts] = await Conversation.aggregate([{ $match: actorScope }, { $facet: Object.fromEntries(Object.entries(filters).map(([key, query]) => [key, [{ $match: query }, { $count: 'total' }]])) }]);
   res.json(Object.fromEntries(Object.keys(filters).map(key => [key, counts[key][0]?.total || 0])));
 }));
@@ -235,8 +233,9 @@ router.put('/conversations/:id', wrap(async (req, res) => {
   const changes = {}; const descriptions = [];
   if ('assignedTo' in req.body) {
     const target = req.body.assignedTo || null;
-    if (!req.actor.admin && (target !== req.actor.id || current.assignedTo)) fail(403, 'You can only claim an unassigned conversation.');
-    const agent = target ? await Staff.findOne({ _id: id(target), role: { $in: ['SS', 'CSS'] } }).select('name') : null;
+    if (!req.actor.admin && !(target === req.actor.id && !current.assignedTo) && !(target && String(current.assignedTo) === req.actor.id)) fail(403, 'Only the assigned representative can transfer this conversation.');
+    if (!req.actor.admin && String(current.assignedTo) === req.actor.id && req.staff.permissions?.transfer === false) fail(403, 'Your administrator has disabled chat transfers.');
+    const agent = target === adminIdentity.ID ? adminIdentity.person : target ? await Staff.findOne({ _id: id(target), role: { $in: ['SS', 'CSS'] } }).select('name') : null;
     if (target && !agent) fail(400, 'Choose an available representative.');
     changes.assignedTo = target; changes['ai.active'] = false; changes['ai.draft'] = null; changes['ai.handoffPending'] = null; changes['ai.assignmentError'] = ''; changes['ai.needsHuman'] = false; changes['ai.handoffReason'] = 'ASSIGNMENT_CHANGED'; descriptions.push(target ? `Assigned to ${agent.name}` : 'Unassigned conversation');
   }
@@ -267,7 +266,7 @@ router.put('/conversations/:id', wrap(async (req, res) => {
   if (!Object.keys(changes).length) fail(400, 'No changes supplied.');
   const updated = await Conversation.findOneAndUpdate(scoped(req, { _id: current._id, revision: req.body.revision }), { $set: changes, $inc: { revision: 1 } }, { returnDocument: 'after' });
   if (!updated) fail(409, 'This conversation changed. Refresh and try again.');
-  if(changes.assignedTo && String(current.assignedTo)!==String(changes.assignedTo))await require('./push').record(`assignment:${current._id}:${updated.revision}`,'assignments',current._id,changes.assignedTo).catch(()=>{});
+  if(changes.assignedTo && String(current.assignedTo)!==String(changes.assignedTo))await require('./push').record(`assignment:${current._id}:${updated.revision}`,'assignments',current._id,adminIdentity.pushRecipient(changes.assignedTo)).catch(()=>{});
   await service.activity(current._id, req.actor, descriptions.join(' · '));
   res.json({ revision: updated.revision });
 }));
@@ -286,7 +285,15 @@ router.put('/conversations/:id/contact', wrap(async (req, res) => {
 }));
 router.get('/conversations/:id/messages', wrap(async (req, res) => {
   const conversation = await conversationFor(req);
-  if (!req.query.kind && !req.query.before && !req.query.after) return res.json(await history(conversation._id, req.query));
+  if (!req.query.kind && !req.query.before && !req.query.after) {
+    const params={...req.query};let firstUnread;
+    if(params.unread==='1'&&!params.target&&!params.page&&!params.changes&&!params.newer){
+      const read=conversation.reads?.get?.(req.actor.id)||conversation.reads?.[req.actor.id];
+      firstUnread=await Message.findOne({conversation:conversation._id,direction:'inbound',...(read?{_id:{$gt:read}}:{})}).sort({_id:1}).select('_id').lean();
+      if(firstUnread)params.target=String(firstUnread._id);
+    }
+    return res.json({...await history(conversation._id,params),firstUnread:firstUnread?String(firstUnread._id):null});
+  }
   const query = { conversation: conversation._id };
   if (req.query.kind === 'media') query.type = { $in: ['image', 'document', 'audio', 'video', 'sticker'] };
   else if (req.query.kind === 'activity') query.type = { $in: ['note', 'activity'] };
@@ -349,8 +356,8 @@ router.post('/conversations/:id/messages', wrap(async (req, res) => {
   let mentions = [];
   if (req.body.mentions?.length) {
     if (type !== 'note' || !Array.isArray(req.body.mentions) || req.body.mentions.length > 10) fail(400, 'Mention up to 10 staff in an internal note.');
-    mentions = [...new Set(req.body.mentions.map(id))].filter(value => value !== req.actor.id);
-    if (await Staff.countDocuments({ _id: { $in: mentions }, role: { $in: ['SS', 'CSS'] } }) !== mentions.length) fail(400, 'Choose an available staff member.');
+    mentions = [...new Set(req.body.mentions.map(id))].filter(value => value !== adminIdentity.recipient(req.actor));
+    if (await Staff.countDocuments({ _id: { $in: mentions.filter(value=>value!==adminIdentity.ID) }, role: { $in: ['SS', 'CSS'] } }) !== mentions.filter(value=>value!==adminIdentity.ID).length) fail(400, 'Choose an available staff member.');
   }
   if (type !== 'note') await require('./ai/worker').pause(conversation._id, req.actor, 'HUMAN_REPLY');
   let message;

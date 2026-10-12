@@ -4,7 +4,7 @@ const definitions = [
  ['templates','Inbox','Send approved templates'],['media','Inbox','Upload and send media'],
  ['reactions','Inbox','React to messages'],['retry','Inbox','Retry failed messages'],
  ['keepMedia','Inbox','Keep media'],['contacts','Inbox','Add contacts'],
- ['editContact','Inbox','Edit contact details'],['claim','Inbox','Claim eligible conversations'],
+ ['editContact','Inbox','Edit contact details'],['claim','Inbox','Claim eligible conversations'],['transfer','Inbox','Transfer assigned chats'],
  ['status','Inbox','Change conversation status'],['labels','Inbox','Edit conversation labels'],
  ['followUps','Inbox','Schedule or clear follow-ups'],['aiControl','Inbox','Change permitted AI handling'],
  ['drafts','Inbox','Approve AI drafts'],['invoice','Payments','Generate and send invoices'],
@@ -22,7 +22,7 @@ function required(req){
  if(/\/contact$/.test(p))keys.push('editContact');
  if(/\/messages$/.test(p)){keys.push(b.type==='note'?'notes':'messages');if(b.type==='template')keys.push('templates');if(['audio','video','image','document'].includes(b.type))keys.push('media');}
  for(const [suffix,key] of [['media','media'],['reaction','reactions'],['retry','retry'],['media-keep','keepMedia'],['actions/invoice','invoice'],['actions/payment','payment'],['control','aiControl'],['draft','drafts']])if(p.endsWith('/'+suffix))keys.push(key);
- if(/^\/conversations\/[^/]+$/.test(p)&&m==='PUT')for(const [field,key] of [['assignedTo','claim'],['status','status'],['labels','labels'],['followUpAt','followUps']])if(Object.hasOwn(b,field))keys.push(key);
+ if(/^\/conversations\/[^/]+$/.test(p)&&m==='PUT')for(const [field,key] of [['assignedTo',b.assignedTo===req.staff?.staffId?'claim':'transfer'],['status','status'],['labels','labels'],['followUpAt','followUps']])if(Object.hasOwn(b,field))keys.push(key);
  if(p.endsWith('/retry')||p.endsWith('/draft'))keys.push('messages');
  const match=p.match(/\/actions\/crm\/(setup|ads|verification)(?:\/[^/]+)?$/);
  if(match)keys.push(`${match[1]}.${m==='POST'?'create':'edit'}`);

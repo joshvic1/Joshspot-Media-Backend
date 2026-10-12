@@ -142,3 +142,14 @@ test('staff editing validates permissions, preserves passwords and updates authe
  const req={headers:{authorization:jwt.sign({staffId:String(staff._id),role:'SS'},process.env.JWT_SECRET||'joshspotsecret')}};
  let passed=false;await auth(req,{status(){throw Error('unexpected auth error')}},()=>{passed=true});assert.equal(passed,true);assert.equal(req.staff.role,'CSS');assert.equal(req.staff.permissions.invoice,false);
 });
+
+test('reconciliation loads automation metadata and rebuilds handoff waits',async()=>{
+ const contact=await Contact.create({name:'Handoff fixture',phone:'+2348000000099'});
+ const c=await Conversation.create({contact:contact._id,assignedTo:staff._id,earningsOwnership:[{at:new Date('2026-10-12T10:12:00+01:00'),from:'',to:String(staff._id)}]});
+ await Message.create({conversation:c._id,direction:'inbound',type:'text',status:'received',createdAt:new Date('2026-10-12T10:10:00+01:00')});
+ await Message.create({conversation:c._id,direction:'outbound',type:'text',status:'sent',author:'ai',automation:{handoff:true},createdAt:new Date('2026-10-12T10:11:00+01:00')});
+ await Message.create({conversation:c._id,direction:'outbound',type:'text',status:'sent',author:'admin',clientKey:'course-link:timing-fixture',createdAt:new Date('2026-10-12T10:15:00+01:00')});
+ await Message.create({conversation:c._id,direction:'outbound',type:'text',status:'sent',author:String(staff._id),createdAt:new Date('2026-10-12T10:30:00+01:00')});
+ await require('./worker').reconcile(await Conversation.findById(c._id).lean(),{...defaults,startsAt:new Date('2026-10-01')});
+ const rows=await Sample.find({conversation:c._id,status:'answered'}).lean();assert.equal(rows.length,1);assert.equal(+rows[0].endedAt-rows[0].startedAt,20*60000);assert.equal((await Conversation.findById(c._id)).earningsVersion,3);
+});
