@@ -206,7 +206,16 @@ router.post('/contacts', wrap(async (req, res) => {
 }));
 router.get('/conversations/:id', wrap(async (req, res) => {
   const conversation = await conversationFor(req);
-  res.json({ ...conversation.toObject(), reads: undefined, windowOpen: policy.windowOpen(conversation.lastInboundAt) });
+  const typing=await require('./typing').find({conversation:conversation._id,actor:{$ne:req.actor.id},expiresAt:{$gt:new Date()}}).select('actor name expiresAt -_id').lean();
+  res.json({ ...conversation.toObject(), typing, reads: undefined, windowOpen: policy.windowOpen(conversation.lastInboundAt) });
+}));
+router.post('/conversations/:id/typing',wrap(async(req,res)=>{
+ const c=await conversationFor(req);if(!policy.canReply(req.actor,c))fail(403,'Only the assigned representative or administrator can type.');
+ if(typeof req.body.active!=='boolean')fail(400,'Invalid typing status.');
+ await rateLimit(req,60);const Typing=require('./typing');
+ if(req.body.active)await Typing.updateOne({conversation:c._id,actor:req.actor.id},{$set:{name:req.actor.name,expiresAt:new Date(Date.now()+7000)}},{upsert:true});
+ else await Typing.deleteOne({conversation:c._id,actor:req.actor.id});
+ live.notify();res.json({ok:true});
 }));
 router.get('/conversations/:id/crm', wrap(async (req, res) => {
   const conversation = await conversationFor(req); const number = conversation.contact.phone;

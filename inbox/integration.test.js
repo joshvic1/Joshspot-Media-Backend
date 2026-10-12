@@ -1039,3 +1039,13 @@ test('opening unread history targets viewer first unread and keeps newer pages',
  await request(`/conversations/${c._id}/read`,{role:'agent',method:'POST',body:{messageId:String(msgs.at(-1)._id)}});
  assert.equal((await request(`/conversations/${c._id}/messages?unread=1`,{role:'agent'})).data.firstUnread,null);
 });
+
+test('typing presence is scoped, expires and clears without exposing draft text',async()=>{
+ const c=await fixture();const path=`/conversations/${c._id}/typing`;
+ assert.equal((await request(path,{role:'second',method:'POST',body:{active:true}})).status,404);
+ assert.equal((await request(path,{role:'agent',method:'POST',body:{active:true,text:'Never stored'}})).status,200);
+ const own=await request(`/conversations/${c._id}`,{role:'agent'});assert.equal(own.data.typing.length,0);
+ const admin=await request(`/conversations/${c._id}`);assert.equal(admin.data.typing[0].name,agent.name);assert.equal(admin.data.typing[0].text,undefined);
+ await require('./typing').updateMany({conversation:c._id},{$set:{expiresAt:new Date(0)}});assert.equal((await request(`/conversations/${c._id}`)).data.typing.length,0);
+ await request(path,{role:'agent',method:'POST',body:{active:true}});await request(path,{role:'agent',method:'POST',body:{active:false}});assert.equal((await request(`/conversations/${c._id}`)).data.typing.length,0);
+});
