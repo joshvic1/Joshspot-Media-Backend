@@ -1049,3 +1049,24 @@ test('typing presence is scoped, expires and clears without exposing draft text'
  await require('./typing').updateMany({conversation:c._id},{$set:{expiresAt:new Date(0)}});assert.equal((await request(`/conversations/${c._id}`)).data.typing.length,0);
  await request(path,{role:'agent',method:'POST',body:{active:true}});await request(path,{role:'agent',method:'POST',body:{active:false}});assert.equal((await request(`/conversations/${c._id}`)).data.typing.length,0);
 });
+
+test('CRM detail views are contact scoped, mask staff phones and restrict invoices to admin', async () => {
+ const c = await fixture();
+ const Client = require('../models/Client');
+ const setup = await Client.create({businessName:'View fixture',clientNumber:'08012345678',servicePaidFor:'Meta ads setup',amountPaid:30000,clientLoginDetails:'private-credential'});
+ const path = `/conversations/${c._id}/crm`;
+ const result = await request(`${path}/Client/${setup._id}`,{role:'agent'});
+ assert.equal(result.status,200);assert.equal(result.data.record.businessName,'View fixture');
+ assert.ok(result.data.record.clientNumber.includes('*'));assert.equal(result.data.record.clientLoginDetails,undefined);
+ assert.equal((await request(`${path}/Client/${setup._id}`,{role:'second'})).status,404);
+ await Conversation.updateOne({_id:c._id},{$set:{assignedTo:second._id}});
+ const support=await request(`${path}/Client/${setup._id}`,{role:'second'});assert.equal(support.status,200);assert.equal(support.data.record.amountPaid,undefined);
+ const invoice=await Invoice.create({token:'private-view-token',amount:30000,customerPhone:'2348012345678',status:'paid'});
+ assert.equal((await request(`${path}/Invoice/${invoice._id}`,{role:'second'})).status,403);
+ const detail=await request(`${path}/Invoice/${invoice._id}`);assert.equal(detail.status,200);assert.equal(detail.data.record.amount,30000);assert.equal(detail.data.record.token,undefined);
+ const other=await Invoice.create({token:'other-view-token',amount:8000,customerPhone:'2348099999999'});
+ assert.equal((await request(`${path}/Invoice/${other._id}`)).status,404);
+ await Invoice.updateOne({_id:invoice._id},{$set:{deletedAt:new Date()}});
+ assert.equal((await request(`${path}/Invoice/${invoice._id}`)).status,404);
+ await Client.deleteOne({_id:setup._id});
+});

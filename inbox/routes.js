@@ -231,6 +231,24 @@ router.get('/conversations/:id/crm', wrap(async (req, res) => {
   }
   res.json(records);
 }));
+router.get('/conversations/:id/crm/:kind/:recordId', wrap(async (req, res) => {
+  const c = await conversationFor(req);
+  const fields = {
+    Client: 'businessName clientNumber amountPaid servicePaidFor landingPageLink createdAt',
+    AdsClient: 'businessName clientNumber amountPaid servicePaidFor videoLinks note adsPublished fundsStatus createdAt',
+    VerificationClient: 'name businessName clientNumber amountPaid service createdAt',
+    Invoice: 'customerName customerEmail customerPhone product amount status note createdAt paidAt expiresAt'
+  };
+  const kind = req.params.kind;
+  if (!Object.hasOwn(fields, kind)) fail(400, 'Unknown record type.');
+  if (kind === 'Invoice' && !req.actor.admin) fail(403, 'Invoice details are only available to administrators.');
+  const query = { _id: id(req.params.recordId), [kind === 'Invoice' ? 'customerPhone' : 'clientNumber']: require('./crmPhoneMatch')(c.contact.phone) };
+  if (kind === 'Invoice') query.deletedAt = null;
+  const record = await require(`../models/${kind}`).findOne(query).select(fields[kind]).lean();
+  if (!record) fail(404, 'CRM record not found for this contact.');
+  if (kind !== 'AdsClient' && !req.actor.admin && req.actor.role !== 'SS') delete record.amountPaid;
+  res.json({ record });
+}));
 router.delete('/conversations/:id',wrap(async(req,res)=>{
   if(!req.actor.admin)fail(403,'Only administrators can delete chats.');
   if(req.body.confirm!==true)fail(400,'Confirm permanent chat deletion.');
