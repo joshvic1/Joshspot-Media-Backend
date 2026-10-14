@@ -98,6 +98,9 @@ test('admin reset and persistent pause are audited, scoped and preserve offline 
  t.mock.timers.enable({apis:['Date'],now:new Date('2026-10-14T09:10:00+01:00')});
  try{
   const who=String(staff._id),body={staff:who,action:'pause',reason:'Approved support break'};
+  await require('./models').Availability.deleteMany({staff:who,day:'2026-10-14'});
+  // Isolate this fixed-date example from earlier reconciliation tests using today's date.
+  await Sample.deleteMany({staff:who,startedAt:{$gte:new Date('2026-10-14T00:00:00+01:00'),$lt:new Date('2026-10-15T00:00:00+01:00')}});
   assert.equal((await request('/earnings/control',body)).status,403);
   assert.equal((await request('/earnings/control',body,true)).status,200);
   assert.equal((await request('/earnings/control',body,true)).status,200);
@@ -151,5 +154,19 @@ test('reconciliation loads automation metadata and rebuilds handoff waits',async
  await Message.create({conversation:c._id,direction:'outbound',type:'text',status:'sent',author:'admin',clientKey:'course-link:timing-fixture',createdAt:new Date('2026-10-12T10:15:00+01:00')});
  await Message.create({conversation:c._id,direction:'outbound',type:'text',status:'sent',author:String(staff._id),createdAt:new Date('2026-10-12T10:30:00+01:00')});
  await require('./worker').reconcile(await Conversation.findById(c._id).lean(),{...defaults,startsAt:new Date('2026-10-01')});
- const rows=await Sample.find({conversation:c._id,status:'answered'}).lean();assert.equal(rows.length,1);assert.equal(+rows[0].endedAt-rows[0].startedAt,20*60000);assert.equal((await Conversation.findById(c._id)).earningsVersion,3);
+ const rows=await Sample.find({conversation:c._id,status:'answered'}).lean();assert.equal(rows.length,1);assert.equal(+rows[0].endedAt-rows[0].startedAt,20*60000);assert.equal((await Conversation.findById(c._id)).earningsVersion,4);
+});
+
+test('resolved samples reconcile once and later human replies update rather than duplicate them',async()=>{
+ const contact=await Contact.create({name:'Resolved fixture',phone:'2348000000099'});
+ const at=x=>new Date(`2026-10-12T${x}:00+01:00`);
+ let c=await Conversation.create({contact:contact._id,assignedTo:other._id,earningsResolutions:[{at:at('15:10'),by:String(other._id),status:'resolved'}]});
+ const q=await Message.create({conversation:c._id,direction:'inbound',type:'text',status:'received',text:'Okay',createdAt:at('15:00')});
+ const cfg={...defaults,startsAt:at('00:00')},worker=require('./worker');
+ await worker.reconcile(c.toObject(),cfg);await worker.reconcile(c.toObject(),cfg);
+ let samples=await Sample.find({conversation:c._id});assert.equal(samples.length,1);assert.equal(+samples[0].endedAt,+at('15:10'));
+ await Message.create({conversation:c._id,direction:'outbound',type:'text',status:'sent',text:'Reminder',author:'admin',automation:{followup:new mongoose.Types.ObjectId()},createdAt:at('17:00')});
+ await worker.reconcile(c.toObject(),cfg);assert.equal(+(await Sample.findOne({conversation:c._id})).endedAt,+at('15:10'));
+ await Message.create({conversation:c._id,direction:'outbound',type:'text',status:'sent',text:'Details',author:String(other._id),createdAt:at('18:00')});
+ await worker.reconcile(c.toObject(),cfg);samples=await Sample.find({conversation:c._id});assert.equal(samples.length,1);assert.equal(+samples[0].endedAt,+at('18:00'));assert.equal(String(samples[0].inbound),String(q._id));
 });

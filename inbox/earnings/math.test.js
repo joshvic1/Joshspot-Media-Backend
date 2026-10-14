@@ -90,3 +90,43 @@ test('normal AI answer before handoff leaves no unanswered period to charge',()=
  {_id:'a',direction:'outbound',author:'ai',status:'sent',createdAt:at('12T10:01:00')}
  ],at('12T00:00:00'));assert.equal(rows.length,0);
 });
+
+test('resolution counts the full wait and a later staff reply extends the same sample once',()=>{
+ const c={assignedTo:'A',earningsResolutions:[{at:at('12T15:10:00'),by:'A',status:'resolved'}]};
+ const messages=[{_id:'q',direction:'inbound',createdAt:at('12T15:00:00')}];
+ let rows=replay(c,messages,at('12T00:00:00'));
+ assert.equal(rows.length,1);assert.equal(summarize(rows,defaults,at('13T12:00:00'))[0].averageMs,10*60000);
+ messages.push({_id:'reply',direction:'outbound',author:'A',status:'sent',createdAt:at('12T16:00:00')});
+ rows=replay(c,messages,at('12T00:00:00'));assert.equal(rows.length,1);assert.equal(rows[0].reply,'reply');
+ assert.equal(summarize(rows,defaults)[0].averageMs,60*60000);
+ c.earningsResolutions[0].at=at('12T16:00:00');
+ assert.equal(summarize(replay(c,messages.slice(0,1),at('12T00:00:00')),defaults)[0].averageMs,60*60000);
+});
+test('new inbound after resolving preserves the old sample and starts a fresh wait',()=>{
+ const c={assignedTo:'A',earningsResolutions:[{at:at('12T15:10:00'),by:'A',status:'resolved'}]};
+ const rows=replay(c,[{_id:'q',direction:'inbound',createdAt:at('12T15:00:00')},{_id:'new',direction:'inbound',createdAt:at('12T17:00:00')},{_id:'reply',direction:'outbound',author:'A',status:'sent',createdAt:at('12T17:20:00')}],at('12T00:00:00'));
+ assert.equal(rows.length,2);assert.equal(+rows[0].endedAt,+at('12T15:10:00'));assert.equal(+rows[1].startedAt,+at('12T17:00:00'));
+ assert.equal(summarize(rows,defaults)[0].averageMs,15*60000);
+});
+test('notes, failed replies and automated reminders cannot extend a resolved wait',()=>{
+ const c={assignedTo:'A',earningsResolutions:[{at:at('12T15:10:00'),by:'A',status:'resolved'}]};
+ const messages=[{_id:'q',direction:'inbound',createdAt:at('12T15:00:00')},
+ {direction:'internal',author:'A',createdAt:at('12T16:00:00')},
+ {direction:'outbound',author:'A',status:'failed',createdAt:at('12T16:30:00')},
+ ...[{author:'admin',automation:{followup:'invoice'}},{author:'admin',courseReminder:{invoice:'course'}},{author:'ai'},{author:'admin',clientKey:'course-link:example'}].map(m=>({...m,direction:'outbound',status:'sent',createdAt:at('13T13:00:00')}))];
+ const rows=replay(c,messages,at('12T00:00:00'));assert.equal(rows.length,1);assert.equal(summarize(rows,defaults,at('14T12:00:00'))[0].averageMs,10*60000);
+});
+test('transfer after resolution cannot erase earlier time when staff later reply',()=>{
+ const c={assignedTo:'B',earningsOwnership:[{at:at('12T15:30:00'),from:'A',to:'B'}],earningsResolutions:[{at:at('12T15:10:00'),by:'A',status:'resolved'}]};
+ const messages=[{_id:'q',direction:'inbound',createdAt:at('12T15:00:00')}];
+ assert.equal(summarize(replay(c,messages,at('12T00:00:00')),defaults)[0].averageMs,10*60000);
+ messages.push({_id:'reply',direction:'outbound',author:'B',status:'sent',createdAt:at('12T16:00:00')});
+ const rows=replay(c,messages,at('12T00:00:00'));assert.equal(rows.length,2);
+ for(const staff of ['A','B'])assert.equal(summarize(rows.filter(r=>r.staff===staff),defaults)[0].averageMs,30*60000);
+});
+
+test('a different human replying after resolution cannot erase the recorded handling time',()=>{
+ const c={assignedTo:'A',earningsResolutions:[{at:at('12T15:10:00'),by:'A',status:'resolved'}]};
+ const rows=replay(c,[{_id:'q',direction:'inbound',createdAt:at('12T15:00:00')},{_id:'admin-reply',direction:'outbound',author:'admin',status:'sent',createdAt:at('12T16:00:00')}],at('12T00:00:00'));
+ assert.equal(rows.length,1);assert.equal(summarize(rows,defaults)[0].averageMs,60*60000);
+});

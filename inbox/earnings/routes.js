@@ -45,9 +45,9 @@ async function report(staff,from,to,cfg,{actor,latePage}={}){
  }
  // Count actual late replies once, even when a reply answers several inbound messages.
  const lateByReply=new Map();
- for(const row of rows){if(row.status!=='answered'||row.exclusion?.reason||!row.reply)continue;
+ for(const row of rows){if(row.status!=='answered'||row.exclusion?.reason||(!row.reply&&!row.resolvedAt))continue;
   const rule=months.find(m=>m.month===dayKey(row.startedAt).slice(0,7)).rule;
-  if(responseMs(row.timingStartedAt||row.startedAt,row.endedAt,rule,breaks)>rule.graceMinutes*60000)lateByReply.set(String(row.reply),row);
+  if(responseMs(row.timingStartedAt||row.startedAt,row.endedAt,rule,breaks)>rule.graceMinutes*60000)lateByReply.set(String(row.reply||row.inbound),row);
  }
  const lateRows=[...lateByReply.values()].sort((a,b)=>+new Date(b.endedAt)-+new Date(a.endedAt)||String(b.reply).localeCompare(String(a.reply)));
  let lateResponses;
@@ -55,8 +55,8 @@ async function report(staff,from,to,cfg,{actor,latePage}={}){
   const pageRows=lateRows.slice(latePage*24,(latePage+1)*24);
   const {Conversation,Message}=require('../models');
   const chats=await Conversation.find({_id:{$in:pageRows.map(r=>r.conversation)},deleting:{$ne:true},...(actor?.admin?{}:{assignedTo:actor?.id||null})}).populate('contact','name deleting').select('_id contact').lean();
-  const replies=await Message.find({_id:{$in:pageRows.map(r=>r.reply)},conversation:{$in:chats.map(c=>c._id)},direction:'outbound'}).select('_id conversation').lean();
-  lateResponses={items:pageRows.map((r,i)=>{const chat=chats.find(c=>String(c._id)===String(r.conversation)&&!c.contact?.deleting);const available=chat&&replies.some(m=>String(m._id)===String(r.reply)&&String(m.conversation)===String(chat._id));return {number:latePage*24+i+1,name:available?(chat.contact?.name||'Unnamed contact'):'Chat unavailable',...(available?{conversation:String(chat._id),message:String(r.reply)}:{}),available:Boolean(available)};}),next:(latePage+1)*24<lateRows.length?latePage+1:null};
+  const replies=await Message.find({_id:{$in:pageRows.map(r=>r.reply||r.inbound)},conversation:{$in:chats.map(c=>c._id)}}).select('_id conversation').lean();
+  lateResponses={items:pageRows.map((r,i)=>{const chat=chats.find(c=>String(c._id)===String(r.conversation)&&!c.contact?.deleting);const available=chat&&replies.some(m=>String(m._id)===String(r.reply||r.inbound)&&String(m.conversation)===String(chat._id));return {number:latePage*24+i+1,name:available?(chat.contact?.name||'Unnamed contact'):'Chat unavailable',...(available?{conversation:String(chat._id),message:String(r.reply||r.inbound)}:{}),available:Boolean(available)};}),next:(latePage+1)*24<lateRows.length?latePage+1:null};
  }
  const answered=days.reduce((s,d)=>s+d.answered,0),pending=days.reduce((s,d)=>s+d.pending,0),transferred=days.reduce((s,d)=>s+(d.transferred||0),0),count=answered+pending+transferred;
  return {timerPaused:Boolean(await Control.exists({staff,kind:'pause',active:true})),controlHistory:controls.map(c=>({kind:c.kind,from:c.from,to:c.to,at:c.at,reason:c.reason,active:c.active,resumedAt:c.resumedAt})),lateCount:lateRows.length,...(lateResponses?{lateResponses}:{}),days:days.sort((a,b)=>b.day.localeCompare(a.day)),months,answered,pending,transferred,averageMs:days.reduce((s,d)=>s+d.totalMs,0)/(count||1),withinGrace:days.reduce((s,d)=>s+d.withinGrace,0),excluded:days.reduce((s,d)=>s+d.excluded,0),deduction:months.reduce((s,m)=>s+(m.finalizedAt&&m.wholeMonth?m.finalTotal:m.estimate),0),samples:rows.slice(0,100).map(r=>({id:r._id,inbound:r.inbound,reply:r.reply,conversation:r.conversation,startedAt:r.startedAt,endedAt:r.endedAt,status:r.exclusion?.reason?'excluded_by_admin':r.status,exclusion:r.exclusion,workingMinutes:responseMs(r.timingStartedAt||r.startedAt,r.endedAt||now,months.find(m=>m.month===dayKey(r.startedAt).slice(0,7)).rule,breaks)/60000})),sampleCount:rows.length};
@@ -114,7 +114,7 @@ function routes(router,wrap,rateLimit){
   const today=dayKey(new Date()),from=req.query.from||`${today.slice(0,7)}-01`,to=req.query.to||today;
   if(!/^\d{4}-\d{2}-\d{2}$/.test(from)||!/^\d{4}-\d{2}-\d{2}$/.test(to)||!Number.isFinite(+dayStart(from))||!Number.isFinite(+dayStart(to))||from>to||(+dayStart(to)-dayStart(from))/DAY>366||to>today)fail(400,'Choose a valid date range of at most one year, ending today or earlier.');
   if(req.query.latePage!==undefined&&(!/^\d+$/.test(req.query.latePage)||Number(req.query.latePage)>1000))fail(400,'Invalid late-response page.');
-  const {Conversation}=require('../models');const outstanding=await Conversation.countDocuments({$or:[{earningsDirty:true},{earningsVersion:{$ne:3}}],deleting:{$ne:true},...(req.actor.admin?{}:{assignedTo:staff})});
+  const {Conversation}=require('../models');const outstanding=await Conversation.countDocuments({$or:[{earningsDirty:true},{earningsVersion:{$ne:4}}],deleting:{$ne:true},...(req.actor.admin?{}:{assignedTo:staff})});
   const data=staff&&cfg.startsAt?await report(staff,from,to,cfg,{actor:req.actor,latePage:req.query.latePage===undefined?undefined:Number(req.query.latePage)}):{days:[],months:[],samples:[],answered:0,pending:0,averageMs:0,deduction:0};
   res.json({...data,staff,people,config:cfg,from,to,outstanding});
  }));
@@ -149,7 +149,7 @@ function routes(router,wrap,rateLimit){
    const updated=await Month.updateOne({_id:ledger._id,finalizedAt:null},{$push:{adjustments:{amount,reason:reason.trim(),at:new Date(),by:req.actor.id}}});if(!updated.matchedCount)fail(409,'Month has already been finalized.');
   }else if(action==='finalize'){
    if(month>=dayKey(new Date()).slice(0,7))fail(400,'Only a completed month can be finalized.');
-   const {Conversation}=require('../models');if(await Conversation.exists({$or:[{earningsDirty:true},{earningsVersion:{$ne:3}}],deleting:{$ne:true}}))fail(409,'Wait for response tracking to finish reconciling before finalizing.');
+   const {Conversation}=require('../models');if(await Conversation.exists({$or:[{earningsDirty:true},{earningsVersion:{$ne:4}}],deleting:{$ne:true}}))fail(409,'Wait for response tracking to finish reconciling before finalizing.');
    const to=new Date(Date.UTC(Number(month.slice(0,4)),Number(month.slice(5)),0)).toISOString().slice(0,10);const data=await report(staff,`${month}-01`,to,cfg);
    if(data.pending)fail(409,'This month still has unanswered messages. Resolve or review them before finalizing.');
    const changed=await Month.updateOne({_id:ledger._id,finalizedAt:null,updatedAt:ledger.updatedAt},{$set:{finalizedAt:new Date(),finalizedBy:req.actor.id,finalTotal:data.deduction,snapshot:{days:data.days,answered:data.answered,excluded:data.excluded}}});if(!changed.matchedCount)fail(409,'Statement changed. Refresh and review before finalizing.');

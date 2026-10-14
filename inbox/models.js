@@ -21,7 +21,7 @@ const conversation = new Schema({
   reads: { type: Map, of: Schema.Types.ObjectId, default: {} }, lastInboundId: Schema.Types.ObjectId, resolvedAt: Date,
 }, { timestamps: true });
 conversation.index({ contact: 1, channel: 1 }, { unique: true });
-conversation.add({earningsVersion: {type:Number,default:0}, earningsDirty:{type:Boolean,default:true},earningsCheckedAt:Date,earningsLease:Date,earningsError:String,earningsOwnership:[{at:Date,from:String,to:String}]});
+conversation.add({earningsVersion: {type:Number,default:0}, earningsDirty:{type:Boolean,default:true},earningsCheckedAt:Date,earningsLease:Date,earningsError:String,earningsResolutions:[{at:Date,by:String,status:String}],earningsOwnership:[{at:Date,from:String,to:String}]});
 conversation.index({earningsDirty:1,earningsCheckedAt:1});
 conversation.index({earningsVersion:1,earningsCheckedAt:1});
 // Capture assignment changes in the same atomic update as the assignment itself.

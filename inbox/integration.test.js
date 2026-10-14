@@ -1070,3 +1070,15 @@ test('CRM detail views are contact scoped, mask staff phones and restrict invoic
  assert.equal((await request(`${path}/Invoice/${invoice._id}`)).status,404);
  await Client.deleteOne({_id:setup._id});
 });
+
+test('resolving records an atomic timing event, keeps assignment and inbound reopens',async()=>{
+ const c=await fixture();
+ const result=await request(`/conversations/${c._id}`,{role:'agent',method:'PUT',body:{status:'resolved',revision:c.revision}});
+ assert.equal(result.status,200);
+ let saved=await Conversation.findById(c._id);assert.equal(saved.status,'resolved');assert.equal(String(saved.assignedTo),String(agent._id));assert.equal(saved.earningsResolutions.length,1);assert.equal(saved.earningsResolutions[0].by,String(agent._id));
+ const activity=await Message.findOne({conversation:c._id,type:'activity',text:/marked this conversation as resolved/i});assert.ok(activity);assert.equal(activity.authorName,'Agent One');
+ assert.equal((await request(`/conversations/${c._id}`,{role:'agent',method:'PUT',body:{status:'resolved',revision:c.revision}})).status,409);
+ assert.equal((await Conversation.findById(c._id)).earningsResolutions.length,1);
+ await service.receive(inbound('wamid.reopen-resolution'));
+ saved=await Conversation.findById(c._id);assert.equal(saved.status,'open');assert.equal(String(saved.assignedTo),String(agent._id));assert.equal(saved.earningsResolutions.length,1);
+});

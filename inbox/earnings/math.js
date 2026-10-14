@@ -32,12 +32,33 @@ function deduction(averageMs,rule){return Math.max(0,Math.floor((averageMs-rule.
 function replay(conversation,messages,startAt){
  const changes=(conversation.earningsOwnership||[]).filter(x=>+new Date(x.at)>=+startAt).sort((a,b)=>+new Date(a.at)-+new Date(b.at));
  let owner=changes.length?String(changes[0].from||''):String(conversation.assignedTo||'');
- const events=[...changes.map(x=>({kind:'owner',at:new Date(x.at),owner:String(x.to||'')})),...messages.map(m=>({kind:'message',at:new Date(m.createdAt),message:m}))].sort((a,b)=>a.at-b.at||(a.kind==='owner'?-1:1));
- let waiting=[],rows=[];
- function close(at,status,reply){for(const row of waiting){row.endedAt=at;row.status=status;row.reply=reply||null;}waiting=[];}
+ const resolutions=(conversation.earningsResolutions||[]).filter(x=>+new Date(x.at)>=+startAt).map(x=>({kind:'resolution',at:new Date(x.at),status:x.status,by:x.by}));
+ const events=[...resolutions,...changes.map(x=>({kind:'owner',at:new Date(x.at),owner:String(x.to||'')})),...messages.map(m=>({kind:'message',at:new Date(m.createdAt),message:m}))].sort((a,b)=>a.at-b.at||(a.kind==='owner'?-1:1));
+ let waiting=[],rows=[],suspended=[],deferredOwners=[];
+ function restore(){
+  if(!suspended.length)return;
+  waiting=suspended;suspended=[];
+  for(const row of waiting){row.status='pending';row.endedAt=null;}
+  for(const change of deferredOwners){
+   const pending=waiting.map(r=>({inbound:r.inbound,startedAt:r.startedAt,staff:r.staff}));
+   close(change.at,'transferred');
+   for(const item of pending){const row={key:`${item.inbound}:${change.at.toISOString()}`,inbound:item.inbound,staff:change.owner,startedAt:item.staff?change.at:item.startedAt,status:'pending'};rows.push(row);waiting.push(row);}
+  }
+  deferredOwners=[];
+ }
+ function close(at,status,reply){for(const row of waiting){row.endedAt=at;row.status=status==='covered_by_other'&&row.resolvedAt?'answered':status;row.reply=reply||null;}waiting=[];}
  for(const e of events){
+  if(e.kind==='resolution'){
+   if(e.status==='resolved'&&waiting.length){
+    suspended=[...waiting];deferredOwners=[];
+    for(const row of suspended){row.resolvedAt=e.at;row.resolvedBy=e.by;}
+    close(e.at,'answered');
+   }else if(e.status!=='resolved')restore();
+   continue;
+  }
   if(e.kind==='owner'){
    if(owner!==e.owner){
+    if(suspended.length){deferredOwners.push(e);owner=e.owner;continue;}
     const previousOwner=owner,pending=waiting.map(r=>({inbound:r.inbound,startedAt:r.startedAt}));
     close(e.at,'transferred');owner=e.owner;
     for(const item of pending){const row={key:`${item.inbound}:${e.at.toISOString()}`,inbound:item.inbound,staff:owner,startedAt:previousOwner?e.at:item.startedAt,status:'pending'};rows.push(row);waiting.push(row);}
@@ -46,6 +67,7 @@ function replay(conversation,messages,startAt){
   }
   const m=e.message;
   if(m.direction==='inbound'){
+   suspended=[];deferredOwners=[];
    // Keep unassigned waiters without charging anyone; assignment adopts the latest inbound time.
    // A new consecutive inbound replaces the previous unanswered start for this owner.
    close(e.at,'superseded');
@@ -54,7 +76,8 @@ function replay(conversation,messages,startAt){
    const automated=m.author==='ai'||Boolean(m.automation)||Boolean(m.courseReminder)||String(m.clientKey||'').startsWith('course-link:');
    // Automated acknowledgments never discharge an assigned human response obligation.
    // A handoff acknowledgment before assignment must also retain the customer wait.
-   if(automated&&(owner||m.automation?.handoff))continue;
+   if(automated&&(owner||suspended.length||m.automation?.handoff))continue;
+   if(!automated)restore();
    // Receipt confirms success; use staff submit time, excluding provider queue delay.
    close(e.at,String(m.author)===owner&&owner?'answered':'covered_by_other',m._id);
   }

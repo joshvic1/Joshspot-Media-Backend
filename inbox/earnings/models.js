@@ -1,7 +1,7 @@
 const mongoose=require('mongoose');
 const {Schema}=mongoose;
 const config=new Schema({_id:String,enabled:{type:Boolean,default:false},startsAt:Date,graceMinutes:{type:Number,default:15},blockMinutes:{type:Number,default:5},blockAmount:{type:Number,default:1000},monthlyCap:{type:Number,default:100000},startHour:{type:Number,default:8},endHour:{type:Number,default:20},days:{type:[Number],default:[1,2,3,4,5,6]}},{timestamps:true});
-const sample=new Schema({key:{type:String,unique:true},conversation:{type:Schema.Types.ObjectId,index:true},inbound:Schema.Types.ObjectId,reply:Schema.Types.ObjectId,staff:String,startedAt:Date,endedAt:Date,status:String,exclusion:{reason:String,at:Date,by:String}});sample.index({staff:1,startedAt:1});
+const sample=new Schema({key:{type:String,unique:true},conversation:{type:Schema.Types.ObjectId,index:true},inbound:Schema.Types.ObjectId,reply:Schema.Types.ObjectId,staff:String,startedAt:Date,endedAt:Date,resolvedAt:Date,resolvedBy:String,status:String,exclusion:{reason:String,at:Date,by:String}});sample.index({staff:1,startedAt:1});
 const month=new Schema({key:{type:String,unique:true},staff:String,month:String,rule:Schema.Types.Mixed,finalizedAt:Date,finalizedBy:String,finalTotal:Number,snapshot:Schema.Types.Mixed,adjustments:[{amount:Number,reason:String,at:Date,by:String}]},{timestamps:true});
 month.index({staff:1,month:1});
 const availability=new Schema({_id:String,staff:String,day:String,revision:{type:Number,default:0},offline:{type:Boolean,default:false},intervals:[{start:Date,end:Date}]},{timestamps:true});availability.index({staff:1,day:1},{unique:true});

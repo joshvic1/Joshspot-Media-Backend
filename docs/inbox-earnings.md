@@ -40,3 +40,13 @@ The Inbox list header offers a staff-only Online/Offline switch. Status is expli
 Admin → Staff earnings → choose staff → Response timer controls. A reason is required. Reset uses the selected date range: completed waits before reset are excluded; a wait still unanswered at reset restarts from the reset timestamp. Subsequent elapsed time counts, including after delayed reconciliation. New customer waits continue normally. Messages and offline deductions are preserved. Finalized months cannot be reset. Pause records a server-timed open interval, persists across days/devices/restarts, and ends only when admin resumes. Response time before pause remains; offline and admin-pause overlaps are merged to avoid double subtraction. Staff can view pause status and timer-change history but cannot invoke controls.
 
 Timing version 2 is reconciled in bounded worker batches for older conversations. Finalized snapshots remain unchanged; finalization waits for reconciliation.
+
+## Resolution timing (version 4)
+
+New resolutions are recorded atomically with status in earningsResolutions (actor and timestamp). Assignment stays unchanged; the inline activity names the resolving staff member. A new customer message reopens the conversation.
+
+Resolution completes the pending waiting sample at the resolution time, without exemption. This is counted as a completed handling period in the existing answered aggregate, with resolvedAt/resolvedBy metadata. A successful human reply without intervening customer input extends that same sample to the staff submission time, without duplication. Ownership transfers during the interval are split if a later reply extends it. New customer input after resolution preserves the completed period and starts a separate one.
+
+Notes, activities, failed sends, AI messages, invoice follow-ups, course reminders and course-link automation do not extend resolved samples. Working hours, Sunday exclusions, offline and admin pauses still apply. Late resolutions appear in the late list, linked to the customer message.
+
+Historical resolutions without structured events are not guessed from activity text. Finalized month snapshots remain locked. This local implementation does not deploy or edit production data.

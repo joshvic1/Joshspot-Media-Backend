@@ -271,7 +271,7 @@ router.put('/conversations/:id', wrap(async (req, res) => {
     if ('status' in req.body) {
       if (!['open', 'follow_up', 'resolved'].includes(req.body.status)) fail(400, 'Invalid conversation status.');
       changes.status = req.body.status; changes.resolvedAt = req.body.status === 'resolved' ? new Date() : null;
-      descriptions.push(`Marked ${req.body.status.replace('_', ' ')}`);
+      descriptions.push(req.body.status === 'resolved' ? 'Marked this conversation as resolved' : `Marked ${req.body.status.replace('_', ' ')}`);
       if (req.body.status !== 'follow_up') changes.followUpAt = null;
     }
     if ('labels' in req.body) {
@@ -291,7 +291,7 @@ router.put('/conversations/:id', wrap(async (req, res) => {
     }
   }
   if (!Object.keys(changes).length) fail(400, 'No changes supplied.');
-  const updated = await Conversation.findOneAndUpdate(scoped(req, { _id: current._id, revision: req.body.revision }), { $set: changes, $inc: { revision: 1 } }, { returnDocument: 'after' });
+  const updated = await Conversation.findOneAndUpdate(scoped(req, { _id: current._id, revision: req.body.revision }), { $set: changes, $inc: { revision: 1 }, ...(changes.status && changes.status !== current.status ? { $push: { earningsResolutions: { at: changes.resolvedAt || new Date(), by: req.actor.id, status: changes.status } } } : {}) }, { returnDocument: 'after' });
   if (!updated) fail(409, 'This conversation changed. Refresh and try again.');
   if(changes.assignedTo && String(current.assignedTo)!==String(changes.assignedTo))await require('./push').record(`assignment:${current._id}:${updated.revision}`,'assignments',current._id,adminIdentity.pushRecipient(changes.assignedTo)).catch(()=>{});
   await service.activity(current._id, req.actor, descriptions.join(' · '));
