@@ -21,7 +21,7 @@ async function resolve({plan,state,messages,records,ports,simulation=true,config
  next.purchaseItems||=[];next.ownership||='AI';
  if(next.ownership==='HUMAN')throw new Error('V4_HUMAN_OWNS_CONVERSATION');
  const pack={requests:plan.current_requests,priorUnresolved:state.unresolvedRequests||[],purchase:[],customerFacts:plan.facts,facts,knowledge:[],plans:[],quote:null,actions,missing:[],allowedQuestions:[],readiness:plan.readiness.value,verifiedPayment:null};
- const service=(p,s)=>{const rows=records.filter(r=>r.kind==='service'&&r.data.serviceType===dbService(s)&&(s==='COURSE'||r.data.platforms?.includes(platform(p).toLowerCase())));return rows.length===1?rows[0]:null;};
+ const service=(p,s)=>{const rows=records.filter(r=>r.kind==='service'&&r.data.serviceType===dbService(s)&&(r.data.platforms?.includes(platform(p).toLowerCase())||(s==='COURSE'&&p==='UNKNOWN'&&r.key==='ads_video_course')));return rows.length===1?rows[0]:null;};
  function fact(role,value,source,field,p='UNKNOWN',s='UNKNOWN'){facts.push({type:typeof value==='number'?'MONEY':'FACT',role,value,source,field,platform:p,service:s});}
  const stopHuman=plan.current_requests.some(r=>r.type==='REQUEST_HUMAN');
  // Human escalation has priority over optional business retrieval, but only its

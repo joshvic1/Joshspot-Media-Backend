@@ -76,3 +76,20 @@ test('composer receives delivered history and current interruption, not failed d
  await decide({config,records:records(),messages,state,ports:ports(state),api,history:[{direction:'outbound',status:'sent',text:'Which platform?'},{direction:'inbound',text:'TikTok'},{direction:'outbound',status:'failed',text:'What is your budget?'}]});
  assert.equal(seen.conversation.history.length,2);assert.equal(seen.conversation.current[0].text,e.text);assert.ok(!seen.allowedQuestions.includes('platform'));
 });
+
+// Product resolution checks use fixture interpretations, not paid model calls.
+test('WhatsApp course resolves its own price/link; no invoice and no ads-course mixup',async()=>{
+ const rows=require('../courseCatalogue').withCourseDefaults(records());
+ const r=await resolve({plan:plan('ASK_COURSE_DETAILS','COURSE','WHATSAPP'),state:{},messages,records:rows,ports:ports(),simulation:true,config});
+ assert.ok(r.pack.facts.some(f=>f.role==='course_price'&&f.value===10000));
+ assert.ok(r.pack.facts.some(f=>f.role==='url'&&f.value==='https://joshspotmedia.com/whatsapp'));
+ assert.ok(!r.pack.facts.some(f=>f.value===8000));
+ assert.equal(r.pack.actions.invoice,undefined);assert.equal(r.pack.actions.handoff,undefined);
+ const ads=await resolve({plan:plan('ASK_COURSE_DETAILS','COURSE','META'),state:{},messages,records:rows,ports:ports(),simulation:true,config});
+ assert.ok(ads.pack.facts.some(f=>f.role==='course_price'&&f.value===8000));
+ assert.ok(!ads.pack.facts.some(f=>f.value===10000));
+});
+test('course default never re-enables a disabled business record',()=>{
+ const rows=[{key:'whatsapp_status_course',enabled:false}];
+ assert.deepEqual(require('../courseCatalogue').withCourseDefaults(rows),rows);
+});

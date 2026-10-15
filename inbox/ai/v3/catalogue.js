@@ -7,7 +7,12 @@ function catalogue(records){
  if(JSON.stringify(index).length>70000)throw new Error('V3_KNOWLEDGE_INDEX_TOO_LARGE');
  return {rows,index,revision};
 }
-async function load(){return require('../models').Record.find({enabled:true,archived:false,kind:{$in:['service','plan','knowledge']}}).sort({kind:1,key:1}).limit(501).lean();}
+async function load(){
+ const Record=require('../models').Record;
+ const records=await Record.find({enabled:true,archived:false,kind:{$in:['service','plan','knowledge']}}).sort({kind:1,key:1}).limit(501).lean();
+ const configured=await Record.findOne({kind:'service',key:'whatsapp_status_course'}).lean();
+ return configured ? records : require('../courseCatalogue').withCourseDefaults(records);
+}
 // Old STRICT flags frequently describe qualification templates. V3 treats these
 // as preferred wording, not another response authority. Exact payment text is
 // supplied and validated by the financial tool, never by a legacy KB template.

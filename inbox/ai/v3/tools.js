@@ -16,7 +16,7 @@ function dispatcher({catalogue,state,messages,history,api,ports,simulation=true,
    switch(call.name){
     case 'get_services':result=rows.filter(r=>r.kind==='service').map(r=>({key:r.key,title:r.title,...r.data}));break;
     case 'get_service_details':{const r=rows.find(r=>r.kind==='service'&&r.key===args.key);result=r?{key:r.key,title:r.title,...r.data}:fail('SERVICE_UNAVAILABLE');break;}
-    case 'resolve_service':{const matches=rows.filter(r=>r.kind==='service'&&r.data.serviceType===args.service&&(!args.platform||r.data.platforms?.includes(args.platform)));result=matches.length===1?{key:matches[0].key,title:matches[0].title,...matches[0].data}:fail('CLARIFY_SERVICE_SELECTION');break;}
+    case 'resolve_service':{const matches=rows.filter(r=>r.kind==='service'&&r.data.serviceType===args.service&&(args.platform?r.data.platforms?.includes(args.platform):(args.service!=='course'||r.key==='ads_video_course')));result=matches.length===1?{key:matches[0].key,title:matches[0].title,...matches[0].data}:fail('CLARIFY_SERVICE_SELECTION');break;}
     case 'get_recommended_ads_plans':result=await pricing.plans(rows);break;
     case 'get_business_knowledge':{
      const entries=args.keys.map(key=>rows.find(r=>r.kind==='knowledge'&&r.key===key));

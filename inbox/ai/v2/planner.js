@@ -40,7 +40,8 @@ async function plan({core,state,interpretation:i,context,records,knowledge,unsup
  if(i.negotiation?.value&&evidenced(i.negotiation.evidence,context)||(i.budgets||[]).some(b=>b.kind==='COUNTEROFFER'&&evidenced(b.evidence,context)))policy('negotiation');
  const decision=consent.effective(core),needs=ledger.map(n=>n.type),recommending=i.recommendations.length>0||needs.some(n=>['ask_recommendation','ask_budget_advice'].includes(n));
  if(decision.blocked&&!i.questions.length&&!recommending)policy('deferred');
- const course=records.find(r=>r.kind==='service'&&r.data.serviceType==='course');
+ const courseRequest=require('../course').classify(context.messages.map(m=>m.text).join(' '));
+ const course=records.find(r=>r.kind==='service'&&r.enabled!==false&&!r.archived&&r.key===(courseRequest?.courseKey||'ads_video_course'));
  if(course)fact('course',`${course.title}\n\n${money(course.data.price)}\n${course.data.checkoutUrl||''}`,'PRICE',{kind:'service',key:course.key,amount:course.data.price,checkoutUrl:course.data.checkoutUrl},core.topic==='course'||needs.includes('ask_course_question'));
  const setupRecords=records.filter(r=>r.kind==='service'&&r.data.serviceType==='account_setup');
  fact('setup_prices',setupRecords.map(r=>`${r.title}: ${money(r.data.price)}`).join('\n'),'PRICE',{kind:'services',keys:setupRecords.map(r=>r.key)},false);

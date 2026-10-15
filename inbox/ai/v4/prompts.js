@@ -21,3 +21,5 @@ Return message, covered_request_ids for requests actually addressed, unsupported
 
 exports.interpreter+='\n'+require('../questionContinuity').instructions;
 exports.composer+='\n'+require('../questionContinuity').instructions;
+
+exports.interpreter += '\nWhatsApp Status adverts/training and WhatsApp ads course enquiries mean COURSE on WHATSAPP. TikTok/Facebook/Instagram training means COURSE on TIKTOK or META. Generic course references use the actual prior context; absent any WhatsApp context, the existing ads course is the default. Ads that send customers to WhatsApp from Meta are ADS_MANAGEMENT on META, not the WhatsApp course. If unclear, ask which they mean. A request to manage WhatsApp campaigns is not permission to sell training instead. Never assume WhatsApp setup or management is offered.';

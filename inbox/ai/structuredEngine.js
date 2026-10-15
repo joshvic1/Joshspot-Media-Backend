@@ -72,12 +72,12 @@ async function decide({text='',type='text',customerName='there',state={},config,
   const courseRequest=require('./course').classify(text,state,d);
   if(courseRequest){
     if(courseRequest.kind==='clarify')return {...base,action:'reply',response:'Do you mean the video training course, or your advertising budget?',state:next};
-    const course=records.find(r=>r.kind==='service'&&r.key==='ads_video_course'&&r.enabled!==false&&!r.archived);
+    const course=records.find(r=>r.kind==='service'&&r.key===(courseRequest.courseKey||'ads_video_course')&&r.enabled!==false&&!r.archived);
     if(!course||!(course.data.price>0))return handoff('NO_APPROVED_SERVICE');
     let link;try{link=new URL(course.data.checkoutUrl);if(link.protocol!=='https:')throw Error();}catch{return handoff('INCOMPLETE_KNOWLEDGE_CONTEXT');}
     const distinction=state.serviceType||courseRequest.kind==='reference'?' Account setup and ads management are separate services.':'';
     if(courseRequest.select){next.purchasePath='course';next.salesPaused=true;next.nextObjective='COURSE_CHECKOUT';next.lastRequiredQuestion='';next.customerWantsToProceed=false;next.paymentDetailsRequested=false;}
-    return {...base,action:'reply',response:`We have a video training course on how to run TikTok, Facebook and Instagram ads yourself, all for ${money(course.data.price)} only.${distinction}\n\nGet the course here:\n${link.href}`,state:next,knowledge:['ads_video_course'],debug:{...base.debug,courseRequest:courseRequest.kind,invoicePreserved:Boolean(state.invoiceId)}};
+    return {...base,action:'reply',response:`We have a video training course ${course.key==='whatsapp_status_course'?'on WhatsApp Status adverts':'on how to run TikTok, Facebook and Instagram ads yourself'}, all for ${money(course.data.price)} only.${distinction}\n\nGet the course here:\n${link.href}`,state:next,knowledge:[course.key],debug:{...base.debug,courseRequest:courseRequest.kind,invoicePreserved:Boolean(state.invoiceId)}};
   }
 
   const groundedPlatforms=qualification.platforms(text,state,d);

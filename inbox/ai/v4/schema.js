@@ -5,7 +5,7 @@ const arr=(items,maxItems=12)=>({type:'array',items,maxItems});
 const nil=s=>({anyOf:[s,{type:'null'}]});
 const num={type:'number',minimum:0.01,maximum:100000000};
 const days={type:'integer',minimum:1,maximum:365};
-const platforms=['TIKTOK','META','FACEBOOK','INSTAGRAM','UNKNOWN'];
+const platforms=['TIKTOK','META','FACEBOOK','INSTAGRAM','WHATSAPP','UNKNOWN'];
 const services=['ACCOUNT_SETUP','ADS_MANAGEMENT','COURSE','GENERAL_SUPPORT','UNKNOWN'];
 const requests=['ASK_PRICE','ASK_QUOTE','ASK_RECOMMENDATION','ASK_BREAKDOWN','ASK_REQUIREMENTS','ASK_SERVICE_INCLUSIONS','ASK_EXPECTED_RESULTS','ASK_CREATIVE_REQUIREMENTS','ASK_TECHNICAL_HELP','ASK_COURSE_DETAILS','ASK_PAYMENT_DETAILS','CLAIM_PAYMENT','REQUEST_HUMAN','NEGOTIATE','OTHER'];
 const fields=['service','platform','budget','budget_basis','duration','package','allocation','proceed','payment','clarification'];

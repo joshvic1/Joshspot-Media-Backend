@@ -1,5 +1,5 @@
 // Course references never rewrite an existing service quote or invoice.
-function classify(text,state={},decision={}) {
+function classifyLegacy(text,state={},decision={}) {
  const t=text.toLowerCase();
  const course=!/\bof course\b/.test(t)&&/\b(?:course|video training|video tutorial|training video)\b/.test(t);
  const learning=/\b(?:learn|learning|teach me|training|tutorial)\b/.test(t)&&/\b(?:ads?|advertising|tiktok|facebook|instagram)\b/.test(t);
@@ -18,5 +18,15 @@ function classify(text,state={},decision={}) {
  if(!budget&&!bargain&&['reference','purchase','learning','clarify'].includes(decision.courseRequest)&&(!setupContext||!['learning'].includes(decision.courseRequest)))return {kind:decision.courseRequest,select:['purchase','learning'].includes(decision.courseRequest)};
  if(state.purchasePath==='course'&&/^(?:yes|okay|ok|send (?:the )?(?:link|account)|how (?:do|can) i pay)[.!?\s]*$/.test(t))return {kind:'course',select:true};
  return null;
+}
+function classify(text,state={},decision={}) {
+ const t=String(text).toLowerCase();
+ const whatsapp=/\bwhats\s*app\b/.test(t);
+ const destination=/\b(?:facebook|instagram|meta)\b/.test(t)&&/\b(?:messages?|inbox|send|direct|click)\b/.test(t);
+ const reject=/\b(?:don.t want|do not want|not interested in)\b/.test(t);
+ if(whatsapp&&!destination&&!reject&&/\b(?:status|ads?|adverts?|course|training|learn|tutorial)\b/.test(t))
+  return {kind:'course',select:false,courseKey:'whatsapp_status_course'};
+ const result=classifyLegacy(text,state,decision);
+ return result ? {...result,courseKey:'ads_video_course'} : null;
 }
 module.exports={classify};
