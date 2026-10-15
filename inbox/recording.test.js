@@ -20,3 +20,15 @@ for(const [format,codec,extra] of [['webm','libopus',[]],['mp4','aac',['-movflag
  });
 }
 test('invalid recording is rejected',async()=>{await assert.rejects(convert(Buffer.from('not audio')),/Could not process/);});
+
+test('non-fragmented Safari-style MP4 with metadata at the end is seekable without storing the upload',async()=>{
+ const fs=require('node:fs'),os=require('node:os'),path=require('node:path');
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'audio-fixture-'));
+ try{
+  const file=path.join(dir,'recording.m4a');run(['-f','lavfi','-i','sine=frequency=440:duration=30','-c:a','aac',file]);
+  const source=fs.readFileSync(file);assert.ok(source.indexOf(Buffer.from('moov'))>source.indexOf(Buffer.from('mdat')));
+  const output=await convert(source);const decoded=run(['-i','pipe:0','-f','s16le','pipe:1'],output);
+  assert.ok(decoded.stdout.length>29*48000*2);
+  const mp3=await require('./playback')(source);assert.ok(run(['-i','pipe:0','-f','s16le','pipe:1'],mp3).stdout.length>29*44100*2);assert.match(decoded.stderr.toString(),/Audio: opus, 48000 Hz, mono/);
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
