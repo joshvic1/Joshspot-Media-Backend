@@ -1,5 +1,5 @@
 const {randomUUID}=require('node:crypto');
-const {Conversation,Message,Notification}=require('../models');
+const {Conversation,Message}=require('../models');
 const Staff=require('../../models/Staff');
 const {Config,Log,Usage}=require('./models');
 const settings=require('./config');
@@ -56,9 +56,7 @@ async function finishHandoff(conversation,configRow) {
   const claimed=await Conversation.findOneAndUpdate({...guard,assignedTo:conversation.assignedTo || null},{$set:{assignedTo:assigned,'ai.state.assignmentStatus':'ASSIGNED','ai.state.assignedAt':new Date().toISOString(),'ai.assignmentError':'','ai.handoffRetryAt':new Date(Date.now()+30000)}},{returnDocument:'after'});
   if(!claimed)return;
   const key=`ai-handoff:${conversation._id}:${pending.inputId}:${conversation.ai.version}`;
-  const note=await Message.findOneAndUpdate({clientKey:`${key}:activity`},{$setOnInsert:{conversation:conversation._id,type:'activity',direction:'internal',status:'internal',author:'ai',authorName:config.displayName,text:`AI assigned this conversation to customer support. Reason: ${result.handoff}\n${result.summary||require('./salesSummary').summary(result.state || conversation.ai?.state || {})}`}},{upsert:true,returnDocument:'after'});
-  await Notification.updateOne({recipient:assigned,message:note._id},{$setOnInsert:{conversation:conversation._id,authorName:config.displayName,kind:'handoff'}},{upsert:true});
-  await require('../push').record(`${key}:assignment`,'assignments',conversation._id,assigned,note._id);
+  await Message.findOneAndUpdate({clientKey:`${key}:activity`},{$setOnInsert:{conversation:conversation._id,type:'activity',direction:'internal',status:'internal',author:'ai',authorName:config.displayName,text:`AI assigned this conversation to customer support. Reason: ${result.handoff}\n${result.summary||require('./salesSummary').summary(result.state || conversation.ai?.state || {})}`}},{upsert:true,returnDocument:'after'});
   const fresh=String(claimed.lastInboundId)===String(pending.inputId) && pending.configRevision===configRow.revision;
   const response=result.response || config.fallbackResponse;
   if(!(result.engineVersion==='v4'&&result.deferAcknowledgement) && fresh && response && pending.mode==='LIVE' && config.mode==='LIVE' && config.enabled && config.autoReply && policy.windowOpen(claimed.lastInboundAt)) {

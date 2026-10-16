@@ -207,7 +207,7 @@ test('AI batches rapid messages and media/errors hand off without sending conten
   await aiWorker.runOne(await aiSettings.getConfig());assert.equal(count,1);
   const payload=inbound('wamid.image');payload.messages[0].type='image';payload.messages[0].image={id:'media-id'};await service.receive(payload);
   await Conversation.updateOne({_id:c._id},{$set:{'ai.pendingAt':new Date(Date.now()-20000)}});await aiWorker.runOne(await aiSettings.getConfig());
-  const current=await Conversation.findById(c._id);assert.equal(count,1);assert.equal(current.ai.handoffReason,'MEDIA_RECEIVED');assert.equal(String(current.assignedTo),String(second._id));assert.equal(await Notification.countDocuments({conversation:c._id}),1);
+  const current=await Conversation.findById(c._id);assert.equal(count,1);assert.equal(current.ai.handoffReason,'MEDIA_RECEIVED');assert.equal(String(current.assignedTo),String(second._id));assert.equal(await Notification.countDocuments({conversation:c._id}),0);
 });
 test('AI provider failures and sensitive text preserve input and route to a human',async()=>{
   const c=await aiFixture();aiProvider.interpret=async()=>{throw new Error('timeout');};await aiWorker.runOne(await aiSettings.getConfig());
@@ -277,7 +277,7 @@ test('LIVE human request assigns CSS immediately, notifies once and sends only o
  await aiWorker.runOne(await aiSettings.getConfig());
  let current=await Conversation.findById(c._id);
  assert.equal(String(current.assignedTo),String(second._id));assert.equal(current.ai.active,false);assert.equal(current.ai.handoffReason,'CUSTOMER_REQUESTED_HUMAN');
- assert.equal(await Notification.countDocuments({recipient:second._id}),1);
+ assert.equal(await Notification.countDocuments({recipient:second._id}),0);
  await service.processOutbox();assert.equal(sent.length,1);assert.ok(sent[0].message.text);
  await service.receive(inbound('wamid.followup'));await Conversation.updateOne({_id:c._id},{$set:{'ai.pendingAt':new Date(0)}});
  await aiWorker.runOne(await aiSettings.getConfig());await service.processOutbox();assert.equal(sent.length,1);
@@ -298,16 +298,16 @@ test('missing fallback chooses CSS and absent CSS remains visible and retries wi
  await Conversation.updateOne({_id:c._id},{$set:{'ai.handoffRetryAt':new Date(0)}});
  await aiWorker.recoverHandoffs(await aiSettings.getConfig());current=await Conversation.findById(c._id);
  assert.equal(String(current.assignedTo),String(second._id));assert.equal(current.ai.assignmentError,'');assert.equal(current.ai.handoffPending,undefined);
- await aiWorker.recoverHandoffs(await aiSettings.getConfig());assert.equal(await Notification.countDocuments({recipient:second._id}),1);
+ await aiWorker.recoverHandoffs(await aiSettings.getConfig());assert.equal(await Notification.countDocuments({recipient:second._id}),0);
 });
-test('interrupted handoff notification is recovered once and manual assignment cancels recovery',async()=>{
+test('interrupted handoff activity is recovered once and manual assignment cancels recovery',async()=>{
  const c=await aiFixture('LIVE');const original=aiProvider.interpret;aiProvider.interpret=async args=>({...await original(args),intent:'human'});
- const notify=Notification.updateOne;
- try{Notification.updateOne=async()=>{throw new Error('Temporary write failure');};await assert.rejects(aiWorker.runOne(await aiSettings.getConfig()));}finally{Notification.updateOne=notify;}
+ const notify=Message.findOneAndUpdate;
+ try{Message.findOneAndUpdate=function(query,...args){if(query.clientKey?.endsWith(':activity'))throw new Error('Temporary write failure');return notify.call(this,query,...args);};await assert.rejects(aiWorker.runOne(await aiSettings.getConfig()));}finally{Message.findOneAndUpdate=notify;}
  let current=await Conversation.findById(c._id);assert.equal(String(current.assignedTo),String(second._id));assert.ok(current.ai.handoffPending);
  await Conversation.updateOne({_id:c._id},{$set:{'ai.handoffRetryAt':new Date(0)}});
  await aiWorker.recoverHandoffs(await aiSettings.getConfig());await aiWorker.recoverHandoffs(await aiSettings.getConfig());
- assert.equal(await Notification.countDocuments({recipient:second._id}),1);assert.equal(await Message.countDocuments({type:'activity',author:'ai'}),1);
+ assert.equal(await Notification.countDocuments({recipient:second._id}),0);assert.equal(await Message.countDocuments({type:'activity',author:'ai'}),1);
  await service.processOutbox();assert.equal(sent.length,1);
  current=await Conversation.findById(c._id);
  await Conversation.updateOne({_id:c._id},{$set:{'ai.handoffPending':{result:{handoff:'SERVICE_ONBOARDING'},inputId:current.lastInboundId},'ai.handoffRetryAt':new Date(0)}});
@@ -743,7 +743,7 @@ test('Waiting response performs real CSS handoff rather than leaving an unassign
  aiProvider.interpret=async args=>({...await original(args),intent:'requirements'});
  await aiWorker.runOne(await aiSettings.getConfig());const current=await Conversation.findById(c._id);
  assert.equal(String(current.assignedTo),String(second._id));assert.equal(current.ai.handoffReason,'RESPONSE_REQUIRES_STAFF');
- assert.equal(await Notification.countDocuments({recipient:second._id}),1);
+ assert.equal(await Notification.countDocuments({recipient:second._id}),0);
  await service.processOutbox();assert.equal(sent.length,1);
 });
 
@@ -772,7 +772,7 @@ test('Structured LIVE missing staff acknowledges once, persists pending assignme
  let row=await Conversation.findById(c._id);assert.equal(row.ai.state.assignmentStatus,'PENDING_HUMAN_ASSIGNMENT');assert.equal(row.ai.active,false);assert.equal(await Message.countDocuments({author:'ai',direction:'outbound'}),1);
  await aiWorker.finishHandoff(row,await aiSettings.getConfig());assert.equal(await Message.countDocuments({author:'ai',direction:'outbound'}),1);
  const css=await Staff.create({name:'New CSS',email:'new@example.test',password:'fixture',role:'CSS'});await aiWorker.finishHandoff(await Conversation.findById(c._id),await aiSettings.getConfig());
- row=await Conversation.findById(c._id);assert.equal(String(row.assignedTo),String(css._id));assert.equal(await Notification.countDocuments({recipient:css._id}),1);assert.equal(await Message.countDocuments({author:'ai',direction:'outbound'}),1);
+ row=await Conversation.findById(c._id);assert.equal(String(row.assignedTo),String(css._id));assert.equal(await Notification.countDocuments({recipient:css._id}),0);assert.equal(await Message.countDocuments({author:'ai',direction:'outbound'}),1);
 });
 
 test('Payment reminders are durable and cancelled at send time after paid or human takeover',async()=>{
@@ -791,7 +791,7 @@ test('Verified payment reconciliation pauses sales and hands off without new cus
  const invoice=await Invoice.create({token:crypto.randomUUID(),amount:20000,status:'paid',paidAt:new Date(),inboxConversation:c._id});
  await Conversation.updateOne({_id:c._id},{$set:{'ai.state':{invoiceId:String(invoice._id),selectedPlatform:'tiktok',serviceType:'account_setup'}}});
  await require('./ai/payments').reconcile(await aiSettings.getConfig());const row=await Conversation.findById(c._id);assert.equal(row.ai.state.paymentStatus,'paid');assert.equal(row.ai.active,false);assert.equal(String(row.assignedTo),String(second._id));
- await require('./ai/payments').reconcile(await aiSettings.getConfig());assert.equal(await Notification.countDocuments(),1);
+ await require('./ai/payments').reconcile(await aiSettings.getConfig());assert.equal(await Notification.countDocuments(),0);
 });
 
 
@@ -868,15 +868,15 @@ test('push preferences default off, validate endpoints and protect recipient acc
  assert.equal(push.validateSubscription({...subscription,endpoint:'https://fcm.googleapis.com.evil.test/send'}),false);
  assert.equal(push.validateSubscription(subscription),true);
  let r=await request('/push/preferences',{role:'agent',method:'POST',body:{endpoint:subscription.endpoint}});assert.deepEqual(r.data.preferences,{assignments:false,messages:false,mentions:false,followups:false,previews:true});
- const preferences={assignments:true,messages:true,mentions:false,followups:false};
+ const preferences={assignments:true,messages:true,mentions:true,followups:true};
  r=await request('/push/subscription',{role:'agent',method:'PUT',body:{subscription,preferences}});assert.equal(r.status,200);
  const other=await request('/push/preferences',{role:'second',method:'POST',body:{endpoint:subscription.endpoint}});assert.equal(other.data.preferences.messages,false);
  const c=await fixture();await Conversation.updateOne({_id:c._id},{$set:{assignedTo:agent._id}});
- assert.equal(await push.eligible({id:String(second._id),role:'CSS',admin:false},{kind:'messages',conversation:c._id}),false);
- assert.equal(await push.eligible({id:String(agent._id),role:'CSS',admin:false},{kind:'messages',conversation:c._id}),true);
+ assert.equal(await push.eligible({id:String(second._id),role:'CSS',admin:false},{kind:'mentions',conversation:c._id}),false);
+ assert.equal(await push.eligible({id:String(agent._id),role:'CSS',admin:false},{kind:'mentions',conversation:c._id}),true);
  await push.Event.deleteMany({});
- await push.record('push-test','messages',c._id);await push.record('push-test','messages',c._id);assert.equal(await push.Event.countDocuments({key:'push-test'}),1);
- const send=webpush.sendNotification;let calls=0;webpush.sendNotification=async(sub,payload)=>{calls++;const body=JSON.parse(payload);assert.equal(body.body,'A new customer message is available.');assert.ok(body.url.includes(String(c._id)));};
+ await push.record('push-test','mentions',c._id);await push.record('push-test','mentions',c._id);assert.equal(await push.Event.countDocuments({key:'push-test'}),1);
+ const send=webpush.sendNotification;let calls=0;webpush.sendNotification=async(sub,payload)=>{calls++;const body=JSON.parse(payload);assert.equal(body.body,'A teammate mentioned you in an internal note.');assert.ok(body.url.includes(String(c._id)));};
  try{await push.tick();assert.equal(calls,1)}finally{webpush.sendNotification=send;delete process.env.INBOX_PUSH_PUBLIC_KEY;delete process.env.INBOX_PUSH_PRIVATE_KEY;delete process.env.INBOX_PUSH_SUBJECT;}
  await request('/push/subscription',{role:'agent',method:'DELETE',body:{endpoint:subscription.endpoint}});assert.equal(await push.Subscription.countDocuments(),0);
 });
@@ -1081,4 +1081,14 @@ test('resolving records an atomic timing event, keeps assignment and inbound reo
  assert.equal((await Conversation.findById(c._id)).earningsResolutions.length,1);
  await service.receive(inbound('wamid.reopen-resolution'));
  saved=await Conversation.findById(c._id);assert.equal(saved.status,'open');assert.equal(String(saved.assignedTo),String(agent._id));assert.equal(saved.earningsResolutions.length,1);
+});
+
+test('alerts hide old handoffs and count only tagged notes',async()=>{
+ const c=await fixture();
+ const handoff=await Notification.create({recipient:agent._id,conversation:c._id,message:new mongoose.Types.ObjectId(),authorName:'AI',kind:'handoff'});
+ const mention=await Notification.create({recipient:agent._id,conversation:c._id,message:new mongoose.Types.ObjectId(),authorName:'Team',kind:'mention'});
+ const r=await request('/notifications',{role:'agent'});assert.equal(r.data.unread,1);assert.deepEqual(r.data.items.map(x=>String(x._id)),[String(mention._id)]);
+ assert.equal((await request(`/notifications/${handoff._id}/read`,{role:'agent',method:'POST',body:{}})).status,404);
+ assert.equal((await request('/notifications/read-all',{role:'agent',method:'POST',body:{}})).data.updated,1);
+ assert.equal((await request('/notifications',{role:'agent'})).data.unread,0);
 });
