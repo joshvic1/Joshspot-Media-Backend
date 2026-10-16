@@ -91,5 +91,37 @@ test('WhatsApp course resolves its own price/link; no invoice and no ads-course 
 });
 test('course default never re-enables a disabled business record',()=>{
  const rows=[{key:'whatsapp_status_course',enabled:false}];
- assert.deepEqual(require('../courseCatalogue').withCourseDefaults(rows),rows);
+ assert.equal(require('../courseCatalogue').withCourseDefaults(rows).find(r=>r.key==='whatsapp_status_course').enabled,false);
+});
+
+test('training replies resolve approved inclusions, correct price and course URL',async()=>{
+ for(const [platform,price,url] of [['TIKTOK',8000,'/course'],['META',8000,'/course'],['UNKNOWN',8000,'/course'],['WHATSAPP',10000,'/whatsapp']]){
+  const rows=require('../courseCatalogue').withCourseDefaults(records());
+  const r=await resolve({plan:plan('ASK_SERVICE_INCLUSIONS','COURSE',platform),state:{},messages,records:rows,ports:ports(),simulation:true,config});
+  assert.equal(r.pack.actions.handoff,undefined);assert.equal(r.pack.actions.invoice,undefined);
+  assert.equal(r.pack.preferredCourseReplies.length,1);
+  const text=r.pack.preferredCourseReplies[0].text;
+  assert.ok(text.includes('\n\nCourse:'));assert.ok(text.includes(price.toLocaleString('en-NG')));assert.ok(text.endsWith('https://joshspotmedia.com'+url));
+  assert.deepEqual(validate(output(text),r.pack),[]);
+ }
+});
+test('course knowledge does not answer unknown technical policies',async()=>{
+ const rows=require('../courseCatalogue').withCourseDefaults(records());
+ const r=await resolve({plan:plan('ASK_TECHNICAL_HELP','COURSE','TIKTOK'),state:{},messages,records:rows,ports:ports(),simulation:true,config});
+ assert.equal(r.pack.actions.handoff.reason,'NO_APPROVED_KNOWLEDGE');
+});
+test('disabled course knowledge is not replaced by built-in knowledge',()=>{
+ const rows=require('../courseCatalogue').withCourseDefaults(records());
+ rows.push({kind:'knowledge',key:'v4_ads_training_details',enabled:false,data:{}});
+ assert.ok(!require('./courseKnowledge').approvedRecords(rows).some(r=>r.key==='v4_ads_training_details'));
+});
+
+test('ad DM runs through interpretation, approved answer pack and grounded course response',async()=>{
+ const text='Hi, I want to get your TikTok Plus Facebook Plus Instagram training';
+ const current=[{_id:'now',direction:'inbound',type:'text',text}];
+ const p=plan('ASK_COURSE_DETAILS','COURSE','TIKTOK');
+ const ev={messageId:'now',text};p.current_requests[0].evidence=ev;p.purchase_change.evidence=ev;p.purchase_change.items[0].evidence=ev;p.readiness.evidence=ev;
+ let calls=0;const api={pass:async(stage,pack)=>{calls++;if(stage==='interpreter')return {value:p,metrics:{}};assert.equal(pack.preferredCourseReplies.length,1);return {value:output(pack.preferredCourseReplies[0].text),metrics:{}};}};
+ const result=await decide({config,records:require('../courseCatalogue').withCourseDefaults(records()),messages:current,ports:ports(),api});
+ assert.equal(result.action,'reply');assert.equal(result.handoff,null);assert.equal(calls,2);assert.ok(result.response.endsWith('https://joshspotmedia.com/course'));assert.equal(result.wouldGenerateInvoice,false);
 });

@@ -15,7 +15,7 @@ function validate(plan,messages){
 }
 async function resolve({plan,state,messages,records,ports,simulation=true,config={}}){
  validate(plan,messages);await ports.assertCurrent();
- records=records.filter(r=>r.enabled!==false&&!r.archived);
+ records=[...records,...require('./courseKnowledge').approvedRecords(records)].filter(r=>r.enabled!==false&&!r.archived);
  const revision=createHash('sha256').update(JSON.stringify(records.map(r=>[r.key,r.revision,r.data]))).digest('hex');
  const next=structuredClone(state),operations=[],missing=new Set(),facts=[],actions={};
  next.purchaseItems||=[];next.ownership||='AI';
@@ -59,6 +59,7 @@ async function resolve({plan,state,messages,records,ports,simulation=true,config
   if(r.data.description)fact('description',r.data.description,r.key,'data.description',platform(i.platform),i.service);
   if(r.data.checkoutUrl)fact('url',r.data.checkoutUrl,r.key,'data.checkoutUrl',platform(i.platform),i.service);
  }
+ pack.preferredCourseReplies=require('./courseKnowledge').preferredReplies(records,facts);
  for(const n of needs){const rows=retrieve(records,n);pack.knowledge.push(...rows);operations.push(`knowledge:${n.topic}`);}
  pack.knowledge=[...new Map(pack.knowledge.map(k=>[k.source,k])).values()].slice(0,9);
  if(requestTypes.has('ASK_RECOMMENDATION')||next.purchaseItems.some(i=>i.packageDuration)||requestTypes.has('ASK_BREAKDOWN')){pack.plans=(await pricing.plans(records)).filter(p=>p.quotable);operations.push('recommended_plans');for(const p of pack.plans){fact('total',p.amount,p.key,'data.amount');fact('advertising_budget',p.breakdown.advertisingBudget,p.key,'breakdown.advertisingBudget');fact('management_fee',p.breakdown.managementFee,p.key,'breakdown.managementFee');}}

@@ -10,8 +10,10 @@ function catalogue(records){
 async function load(){
  const Record=require('../models').Record;
  const records=await Record.find({enabled:true,archived:false,kind:{$in:['service','plan','knowledge']}}).sort({kind:1,key:1}).limit(501).lean();
- const configured=await Record.findOne({kind:'service',key:'whatsapp_status_course'}).lean();
- return configured ? records : require('../courseCatalogue').withCourseDefaults(records);
+ const keys=['ads_video_course','whatsapp_status_course',...require('../v4/courseKnowledge').definitions.map(d=>d.key)];
+ const configured=await Record.find({key:{$in:keys}}).lean();
+ // Keep disabled rows until default merging finishes; never revive an opt-out.
+ return require('../courseCatalogue').withCourseDefaults([...records,...configured.filter(r=>!records.some(x=>x.key===r.key))]);
 }
 // Old STRICT flags frequently describe qualification templates. V3 treats these
 // as preferred wording, not another response authority. Exact payment text is
