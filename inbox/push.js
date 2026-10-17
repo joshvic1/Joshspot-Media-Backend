@@ -52,7 +52,7 @@ async function actorFor(id){
 async function eligible(actor,event){
  if(!allowedKind(event.kind))return false;
  if(event.recipient&&event.recipient!==actor.id)return false;
- const c=await Conversation.findOne({$and:[policy.visible(actor),{_id:event.conversation,deleting:{$ne:true}}]}).lean();
+ const c=await Conversation.findOne({$and:[policy.accessible(actor),{_id:event.conversation,deleting:{$ne:true}}]}).lean();
  if(!c)return false;
  if(event.kind==='assignments'&&String(c.assignedTo)!==require('./adminIdentity').recipient(actor))return false;
  if(event.kind==='followups'&&(c.status!=='follow_up'||+new Date(c.followUpAt)!==+new Date(event.dueAt)))return false;

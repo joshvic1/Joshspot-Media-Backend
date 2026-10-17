@@ -35,9 +35,9 @@ async function finishHandoff(conversation,configRow) {
   const result=pending.result,config=configRow.data;
   const guard={_id:conversation._id,status:{$ne:'resolved'},deleting:{$ne:true},'ai.version':conversation.ai.version,'ai.active':false,'ai.needsHuman':true,'ai.handoffPending.inputId':pending.inputId};
   const rule=result.handoffRule && await require('./models').Record.findOne({kind:'handoff',key:result.handoffRule,enabled:true,archived:false}).lean();
-  const team=result.handoffTeam || rule?.data.team || config.handoffTeam;
+  const team='SS'; // All automatic handoffs go to sales; manual transfers remain available.
   let assigned=conversation.assignedTo;
-  if(assigned && !await Staff.exists({_id:assigned,role:{$in:['CSS','SS']}}))assigned=null;
+  if(assigned && !await Staff.exists({_id:assigned,role:'SS'}))assigned=null;
   const preferred=rule?.data.agent || (result.priority?config.paymentAgent:'') || config.fallbackAgent;
   if(!assigned && preferred)assigned=(await Staff.findOne({_id:preferred,role:team}))?._id;
   if(!assigned) {
@@ -45,7 +45,7 @@ async function finishHandoff(conversation,configRow) {
     if(config.assignment==='round_robin' && staff.length) {
       const sequence=await Usage.findOneAndUpdate({key:'assignment'},{$inc:{calls:1}},{upsert:true,returnDocument:'after'});assigned=staff[(sequence.calls-1)%staff.length]._id;
     } else {
-      // Missing/deleted fallback staff must not strand a chat when CSS exists.
+      // Missing/deleted fallback staff must not strand a chat when sales staff exist.
       const counts=await Promise.all(staff.map(async person=>({id:person._id,count:await Conversation.countDocuments({assignedTo:person._id,status:{$ne:'resolved'}})})));
       counts.sort((a,b)=>a.count-b.count);assigned=counts[0]?.id;
     }
@@ -56,7 +56,7 @@ async function finishHandoff(conversation,configRow) {
   const claimed=await Conversation.findOneAndUpdate({...guard,assignedTo:conversation.assignedTo || null},{$set:{assignedTo:assigned,'ai.state.assignmentStatus':'ASSIGNED','ai.state.assignedAt':new Date().toISOString(),'ai.assignmentError':'','ai.handoffRetryAt':new Date(Date.now()+30000)}},{returnDocument:'after'});
   if(!claimed)return;
   const key=`ai-handoff:${conversation._id}:${pending.inputId}:${conversation.ai.version}`;
-  await Message.findOneAndUpdate({clientKey:`${key}:activity`},{$setOnInsert:{conversation:conversation._id,type:'activity',direction:'internal',status:'internal',author:'ai',authorName:config.displayName,text:`AI assigned this conversation to customer support. Reason: ${result.handoff}\n${result.summary||require('./salesSummary').summary(result.state || conversation.ai?.state || {})}`}},{upsert:true,returnDocument:'after'});
+  await Message.findOneAndUpdate({clientKey:`${key}:activity`},{$setOnInsert:{conversation:conversation._id,type:'activity',direction:'internal',status:'internal',author:'ai',authorName:config.displayName,text:`AI assigned this conversation to sales staff. Reason: ${result.handoff}\n${result.summary||require('./salesSummary').summary(result.state || conversation.ai?.state || {})}`}},{upsert:true,returnDocument:'after'});
   const fresh=String(claimed.lastInboundId)===String(pending.inputId) && pending.configRevision===configRow.revision;
   const response=result.response || config.fallbackResponse;
   if(!(result.engineVersion==='v4'&&result.deferAcknowledgement) && fresh && response && pending.mode==='LIVE' && config.mode==='LIVE' && config.enabled && config.autoReply && policy.windowOpen(claimed.lastInboundAt)) {

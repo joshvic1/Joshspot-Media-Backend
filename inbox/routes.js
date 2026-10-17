@@ -20,8 +20,9 @@ const wrap = (handler) => (req, res, next) => Promise.resolve(handler(req, res, 
 const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const scoped = (req, query = {}) => ({ $and: [policy.visible(req.actor), query] });
 async function conversationFor(req) {
-  const item = await Conversation.findOne(scoped(req, { _id: id(req.params.id) })).populate('contact');
+  const item = await Conversation.findOne({ $and: [policy.accessible(req.actor), { _id: id(req.params.id) }] }).populate('contact');
   if (!item) fail(404, 'Conversation not found or no longer assigned to you.');
+  if (!policy.canReply(req.actor,item) && !(req.method === 'GET' || (req.method === 'POST' && (req.path.endsWith('/read') || (req.path.endsWith('/messages') && req.body.type === 'note'))))) fail(403, 'You can only add internal notes to this mentioned conversation.');
   if(item.deleting) fail(409, 'This chat is being deleted.');
   return item;
 }
@@ -97,21 +98,31 @@ router.use((req, res, next) => {
   next();
 });
 router.use(require('./actions')({ wrap, fail, id, conversationFor, rateLimit }));
+async function notificationScope(req) {
+  const scope = { kind: { $in: ['mention', null] }, recipient: adminIdentity.recipient(req.actor) };
+  if (!req.actor.admin) {
+    const ids = await Notification.distinct('conversation', scope);
+    const allowed = await Conversation.find({ $and: [policy.accessible(req.actor), { _id: { $in: ids }, deleting: { $ne: true } }] }).distinct('_id');
+    scope.conversation = { $in: allowed };
+  }
+  return scope;
+}
 router.get('/notifications', wrap(async (req, res) => {
-  const query = { kind: { $in: ['mention', null] }, recipient: adminIdentity.recipient(req.actor), ...(req.query.before ? { _id: { $lt: id(req.query.before) } } : {}) };
+  const scope = await notificationScope(req);
+  const query = { ...scope, ...(req.query.before ? { _id: { $lt: id(req.query.before) } } : {}) };
   const rows = await Notification.find(query).sort({ _id: -1 }).limit(21).lean();
-  const unread = await Notification.countDocuments({ kind: { $in: ['mention', null] }, recipient: adminIdentity.recipient(req.actor), readAt: null });
+  const unread = await Notification.countDocuments({ ...scope, readAt: null });
   const conversations = await Conversation.find({ _id: { $in: rows.slice(0, 20).map(row => row.conversation) }, deleting: { $ne: true } }).select('contact').populate({ path: 'contact', select: 'name', match: { deleting: { $ne: true } } }).lean();
   const names = new Map(conversations.map(row => [String(row._id), row.contact?.name?.trim() || 'Unnamed contact']));
   const items = rows.slice(0, 20).map(row => ({ ...row, contactName: names.get(String(row.conversation)) || 'Unavailable contact' }));
   res.json({ items, unread, next: rows.length > 20 ? String(rows[19]._id) : null });
 }));
 router.post('/notifications/read-all', wrap(async (req, res) => {
-  const result = await Notification.updateMany({ kind: { $in: ['mention', null] }, recipient: adminIdentity.recipient(req.actor), readAt: null }, { $set: { readAt: new Date() } });
+  const result = await Notification.updateMany({ ...await notificationScope(req), readAt: null }, { $set: { readAt: new Date() } });
   res.json({ updated: result.modifiedCount });
 }));
 router.post('/notifications/:notificationId/read', wrap(async (req, res) => {
-  const item = await Notification.findOneAndUpdate({ _id: id(req.params.notificationId), kind: { $in: ['mention', null] }, recipient: adminIdentity.recipient(req.actor) }, { $set: { readAt: new Date() } }, { returnDocument: 'after' });
+  const item = await Notification.findOneAndUpdate({ _id: id(req.params.notificationId), ...await notificationScope(req) }, { $set: { readAt: new Date() } }, { returnDocument: 'after' });
   if (!item) fail(404, 'Notification not found.');
   res.json({ conversation: item.conversation, message: item.message });
 }));
@@ -201,13 +212,13 @@ router.post('/contacts', wrap(async (req, res) => {
   const number = policy.phone(req.body.phone); const name = text(req.body.name || '');
   const contact = await service.upsertContact(number, name);
   const conversation = await service.openConversation(contact);
-  if (!req.actor.admin && conversation.assignedTo && String(conversation.assignedTo) !== req.actor.id) fail(409, 'This contact already belongs to another representative. Ask an administrator to reassign it.');
+  if (!policy.canReply(req.actor, conversation)) fail(409, 'This contact already belongs to another representative. Ask an administrator to reassign it.');
   res.status(201).json({ id: conversation._id });
 }));
 router.get('/conversations/:id', wrap(async (req, res) => {
   const conversation = await conversationFor(req);
   const typing=await require('./typing').find({conversation:conversation._id,actor:{$ne:req.actor.id},expiresAt:{$gt:new Date()}}).select('actor name expiresAt -_id').lean();
-  res.json({ ...conversation.toObject(), typing, reads: undefined, windowOpen: policy.windowOpen(conversation.lastInboundAt) });
+  res.json({ ...conversation.toObject(), typing, noteOnly: !policy.canReply(req.actor, conversation), reads: undefined, windowOpen: policy.windowOpen(conversation.lastInboundAt) });
 }));
 router.post('/conversations/:id/typing',wrap(async(req,res)=>{
  const c=await conversationFor(req);if(!policy.canReply(req.actor,c))fail(403,'Only the assigned representative or administrator can type.');
@@ -257,6 +268,8 @@ router.delete('/conversations/:id',wrap(async(req,res)=>{
 router.put('/conversations/:id', wrap(async (req, res) => {
   await rateLimit(req); const current = await conversationFor(req);
   if (!Number.isInteger(req.body.revision)) fail(400, 'A conversation revision is required.');
+  const transferNote = 'transferNote' in req.body ? text(req.body.transferNote, 10000) : '';
+  if (transferNote && (!req.body.assignedTo || String(req.body.assignedTo) === String(current.assignedTo))) fail(400, 'Choose a different recipient for a transfer note.');
   const changes = {}; const descriptions = [];
   if ('assignedTo' in req.body) {
     const target = req.body.assignedTo || null;
@@ -294,6 +307,7 @@ router.put('/conversations/:id', wrap(async (req, res) => {
   const updated = await Conversation.findOneAndUpdate(scoped(req, { _id: current._id, revision: req.body.revision }), { $set: changes, $inc: { revision: 1 }, ...(changes.status && changes.status !== current.status ? { $push: { earningsResolutions: { at: changes.resolvedAt || new Date(), by: req.actor.id, status: changes.status } } } : {}) }, { returnDocument: 'after' });
   if (!updated) fail(409, 'This conversation changed. Refresh and try again.');
   if(changes.assignedTo && String(current.assignedTo)!==String(changes.assignedTo))await require('./push').record(`assignment:${current._id}:${updated.revision}`,'assignments',current._id,adminIdentity.pushRecipient(changes.assignedTo)).catch(()=>{});
+  if (transferNote) await Message.updateOne({clientKey:`transfer-note:${current._id}:${updated.revision}`},{$setOnInsert:{conversation:current._id,type:'note',direction:'internal',status:'internal',author:req.actor.id,authorName:req.actor.name,text:transferNote}},{upsert:true});
   await service.activity(current._id, req.actor, descriptions.join(' · '));
   res.json({ revision: updated.revision });
 }));
@@ -353,8 +367,8 @@ router.post('/conversations/:id/media', wrap(async (req, res) => {
 }));
 router.post('/conversations/:id/messages', wrap(async (req, res) => {
   await rateLimit(req, 60); const conversation = await conversationFor(req);
-  if (!policy.canReply(req.actor, conversation)) fail(403, 'Claim this conversation before replying.');
   const type = req.body.type || 'text';
+  if (!(type === 'note' ? policy.canNote(req.actor, conversation) : policy.canReply(req.actor, conversation))) fail(403, 'You can only add internal notes to this conversation.');
   if (!['text', 'note', 'template', 'image', 'document', 'audio', 'video'].includes(type)) fail(400, 'Unsupported message type.');
   if (!/^[a-zA-Z0-9-]{16,80}$/.test(req.body.clientId || '')) fail(400, 'A unique message key is required.');
   const clientKey = `${req.actor.id}:${conversation._id}:${req.body.clientId}`;

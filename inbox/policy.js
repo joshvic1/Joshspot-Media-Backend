@@ -9,8 +9,10 @@ function phone(value) {
   return digits;
 }
 const windowOpen = (lastInboundAt, now = Date.now()) => Boolean(lastInboundAt && now - new Date(lastInboundAt).getTime() < 86400000);
-const visible = (actor) => actor.admin ? {} : actor.role === 'CSS' ? { assignedTo: actor.id } : { $or: [{ assignedTo: null }, { assignedTo: actor.id }, { collaborators: actor.id }] };
-const canReply = (actor, conversation) => actor.admin || String(conversation.assignedTo) === actor.id;
+const visible = (actor) => actor.admin ? {} : { assignedTo: actor.id, 'ai.active': { $ne: true } };
+const accessible = (actor) => actor.admin ? {} : { 'ai.active': { $ne: true }, $or: [{ assignedTo: actor.id }, { collaborators: actor.id }] };
+const canReply = (actor, conversation) => actor.admin || (conversation.ai?.active !== true && String(conversation.assignedTo) === String(actor.id));
+const canNote = (actor, conversation) => canReply(actor, conversation) || (conversation.ai?.active !== true && (conversation.collaborators || []).some(id => String(id) === String(actor.id)));
 function signature(raw, header, secret) {
   if (!secret || !Buffer.isBuffer(raw) || !/^sha256=[a-f0-9]{64}$/.test(header || '')) return false;
   const expected = `sha256=${crypto.createHmac('sha256', secret).update(raw).digest('hex')}`;
@@ -47,4 +49,4 @@ function templatePayload(template, values) {
 }
 const ranks = { queued: 0, sending: 1, unknown: 1, sent: 2, delivered: 3, read: 4, failed: -1 };
 const statusCanAdvance = (current, next) => next === 'failed' ? !['delivered', 'read', 'failed'].includes(current) : current === 'failed' && next === 'sent' ? false : (ranks[next] ?? -1) > (ranks[current] ?? -1);
-module.exports = { phone, windowOpen, visible, canReply, signature, templateFields, templatePayload, statusCanAdvance };
+module.exports = { phone, windowOpen, visible, accessible, canReply, canNote, signature, templateFields, templatePayload, statusCanAdvance };

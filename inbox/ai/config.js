@@ -26,6 +26,7 @@ function validateConfig(input) {
   if (!['handoff','continue'].includes(out.outsideHours) || !['handoff','ignore'].includes(out.stickerAction) || !['handoff','ignore'].includes(out.contactAction)) fail('Invalid handling rule.');
   for (const key of ['fallbackAgent','paymentAgent']) if (out[key] && !/^[a-f0-9]{24}$/i.test(out[key])) fail('Choose a valid staff member.');
   try { new Intl.DateTimeFormat('en',{timeZone:out.timezone}); } catch { fail('Invalid timezone.'); }
+  out.handoffTeam = 'SS';
   return out;
 }
 const fields = {
@@ -73,7 +74,7 @@ async function getConfig() {
     await Config.updateOne({key:'main',usageLimitsVersion:{$ne:1}},{$set:{usageLimitsVersion:1,'data.maxDailyCalls':0,'data.maxConversationCalls':0,'data.maxConsecutive':0},$inc:{revision:1}});
     row=await Config.findOne({key:'main'}).lean();
   }
-  return row ? {...row,data:{...defaults.config,...row.data,masterInstructions:row.masterInstructions ?? require('./masterKnowledge').starter}} : {revision:-1,data:{...defaults.config,enabled:false}};
+  return row ? {...row,data:{...defaults.config,...row.data,handoffTeam:'SS',masterInstructions:row.masterInstructions ?? require('./masterKnowledge').starter}} : {revision:-1,data:{...defaults.config,enabled:false}};
 }
 async function seed(actor) {
   await Config.updateOne({key:'main'},{$setOnInsert:{data:defaults.config,changedBy:actor,revision:0,usageLimitsVersion:1}},{upsert:true});
