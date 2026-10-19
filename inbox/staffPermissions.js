@@ -17,6 +17,7 @@ function validate(value){
 }
 function required(req){
  const p=req.path,m=req.method,b=req.body||{},keys=[];
+ if(p==='/staff-chats'||p.startsWith('/staff-chats/'))return keys;
  if(m==='GET'||m==='DELETE')return keys;
  if(p==='/contacts')keys.push('contacts');
  if(/\/contact$/.test(p))keys.push('editContact');

@@ -98,14 +98,16 @@ router.use((req, res, next) => {
   next();
 });
 router.use(require('./actions')({ wrap, fail, id, conversationFor, rateLimit }));
+require('./staffChats').routes(router,wrap,fail,id,rateLimit);
 async function notificationScope(req) {
-  const scope = { kind: { $in: ['mention', null] }, recipient: adminIdentity.recipient(req.actor) };
+  const recipient = adminIdentity.recipient(req.actor);
+  const staffIds = await require('./staffChats').Thread.find({participants:req.actor.id}).distinct('_id');
+  const mentions = {kind:{$in:['mention',null]}};
   if (!req.actor.admin) {
-    const ids = await Notification.distinct('conversation', scope);
-    const allowed = await Conversation.find({ $and: [policy.accessible(req.actor), { _id: { $in: ids }, deleting: { $ne: true } }] }).distinct('_id');
-    scope.conversation = { $in: allowed };
+    const ids = await Notification.distinct('conversation',{recipient,...mentions});
+    mentions.conversation = {$in:await Conversation.find({$and:[policy.accessible(req.actor),{_id:{$in:ids},deleting:{$ne:true}}]}).distinct('_id')};
   }
-  return scope;
+  return {recipient,$or:[mentions,{kind:'staff_message',conversation:{$in:staffIds}}]};
 }
 router.get('/notifications', wrap(async (req, res) => {
   const scope = await notificationScope(req);
@@ -114,7 +116,7 @@ router.get('/notifications', wrap(async (req, res) => {
   const unread = await Notification.countDocuments({ ...scope, readAt: null });
   const conversations = await Conversation.find({ _id: { $in: rows.slice(0, 20).map(row => row.conversation) }, deleting: { $ne: true } }).select('contact').populate({ path: 'contact', select: 'name', match: { deleting: { $ne: true } } }).lean();
   const names = new Map(conversations.map(row => [String(row._id), row.contact?.name?.trim() || 'Unnamed contact']));
-  const items = rows.slice(0, 20).map(row => ({ ...row, contactName: names.get(String(row.conversation)) || 'Unavailable contact' }));
+  const items = rows.slice(0, 20).map(row => ({ ...row, contactName: row.kind==='staff_message' ? row.authorName || 'Teammate' : names.get(String(row.conversation)) || 'Unavailable contact' }));
   res.json({ items, unread, next: rows.length > 20 ? String(rows[19]._id) : null });
 }));
 router.post('/notifications/read-all', wrap(async (req, res) => {
@@ -124,7 +126,7 @@ router.post('/notifications/read-all', wrap(async (req, res) => {
 router.post('/notifications/:notificationId/read', wrap(async (req, res) => {
   const item = await Notification.findOneAndUpdate({ _id: id(req.params.notificationId), ...await notificationScope(req) }, { $set: { readAt: new Date() } }, { returnDocument: 'after' });
   if (!item) fail(404, 'Notification not found.');
-  res.json({ conversation: item.conversation, message: item.message });
+  res.json({ conversation: item.kind==='staff_message' ? `staff:${item.conversation}` : item.conversation, message: item.message });
 }));
 router.get('/session', wrap(async (req, res) => {
   const config = provider.configuration();
@@ -186,7 +188,7 @@ router.get('/conversations', wrap(async (req, res) => {
     filter.$and.push({ $or: [{ lastMessageAt: { $lt: date } }, { lastMessageAt: date, _id: { $lt: cursor.id } }] });
   }
   const rows = await Conversation.find(filter).sort({ lastMessageAt: -1, _id: -1 }).limit(21).populate('contact').lean();
-  const hasMore = rows.length > 20; const items = rows.slice(0, 20).map((row) => ({ ...row, unread: Boolean(row.lastInboundId && String(row.lastInboundId) > String(row.reads?.[req.actor.id] || '')), reads: undefined }));
+  let hasMore = rows.length > 20; let items = rows.slice(0, 20).map((row) => ({ ...row, unread: Boolean(row.lastInboundId && String(row.lastInboundId) > String(row.reads?.[req.actor.id] || '')), reads: undefined }));
   const unreadFilters=rows.slice(0,20).filter(r=>r.lastInboundId&&String(r.lastInboundId)>String(r.reads?.[req.actor.id]||'')).map(r=>({conversation:r._id,_id:{$gt:r.reads?.[req.actor.id]||new mongoose.Types.ObjectId('000000000000000000000000'),$lte:r.lastInboundId}}));
   const unreadCounts=unreadFilters.length?await Message.aggregate([{$match:{direction:'inbound',$or:unreadFilters}},{$group:{_id:'$conversation',count:{$sum:1}}}]):[];
   for(const row of items)row.unreadCount=unreadCounts.find(c=>String(c._id)===String(row._id))?.count||0;
@@ -196,8 +198,11 @@ router.get('/conversations', wrap(async (req, res) => {
     const latest = latestById.get(String(row.lastMessageId));
     row.previewStatus = latest && String(latest.conversation) === String(row._id) && latest.direction === 'outbound' && !['note', 'activity'].includes(latest.type) ? latest.status : null;
   }
+  const staffRows = await require('./staffChats').list(req.actor,req.query);
+  items=[...items,...staffRows].sort((a,b)=>new Date(b.lastMessageAt)-new Date(a.lastMessageAt)||String(b.threadId||b._id).localeCompare(String(a.threadId||a._id)));
+  hasMore=hasMore||items.length>20;items=items.slice(0,20);
   const last = items.at(-1);
-  res.json({ items, next: hasMore ? Buffer.from(JSON.stringify({ date: last.lastMessageAt, id: last._id })).toString('base64url') : null });
+  res.json({ items, next: hasMore ? Buffer.from(JSON.stringify({ date: last.lastMessageAt, id: last.threadId || last._id })).toString('base64url') : null });
 }));
 router.get('/counts', wrap(async (req, res) => {
   const filters = { inbox: { status: { $ne: 'resolved' } }, mine: { assignedTo: adminIdentity.recipient(req.actor), status: { $ne: 'resolved' } }, unassigned: { assignedTo: null, status: { $ne: 'resolved' } }, unread: { status: { $ne: 'resolved' }, $expr: { $gt: ['$lastInboundId', { $ifNull: [`$reads.${req.actor.id}`, new mongoose.Types.ObjectId('000000000000000000000000')] }] } }, follow_up: { status: 'follow_up' }, resolved: { status: 'resolved' } };
@@ -205,7 +210,8 @@ router.get('/counts', wrap(async (req, res) => {
   const actorScope = policy.visible({ ...req.actor, id: req.actor.admin ? req.actor.id : new mongoose.Types.ObjectId(req.actor.id) });
   filters.mine.assignedTo = new mongoose.Types.ObjectId(adminIdentity.recipient(req.actor));
   const [counts] = await Conversation.aggregate([{ $match: actorScope }, { $facet: Object.fromEntries(Object.entries(filters).map(([key, query]) => [key, [{ $match: query }, { $count: 'total' }]])) }]);
-  res.json(Object.fromEntries(Object.keys(filters).map(key => [key, counts[key][0]?.total || 0])));
+  const totals=Object.fromEntries(Object.keys(filters).map(key => [key, counts[key][0]?.total || 0]));
+  const staffCounts=await require('./staffChats').counts(req.actor);totals.inbox+=staffCounts.total;totals.mine+=staffCounts.total;totals.unread+=staffCounts.unread;res.json(totals);
 }));
 router.post('/contacts', wrap(async (req, res) => {
   await rateLimit(req);

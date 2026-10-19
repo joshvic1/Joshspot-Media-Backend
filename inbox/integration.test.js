@@ -1,3 +1,4 @@
+const staffDM=require('./staffChats');
 const push = require('./push');
 // Ephemeral database and stubbed provider only. Never loads .env or contacts Meta.
 const { test, before, after, beforeEach } = require('node:test');
@@ -25,14 +26,14 @@ before(async () => {
   process.env.WHATSAPP_GRAPH_VERSION = 'v23.0';
   mongo = await MongoMemoryServer.create();
   await mongoose.connect(mongo.getUri());
-  await Promise.all([push.Subscription, push.Event, DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.init()));
+  await Promise.all([staffDM.Thread,staffDM.StaffMessage,push.Subscription, push.Event, DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.init()));
   const app = express(); app.use(express.json({ limit: "10mb", verify: (req, res, raw) => { req.rawBody = raw; } })); app.use('/inbox', require('./routes'));
   server = app.listen(0, '127.0.0.1'); await new Promise((resolve) => server.once('listening', resolve));
   base = `http://127.0.0.1:${server.address().port}/inbox`;
 }, { timeout: 300000 });
 after(async () => { Object.assign(provider, providerOriginal); if (server) await new Promise((resolve) => server.close(resolve)); await mongoose.disconnect(); if (mongo) await mongo.stop(); });
 beforeEach(async () => {
-  await Promise.all([push.Subscription, push.Event, DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.deleteMany({})));
+  await Promise.all([staffDM.Thread,staffDM.StaffMessage,push.Subscription, push.Event, DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.deleteMany({})));
   agent = await Staff.create({ name: 'Agent One', email: 'one@example.test', password: 'not-a-real-password', role: 'SS' });
   second = await Staff.create({ name: 'Agent Two', email: 'two@example.test', password: 'not-a-real-password', role: 'CSS' });
   const restricted = await Staff.create({ name: 'Restricted', email: 'restricted@example.test', password: 'not-a-real-password', role: 'SES' });
@@ -867,7 +868,7 @@ test('push preferences default off, validate endpoints and protect recipient acc
  assert.equal(push.validateSubscription({...subscription,endpoint:'https://localhost/internal'}),false);
  assert.equal(push.validateSubscription({...subscription,endpoint:'https://fcm.googleapis.com.evil.test/send'}),false);
  assert.equal(push.validateSubscription(subscription),true);
- let r=await request('/push/preferences',{role:'agent',method:'POST',body:{endpoint:subscription.endpoint}});assert.deepEqual(r.data.preferences,{assignments:false,messages:false,mentions:false,followups:false,previews:true});
+ let r=await request('/push/preferences',{role:'agent',method:'POST',body:{endpoint:subscription.endpoint}});assert.deepEqual(r.data.preferences,{assignments:false,messages:false,mentions:false,followups:false,staff_messages:true,previews:true});
  const preferences={assignments:true,messages:true,mentions:true,followups:true};
  r=await request('/push/subscription',{role:'agent',method:'PUT',body:{subscription,preferences}});assert.equal(r.status,200);
  const other=await request('/push/preferences',{role:'second',method:'POST',body:{endpoint:subscription.endpoint}});assert.equal(other.data.preferences.messages,false);
@@ -1145,4 +1146,55 @@ test('admin replies preserve staff ownership and tagged staff gain full replies 
  assert.equal((await request(`/conversations/${c._id}/messages`,{role:'second',method:'POST',body:outgoing('Sales transferred this to me')})).status,201);
  await service.processOutbox();assert.equal(sent.length,2);
  assert.equal(String((await Conversation.findById(c._id)).assignedTo),String(second._id));
+});
+
+test('staff DMs are participant-only, isolated from customer records, and retry safely',async()=>{
+ const opened=await request('/staff-chats',{role:'agent',method:'POST',body:{recipient:String(second._id)}});assert.equal(opened.status,200);const thread=opened.data.threadId;
+ const again=await request('/staff-chats',{role:'second',method:'POST',body:{recipient:String(agent._id)}});assert.equal(again.data.threadId,thread);assert.equal(await staffDM.Thread.countDocuments(),1);
+ for(const route of [`/staff-chats/${thread}`,`/staff-chats/${thread}/messages`])assert.equal((await request(route)).status,404,'admin cannot read a DM between other staff');
+ assert.equal((await request('/conversations')).data.items.length,0);
+ const payload={text:'Can you help with this setup?',clientId:crypto.randomUUID()};
+ const sentMessage=await request(`/staff-chats/${thread}/messages`,{role:'agent',method:'POST',body:payload});assert.equal(sentMessage.status,201);
+ await request(`/staff-chats/${thread}/messages`,{role:'agent',method:'POST',body:payload});assert.equal(await staffDM.StaffMessage.countDocuments(),1);assert.equal(await Notification.countDocuments({kind:'staff_message'}),1);
+ assert.equal(await Message.countDocuments(),0);assert.equal(await Conversation.countDocuments(),0);assert.equal(await Contact.countDocuments(),0);await service.processOutbox();assert.equal(sent.length,0);
+ const inbox=await request('/conversations?view=mine',{role:'second'});assert.equal(inbox.data.items[0].channel,'staff');assert.equal(inbox.data.items[0].unreadCount,1);assert.equal(inbox.data.items[0].contact.name,agent.name);
+ assert.equal((await request('/counts',{role:'second'})).data.unread,1);
+ assert.equal(await push.eligible({id:String(second._id)},{kind:'staff_messages',recipient:String(second._id),conversation:thread,message:sentMessage.data._id}),true);
+ assert.equal(await push.eligible({id:'admin',admin:true},{kind:'staff_messages',recipient:String(second._id),conversation:thread,message:sentMessage.data._id}),false);
+ const alerts=await request('/notifications',{role:'second'});assert.equal(alerts.data.items[0].kind,'staff_message');
+ const target=await request(`/notifications/${alerts.data.items[0]._id}/read`,{role:'second',method:'POST',body:{}});assert.equal(target.data.conversation,'staff:'+thread);assert.equal(target.data.message,sentMessage.data._id);
+ assert.equal((await request(`/staff-chats/${thread}/messages/${sentMessage.data._id}/reaction`,{role:'second',method:'PUT',body:{emoji:'👍'}})).data.reactions[String(second._id)],'👍');
+ assert.equal((await request(`/staff-chats/${thread}/messages/${sentMessage.data._id}/reaction`,{method:'PUT',body:{emoji:'👍'}})).status,404);
+ await request(`/staff-chats/${thread}/read`,{role:'second',method:'POST',body:{messageId:sentMessage.data._id}});
+ assert.equal((await request('/conversations?view=unread',{role:'second'})).data.items.length,0);assert.equal((await request('/counts',{role:'second'})).data.unread,0);
+ assert.equal(await push.eligible({id:String(second._id)},{kind:'staff_messages',recipient:String(second._id),conversation:thread,message:sentMessage.data._id}),false);
+});
+test('staff DMs include admin, paginate alongside customer chats and recover notifications',async()=>{
+ const customer=await fixture();
+ const opened=await request('/staff-chats',{role:'agent',method:'POST',body:{recipient:require('./adminIdentity').ID}});const thread=opened.data.threadId;
+ assert.equal(opened.data.peer.name,'Administrator');
+ const m=await staffDM.StaffMessage.create({thread,sender:String(agent._id),senderName:agent.name,recipient:'admin',text:'Private update',clientKey:crypto.randomUUID()});
+ await staffDM.deliverPending();await staffDM.deliverPending();assert.equal(await Notification.countDocuments({kind:'staff_message'}),1);
+ assert.equal((await request('/notifications')).data.items[0].authorName,agent.name);
+ assert.equal((await request('/conversations')).data.items.length,2);
+ const list=await request('/conversations?view=mine',{role:'agent'});assert.equal(list.data.items.length,2);
+ const cursor=Buffer.from(JSON.stringify({date:list.data.items[0].lastMessageAt,id:list.data.items[0].threadId||list.data.items[0]._id})).toString('base64url');
+ const next=await request('/conversations?view=mine&before='+cursor,{role:'agent'});assert.equal(next.data.items.length,1);assert.notEqual(next.data.items[0]._id,list.data.items[0]._id);
+ assert.equal((await request(`/staff-chats/${thread}/messages?around=${m._id}`)).data.items[0]._id,String(m._id));
+ assert.equal((await request('/staff-chats',{method:'POST',body:{recipient:require('./adminIdentity').ID}})).status,400);
+ assert.equal((await request(`/staff-chats/${thread}/messages`,{role:'second',method:'POST',body:{text:'intrusion',clientId:crypto.randomUUID()}})).status,404);
+ assert.equal((await request(`/staff-chats/${thread}/messages`,{method:'POST',body:{text:'Thanks',clientId:crypto.randomUUID()}})).status,201);
+ assert.equal(String((await Conversation.findById(customer._id)).assignedTo),String(agent._id));
+});
+
+test('staff DM device push names sender, links to message and respects disabled preference',async(t)=>{
+ const now=Date.now;
+ const webpush=require('web-push');const keys=['INBOX_PUSH_PUBLIC_KEY','INBOX_PUSH_PRIVATE_KEY','INBOX_PUSH_SUBJECT'];keys.forEach(k=>process.env[k]='test');const original=webpush.sendNotification;const deliveries=[];webpush.sendNotification=async(subscription,payload)=>deliveries.push(JSON.parse(payload));
+ try{
+ const opened=await request('/staff-chats',{method:'POST',body:{recipient:String(agent._id)}});const thread=opened.data.threadId;
+ await push.Subscription.create({endpoint:'test-device',actor:String(agent._id),subscription:{endpoint:'test-device'},preferences:{mentions:true,staff_messages:true,previews:true},enabledAt:new Date(Date.now()-1000)});
+ await push.Subscription.create({endpoint:'off-device',actor:String(agent._id),subscription:{endpoint:'off-device'},preferences:{mentions:true,staff_messages:false,previews:true},enabledAt:new Date(Date.now()-1000)});
+ const m=await request(`/staff-chats/${thread}/messages`,{method:'POST',body:{text:'Private update',clientId:crypto.randomUUID()}});
+ t.mock.method(Date,'now',()=>now()+60000);await push.tick();assert.equal(deliveries.length,1);assert.equal(deliveries[0].body,'Administrator messaged you.');assert.equal(deliveries[0].url,`/crm-inbox?staffChat=${thread}&message=${m.data._id}`);
+ }finally{webpush.sendNotification=original;keys.forEach(k=>delete process.env[k]);}
 });

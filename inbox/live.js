@@ -12,7 +12,7 @@ function notify() {
 function start() {
   if (watching || mongoose.connection.readyState !== 1) return;
   watching = true;
-  const stream = mongoose.connection.db.watch([{ $match: { 'ns.coll': { $in: ['inboxmessages', 'inboxconversations', 'inboxcontacts', 'inboxnotifications'] } } }]);
+  const stream = mongoose.connection.db.watch([{ $match: { 'ns.coll': { $in: ['inboxmessages', 'inboxconversations', 'inboxcontacts', 'inboxnotifications', 'inboxstaffthreads', 'inboxstaffmessages'] } } }]);
   stream.on('change', notify);
   stream.on('error', () => { stream.close().catch(() => {}); const retry = setTimeout(() => { watching = false; start(); }, 60000); retry.unref(); });
 }

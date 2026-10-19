@@ -18,10 +18,10 @@ test('existing device preferences cannot re-enable nonmention notifications',asy
  t.mock.method(push.Subscription,'findOne',()=>({lean:async()=>({preferences:{assignments:true,messages:true,mentions:true,followups:true}})}));
  let result;const res={json:data=>result=data};
  await handlers['/push/preferences']({body:{endpoint:'https://fcm.googleapis.com/test'},actor:{id:'staff'}},res);
- assert.deepEqual(result.preferences,{assignments:false,messages:false,mentions:true,followups:false,previews:true});
+ assert.deepEqual(result.preferences,{assignments:false,messages:false,mentions:true,followups:false,staff_messages:true,previews:true});
  const keys=['INBOX_PUSH_PUBLIC_KEY','INBOX_PUSH_PRIVATE_KEY','INBOX_PUSH_SUBJECT'];const before=keys.map(k=>process.env[k]);keys.forEach(k=>process.env[k]='test');
  t.after(()=>keys.forEach((k,i)=>before[i]===undefined?delete process.env[k]:process.env[k]=before[i]));
  let saved;t.mock.method(push.Subscription,'findOneAndUpdate',async(q,u)=>saved=u.$set.preferences);
  await handlers['/push/subscription']({actor:{id:'staff'},body:{subscription:{endpoint:'https://fcm.googleapis.com/test',keys:{p256dh:'a'.repeat(87),auth:'b'.repeat(22)}},preferences:{assignments:true,messages:true,mentions:true,followups:true}}},res);
- assert.deepEqual(saved,{assignments:false,messages:false,mentions:true,followups:false,previews:true});
+ assert.deepEqual(saved,{assignments:false,messages:false,mentions:true,followups:false,staff_messages:true,previews:true});
 });

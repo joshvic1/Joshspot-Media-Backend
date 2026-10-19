@@ -120,6 +120,7 @@ async function deliverMentions(message) {
   live.notify();
 }
 async function processMentions() {
+  await require('./staffChats').deliverPending();
   for (const message of await Message.find({ mentionsPending: true }).limit(25)) await deliverMentions(message);
 }
 async function processWebhooks() {
