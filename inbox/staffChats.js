@@ -1,5 +1,5 @@
 // Staff DMs deliberately never use InboxConversation/InboxMessage, Meta or earnings records.
-const {Thread,StaffMessage}=require('./staffChatModels');
+const {Thread,StaffMessage,Attachment}=require('./staffChatModels');
 const Staff=require('../models/Staff');
 const {Notification}=require('./models');
 const identity=require('./adminIdentity');
@@ -14,7 +14,7 @@ async function present(rows,actor){
  const people=await Staff.find({_id:{$in:ids}}).select('name role').lean();
  const names=new Map(people.map(p=>[String(p._id),p]));names.set('admin',{name:'Administrator',role:'ADMIN'});
  const counts=rows.length?await StaffMessage.aggregate([{$match:{recipient:actor.id,$or:rows.map(r=>({thread:r._id,_id:{$gt:r.reads?.[actor.id]||zero}}))}},{$group:{_id:'$thread',count:{$sum:1}}}]):[];
- return rows.map(r=>{const other=r.participants.find(id=>id!==actor.id);const person=names.get(other);const unreadCount=counts.find(c=>String(c._id)===String(r._id))?.count||0;return {_id:`staff:${r._id}`,threadId:String(r._id),channel:'staff',contact:{name:person?.name||'Former staff member'},peer:{id:other,name:person?.name||'Former staff member',role:person?.role||'',available:Boolean(person)},lastMessageAt:r.lastMessageAt,lastMessageId:r.lastMessageId,lastInboundId:r.received?.[actor.id],preview:r.preview||'Start a private staff chat',unread:unreadCount>0,unreadCount,status:'open',labels:[],participants:r.participants};});
+ return rows.map(r=>{const other=r.participants.find(id=>id!==actor.id);const person=names.get(other);const unreadCount=counts.find(c=>String(c._id)===String(r._id))?.count||0;return {_id:`staff:${r._id}`,threadId:String(r._id),channel:'staff',contact:{name:person?.name||'Former staff member'},peer:{id:other,name:person?.name||'Former staff member',role:person?.role||'',available:Boolean(person)},lastMessageAt:r.lastMessageAt,lastMessageId:r.lastMessageId,lastInboundId:r.received?.[actor.id],readThrough:r.reads?.[actor.id],peerReadThrough:r.reads?.[other],peerTypingUntil:r.typing?.[other],preview:r.preview||'Start a private staff chat',unread:unreadCount>0,unreadCount,status:'open',labels:[],participants:r.participants};});
 }
 async function list(actor,query){
  if(!['inbox','mine','unread'].includes(String(query.view||'inbox'))||query.status||query.label||query.source||query.customerStatus||(query.agent&&query.agent!==actor.id))return [];
@@ -26,9 +26,10 @@ async function list(actor,query){
 }
 async function counts(actor){return {total:await Thread.countDocuments({participants:actor.id}),unread:await Thread.countDocuments({participants:actor.id,$expr:{$gt:[`$received.${actor.id}`,{$ifNull:[`$reads.${actor.id}`,zero]}]}})};}
 async function deliver(message){
+ if(message.media?.id)await Attachment.updateOne({_id:message.media.id,thread:message.thread},{$unset:{expiresAt:1}});
  const thread=await Thread.findById(message.thread).lean();if(!thread||!thread.participants.includes(message.recipient))return;
  await Thread.updateOne({_id:thread._id},{$max:{[`received.${message.recipient}`]:message._id}});
- await Thread.updateOne({_id:thread._id,$or:[{lastMessageId:null},{lastMessageId:{$lt:message._id}}]},{$set:{lastMessageId:message._id,lastMessageAt:message.createdAt,preview:message.text.slice(0,160)}});
+ await Thread.updateOne({_id:thread._id,$or:[{lastMessageId:null},{lastMessageId:{$lt:message._id}}]},{$set:{lastMessageId:message._id,lastMessageAt:message.createdAt,preview:(message.text||message.media?.name||'Attachment').slice(0,160)}});
  const read=thread.reads?.[message.recipient];
  await Notification.updateOne({recipient:notificationRecipient(message.recipient),message:message._id},{$setOnInsert:{conversation:thread._id,kind:'staff_message',authorName:message.senderName,...(read&&String(read)>=String(message._id)?{readAt:new Date()}: {})}},{upsert:true});
  await require('./push').record(`staff-message:${message._id}`,'staff_messages',thread._id,message.recipient,message._id);
@@ -37,6 +38,7 @@ async function deliver(message){
 async function deliverPending(){for(const m of await StaffMessage.find({notificationPending:true}).sort({_id:1}).limit(25).lean())await deliver(m);}
 function routes(router,wrap,fail,id,rateLimit){
  async function accessible(req){const t=await Thread.findOne({_id:id(req.params.threadId),participants:req.actor.id}).lean();if(!t)fail(404,'Staff chat not found.');return t;}
+ require('./staffChatMedia').routes(router,wrap,fail,id,rateLimit,accessible);
  router.post('/staff-chats',wrap(async(req,res)=>{
   await rateLimit(req);const target=normalize(req.body.recipient);if(target!=='admin')id(target);
   if(target===req.actor.id)fail(400,'Choose another teammate.');if(!await peer(target))fail(400,'This teammate is no longer available.');
@@ -45,18 +47,25 @@ function routes(router,wrap,fail,id,rateLimit){
   live.notify();res.json((await present([t],req.actor))[0]);
  }));
  router.get('/staff-chats/:threadId',wrap(async(req,res)=>res.json((await present([await accessible(req)],req.actor))[0])));
+ router.post('/staff-chats/:threadId/typing',wrap(async(req,res)=>{await rateLimit(req,60);const t=await accessible(req);await Thread.updateOne({_id:t._id},{$set:{[`typing.${req.actor.id}`]:new Date(req.body.active===true?Date.now()+10000:0)}});live.notify();res.json({ok:true});}));
  router.get('/staff-chats/:threadId/messages',wrap(async(req,res)=>{
   const t=await accessible(req);const filter={thread:t._id};let rows;
-  if(req.query.around){const target=await StaffMessage.findOne({_id:id(req.query.around),thread:t._id}).lean();if(!target)fail(404,'Message not found.');rows=[...(await StaffMessage.find({...filter,_id:{$lte:target._id}}).sort({_id:-1}).limit(30).lean()).reverse(),...await StaffMessage.find({...filter,_id:{$gt:target._id}}).sort({_id:1}).limit(30).lean()];}
+  let around=req.query.around;if(req.query.unread==='1'&&!around){const first=await StaffMessage.findOne({thread:t._id,recipient:req.actor.id,_id:{$gt:t.reads?.[req.actor.id]||zero}}).sort({_id:1}).lean();if(first)around=String(first._id);}
+  if(around){const target=await StaffMessage.findOne({_id:id(around),thread:t._id}).lean();if(!target)fail(404,'Message not found.');rows=[...(await StaffMessage.find({...filter,_id:{$lte:target._id}}).sort({_id:-1}).limit(30).lean()).reverse(),...await StaffMessage.find({...filter,_id:{$gt:target._id}}).sort({_id:1}).limit(30).lean()];}
   else{if(req.query.before)filter._id={$lt:id(req.query.before)};if(req.query.after)filter._id={$gt:id(req.query.after)};rows=await StaffMessage.find(filter).sort({_id:req.query.after?1:-1}).limit(51).lean();if(!req.query.after)rows.reverse();}
-  res.json({items:rows,more:rows.length>=50});
+  res.json({items:rows,more:rows.length>=50,anchor:around||null,hasEarlier:rows.length?Boolean(await StaffMessage.exists({thread:t._id,_id:{$lt:rows[0]._id}})):false,hasNewer:rows.length?Boolean(await StaffMessage.exists({thread:t._id,_id:{$gt:rows.at(-1)._id}})):false});
  }));
  router.post('/staff-chats/:threadId/messages',wrap(async(req,res)=>{
   await rateLimit(req,60);const t=await accessible(req);const recipient=t.participants.find(p=>p!==req.actor.id);if(!await peer(recipient))fail(400,'This teammate is no longer available.');
-  if(typeof req.body.text!=='string'||!req.body.text.trim()||req.body.text.length>10000)fail(400,'Write a message of up to 10,000 characters.');
+  if(typeof req.body.text!=='string'||(!req.body.text.trim()&&!req.body.attachmentId)||req.body.text.length>10000)fail(400,'Write a message of up to 10,000 characters.');
   if(!/^[a-zA-Z0-9-]{16,80}$/.test(req.body.clientId||''))fail(400,'A unique message key is required.');
   const key=`${t._id}:${req.actor.id}:${req.body.clientId}`;let m;
-  try{m=await StaffMessage.findOneAndUpdate({clientKey:key},{$setOnInsert:{thread:t._id,sender:req.actor.id,senderName:req.actor.name,recipient,text:req.body.text.trim()}},{upsert:true,returnDocument:'after'}).lean();}catch(e){if(e.code!==11000)throw e;m=await StaffMessage.findOne({clientKey:key}).lean();}
+  const existing=await StaffMessage.findOne({clientKey:key}).lean();if(existing){await deliver(existing);return res.json(existing);}
+  let media,quote,replyTo;
+  if(req.body.attachmentId){const asset=await Attachment.findOne({_id:id(req.body.attachmentId),thread:t._id,owner:req.actor.id});if(!asset)fail(400,'Attachment expired or is unavailable. Attach it again.');media={id:asset._id,type:asset.type,mime:asset.mime,name:asset.name,size:asset.size};}
+  if(req.body.replyTo){const original=await StaffMessage.findOne({_id:id(req.body.replyTo),thread:t._id}).lean();if(!original)fail(400,'Reply message not found in this chat.');replyTo=original._id;quote={text:(original.text||original.media?.name||'Attachment').slice(0,300),senderName:original.senderName,type:original.media?.type||'text'};}
+
+  try{m=await StaffMessage.findOneAndUpdate({clientKey:key},{$setOnInsert:{thread:t._id,sender:req.actor.id,senderName:req.actor.name,recipient,text:req.body.text.trim(),media,replyTo,quote}},{upsert:true,returnDocument:'after'}).lean();}catch(e){if(e.code!==11000)throw e;m=await StaffMessage.findOne({clientKey:key}).lean();}
   await deliver(m);res.status(201).json(m);
  }));
  router.post('/staff-chats/:threadId/read',wrap(async(req,res)=>{
@@ -69,4 +78,4 @@ function routes(router,wrap,fail,id,rateLimit){
   const m=await StaffMessage.findOneAndUpdate({_id:id(req.params.messageId),thread:t._id},change,{returnDocument:'after'}).lean();if(!m)fail(404,'Message not found.');live.notify();res.json(m);
  }));
 }
-module.exports={routes,list,counts,deliverPending,Thread,StaffMessage};
+module.exports={routes,list,counts,deliverPending,Thread,StaffMessage,Attachment};

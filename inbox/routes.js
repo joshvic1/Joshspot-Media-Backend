@@ -107,7 +107,7 @@ async function notificationScope(req) {
     const ids = await Notification.distinct('conversation',{recipient,...mentions});
     mentions.conversation = {$in:await Conversation.find({$and:[policy.accessible(req.actor),{_id:{$in:ids},deleting:{$ne:true}}]}).distinct('_id')};
   }
-  return {recipient,$or:[mentions,{kind:'staff_message',conversation:{$in:staffIds}}]};
+  return {recipient,$or:[mentions,{kind:'followup'},{kind:'staff_message',conversation:{$in:staffIds}}]};
 }
 router.get('/notifications', wrap(async (req, res) => {
   const scope = await notificationScope(req);
@@ -126,7 +126,8 @@ router.post('/notifications/read-all', wrap(async (req, res) => {
 router.post('/notifications/:notificationId/read', wrap(async (req, res) => {
   const item = await Notification.findOneAndUpdate({ _id: id(req.params.notificationId), ...await notificationScope(req) }, { $set: { readAt: new Date() } }, { returnDocument: 'after' });
   if (!item) fail(404, 'Notification not found.');
-  res.json({ conversation: item.kind==='staff_message' ? `staff:${item.conversation}` : item.conversation, message: item.message });
+  if(item.kind==='followup'&&!await Conversation.exists({$and:[policy.accessible(req.actor),{_id:item.conversation,deleting:{$ne:true}}]}))return res.json({unavailable:true});
+  res.json({ conversation: item.kind==='staff_message' ? `staff:${item.conversation}` : item.conversation, message: item.kind==='followup'?null:item.message });
 }));
 router.get('/session', wrap(async (req, res) => {
   const config = provider.configuration();
@@ -304,6 +305,7 @@ router.put('/conversations/:id', wrap(async (req, res) => {
         const when = new Date(req.body.followUpAt);
         if (Number.isNaN(when.getTime()) || when.getTime() <= Date.now()) fail(400, 'Choose a future follow-up date and time.');
         if (req.body.status && req.body.status !== 'follow_up') fail(400, 'A scheduled follow-up must use follow-up status.');
+        changes.followUpBy = adminIdentity.recipient(req.actor); changes.followUpAlertId = new mongoose.Types.ObjectId(); changes.followUpNotifiedAt = null;
         changes.followUpAt = when; changes.status = 'follow_up'; changes.resolvedAt = null;
         descriptions.push(`Follow-up scheduled for ${when.toISOString()}`);
       }

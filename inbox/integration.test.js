@@ -26,14 +26,14 @@ before(async () => {
   process.env.WHATSAPP_GRAPH_VERSION = 'v23.0';
   mongo = await MongoMemoryServer.create();
   await mongoose.connect(mongo.getUri());
-  await Promise.all([staffDM.Thread,staffDM.StaffMessage,push.Subscription, push.Event, DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.init()));
+  await Promise.all([staffDM.Attachment,staffDM.Thread,staffDM.StaffMessage,push.Subscription, push.Event, DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.init()));
   const app = express(); app.use(express.json({ limit: "10mb", verify: (req, res, raw) => { req.rawBody = raw; } })); app.use('/inbox', require('./routes'));
   server = app.listen(0, '127.0.0.1'); await new Promise((resolve) => server.once('listening', resolve));
   base = `http://127.0.0.1:${server.address().port}/inbox`;
 }, { timeout: 300000 });
 after(async () => { Object.assign(provider, providerOriginal); if (server) await new Promise((resolve) => server.close(resolve)); await mongoose.disconnect(); if (mongo) await mongo.stop(); });
 beforeEach(async () => {
-  await Promise.all([staffDM.Thread,staffDM.StaffMessage,push.Subscription, push.Event, DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.deleteMany({})));
+  await Promise.all([staffDM.Attachment,staffDM.Thread,staffDM.StaffMessage,push.Subscription, push.Event, DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.deleteMany({})));
   agent = await Staff.create({ name: 'Agent One', email: 'one@example.test', password: 'not-a-real-password', role: 'SS' });
   second = await Staff.create({ name: 'Agent Two', email: 'two@example.test', password: 'not-a-real-password', role: 'CSS' });
   const restricted = await Staff.create({ name: 'Restricted', email: 'restricted@example.test', password: 'not-a-real-password', role: 'SES' });
@@ -1197,4 +1197,64 @@ test('staff DM device push names sender, links to message and respects disabled 
  const m=await request(`/staff-chats/${thread}/messages`,{method:'POST',body:{text:'Private update',clientId:crypto.randomUUID()}});
  t.mock.method(Date,'now',()=>now()+60000);await push.tick();assert.equal(deliveries.length,1);assert.equal(deliveries[0].body,'Administrator messaged you.');assert.equal(deliveries[0].url,`/crm-inbox?staffChat=${thread}&message=${m.data._id}`);
  }finally{webpush.sendNotification=original;keys.forEach(k=>delete process.env[k]);}
+});
+
+test('due follow-up alerts go to their scheduler once, survive transfer, and do not send customer messages',async()=>{
+ const c=await fixture();const due=new Date(Date.now()+60000);
+ const schedule=await request(`/conversations/${c._id}`,{role:'agent',method:'PUT',body:{revision:c.revision,followUpAt:due.toISOString()}});assert.equal(schedule.status,200);
+ let saved=await Conversation.findById(c._id);assert.equal(String(saved.followUpBy),String(agent._id));
+ const worker=require('./followupAlerts');await worker.tick();assert.equal(await Notification.countDocuments({kind:'followup'}),0);
+ await Conversation.updateOne({_id:c._id},{$set:{followUpAt:new Date(Date.now()-1000),assignedTo:second._id}});
+ await worker.tick();await worker.tick();assert.equal(await Notification.countDocuments({kind:'followup'}),1);
+ const alert=await Notification.findOne({kind:'followup'});assert.equal(String(alert.recipient),String(agent._id));
+ assert.equal((await request('/notifications',{role:'agent'})).data.items.length,1);
+ assert.equal((await request('/notifications',{role:'second'})).data.items.length,0);
+ assert.equal((await request(`/notifications/${alert._id}/read`,{role:'agent',method:'POST',body:{}})).data.unavailable,true);
+ assert.equal(await Message.countDocuments({direction:'outbound'}),0);assert.equal(sent.length,0);
+});
+test('cancelled and rescheduled follow-ups only notify for the active due schedule',async()=>{
+ const c=await fixture();const now=Date.now();
+ await request(`/conversations/${c._id}`,{role:'agent',method:'PUT',body:{revision:c.revision,followUpAt:new Date(now+60000).toISOString()}});
+ let saved=await Conversation.findById(c._id);const first=String(saved.followUpAlertId);
+ await request(`/conversations/${c._id}`,{role:'agent',method:'PUT',body:{revision:saved.revision,followUpAt:new Date(now+120000).toISOString()}});
+ saved=await Conversation.findById(c._id);assert.notEqual(String(saved.followUpAlertId),first);
+ await request(`/conversations/${c._id}`,{role:'agent',method:'PUT',body:{revision:saved.revision,followUpAt:null}});
+ await require('./followupAlerts').tick();assert.equal(await Notification.countDocuments({kind:'followup'}),0);
+});
+test('staff attachments are private, replies scoped, sends idempotent and do not touch earnings or WhatsApp',async()=>{
+ const open=await request('/staff-chats',{role:'agent',method:'POST',body:{recipient:String(second._id)}});const path=`/staff-chats/${open.data.threadId}`;
+ const uploaded=await request(path+'/media',{role:'agent',method:'POST',body:{data:Buffer.from('%PDF-1.4\nprivate test').toString('base64'),name:'brief.pdf'}});assert.equal(uploaded.status,200);
+ const mediaPath=path+'/media/'+uploaded.data.attachmentId;
+ assert.equal((await request(mediaPath,{role:'admin'})).status,404);
+ assert.equal((await request(mediaPath,{role:'second'})).status,404);
+ const body={text:'',attachmentId:uploaded.data.attachmentId,clientId:crypto.randomUUID()};
+ const result=await request(path+'/messages',{role:'agent',method:'POST',body});assert.equal(result.status,201);assert.equal(result.data.media.type,'document');
+ const duplicate=await request(path+'/messages',{role:'agent',method:'POST',body});assert.equal(duplicate.data._id,result.data._id);
+ const file=await fetch(base+mediaPath,{headers:{Authorization:`Bearer ${tokens.second}`}});assert.equal(file.status,200);assert.equal(await file.text(),'%PDF-1.4\nprivate test');
+ const quoted=await request(path+'/messages',{role:'second',method:'POST',body:{text:'Thanks',clientId:crypto.randomUUID(),replyTo:result.data._id}});assert.equal(quoted.status,201);assert.equal(quoted.data.quote.text,'brief.pdf');
+ const other=await request('/staff-chats',{role:'admin',method:'POST',body:{recipient:String(agent._id)}});
+ const wrong=await request(`/staff-chats/${other.data.threadId}/messages`,{role:'admin',method:'POST',body:{text:'wrong',clientId:crypto.randomUUID(),replyTo:result.data._id}});assert.equal(wrong.status,400);
+ assert.equal((await request(path+'/media',{role:'agent',method:'POST',body:{data:Buffer.from('<script>bad</script>').toString('base64'),name:'photo.png'}})).status,400);
+ assert.equal(await Conversation.countDocuments(),0);assert.equal(await Message.countDocuments(),0);assert.equal(sent.length,0);
+ assert.equal((await staffDM.Attachment.findById(uploaded.data.attachmentId)).expiresAt,undefined);
+});
+test('staff unread navigation finds first unread and exposes read receipt and typing only to participants',async()=>{
+ const open=await request('/staff-chats',{role:'agent',method:'POST',body:{recipient:String(second._id)}});const path=`/staff-chats/${open.data.threadId}`;
+ const one=await request(path+'/messages',{role:'agent',method:'POST',body:{text:'First',clientId:crypto.randomUUID()}});
+ await request(path+'/messages',{role:'agent',method:'POST',body:{text:'Second',clientId:crypto.randomUUID()}});
+ const page=await request(path+'/messages?unread=1',{role:'second'});assert.equal(page.data.anchor,one.data._id);
+ await request(path+'/read',{role:'second',method:'POST',body:{messageId:one.data._id}});
+ assert.equal((await request(path,{role:'agent'})).data.peerReadThrough,one.data._id);
+ await request(path+'/typing',{role:'second',method:'POST',body:{active:true}});
+ assert.ok(new Date((await request(path,{role:'agent'})).data.peerTypingUntil)>new Date());
+ assert.equal((await request(path+'/typing',{role:'admin',method:'POST',body:{active:true}})).status,404);
+});
+
+test('staff voice recordings are converted to playable MP3 and remain private app media',async()=>{
+ const open=await request('/staff-chats',{role:'agent',method:'POST',body:{recipient:String(second._id)}});const path=`/staff-chats/${open.data.threadId}`;
+ const source=require('node:child_process').spawnSync(require('ffmpeg-static'),['-hide_banner','-loglevel','error','-f','lavfi','-i','sine=frequency=440:duration=1','-c:a','libopus','-f','webm','pipe:1'],{windowsHide:true});assert.equal(source.status,0);
+ const uploaded=await request(path+'/media',{role:'agent',method:'POST',body:{recording:true,data:source.stdout.toString('base64'),name:'Voice note'}});assert.equal(uploaded.status,200,JSON.stringify(uploaded.data));
+ const asset=await staffDM.Attachment.findById(uploaded.data.attachmentId).select('+data');assert.equal(asset.mime,'audio/mpeg');assert.equal(asset.type,'audio');
+ const decoded=require('node:child_process').spawnSync(require('ffmpeg-static'),['-hide_banner','-loglevel','error','-i','pipe:0','-f','s16le','pipe:1'],{windowsHide:true,input:Buffer.from(asset.data)});assert.equal(decoded.status,0);assert.ok(decoded.stdout.length>1000);
+ assert.equal(sent.length,0);
 });

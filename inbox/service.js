@@ -119,8 +119,10 @@ async function deliverMentions(message) {
   await Message.updateOne({ _id: message._id }, { $set: { mentionsPending: false } });
   live.notify();
 }
+let lastFollowupAlertCheck=0;
 async function processMentions() {
   await require('./staffChats').deliverPending();
+  if(Date.now()-lastFollowupAlertCheck>=30000){await require('./followupAlerts').tick();lastFollowupAlertCheck=Date.now();}
   for (const message of await Message.find({ mentionsPending: true }).limit(25)) await deliverMentions(message);
 }
 async function processWebhooks() {

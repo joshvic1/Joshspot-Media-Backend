@@ -16,7 +16,7 @@ const conversation = new Schema({
   deleting: Boolean,
   contact: { ...ref('InboxContact'), required: true }, channel: { type: String, default: 'whatsapp' },
   assignedTo: { ...ref('Staff'), default: null }, status: { type: String, enum: ['open', 'follow_up', 'resolved'], default: 'open' },
-  labels: [String], revision: { type: Number, default: 0 }, lastInboundAt: Date, followUpAt: Date,
+  labels: [String], revision: { type: Number, default: 0 }, lastInboundAt: Date, followUpAt: Date, followUpBy: Schema.Types.ObjectId, followUpAlertId: Schema.Types.ObjectId, followUpNotifiedAt: Date,
   lastMessageAt: { type: Date, default: Date.now }, lastMessageId: Schema.Types.ObjectId, preview: String,
   reads: { type: Map, of: Schema.Types.ObjectId, default: {} }, lastInboundId: Schema.Types.ObjectId, resolvedAt: Date,
 }, { timestamps: true });
@@ -51,6 +51,7 @@ conversation.index({ collaborators: 1, lastMessageAt: -1, _id: -1 });
 conversation.index({ status: 1, lastMessageAt: -1, _id: -1 });
 conversation.index({ lastMessageAt: -1, _id: -1 });
 conversation.index({ assignedTo: 1, status: 1, followUpAt: 1 });
+conversation.index({ status: 1, followUpNotifiedAt: 1, followUpAt: 1 });
 const message = new Schema({
   conversation: { ...ref('InboxConversation'), required: true }, direction: { type: String, enum: ['inbound', 'outbound', 'internal'], required: true },
   type: { type: String, enum: ['text', 'template', 'image', 'document', 'audio', 'video', 'sticker', 'unsupported', 'note', 'activity'], required: true },
