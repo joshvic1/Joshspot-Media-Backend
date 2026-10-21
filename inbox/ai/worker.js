@@ -51,7 +51,7 @@ async function finishHandoff(conversation,configRow) {
     }
   }
   if(!assigned){
-    if(!(result.engineVersion==='v4'&&result.deferAcknowledgement)&&config.structuredSales&&pending.mode==='LIVE'&&config.mode==='LIVE'&&config.enabled&&config.autoReply&&policy.windowOpen(conversation.lastInboundAt))await queue(conversation,{response:result.response||config.fallbackResponse,handoff:true,engineVersion:result.engineVersion||result.debug?.engineVersion||'v1'},configRow,pending.inputId,`ai-handoff:${conversation._id}:${pending.inputId}:${conversation.ai.version}`);
+    if(!result.suppressAcknowledgement&&!(result.engineVersion==='v4'&&result.deferAcknowledgement)&&config.structuredSales&&pending.mode==='LIVE'&&config.mode==='LIVE'&&config.enabled&&config.autoReply&&policy.windowOpen(conversation.lastInboundAt))await queue(conversation,{response:result.response||config.fallbackResponse,handoff:true,engineVersion:result.engineVersion||result.debug?.engineVersion||'v1'},configRow,pending.inputId,`ai-handoff:${conversation._id}:${pending.inputId}:${conversation.ai.version}`);
     await Conversation.updateOne(guard,{$set:{'ai.state.assignmentStatus':'PENDING_HUMAN_ASSIGNMENT','ai.assignmentError':`No ${team} staff account is available. Add a representative; assignment will retry automatically.`,'ai.handoffRetryAt':new Date(Date.now()+30000)}});live.notify();return;}
   const claimed=await Conversation.findOneAndUpdate({...guard,assignedTo:conversation.assignedTo || null},{$set:{assignedTo:assigned,'ai.state.assignmentStatus':'ASSIGNED','ai.state.assignedAt':new Date().toISOString(),'ai.assignmentError':'','ai.handoffRetryAt':new Date(Date.now()+30000)}},{returnDocument:'after'});
   if(!claimed)return;
@@ -59,9 +59,9 @@ async function finishHandoff(conversation,configRow) {
   await Message.findOneAndUpdate({clientKey:`${key}:activity`},{$setOnInsert:{conversation:conversation._id,type:'activity',direction:'internal',status:'internal',author:'ai',authorName:config.displayName,text:`AI assigned this conversation to sales staff. Reason: ${result.handoff}\n${result.summary||require('./salesSummary').summary(result.state || conversation.ai?.state || {})}`}},{upsert:true,returnDocument:'after'});
   const fresh=String(claimed.lastInboundId)===String(pending.inputId) && pending.configRevision===configRow.revision;
   const response=result.response || config.fallbackResponse;
-  if(!(result.engineVersion==='v4'&&result.deferAcknowledgement) && fresh && response && pending.mode==='LIVE' && config.mode==='LIVE' && config.enabled && config.autoReply && policy.windowOpen(claimed.lastInboundAt)) {
+  if(!result.suppressAcknowledgement&&!(result.engineVersion==='v4'&&result.deferAcknowledgement) && fresh && response && pending.mode==='LIVE' && config.mode==='LIVE' && config.enabled && config.autoReply && policy.windowOpen(claimed.lastInboundAt)) {
     await queue(claimed,{response,handoff:true,engineVersion:result.engineVersion||result.debug?.engineVersion||'v1'},configRow,pending.inputId,key);
-  } else if(fresh && response && pending.mode==='DRAFT') {
+  } else if(!result.suppressAcknowledgement && fresh && response && pending.mode==='DRAFT') {
     await Conversation.updateOne(guard,{$set:{'ai.draft':{...result,response,action:'handoff',mode:'DRAFT',inputId:String(pending.inputId),version:claimed.ai.version,configRevision:configRow.revision,createdAt:new Date()}}});
   }
   await Conversation.updateOne(guard,{$unset:{'ai.handoffPending':1,'ai.handoffRetryAt':1}});
@@ -123,6 +123,10 @@ async function runOne(configRow) {
         result=await engine.decide(turnArgs);
       }
     } catch(error) { const detail=require('./errors').describe(error);result={action:'handoff',handoff:detail.code,state:prior,error:detail.message}; }
+    if(['v1','shadow'].includes(engineVersion) && result.action==='reply' && result.response) {
+      const sentHistory=await Message.find({conversation:conversation._id,direction:'outbound',type:'text',status:{$in:['sent','delivered','read']},$or:[{author:'ai'},{'automation.engineVersion':{$exists:true}}],'automation.followup':null,'automation.handoff':{$ne:true}}).select('text status direction author automation.engineVersion automation.followup automation.handoff').sort({_id:-1}).limit(50).lean();
+      result=require('./repetition').protect(result,text,sentHistory);
+    }
     const currentConfig=await settings.getConfig();
     if(currentConfig.revision!==configRow.revision || !currentConfig.data.enabled || currentConfig.data.mode==='OFF') return true;
     if(!await Conversation.exists({_id:conversation._id,...guard,'ai.active':{$ne:false},assignedTo:null}))return true;

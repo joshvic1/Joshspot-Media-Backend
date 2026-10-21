@@ -57,7 +57,7 @@ exports.createVerificationClient = async (req, res) => {
       name,
       businessName,
       clientLoginDetails,
-      amountPaid: ["SS", "ADMIN"].includes(req.staff.role) ? Number(amountPaid) : 0,
+      amountPaid: req.inboxRequestKey || ["SS", "ADMIN"].includes(req.staff.role) ? Number(amountPaid) : 0,
       clientNumber,
       idCard: uploadedIdCard,
       createdBy: req.staff.staffId,

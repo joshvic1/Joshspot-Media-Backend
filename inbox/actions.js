@@ -74,6 +74,13 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
     const query = crmMatch(c); if (req.query.recordId) query._id = id(req.query.recordId);
     const row = await require('../models/' + spec[0]).findOne(query).sort({createdAt:-1}).lean();
     if (row && req.params.kind !== 'ads' && !req.actor.admin && req.actor.role !== 'SS') delete row.amountPaid;
+    if (row && !req.actor.admin) row.clientNumber = maskPhone(row.clientNumber);
+    if (req.params.kind === 'ads' && !req.query.recordId) {
+      const historyQuery = crmMatch(c);
+      if (req.query.before) historyQuery._id = { $lt: id(req.query.before) };
+      const rows = await require('../models/AdsClient').find(historyQuery).select('businessName servicePaidFor amountPaid adsPublished createdAt').sort({_id:-1}).limit(21).lean();
+      return res.json({ record: row, records: rows.slice(0,20), next: rows.length > 20 ? String(rows[19]._id) : null });
+    }
     res.json({ record: row });
   }));
   router.put('/conversations/:id/actions/crm/:kind/:recordId', wrap(async (req, res) => {
@@ -84,6 +91,7 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
     if (!row) fail(404, 'Linked CRM record not found.');
     const fields = ['amountPaid','servicePaidFor','clientLoginDetails','landingPageLogins','landingPageLink','videoLinks','note','idCard', ...(req.params.kind === 'verification' ? ['businessName'] : [])];
     req.body = Object.fromEntries(fields.filter(f => Object.hasOwn(req.body,f)).map(f => [f,req.body[f]]));
+    if (Object.hasOwn(req.body,'amountPaid') && (req.body.amountPaid == null || String(req.body.amountPaid).trim() === '' || !Number.isFinite(Number(req.body.amountPaid)) || Number(req.body.amountPaid) <= 0)) fail(400, 'Amount paid is required and must be greater than zero.');
     req.params.id = String(row._id); req.staff = {...req.staff,role:req.actor.role};
     await require(spec[1])[spec[2]](req,res);
   }));
@@ -96,7 +104,7 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
     const fields = ['businessName', 'amountPaid', 'servicePaidFor', 'clientLoginDetails', 'landingPageLogins', 'landingPageLink', 'videoLinks', 'note', 'idCard'];
     const payload = Object.fromEntries(fields.filter(f => Object.hasOwn(req.body, f)).map(f => [f, req.body[f]]));
     for (const [f, value] of Object.entries(payload)) if (f !== 'idCard' && f !== 'amountPaid' && (typeof value !== 'string' || value.length > 10000)) fail(400, 'Invalid form field.');
-    if (payload.amountPaid !== undefined && (!Number.isFinite(Number(payload.amountPaid)) || Number(payload.amountPaid) < 0)) fail(400, 'Enter a valid amount.');
+    if (payload.amountPaid == null || String(payload.amountPaid).trim() === '' || !Number.isFinite(Number(payload.amountPaid)) || Number(payload.amountPaid) <= 0) fail(400, 'Amount paid is required and must be greater than zero.');
     payload.clientNumber = `+${c.contact.phone}`;
     if (req.params.kind === 'verification') payload.name = c.contact.name || 'WhatsApp customer'; else payload.businessName = c.contact.name || 'WhatsApp customer';
     const existing = req.params.kind !== 'ads' && await require('../models/' + crmKinds[req.params.kind][0]).findOne(crmMatch(c)).select('_id');

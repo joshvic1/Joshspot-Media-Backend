@@ -61,11 +61,15 @@ app.use(express.json({ limit: "10mb", verify: (req, res, buffer) => {
   if (["/api/payment/webhook", "/api/inbox/webhook"].includes(req.originalUrl.split("?")[0])) req.rawBody = buffer;
 } }));
 
+/* All API responses are excluded from search; authorization remains unchanged. */
+app.use((req,res,next)=>{res.set('X-Robots-Tag','noindex, nofollow, nosnippet');next();});
+
 /* Routes */
 
 app.use("/api/payment", paymentRoutes);
 app.use("/api/booking", bookingRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/blog", require("./blog/routes"));
 app.use("/api/crm", crmRoutes);
 app.use("/api/growth-assessment", growthAssessmentRoutes);
 app.use("/api/invoice", invoiceRoutes);
@@ -86,3 +90,6 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// Opt-in search notifications never affect payment or Inbox delivery.
+if(process.env.INDEXNOW_ENABLED==='true'){const searchTimer=setInterval(()=>require('./search/indexNow').tick(),60000);searchTimer.unref();}

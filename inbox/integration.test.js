@@ -88,10 +88,14 @@ test('Staff shortcuts mask identity, lock CRM identity and restrict admin librar
   await Contact.insertMany(Array.from({ length: 23 }, (_, i) => ({ name: `Person ${i}`, phone: `234900000${String(i).padStart(4,'0')}` })));
   const first = (await request('/admin-contacts')).data; assert.equal(first.items.length, 20); assert.ok(first.next);
   assert.equal((await request(`/admin-contacts?before=${first.next}`)).data.items.length, 4);
-  const body = { clientId: crypto.randomUUID(), businessName: 'Forged', clientNumber: '+11111111111', servicePaidFor: 'Meta ads setup', amountPaid: 0 };
+  const body = { clientId: crypto.randomUUID(), businessName: 'Forged', clientNumber: '+11111111111', servicePaidFor: 'Meta ads setup', amountPaid: 20000 };
+  for (const kind of ['setup','ads','verification']) for (const amountPaid of [undefined,'',0,-1]) {
+    const rejected = await request(`/conversations/${c._id}/actions/crm/${kind}`, {role:'agent',method:'POST',body:{...body,clientId:crypto.randomUUID(),amountPaid}});
+    assert.equal(rejected.status,400); assert.match(rejected.data.message,/Amount paid/);
+  }
   const saved = await request(`/conversations/${c._id}/actions/crm/setup`, { role: 'agent', method: 'POST', body }); assert.equal(saved.status, 201);
   const Client = require('../models/Client'); const record = await Client.findById(saved.data.id);
-  assert.equal(record.businessName, 'Ada Customer'); assert.equal(record.clientNumber, '+2348012345678');
+  assert.equal(record.businessName, 'Ada Customer'); assert.equal(record.clientNumber, '+2348012345678'); assert.equal(record.amountPaid,20000);
   const retry = await request(`/conversations/${c._id}/actions/crm/setup`, { role: 'agent', method: 'POST', body }); assert.equal(retry.data.id, saved.data.id);
   await shortcutModels.Action.updateMany({}, { $set: { state: 'processing' } });
   assert.equal((await request(`/conversations/${c._id}/actions/crm/setup`, { role: 'agent', method: 'POST', body })).data.id, saved.data.id);
@@ -104,13 +108,17 @@ test('CRM shortcuts preserve Ads and Verification fields and CSS amount permissi
   assert.equal(ads.status, 201);
   const AdsClient = require('../models/AdsClient'); const record = await AdsClient.findById(ads.data.id);
   assert.equal(record.clientNumber, '+2348012345678'); assert.equal(record.businessName, 'Ada Customer'); assert.equal(record.note, 'Customer brief');
+  await AdsClient.create({businessName:'Earlier campaign',clientNumber:'08012345678',servicePaidFor:'Meta DM Ads',videoLinks:'https://example.test/video',adsPublished:true});
+  const history = await request(`/conversations/${c._id}/actions/crm/ads`,{role:'second'});
+  assert.equal(history.status,200); assert.equal(history.data.records.length,2); assert.ok(history.data.records.some(r=>r.adsPublished));
+  assert.ok(history.data.records.every(r=>!r.clientNumber)); assert.notEqual(history.data.record.clientNumber,'+2348012345678');
   const storage = require('../utils/r2Storage'); const originalUpload = storage.uploadVerificationIdCard;
   storage.uploadVerificationIdCard = async () => ({ key: 'fixture-id', fileName: 'id.png', mimeType: 'image/png', size: 1 });
   try {
     const verification = await request(`/conversations/${c._id}/actions/crm/verification`, { role: 'second', method: 'POST', body: { clientId: crypto.randomUUID(), businessName: 'Actual business', name: 'Forged name', clientNumber: '+11111111111', clientLoginDetails: 'Fixture access notes', amountPaid: 90000, idCard: { data: 'fixture' } } });
     assert.equal(verification.status, 201);
     const VerificationClient = require('../models/VerificationClient'); const item = await VerificationClient.findById(verification.data.id);
-    assert.equal(item.name, 'Ada Customer'); assert.equal(item.clientNumber, '+2348012345678'); assert.equal(item.businessName, 'Actual business'); assert.equal(item.amountPaid, 0);
+    assert.equal(item.name, 'Ada Customer'); assert.equal(item.clientNumber, '+2348012345678'); assert.equal(item.businessName, 'Actual business'); assert.equal(item.amountPaid, 90000);
     await VerificationClient.deleteMany({});
   } finally { storage.uploadVerificationIdCard = originalUpload; delete require.cache[require.resolve('../controllers/verificationController')]; await AdsClient.deleteMany({}); }
 });
@@ -1277,4 +1285,16 @@ test('compatible audio uses separate rate limits and scoped seekable playback ti
  await Conversation.updateOne({_id:c._id},{$set:{assignedTo:agent._id}});
  assert.equal((await request(`/conversations/${c._id}/messages/${audio._id}/media?playback=mp3`,{role:'second'})).status,404);
  }finally{provider.download=download;require.cache[playbackPath].exports=playback;}
+});
+
+for(const structuredSales of [false,true])test(`V1 repetition guard routes to sales without sending duplicate (structured=${structuredSales})`,async()=>{
+ const c=await aiFixture('LIVE');await aiModels.Config.updateOne({key:'main'},{$set:{'data.engineVersion':'v1','data.structuredSales':structuredSales}});
+ const response='Do you want us to set up your account or run the ads for you?';
+ await Message.create({conversation:c._id,direction:'outbound',type:'text',author:'ai',status:'delivered',text:response});
+ const engine=require('./ai/engine'),original=engine.decide;
+ try{engine.decide=async()=>({action:'reply',response,state:{}});await aiWorker.runOne(await aiSettings.getConfig());}finally{engine.decide=original;}
+ const row=await Conversation.findById(c._id);assert.equal(String(row.assignedTo),String(agent._id));assert.equal(row.ai.active,false);assert.equal(row.ai.handoffReason,'AI_REPEATED_RESPONSE');
+ assert.equal(await Message.countDocuments({conversation:c._id,direction:'outbound',status:'queued'}),0);
+ assert.match((await Message.findOne({conversation:c._id,type:'activity'})).text,/avoid repeating/);
+ assert.equal((await aiModels.Log.findOne({conversation:c._id,kind:'decision'})).handoff,'AI_REPEATED_RESPONSE');
 });

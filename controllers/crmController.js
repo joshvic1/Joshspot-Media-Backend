@@ -142,6 +142,7 @@ exports.createClient = async (req, res) => {
     }
 
     const payload = pickAllowedFields(req.body, req.staff.role);
+    if (req.inboxRequestKey) payload.amountPaid = Number(req.body.amountPaid);
 
     if (!payload.businessName || !payload.servicePaidFor) {
       return res.status(400).json({
