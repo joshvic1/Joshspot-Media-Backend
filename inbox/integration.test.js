@@ -1258,3 +1258,23 @@ test('staff voice recordings are converted to playable MP3 and remain private ap
  const decoded=require('node:child_process').spawnSync(require('ffmpeg-static'),['-hide_banner','-loglevel','error','-i','pipe:0','-f','s16le','pipe:1'],{windowsHide:true,input:Buffer.from(asset.data)});assert.equal(decoded.status,0);assert.ok(decoded.stdout.length>1000);
  assert.equal(sent.length,0);
 });
+
+test('compatible audio uses separate rate limits and scoped seekable playback tickets',async()=>{
+ const c=await fixture();const audio=await Message.create({conversation:c._id,direction:'inbound',type:'audio',status:'received',media:{id:'audio-fixture',mime:'audio/ogg'}});
+ const minute=Math.floor(Date.now()/60000);await RateBucket.create({key:`${agent._id}:${minute}`,count:60,expiresAt:new Date(Date.now()+120000)});
+ const download=provider.download;const playbackPath=require.resolve('./playback');const playback=require(playbackPath);
+ try{provider.download=async()=>({buffer:Buffer.from('fixture'),mime:'audio/ogg'});require.cache[playbackPath].exports=async()=>Buffer.from('mp3 fixture');
+ const response=await request(`/conversations/${c._id}/messages/${audio._id}/media?playback=mp3`,{role:'agent'});assert.equal(response.status,200);
+ const issued=await request(`/conversations/${c._id}/messages/${audio._id}/audio-ticket`,{role:'agent',method:'POST',body:{}});assert.equal(issued.status,200);
+ const streamURL=base+'/audio-playback?ticket='+issued.data.ticket;
+ let range=await fetch(streamURL,{headers:{Range:'bytes=0-2'}});assert.equal(range.status,206);assert.equal(await range.text(),'mp3');assert.equal(range.headers.get('content-range'),'bytes 0-2/11');
+ range=await fetch(streamURL,{headers:{Range:'bytes=-7'}});assert.equal(range.status,206);assert.equal(await range.text(),'fixture');
+ assert.equal((await fetch(streamURL,{headers:{Range:'bytes=99-100'}})).status,416);
+ assert.equal((await fetch(streamURL,{method:'HEAD'})).headers.get('content-length'),'11');
+ assert.equal((await fetch(base+'/audio-playback?ticket=invalid')).status,401);
+ await Conversation.updateOne({_id:c._id},{$set:{assignedTo:second._id}});
+ assert.equal((await fetch(streamURL)).status,404,'Tickets do not survive loss of conversation access');
+ await Conversation.updateOne({_id:c._id},{$set:{assignedTo:agent._id}});
+ assert.equal((await request(`/conversations/${c._id}/messages/${audio._id}/media?playback=mp3`,{role:'second'})).status,404);
+ }finally{provider.download=download;require.cache[playbackPath].exports=playback;}
+});

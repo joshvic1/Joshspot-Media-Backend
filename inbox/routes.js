@@ -22,13 +22,13 @@ const scoped = (req, query = {}) => ({ $and: [policy.visible(req.actor), query] 
 async function conversationFor(req) {
   const item = await Conversation.findOne({ $and: [policy.accessible(req.actor), { _id: id(req.params.id) }] }).populate('contact');
   if (!item) fail(404, 'Conversation not found or no longer assigned to you.');
-  if (!policy.canReply(req.actor,item) && !(req.method === 'GET' || (req.method === 'POST' && (req.path.endsWith('/read') || (req.path.endsWith('/messages') && req.body.type === 'note'))))) fail(403, 'You can only add internal notes to this mentioned conversation.');
+  if (!policy.canReply(req.actor,item) && !(req.method === 'GET' || (req.method === 'POST' && (req.path.endsWith('/read') || req.path.endsWith('/audio-ticket') || (req.path.endsWith('/messages') && req.body.type === 'note'))))) fail(403, 'You can only add internal notes to this mentioned conversation.');
   if(item.deleting) fail(409, 'This chat is being deleted.');
   return item;
 }
-async function rateLimit(req, limit = 90) {
+async function rateLimit(req, limit = 90, scope = '') {
   const minute = Math.floor(Date.now() / 60000);
-  const key = `${req.actor.id}:${minute}`;
+  const key = `${req.actor.id}:${minute}${scope?':'+scope:''}`;
   let bucket;
   try { bucket = await RateBucket.findOneAndUpdate({ key }, { $inc: { count: 1 }, $setOnInsert: { expiresAt: new Date((minute + 2) * 60000) } }, { upsert: true, returnDocument: 'after' }); }
   catch (error) { if (error.code !== 11000) throw error; bucket = await RateBucket.findOneAndUpdate({ key }, { $inc: { count: 1 } }, { returnDocument: 'after' }); }
@@ -63,6 +63,7 @@ router.get('/events', wrap(async (req, res) => {
   const expiry = setTimeout(() => res.end(), 240000);
   req.on('close', () => { open.delete(res); if (!open.size) connections.delete(ticket.actor.id); clearInterval(heartbeat); clearTimeout(expiry); live.bus.off('change', changed); });
 }));
+require('./audioPlayback').publicRoute(router,wrap);
 router.use(staffAuth);
 router.use(require('./staffPermissions').inbox);
 router.use(wrap(async (req, res, next) => {
@@ -461,6 +462,12 @@ async function messageMedia(req) {
   if (!asset || String(asset.conversation) !== String(conversation._id)) fail(404, 'Attachment not found.');
   return { asset, conversation };
 }
+router.post('/conversations/:id/messages/:messageId/audio-ticket', wrap(async(req,res)=>{
+  const {asset,conversation}=await messageMedia(req);
+  await rateLimit(req,30,'audio-playback');
+  const playback=require('./audioPlayback');await playback.prepare(asset);
+  res.json({ticket:playback.ticket(req.actor,conversation._id,req.params.messageId)});
+}));
 router.get('/conversations/:id/messages/:messageId/media-info', wrap(async (req, res) => {
   const { asset } = await messageMedia(req); res.json(mediaService.safe(asset));
 }));
@@ -486,7 +493,7 @@ router.get('/conversations/:id/messages/:messageId/media', wrap(async (req, res)
   const mime = String(file.mime || asset.mime).split(';')[0];
   if(req.query.playback === 'mp3') {
     if(!mime.startsWith('audio/')) fail(400, 'Compatible playback is only available for audio.');
-    await rateLimit(req, 30);
+    await rateLimit(req, 30, 'audio-playback');
     const buffer = await require('./playback')(file.buffer);
     return res.set({'Content-Type':'audio/mpeg','Content-Disposition':'inline; filename="voice-note.mp3"','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'}).send(buffer);
   }
