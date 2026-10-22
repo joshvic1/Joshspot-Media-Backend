@@ -20,7 +20,7 @@ async function eligible(invoice){
 }
 async function verifyUnpaid(invoice){
  if(!invoice.reference)return true; // Account generation failed before a payment reference existed.
- if(invoice.paymentProvider!=='flutterwave')return false; // Only new course checkouts are scheduled.
+ if(invoice.paymentProvider!=='flutterwave'){const fresh=await require('../controllers/invoiceController').refreshInvoiceStatus(invoice,true);return fresh.status!=='paid';}
  try{const fresh=await require('../utils/flutterwaveCoursePayment').refresh(invoice,true);return fresh?.status!=='paid';}
  catch(error){
   // Flutterwave reports an unused transfer reference this way. Timeouts/auth failures are not unpaid evidence.

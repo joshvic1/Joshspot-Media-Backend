@@ -73,7 +73,7 @@ function replay(conversation,messages,startAt){
    close(e.at,'superseded');
    const row={key:String(m._id),inbound:m._id,staff:owner,startedAt:e.at,status:'pending'};rows.push(row);waiting.push(row);
   }else if(m.direction==='outbound'&&['sent','delivered','read'].includes(m.status)){
-   const automated=m.author==='ai'||Boolean(m.automation)||Boolean(m.courseReminder)||String(m.clientKey||'').startsWith('course-link:');
+   const automated=m.author==='ai'||Boolean(m.automation)||Boolean(m.courseReminder)||Boolean(m.shortReminder)||String(m.clientKey||'').startsWith('course-link:');
    // Automated acknowledgments never discharge an assigned human response obligation.
    // A handoff acknowledgment before assignment must also retain the customer wait.
    if(automated&&(owner||suspended.length||m.automation?.handoff))continue;

@@ -20,4 +20,6 @@ router.post("/sync-payments", adminAuth, reports.syncPayments);
 router.delete("/records/:kind/:id", adminAuth, reports.deleteRecord);
 router.post("/records/:kind/:id/restore", adminAuth, reports.deleteRecord);
 
+router.get("/general-settings", adminAuth, require("../utils/generalSettings").get);
+router.put("/general-settings", adminAuth, require("../utils/generalSettings").save);
 module.exports = router;

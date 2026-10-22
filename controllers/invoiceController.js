@@ -153,9 +153,10 @@ exports.createInvoice = async (req, res) => {
       return res.status(400).json({ message: "Please enter a valid amount." });
     }
 
-    if(coursePurchase && (!process.env.FLUTTERWAVE_SECRET_KEY || !process.env.FLUTTERWAVE_WEBHOOK_SECRET)) return res.status(503).json({message:'Course payments are temporarily unavailable. Please try again shortly.'});
+    const paymentProvider = coursePurchase ? await require('../utils/generalSettings').gateway() : 'paystack';
+    if(coursePurchase && !require('../utils/generalSettings').ready(paymentProvider)) return res.status(503).json({message:'Course payments are temporarily unavailable. Please try again shortly.'});
     invoice = await Invoice.create({
-      paymentProvider:coursePurchase?'flutterwave':'paystack',
+      paymentProvider,
       token: uuidv4(),
       amount,
       customerName,

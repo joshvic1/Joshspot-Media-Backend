@@ -158,6 +158,7 @@ async function processOutbox() {
     try {
       const conversation = await Conversation.findById(message.conversation).populate('contact');
       if (!conversation || conversation.deleting || !conversation.contact || conversation.contact.deleting) throw Object.assign(new Error('Chat deleted or deletion in progress.'),{safe:true});
+      if(message.shortReminder)await require('./shortReminders').beforeSend(message);
       if(message.courseReminder?.invoice)await require('./courseReminder').beforeSend(message);
       if(message.automation?.followup){
         const cfg=await require('./ai/config').getConfig();
@@ -172,6 +173,7 @@ async function processOutbox() {
       if(message.automation?.delivery)await require('./ai/v2/delivery').record({...message.toObject(),status:'sent',sentAt:new Date().toISOString()}).catch(()=>{});
       await Conversation.updateOne({_id:message.conversation},{$set:{earningsDirty:true}});
       publish('message.sent', { messageId: String(message._id), conversationId: String(message.conversation) });
+      await require('./shortReminders').schedule(await Message.findById(message._id)).catch(()=>console.error('Short reminder scheduling deferred'));
       if(message.invoiceDelivery)await scheduleManualInvoice(await Message.findById(message._id)).catch(()=>console.error('Manual invoice reminder scheduling deferred'));
       if(message.author!=='ai'&&conversation.ai?.handoffReason)await Conversation.updateOne({_id:conversation._id,'ai.state.firstHumanResponseAt':null},{$set:{'ai.state.firstHumanResponseAt':new Date().toISOString()}}).catch(()=>{});
     } catch (error) {
@@ -205,6 +207,7 @@ async function tick() {
   void require('./earnings/worker').tick().catch(()=>console.error('Earnings reconciliation deferred'));
   void require('./media').tick();
   void manualInvoiceReminders().catch(()=>console.error('Manual invoice reminder worker deferred'));
+  void require('./shortReminders').tick().catch(()=>console.error('Short reminder worker deferred'));
   void require('./courseReminder').tick().catch(()=>console.error('Course WhatsApp reminder worker deferred'));
   void require('./deleteChat').recover().catch(()=>console.error('Inbox deletion recovery unavailable'));
   void require('./ai/worker').tick();

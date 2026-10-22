@@ -1325,3 +1325,14 @@ test('only admin can return assigned chats to AI', async () => {
  assert.equal(adminResult.status,200);
  assert.equal((await Conversation.findById(c._id)).ai.active,true);
 });
+
+test('short course and invoice reminders are deterministic, deduplicated and window guarded',async()=>{
+ const r=require('./shortReminders');await r.Job.deleteMany({});const c=await fixture();
+ const m=await Message.create({conversation:c._id,direction:'outbound',type:'text',text:'Get it https://www.joshspotmedia.com/course',author:'ai',status:'sent',sentAt:new Date(Date.now()-31*60000)});
+ await r.schedule(m);await r.schedule(m);assert.equal(await r.Job.countDocuments(),1);const job=await r.Job.findOne();assert.equal(job.kind,'course');assert.ok(await r.check(job));
+ await Conversation.updateOne({_id:c._id},{$set:{lastInboundAt:new Date(Date.now()-25*3600000)}});assert.equal(await r.check(job),false);
+ await Conversation.updateOne({_id:c._id},{$set:{lastInboundAt:new Date()}});const contact=await Contact.findById(c.contact);
+ await Invoice.create({token:crypto.randomUUID(),customerPhone:contact.phone,product:'ads-course',status:'paid',amount:8000});assert.equal(await r.check(job),false);
+ const invoice=await Invoice.create({token:crypto.randomUUID(),customerPhone:contact.phone,amount:30000,status:'pending',inboxConversation:c._id});
+ const sent=await Message.create({conversation:c._id,direction:'outbound',type:'text',author:'admin',status:'sent',sentAt:new Date(),invoiceDelivery:invoice._id});await r.schedule(sent);const ij=await r.Job.findOne({kind:'invoice'});assert.equal(+ij.dueAt-+sent.sentAt,3600000);await r.schedule(sent);assert.equal(await r.Job.countDocuments({kind:'invoice'}),1);await r.Job.deleteMany({});
+});

@@ -2,7 +2,7 @@ const {Config,Sample}=require('./models');
 let running=false,last=0;
 async function reconcile(c,cfg){
  const {Conversation,Message}=require('../models');
- const messages=await Message.find({conversation:c._id,createdAt:{$gte:cfg.startsAt},direction:{$in:['inbound','outbound']}}).sort({createdAt:1,_id:1}).limit(20001).select('_id createdAt direction status author automation courseReminder clientKey').lean();
+ const messages=await Message.find({conversation:c._id,createdAt:{$gte:cfg.startsAt},direction:{$in:['inbound','outbound']}}).sort({createdAt:1,_id:1}).limit(20001).select('_id createdAt direction status author automation courseReminder shortReminder clientKey').lean();
  if(messages.length>20000)throw new Error('Earnings reconciliation limit reached; admin review required');
  const rows=require('./math').replay(c,messages,cfg.startsAt);
  for(const key of new Set(rows.map(r=>`${r.staff}|${require('./math').dayKey(r.startedAt).slice(0,7)}`))){const [staff,month]=key.split('|');await require('./routes').monthly(staff,month,cfg);}
