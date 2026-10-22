@@ -65,7 +65,7 @@ function routes(router,wrap,rateLimit){
  router.post('/earnings/control',wrap(async(req,res)=>{
   if(!req.actor.admin)fail(403,'Administrator access required.');await rateLimit(req);
   const {staff,action,reason}=req.body;
-  if(!require('mongoose').isValidObjectId(staff)||!await Staff.exists({_id:staff,role:{$in:['SS','CSS']}}))fail(400,'Choose a staff member.');
+  if(!require('mongoose').isValidObjectId(staff)||!await Staff.exists({_id:staff,...require('../staffPermissions').messagingQuery}))fail(400,'Choose a staff member.');
   if(typeof reason!=='string'||reason.trim().length<5||reason.length>500)fail(400,'Enter a reason of 5–500 characters.');
   const now=new Date();
   if(action==='pause'){
@@ -83,13 +83,13 @@ function routes(router,wrap,rateLimit){
  }));
 
  router.get('/availability',wrap(async(req,res)=>{
-  if(req.actor.admin||!await Staff.exists({_id:req.actor.id,role:{$in:['SS','CSS']}}))fail(403,'Staff availability is for support staff.');
+  if(req.actor.admin||!await Staff.exists({_id:req.actor.id,...require('../staffPermissions').messagingQuery}))fail(403,'Staff availability is for support staff.');
   const cfg=await config(),record=await require('./availability').current(req.actor.id);
   const rule=cfg.startsAt?(await monthly(req.actor.id,record.day.slice(0,7),cfg)).rule:cfg;
   res.json({...require('./availability').view(record,rule),enabled:Boolean(cfg.enabled&&cfg.startsAt)});
  }));
  router.put('/availability',wrap(async(req,res)=>{
-  if(req.actor.admin||!await Staff.exists({_id:req.actor.id,role:{$in:['SS','CSS']}}))fail(403,'Staff availability is for support staff.');
+  if(req.actor.admin||!await Staff.exists({_id:req.actor.id,...require('../staffPermissions').messagingQuery}))fail(403,'Staff availability is for support staff.');
   await rateLimit(req);
   const cfg=await config();if(!cfg.enabled||!cfg.startsAt)fail(409,'Earnings tracking has not been activated.');
   const record=await require('./availability').current(req.actor.id),ledger=await monthly(req.actor.id,record.day.slice(0,7),cfg),now=new Date();
@@ -107,7 +107,7 @@ function routes(router,wrap,rateLimit){
  }));
 
  router.get('/earnings',wrap(async(req,res)=>{
-  const cfg=await config();const people=req.actor.admin?await Staff.find({role:{$in:['SS','CSS']}}).select('_id name role').lean():[];
+  const cfg=await config();const people=req.actor.admin?await Staff.find({...require('../staffPermissions').messagingQuery}).select('_id name role').lean():[];
   const staff=req.actor.admin?(req.query.self==='1'?'':String(req.query.staff||people[0]?._id||'')):req.actor.id;
   if(req.query.staff&&!req.actor.admin&&req.query.staff!==req.actor.id)fail(403,'You can only view your own earnings.');
   if(req.actor.admin&&staff&&!people.some(p=>String(p._id)===staff))fail(404,'Staff not found.');
@@ -126,7 +126,7 @@ function routes(router,wrap,rateLimit){
   const old=await config();if(old.startsAt&&!b.enabled)fail(400,'Tracking is active. Use audited adjustments to waive deductions; do not silently pause response records.');
   if(b.enabled&&!old.startsAt)next.startsAt=new Date();
   // Freeze this month before updating rules. Revised rules apply to future monthly statements.
-  if(old.startsAt)for(const person of await Staff.find({role:{$in:['SS','CSS']}}).select('_id'))await monthly(String(person._id),dayKey(new Date()).slice(0,7),old);
+  if(old.startsAt)for(const person of await Staff.find({...require('../staffPermissions').messagingQuery}).select('_id'))await monthly(String(person._id),dayKey(new Date()).slice(0,7),old);
   const saved=await Config.findOneAndUpdate({_id:'main'},{$set:next},{upsert:true,returnDocument:'after'}).lean();
   res.json(saved);
  }));

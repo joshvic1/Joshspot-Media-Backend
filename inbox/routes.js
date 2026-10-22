@@ -51,7 +51,7 @@ const connections = new Map();
 router.get('/events', wrap(async (req, res) => {
   const ticket = tickets.get(req.query.ticket); tickets.delete(req.query.ticket);
   if (!ticket || ticket.until < Date.now()) return res.sendStatus(401);
-  if (!ticket.actor.admin && !await Staff.exists({ _id: ticket.actor.id, role: { $in: ['SS', 'CSS'] } })) return res.sendStatus(403);
+  if (!ticket.actor.admin && !await Staff.exists({ _id: ticket.actor.id, ...require('./staffPermissions').messagingQuery })) return res.sendStatus(403);
   const open = connections.get(ticket.actor.id) || new Set();
   while (open.size >= 3) { const oldest = open.values().next().value; open.delete(oldest); oldest.end(); }
   open.add(res); connections.set(ticket.actor.id, open);
@@ -69,9 +69,9 @@ router.use(require('./staffPermissions').inbox);
 router.use(wrap(async (req, res, next) => {
   if (req.staff.admin) req.actor = { id: 'admin', admin: true, name: 'Administrator', role: 'ADMIN' };
   else {
-    const staff = await Staff.findById(req.staff.staffId).select('name role');
-    if (!staff || !['SS', 'CSS'].includes(staff.role)) fail(403, 'Your role does not have access to customer messaging.');
-    req.actor = { id: String(staff._id), name: staff.name, role: staff.role, admin: false };
+    const staff = await Staff.findById(req.staff.staffId).select('name role permissions');
+    if (!require('./staffPermissions').canInbox(staff)) fail(403, 'Your role does not have access to customer messaging.');
+    req.actor = { id: String(staff._id), name: staff.name, role: staff.role, permissions: staff.permissions || {}, admin: false };
   }
   next();
 }));
@@ -132,7 +132,7 @@ router.post('/notifications/:notificationId/read', wrap(async (req, res) => {
 }));
 router.get('/session', wrap(async (req, res) => {
   const config = provider.configuration();
-  const staff = await Staff.find({ role: { $in: ['SS', 'CSS'] } }).select('name role').sort({ name: 1 }).lean();
+  const staff = await Staff.find({ ...require('./staffPermissions').messagingQuery }).select('name role').sort({ name: 1 }).lean();
   const failedJobs = req.actor.admin ? await WebhookJob.countDocuments({ state: { $in: ['dead', 'blocked'] } }) : undefined;
   res.json({ actor: req.actor, staff: [adminIdentity.person,...staff], provider: { configured: config.configured, ...(req.actor.admin ? { missing: config.missing, failedJobs } : {}) } });
 }));
@@ -241,12 +241,12 @@ router.get('/conversations/:id/crm', wrap(async (req, res) => {
   const pattern = require('./crmPhoneMatch')(number);
   const records = [];
   for (const [model, route] of [['Client', '/crm-dashboard'], ['AdsClient', '/crm-ads-dashboard'], ['VerificationClient', '/crm-verification-dashboard']]) {
-    const rows = await require(`../models/${model}`).find({ clientNumber: pattern }).select('businessName name servicePaidFor service').limit(10).lean();
-    rows.forEach((row) => records.push({ id: row._id, kind: model, name: row.businessName || row.name, service: row.servicePaidFor || row.service, href: route }));
+    const rows = await require(`../models/${model}`).find({ clientNumber: pattern }).select('businessName name servicePaidFor service createdAt').limit(10).lean();
+    rows.forEach((row) => records.push({ id: row._id, kind: model, name: row.businessName || row.name, service: row.servicePaidFor || row.service, createdAt: row.createdAt, href: route }));
   }
   if (req.actor.admin) {
-    const invoices = await require('../models/Invoice').find({ customerPhone: pattern, deletedAt: null }).select('customerName amount status product createdAt').sort({ createdAt: -1 }).limit(10).lean();
-    invoices.forEach((row) => records.push({ id: row._id, kind: 'Invoice', name: row.customerName, service: row.product, amount: row.amount, status: row.status, href: '/admin-7812er/invoices' }));
+    const invoices = await require('../models/Invoice').find({ customerPhone: pattern, deletedAt: null }).select('customerName amount status product createdAt paidAt').sort({ createdAt: -1 }).limit(10).lean();
+    invoices.forEach((row) => records.push({ id: row._id, kind: 'Invoice', name: row.customerName, service: row.product, amount: row.amount, status: row.status, createdAt: row.createdAt, paidAt: row.paidAt, href: '/admin-7812er/invoices' }));
   }
   res.json(records);
 }));
@@ -256,7 +256,7 @@ router.get('/conversations/:id/crm/:kind/:recordId', wrap(async (req, res) => {
     Client: 'businessName clientNumber amountPaid servicePaidFor landingPageLink createdAt',
     AdsClient: 'businessName clientNumber amountPaid servicePaidFor videoLinks note adsPublished fundsStatus createdAt',
     VerificationClient: 'name businessName clientNumber amountPaid service createdAt',
-    Invoice: 'customerName customerEmail customerPhone product amount status note createdAt paidAt expiresAt'
+    Invoice: 'customerName customerEmail customerPhone product amount status note createdAt paidAt expiresAt reference paymentProvider flutterwaveOrderRef flutterwaveTransactionId'
   };
   const kind = req.params.kind;
   if (!Object.hasOwn(fields, kind)) fail(400, 'Unknown record type.');
@@ -283,7 +283,7 @@ router.put('/conversations/:id', wrap(async (req, res) => {
     const target = req.body.assignedTo || null;
     if (!req.actor.admin && !(target === req.actor.id && !current.assignedTo) && !(target && String(current.assignedTo) === req.actor.id)) fail(403, 'Only the assigned representative can transfer this conversation.');
     if (!req.actor.admin && String(current.assignedTo) === req.actor.id && req.staff.permissions?.transfer === false) fail(403, 'Your administrator has disabled chat transfers.');
-    const agent = target === adminIdentity.ID ? adminIdentity.person : target ? await Staff.findOne({ _id: id(target), role: { $in: ['SS', 'CSS'] } }).select('name') : null;
+    const agent = target === adminIdentity.ID ? adminIdentity.person : target ? await Staff.findOne({ _id: id(target), ...require('./staffPermissions').messagingQuery }).select('name') : null;
     if (target && !agent) fail(400, 'Choose an available representative.');
     changes.assignedTo = target; changes['ai.active'] = false; changes['ai.draft'] = null; changes['ai.handoffPending'] = null; changes['ai.assignmentError'] = ''; changes['ai.needsHuman'] = false; changes['ai.handoffReason'] = 'ASSIGNMENT_CHANGED'; descriptions.push(target ? `Assigned to ${agent.name}` : 'Unassigned conversation');
   }
@@ -407,7 +407,7 @@ router.post('/conversations/:id/messages', wrap(async (req, res) => {
   if (req.body.mentions?.length) {
     if (type !== 'note' || !Array.isArray(req.body.mentions) || req.body.mentions.length > 10) fail(400, 'Mention up to 10 staff in an internal note.');
     mentions = [...new Set(req.body.mentions.map(id))].filter(value => value !== adminIdentity.recipient(req.actor));
-    if (await Staff.countDocuments({ _id: { $in: mentions.filter(value=>value!==adminIdentity.ID) }, role: { $in: ['SS', 'CSS'] } }) !== mentions.filter(value=>value!==adminIdentity.ID).length) fail(400, 'Choose an available staff member.');
+    if (await Staff.countDocuments({ _id: { $in: mentions.filter(value=>value!==adminIdentity.ID) }, ...require('./staffPermissions').messagingQuery }) !== mentions.filter(value=>value!==adminIdentity.ID).length) fail(400, 'Choose an available staff member.');
   }
   if (type !== 'note') await require('./ai/worker').pause(conversation._id, req.actor, 'HUMAN_REPLY');
   let message;

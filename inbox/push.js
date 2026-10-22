@@ -49,7 +49,7 @@ function routes(router,wrap,rateLimit){
 }
 async function actorFor(id){
  if(id==='admin')return {id,admin:true};
- const staff=await Staff.findById(id).select('role').lean();return staff&&['SS','CSS'].includes(staff.role)?{id,role:staff.role,admin:false}:null;
+ const staff=await Staff.findById(id).select('role permissions').lean();return require('./staffPermissions').canInbox(staff)?{id,role:staff.role,admin:false}:null;
 }
 async function eligible(actor,event){
  if(!allowedKind(event.kind))return false;

@@ -99,6 +99,7 @@ exports.crmLogin = async (req, res) => {
       {
         staffId: staff._id,
         role: staff.role,
+        permissions: staff.permissions || {},
         name: staff.name,
       },
       process.env.JWT_SECRET || "joshspotsecret",
@@ -112,6 +113,7 @@ exports.crmLogin = async (req, res) => {
         name: staff.name,
         email: staff.email,
         role: staff.role,
+        permissions: staff.permissions || {},
       },
     });
   } catch (error) {

@@ -164,7 +164,7 @@ async function processOutbox() {
         if(cfg.revision!==message.automation.configRevision||!await require('./ai/followups').canSend(message,cfg.data))throw Object.assign(new Error('Invoice reminder cancelled: invoice or conversation changed.'),{safe:true});
       }
       if (message.author === 'ai' && !await require('./ai/worker').eligible(message)) throw Object.assign(new Error('AI reply cancelled: ownership, input or settings changed.'), { safe: true });
-      if (!['admin','ai'].includes(message.author) && !await require('../models/Staff').exists({ _id: message.author, role: { $in: ['SS', 'CSS'] } })) throw Object.assign(new Error('The sending representative no longer has messaging access.'), { safe: true });
+      if (!['admin','ai'].includes(message.author) && !await require('../models/Staff').exists({ _id: message.author, ...require('./staffPermissions').messagingQuery })) throw Object.assign(new Error('The sending representative no longer has messaging access.'), { safe: true });
       if (!conversation || (!['admin','ai'].includes(message.author) && String(conversation.assignedTo) !== message.author)) throw Object.assign(new Error('Assignment changed. Claim the conversation and try again.'), { safe: true });
       if (message.type !== 'template' && !policy.windowOpen(conversation.lastInboundAt)) throw Object.assign(new Error('The 24-hour reply window closed. Send an approved template.'), { safe: true });
       const id = await provider.send(conversation.contact.phone, message);

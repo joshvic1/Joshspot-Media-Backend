@@ -8,7 +8,7 @@ const live=require('./live');
 const zero=new mongoose.Types.ObjectId('000000000000000000000000');
 const normalize=id=>String(id)===identity.ID?'admin':String(id);
 const notificationRecipient=id=>id==='admin'?identity.ID:id;
-async function peer(id){return id==='admin'?{_id:'admin',name:'Administrator',role:'ADMIN'}:await Staff.findOne({_id:id,role:{$in:['SS','CSS']}}).select('name role').lean();}
+async function peer(id){return id==='admin'?{_id:'admin',name:'Administrator',role:'ADMIN'}:await Staff.findOne({_id:id,...require('./staffPermissions').messagingQuery}).select('name role').lean();}
 async function present(rows,actor){
  const ids=[...new Set(rows.flatMap(r=>r.participants).filter(id=>id!=='admin'))];
  const people=await Staff.find({_id:{$in:ids}}).select('name role').lean();

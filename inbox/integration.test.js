@@ -1298,3 +1298,30 @@ for(const structuredSales of [false,true])test(`V1 repetition guard routes to sa
  assert.match((await Message.findOne({conversation:c._id,type:'activity'})).text,/avoid repeating/);
  assert.equal((await aiModels.Log.findOne({conversation:c._id,kind:'decision'})).handoff,'AI_REPEATED_RESPONSE');
 });
+
+test('setup staff inbox permission preserves assigned and mention-only boundaries', async () => {
+ const c=await fixture();const person=await Staff.findOne({role:'SES'});
+ assert.equal((await request('/session',{role:'restricted'})).status,403);
+ await Staff.updateOne({_id:person._id},{$set:{'permissions.inboxAccess':true}});
+ assert.equal((await request('/session',{role:'restricted'})).status,200);
+ assert.equal((await request(`/conversations/${c._id}`,{role:'restricted'})).status,404);
+ await Conversation.updateOne({_id:c._id},{$addToSet:{collaborators:person._id}});
+ assert.equal((await request(`/conversations/${c._id}`,{role:'restricted'})).data.noteOnly,true);
+ assert.equal((await request(`/conversations/${c._id}/messages`,{role:'restricted',method:'POST',body:outgoing()})).status,403);
+ assert.equal((await request(`/conversations/${c._id}/messages`,{role:'restricted',method:'POST',body:{...outgoing('Internal help'),type:'note'}})).status,201);
+ await Conversation.updateOne({_id:c._id},{$set:{assignedTo:person._id}});
+ assert.equal((await request(`/conversations/${c._id}`,{role:'restricted'})).data.noteOnly,false);
+ assert.equal((await request(`/conversations/${c._id}/messages`,{role:'restricted',method:'POST',body:outgoing()})).status,201);
+ await Conversation.updateOne({_id:c._id},{$set:{'ai.active':true}});
+ assert.equal((await request(`/conversations/${c._id}`,{role:'restricted'})).status,404);
+});
+
+test('only admin can return assigned chats to AI', async () => {
+ const c=await fixture();
+ const result=await request(`/ai/conversations/${c._id}/control`,{role:'agent',method:'POST',body:{action:'return'}});
+ assert.equal(result.status,403);
+ assert.equal((await Conversation.findById(c._id)).ai.active,false);
+ const adminResult=await request(`/ai/conversations/${c._id}/control`,{method:'POST',body:{action:'return'}});
+ assert.equal(adminResult.status,200);
+ assert.equal((await Conversation.findById(c._id)).ai.active,true);
+});

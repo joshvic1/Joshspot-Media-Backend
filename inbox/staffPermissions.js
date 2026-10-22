@@ -1,6 +1,7 @@
 // Optional restrictions layered on top of existing role, ownership and privacy rules.
 const definitions = [
- ['messages','Inbox','Send messages'],['notes','Inbox','Write internal notes'],
+ ['inboxAccess','Access','Access dashboard inbox'],['staffChat','Inbox','Use private staff chat'],['viewRecords','CRM records','View linked CRM details'],
+ ['messages','Inbox','Send messages'],['notes','Inbox','Write internal notes'],['mentions','Inbox','Tag colleagues in internal notes'],['resolve','Inbox','Resolve or reopen conversations'],
  ['templates','Inbox','Send approved templates'],['media','Inbox','Upload and send media'],
  ['reactions','Inbox','React to messages'],['retry','Inbox','Retry failed messages'],
  ['keepMedia','Inbox','Keep media'],['contacts','Inbox','Add contacts'],
@@ -17,8 +18,11 @@ function validate(value){
 }
 function required(req){
  const p=req.path,m=req.method,b=req.body||{},keys=[];
- if(p==='/staff-chats'||p.startsWith('/staff-chats/'))return keys;
+ if(p==='/staff-chats'||p.startsWith('/staff-chats/'))return ['staffChat'];
+ if(m==='GET' && /\/crm(?:\/|$)/.test(p))keys.push('viewRecords');
  if(m==='GET'||m==='DELETE')return keys;
+ if(b.mentions?.length)keys.push('mentions');
+ if(m==='PUT' && /^\/conversations\/[^/]+$/.test(p) && Object.hasOwn(b,'status'))keys.push('resolve');
  if(p==='/contacts')keys.push('contacts');
  if(/\/contact$/.test(p))keys.push('editContact');
  if(/\/messages$/.test(p)){keys.push(b.type==='note'?'notes':'messages');if(b.type==='template')keys.push('templates');if(['audio','video','image','document'].includes(b.type))keys.push('media');}
@@ -36,4 +40,6 @@ function deny(req,res,next,keys){
 }
 const inbox=(req,res,next)=>deny(req,res,next,required(req));
 const crm=(key)=>(req,res,next)=>deny(req,res,next,[key]);
-module.exports={definitions,validate,required,inbox,crm};
+const messagingQuery = { $or: [{ role: { $in: ['SS','CSS'] }, 'permissions.inboxAccess': { $ne: false } }, { role: 'SES', 'permissions.inboxAccess': true }] };
+const canInbox = staff => Boolean(staff && (['SS','CSS'].includes(staff.role) ? staff.permissions?.inboxAccess !== false : staff.role === 'SES' && staff.permissions?.inboxAccess === true));
+module.exports={messagingQuery,canInbox,definitions,validate,required,inbox,crm};
