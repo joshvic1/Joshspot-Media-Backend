@@ -876,7 +876,7 @@ test('push preferences default off, validate endpoints and protect recipient acc
  assert.equal(push.validateSubscription({...subscription,endpoint:'https://localhost/internal'}),false);
  assert.equal(push.validateSubscription({...subscription,endpoint:'https://fcm.googleapis.com.evil.test/send'}),false);
  assert.equal(push.validateSubscription(subscription),true);
- let r=await request('/push/preferences',{role:'agent',method:'POST',body:{endpoint:subscription.endpoint}});assert.deepEqual(r.data.preferences,{assignments:false,messages:false,mentions:false,followups:false,staff_messages:true,previews:true});
+ let r=await request('/push/preferences',{role:'agent',method:'POST',body:{endpoint:subscription.endpoint}});assert.deepEqual(r.data.preferences,{assignments:false,messages:false,mentions:false,followups:false,new_chats:false,staff_messages:true,previews:true});
  const preferences={assignments:true,messages:true,mentions:true,followups:true};
  r=await request('/push/subscription',{role:'agent',method:'PUT',body:{subscription,preferences}});assert.equal(r.status,200);
  const other=await request('/push/preferences',{role:'second',method:'POST',body:{endpoint:subscription.endpoint}});assert.equal(other.data.preferences.messages,false);
@@ -1217,7 +1217,15 @@ test('due follow-up alerts go to their scheduler once, survive transfer, and do 
  const alert=await Notification.findOne({kind:'followup'});assert.equal(String(alert.recipient),String(agent._id));
  assert.equal((await request('/notifications',{role:'agent'})).data.items.length,1);
  assert.equal((await request('/notifications',{role:'second'})).data.items.length,0);
- assert.equal((await request(`/notifications/${alert._id}/read`,{role:'agent',method:'POST',body:{}})).data.unavailable,true);
+ assert.equal(String((await request(`/notifications/${alert._id}/read`,{role:'agent',method:'POST',body:{}})).data.conversation),String(c._id));
+ assert.equal((await request(`/conversations/${c._id}`,{role:'agent'})).data.noteOnly,true);
+ assert.equal((await request('/conversations?view=follow_up',{role:'agent'})).data.items.length,1);
+ assert.equal((await request('/conversations?view=follow_up',{role:'second'})).data.items.length,0);
+ assert.equal((await request('/counts',{role:'agent'})).data.follow_up,1);
+ await Conversation.updateOne({_id:c._id},{$set:{followUpAt:new Date(Date.now()-6*3600000-1000)}});
+ assert.equal((await request('/conversations?view=follow_up',{role:'agent'})).data.items.length,0);
+ assert.equal((await request('/counts',{role:'agent'})).data.follow_up,0);
+ assert.equal((await request(`/conversations/${c._id}`,{role:'agent'})).status,200);
  assert.equal(await Message.countDocuments({direction:'outbound'}),0);assert.equal(sent.length,0);
 });
 test('cancelled and rescheduled follow-ups only notify for the active due schedule',async()=>{
@@ -1336,3 +1344,4 @@ test('short course and invoice reminders are deterministic, deduplicated and win
  const invoice=await Invoice.create({token:crypto.randomUUID(),customerPhone:contact.phone,amount:30000,status:'pending',inboxConversation:c._id});
  const sent=await Message.create({conversation:c._id,direction:'outbound',type:'text',author:'admin',status:'sent',sentAt:new Date(),invoiceDelivery:invoice._id});await r.schedule(sent);const ij=await r.Job.findOne({kind:'invoice'});assert.equal(+ij.dueAt-+sent.sentAt,3600000);await r.schedule(sent);assert.equal(await r.Job.countDocuments({kind:'invoice'}),1);await r.Job.deleteMany({});
 });
+

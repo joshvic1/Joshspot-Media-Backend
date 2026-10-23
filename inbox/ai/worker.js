@@ -56,6 +56,7 @@ async function finishHandoff(conversation,configRow) {
   const claimed=await Conversation.findOneAndUpdate({...guard,assignedTo:conversation.assignedTo || null},{$set:{assignedTo:assigned,'ai.state.assignmentStatus':'ASSIGNED','ai.state.assignedAt':new Date().toISOString(),'ai.assignmentError':'','ai.handoffRetryAt':new Date(Date.now()+30000)}},{returnDocument:'after'});
   if(!claimed)return;
   const key=`ai-handoff:${conversation._id}:${pending.inputId}:${conversation.ai.version}`;
+  await require('../push').record(`ai-assignment:${key}`,'assignments',conversation._id,require('../adminIdentity').pushRecipient(assigned));
   await Message.findOneAndUpdate({clientKey:`${key}:activity`},{$setOnInsert:{conversation:conversation._id,type:'activity',direction:'internal',status:'internal',author:'ai',authorName:config.displayName,text:`AI assigned this conversation to sales staff. Reason: ${result.handoff}\n${result.summary||require('./salesSummary').summary(result.state || conversation.ai?.state || {})}`}},{upsert:true,returnDocument:'after'});
   const fresh=String(claimed.lastInboundId)===String(pending.inputId) && pending.configRevision===configRow.revision;
   const response=result.response || config.fallbackResponse;

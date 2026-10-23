@@ -159,7 +159,7 @@ router.get('/conversations', wrap(async (req, res) => {
   const view = String(req.query.view || 'inbox');
   if (view === 'mine') filter.$and.push({ assignedTo: adminIdentity.recipient(req.actor) });
   if (view === 'unassigned') filter.$and.push({ assignedTo: null });
-  if (view === 'follow_up') filter.$and.push({ status: 'follow_up' });
+  if (view === 'follow_up') { filter.$and[0]=policy.accessible(req.actor); filter.$and.push({status:'follow_up',followUpAt:{$gt:new Date(Date.now()-6*3600000)},...(!req.actor.admin?{followUpBy:adminIdentity.recipient(req.actor)}:{})}); }
   else if (view === 'resolved') filter.$and.push({ status: 'resolved' });
   else if (!['contacts', 'inbox'].includes(view) && !['open', 'follow_up', 'resolved'].includes(req.query.status)) filter.$and.push({ status: { $ne: 'resolved' } });
   if (view === 'unread') filter.$and.push({ $expr: { $gt: ['$lastInboundId', { $ifNull: [`$reads.${req.actor.id}`, new mongoose.Types.ObjectId('000000000000000000000000')] }] } });
@@ -207,11 +207,11 @@ router.get('/conversations', wrap(async (req, res) => {
   res.json({ items, next: hasMore ? Buffer.from(JSON.stringify({ date: last.lastMessageAt, id: last.threadId || last._id })).toString('base64url') : null });
 }));
 router.get('/counts', wrap(async (req, res) => {
-  const filters = { inbox: { status: { $ne: 'resolved' } }, mine: { assignedTo: adminIdentity.recipient(req.actor), status: { $ne: 'resolved' } }, unassigned: { assignedTo: null, status: { $ne: 'resolved' } }, unread: { status: { $ne: 'resolved' }, $expr: { $gt: ['$lastInboundId', { $ifNull: [`$reads.${req.actor.id}`, new mongoose.Types.ObjectId('000000000000000000000000')] }] } }, follow_up: { status: 'follow_up' }, resolved: { status: 'resolved' } };
+  const filters = { inbox: { status: { $ne: 'resolved' } }, mine: { assignedTo: adminIdentity.recipient(req.actor), status: { $ne: 'resolved' } }, unassigned: { assignedTo: null, status: { $ne: 'resolved' } }, unread: { status: { $ne: 'resolved' }, $expr: { $gt: ['$lastInboundId', { $ifNull: [`$reads.${req.actor.id}`, new mongoose.Types.ObjectId('000000000000000000000000')] }] } }, follow_up: { status: 'follow_up',followUpAt:{$gt:new Date(Date.now()-6*3600000)},...(!req.actor.admin?{followUpBy:new mongoose.Types.ObjectId(req.actor.id)}:{}) }, resolved: { status: 'resolved' } };
   // One permission-scoped aggregation instead of six independent count queries.
   const actorScope = policy.visible({ ...req.actor, id: req.actor.admin ? req.actor.id : new mongoose.Types.ObjectId(req.actor.id) });
   filters.mine.assignedTo = new mongoose.Types.ObjectId(adminIdentity.recipient(req.actor));
-  const [counts] = await Conversation.aggregate([{ $match: actorScope }, { $facet: Object.fromEntries(Object.entries(filters).map(([key, query]) => [key, [{ $match: query }, { $count: 'total' }]])) }]);
+  const [counts] = await Conversation.aggregate([{ $match: {deleting:{$ne:true}} }, { $facet: Object.fromEntries(Object.entries(filters).map(([key, query]) => [key, [{ $match: {$and:[key==='follow_up'?policy.accessible({...req.actor,id:req.actor.admin?req.actor.id:new mongoose.Types.ObjectId(req.actor.id)}):actorScope,query]} }, { $count: 'total' }]])) }]);
   const totals=Object.fromEntries(Object.keys(filters).map(key => [key, counts[key][0]?.total || 0]));
   const staffCounts=await require('./staffChats').counts(req.actor);totals.inbox+=staffCounts.total;totals.mine+=staffCounts.total;totals.unread+=staffCounts.unread;res.json(totals);
 }));
@@ -313,7 +313,7 @@ router.put('/conversations/:id', wrap(async (req, res) => {
     }
   }
   if (!Object.keys(changes).length) fail(400, 'No changes supplied.');
-  const updated = await Conversation.findOneAndUpdate(scoped(req, { _id: current._id, revision: req.body.revision }), { $set: changes, $inc: { revision: 1 }, ...(changes.status && changes.status !== current.status ? { $push: { earningsResolutions: { at: changes.resolvedAt || new Date(), by: req.actor.id, status: changes.status } } } : {}) }, { returnDocument: 'after' });
+  const updated = await Conversation.findOneAndUpdate(scoped(req, { _id: current._id, revision: req.body.revision }), { $set: changes, ...((changes.followUpBy&&!req.actor.admin)?{$addToSet:{collaborators:changes.followUpBy}}:{}), $inc: { revision: 1 }, ...(changes.status && changes.status !== current.status ? { $push: { earningsResolutions: { at: changes.resolvedAt || new Date(), by: req.actor.id, status: changes.status } } } : {}) }, { returnDocument: 'after' });
   if (!updated) fail(409, 'This conversation changed. Refresh and try again.');
   if(changes.assignedTo && String(current.assignedTo)!==String(changes.assignedTo))await require('./push').record(`assignment:${current._id}:${updated.revision}`,'assignments',current._id,adminIdentity.pushRecipient(changes.assignedTo)).catch(()=>{});
   if (transferNote) await Message.updateOne({clientKey:`transfer-note:${current._id}:${updated.revision}`},{$setOnInsert:{conversation:current._id,type:'note',direction:'internal',status:'internal',author:req.actor.id,authorName:req.actor.name,text:transferNote}},{upsert:true});

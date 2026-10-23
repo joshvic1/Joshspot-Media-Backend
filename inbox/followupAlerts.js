@@ -4,6 +4,10 @@ const live = require('./live');
 
 // The schedule has its own stable ID, so retries cannot duplicate an alert.
 async function tick() {
+  // Restore note-only access for creators of reminders already issued before this update.
+  const issued=await Conversation.find({deleting:{$ne:true},followUpBy:{$ne:null},followUpNotifiedAt:{$ne:null},$expr:{$not:[{$in:['$followUpBy',{$ifNull:['$collaborators',[]]}]}]}}).select('_id followUpBy').limit(50).lean();
+  for(const row of issued)await Conversation.updateOne({_id:row._id,followUpBy:row.followUpBy},{$addToSet:{collaborators:row.followUpBy}});
+
   // Older schedules did not save their creator; recover only from the actual
   // scheduling activity, never assume the current assignee created it.
   const legacy = await Conversation.find({ status:'follow_up', deleting:{$ne:true}, followUpAt:{$lte:new Date(),$ne:null}, followUpBy:null }).limit(25).lean();
@@ -15,7 +19,7 @@ async function tick() {
   }
   const rows = await Conversation.find({
     status: 'follow_up', deleting: { $ne: true },
-    followUpAt: { $lte: new Date(), $ne: null }, followUpBy: { $ne: null },
+    followUpAt: { $lte: new Date(), $gt:new Date(Date.now()-6*3600000) }, followUpBy: { $ne: null },
     followUpAlertId: { $ne: null }, followUpNotifiedAt: null,
   }).sort({ followUpAt: 1 }).limit(50).lean();
   for (const row of rows) {
@@ -25,7 +29,8 @@ async function tick() {
       $setOnInsert: { kind: 'followup', conversation: row._id, authorName: 'Follow-up reminder' },
     }, { upsert: true });
     // A reschedule/cancellation racing this worker must not leave a stale alert.
-    const updated = await Conversation.updateOne(schedule, { $set: { followUpNotifiedAt: new Date() } });
+    const updated = await Conversation.updateOne(schedule, { $set: { followUpNotifiedAt: new Date() }, $addToSet:{collaborators:row.followUpBy} });
+    if(updated.matchedCount)await require('./push').record(`followup:${row.followUpAlertId}`,'followups',row._id,require('./adminIdentity').pushRecipient(row.followUpBy),undefined,row.followUpAt);
     if (!updated.matchedCount) await Notification.deleteOne({ recipient: row.followUpBy, message: row.followUpAlertId });
     live.notify();
   }

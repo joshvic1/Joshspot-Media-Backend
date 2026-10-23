@@ -170,3 +170,18 @@ test('resolved samples reconcile once and later human replies update rather than
  await Message.create({conversation:c._id,direction:'outbound',type:'text',status:'sent',text:'Details',author:String(other._id),createdAt:at('18:00')});
  await worker.reconcile(c.toObject(),cfg);samples=await Sample.find({conversation:c._id});assert.equal(samples.length,1);assert.equal(+samples[0].endedAt,+at('18:00'));assert.equal(String(samples[0].inbound),String(q._id));
 });
+
+test('admin password change accepts new login, rejects old and preserves password when blank',async()=>{
+ const bcrypt=require('bcryptjs');const oldPassword='Old-synthetic-123',newPassword='New-synthetic-456';
+ await Staff.updateOne({_id:staff._id},{$set:{password:await bcrypt.hash(oldPassword,12)}});
+ const body={name:staff.name,email:staff.email,role:'CSS',permissions:{},password:newPassword};
+ const path='/staff-management/'+staff._id;
+ assert.equal((await request(path,body,false,'PUT')).status,403);
+ assert.equal((await request(path,{...body,password:'short'},true,'PUT')).status,400);
+ const result=await request(path,body,true,'PUT');assert.equal(result.status,200);assert.equal(result.data.password,undefined);
+ const stored=await Staff.findById(staff._id);assert.notEqual(stored.password,newPassword);assert.ok(await bcrypt.compare(newPassword,stored.password));
+ async function login(password){const res={code:200,status(code){this.code=code;return this},json(data){this.data=data;}};await require('../../controllers/crmController').crmLogin({body:{email:staff.email,password}},res);return res;}
+ assert.equal((await login(oldPassword)).code,401);assert.equal((await login(newPassword)).code,200);
+ assert.equal((await request(path,{...body,password:''},true,'PUT')).status,200);
+ assert.equal((await Staff.findById(staff._id)).password,stored.password);
+});

@@ -73,6 +73,7 @@ async function receive(value) {
       await Conversation.updateOne({_id:conversation._id,deleting:{$ne:true},$or:[{lastMessageId:{$lt:reply._id}},{lastMessageId:null}]},{$set:{lastMessageId:reply._id,lastMessageAt:reply.createdAt,preview:response.slice(0,160)}});
       live.notify();
     }
+    if(!conversation.lastInboundId)await require('./push').record(`new-chat:${conversation._id}`,'new_chats',conversation._id,undefined,stored._id);
     await require('./push').record(`message:${stored._id}`,'messages',conversation._id,undefined,stored._id);
     if (result?.upsertedCount) publish('message.received', { conversationId: String(conversation._id), providerId: item.id });
   }
