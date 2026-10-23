@@ -11,7 +11,7 @@ const eventSchema = new mongoose.Schema({key:{type:String,unique:true},kind:Stri
 eventSchema.index({createdAt:1},{expireAfterSeconds:604800});
 const Subscription=mongoose.model('InboxPushSubscription',subscriptionSchema);
 const Event=mongoose.model('InboxPushEvent',eventSchema);
-const preference=(prefs,kind)=>kind==='staff_messages' ? prefs?.staff_messages!==false : prefs?.[kind]===true && (kind==='mentions'||prefs?.customizationVersion===1);
+const preference=(prefs,kind)=>!prefs ? allowedKind(kind)&&kind!=='messages' : kind==='staff_messages' ? prefs?.staff_messages!==false : prefs?.[kind]===true && (kind==='mentions'||prefs?.customizationVersion===1);
 const configured=()=>Boolean(process.env.INBOX_PUSH_PUBLIC_KEY&&process.env.INBOX_PUSH_PRIVATE_KEY&&process.env.INBOX_PUSH_SUBJECT);
 function validateSubscription(s){
   let u;try{u=new URL(s?.endpoint)}catch{return false}

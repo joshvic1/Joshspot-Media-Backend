@@ -19,3 +19,10 @@ test('old preferences stay quiet until the user opts in to expanded alerts',asyn
  await handlers['/push/subscription']({actor:{id:'staff'},body:{subscription:{endpoint:'https://fcm.googleapis.com/test',keys:{p256dh:'a'.repeat(87),auth:'b'.repeat(22)}},preferences:{assignments:true,messages:true,mentions:true,followups:true}}},res);
  assert.deepEqual(saved,{customizationVersion:1,assignments:true,messages:true,mentions:true,followups:true,new_chats:false,staff_messages:true,previews:true});
 });
+
+test('new devices default all notification types on except every message',async t=>{
+ const handlers={};const router={get:(p,h)=>handlers[p]=h,post:(p,h)=>handlers[p]=h,put:(p,h)=>handlers[p]=h,delete:()=>{}};push.routes(router,h=>h,async()=>{});
+ t.mock.method(push.Subscription,'findOne',()=>({lean:async()=>null}));let result;
+ await handlers['/push/preferences']({body:{endpoint:'https://fcm.googleapis.com/test'},actor:{id:'staff'}},{json:data=>result=data});
+ assert.deepEqual(result.preferences,{assignments:true,messages:false,mentions:true,followups:true,new_chats:true,staff_messages:true,previews:true});
+});

@@ -876,7 +876,7 @@ test('push preferences default off, validate endpoints and protect recipient acc
  assert.equal(push.validateSubscription({...subscription,endpoint:'https://localhost/internal'}),false);
  assert.equal(push.validateSubscription({...subscription,endpoint:'https://fcm.googleapis.com.evil.test/send'}),false);
  assert.equal(push.validateSubscription(subscription),true);
- let r=await request('/push/preferences',{role:'agent',method:'POST',body:{endpoint:subscription.endpoint}});assert.deepEqual(r.data.preferences,{assignments:false,messages:false,mentions:false,followups:false,new_chats:false,staff_messages:true,previews:true});
+ let r=await request('/push/preferences',{role:'agent',method:'POST',body:{endpoint:subscription.endpoint}});assert.deepEqual(r.data.preferences,{assignments:true,messages:false,mentions:true,followups:true,new_chats:true,staff_messages:true,previews:true});
  const preferences={assignments:true,messages:true,mentions:true,followups:true};
  r=await request('/push/subscription',{role:'agent',method:'PUT',body:{subscription,preferences}});assert.equal(r.status,200);
  const other=await request('/push/preferences',{role:'second',method:'POST',body:{endpoint:subscription.endpoint}});assert.equal(other.data.preferences.messages,false);
