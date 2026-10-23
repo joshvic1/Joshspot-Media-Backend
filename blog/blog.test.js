@@ -25,6 +25,15 @@ test('sanitizes pasted HTML while keeping article formatting',()=>{
   assert.ok(html.includes('<h2>Hello</h2>'));assert.ok(html.includes('text-align:center'));assert.ok(html.includes('table'));assert.ok(html.includes('https://example.test/photo.jpg'));
   for(const unsafe of ['onclick','onerror','javascript:','data:image','<script','position:fixed'])assert.equal(html.includes(unsafe),false);
 });
+test('video embeds survive saving between paragraphs and reject unsafe frames',()=>{
+ const html=clean('<p>Before</p><iframe src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ" allowfullscreen="true" onload="bad()" srcdoc="bad"></iframe><p>After</p><iframe src="https://player.vimeo.com/video/123456"></iframe>');
+ assert.ok(html.includes('youtube-nocookie.com/embed/dQw4w9WgXcQ'));
+ assert.ok(html.includes('player.vimeo.com/video/123456'));
+ assert.ok(html.indexOf('<p>Before')<html.indexOf('<iframe'));
+ assert.ok(html.indexOf('<p>After')>html.indexOf('</iframe>'));
+ assert.ok(!html.includes('onload'));assert.ok(!html.includes('srcdoc'));
+ for(const src of ['javascript:alert(1)','https://evil.test/embed/123','https://www.youtube-nocookie.com.evil.test/embed/dQw4w9WgXcQ','//player.vimeo.com/video/123'])assert.ok(!clean(`<iframe src="${src}"></iframe>`).includes('<iframe'));
+});
 test('admin-only lifecycle, private drafts, safe updates, immediate unpublish and delete',async()=>{
   assert.equal((await request('/admin/posts','POST',sample,null)).status,401);
   assert.equal((await request('/admin/posts','GET',undefined,jwt.sign({role:'SS'},process.env.JWT_SECRET))).status,401);

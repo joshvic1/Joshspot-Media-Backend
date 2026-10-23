@@ -1,13 +1,14 @@
 const sanitize = require('sanitize-html');
+const videoUrl = value => typeof value==='string' && /^https:\/\/(?:www\.youtube-nocookie\.com\/embed\/[\w-]{11}|player\.vimeo\.com\/video\/\d+)$/.test(value);
 const imageUrl = value => typeof value === 'string' && (/^\/api\/blog\/images\/[a-f\d]{24}$/.test(value) || /^https:\/\/[^\s<>"']+$/i.test(value));
 function clean(html) {
   return sanitize(String(html || ''), {
-    allowedTags: ['p','br','h2','h3','h4','strong','b','em','i','u','s','blockquote','ul','ol','li','a','img','hr','pre','code','table','thead','tbody','tr','th','td','span'],
-    allowedAttributes: { a:['href','title','target','rel'], img:['src','alt','title','width','height','loading'], ol:['start'], td:['colspan','rowspan'], th:['colspan','rowspan'], '*':['style'] },
+    allowedTags: ['iframe','p','br','h2','h3','h4','strong','b','em','i','u','s','blockquote','ul','ol','li','a','img','hr','pre','code','table','thead','tbody','tr','th','td','span'],
+    allowedAttributes: { iframe:['src','title','loading','allowfullscreen','allow','referrerpolicy'], a:['href','title','target','rel'], img:['src','alt','title','width','height','loading'], ol:['start'], td:['colspan','rowspan'], th:['colspan','rowspan'], '*':['style'] },
     allowedSchemes:['https','http','mailto','tel'], allowProtocolRelative:false,
     allowedStyles:{'*':{'text-align':[/^(left|center|right|justify)$/],color:[/^#[\da-f]{3,8}$/i,/^rgb\([\d ,]+\)$/], 'background-color':[/^#[\da-f]{3,8}$/i,/^rgb\([\d ,]+\)$/]}},
     transformTags:{h1:'h2',a:(tag,attrs)=>({tagName:'a',attribs:{...attrs,rel:'noopener noreferrer',target:'_blank'}}),img:(tag,attrs)=>({tagName:'img',attribs:{...attrs,loading:'lazy'}})},
-    exclusiveFilter: frame => frame.tag === 'img' && !imageUrl(frame.attribs.src),
+    exclusiveFilter: frame => (frame.tag === 'img' && !imageUrl(frame.attribs.src)) || (frame.tag==='iframe'&&!videoUrl(frame.attribs.src)),
   });
 }
 const plain = html => sanitize(String(html || '').replace(/<\/(?:p|h[1-6]|li|blockquote|tr)>/gi,'$& '),{allowedTags:[],allowedAttributes:{}}).replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/\s+/g,' ').trim();
