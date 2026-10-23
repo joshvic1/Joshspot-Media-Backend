@@ -1224,6 +1224,8 @@ test('due follow-up alerts go to their scheduler once, survive transfer, and do 
  assert.equal((await request('/counts',{role:'agent'})).data.follow_up,1);
  await Conversation.updateOne({_id:c._id},{$set:{followUpAt:new Date(Date.now()-6*3600000-1000)}});
  assert.equal((await request('/conversations?view=follow_up',{role:'agent'})).data.items.length,0);
+ assert.equal((await request('/conversations?status=follow_up',{role:'agent'})).data.items.length,0);
+ assert.equal((await request('/conversations?status=follow_up',{role:'admin'})).data.items.length,0);
  assert.equal((await request('/counts',{role:'agent'})).data.follow_up,0);
  assert.equal((await request(`/conversations/${c._id}`,{role:'agent'})).status,200);
  assert.equal(await Message.countDocuments({direction:'outbound'}),0);assert.equal(sent.length,0);

@@ -159,7 +159,7 @@ router.get('/conversations', wrap(async (req, res) => {
   const view = String(req.query.view || 'inbox');
   if (view === 'mine') filter.$and.push({ assignedTo: adminIdentity.recipient(req.actor) });
   if (view === 'unassigned') filter.$and.push({ assignedTo: null });
-  if (view === 'follow_up') { filter.$and[0]=policy.accessible(req.actor); filter.$and.push({status:'follow_up',followUpAt:{$gt:new Date(Date.now()-6*3600000)},...(!req.actor.admin?{followUpBy:adminIdentity.recipient(req.actor)}:{})}); }
+  if (view === 'follow_up' || req.query.status === 'follow_up') { filter.$and[0]=policy.accessible(req.actor); filter.$and.push({status:'follow_up',followUpAt:{$gt:new Date(Date.now()-6*3600000)},...(!req.actor.admin?{followUpBy:adminIdentity.recipient(req.actor)}:{})}); }
   else if (view === 'resolved') filter.$and.push({ status: 'resolved' });
   else if (!['contacts', 'inbox'].includes(view) && !['open', 'follow_up', 'resolved'].includes(req.query.status)) filter.$and.push({ status: { $ne: 'resolved' } });
   if (view === 'unread') filter.$and.push({ $expr: { $gt: ['$lastInboundId', { $ifNull: [`$reads.${req.actor.id}`, new mongoose.Types.ObjectId('000000000000000000000000')] }] } });
