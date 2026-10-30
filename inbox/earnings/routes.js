@@ -16,7 +16,7 @@ async function report(staff,from,to,cfg,{actor,latePage}={}){
  const now=new Date();
  const availabilityEnd=rows.reduce((last,row)=>{const end=dayKey(row.endedAt||now);return end>last?end:last},to);
  const availability=await Availability.find({staff,day:{$gte:from,$lte:availabilityEnd}}).lean();
- const controls=await Control.find({staff,$or:[{kind:'reset',from:{$lt:end},to:{$gte:start}},{kind:'pause',from:{$lt:new Date(+dayStart(availabilityEnd)+DAY)},$or:[{to:null},{to:{$gte:start}}]}]}).lean();
+ const controls=await Control.find({staff,$or:[{kind:'reset',from:{$lt:end},to:{$gte:start}},{kind:{$in:['pause','birthday']},from:{$lt:new Date(+dayStart(availabilityEnd)+DAY)},$or:[{to:null},{to:{$gte:start}}]}]}).lean();
  for(const row of rows){
   const resets=controls.filter(c=>c.kind==='reset'&&+row.startedAt>=+c.from&&+row.startedAt<+c.to&&+row.startedAt<=+c.at).sort((a,b)=>+b.at-+a.at);
   const reset=resets[0];if(!reset||row.exclusion?.reason)continue;
@@ -24,7 +24,7 @@ async function report(staff,from,to,cfg,{actor,latePage}={}){
   else row.timingStartedAt=new Date(Math.max(+row.startedAt,+reset.at));
  }
 
- const breaks=mergeIntervals([...offlineIntervals(availability,now),...controls.filter(c=>c.kind==='pause').map(c=>[+c.from,Math.min(+new Date(c.to||now),+now)])]);
+ const breaks=mergeIntervals([...offlineIntervals(availability,now),...controls.filter(c=>['pause','birthday'].includes(c.kind)).map(c=>[+c.from,Math.min(+new Date(c.to||now),+now)])]);
  const grouped={};for(const row of rows){const month=dayKey(row.startedAt).slice(0,7);(grouped[month]||=[]).push(row);}
  // Include empty months so adjustments and finalized statements are still visible.
  let cursor=from.slice(0,7);while(cursor<=to.slice(0,7)){grouped[cursor]||=[];const d=new Date(`${cursor}-01T00:00:00Z`);d.setUTCMonth(d.getUTCMonth()+1);cursor=d.toISOString().slice(0,7);}

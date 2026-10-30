@@ -85,6 +85,14 @@ router.use((req, res, next) => {
 require('./push').routes(router,wrap,rateLimit);
 require('./earnings/routes').routes(router,wrap,rateLimit);
 require('./staffRoutes')(router,wrap,rateLimit);
+const birthday = require('./birthday');
+router.get('/birthday', wrap(async (req, res) => {
+  res.json(await birthday.status(req.actor));
+}));
+router.post('/birthday/complete', wrap(async (req, res) => {
+  await rateLimit(req, 10, 'birthday');
+  res.json(await birthday.complete(req.actor));
+}));
 router.use('/ai', require('./ai/routes'));
 router.post('/events-ticket', wrap(async (req, res) => {
   for (const [key, value] of tickets) if (value.until < Date.now()) tickets.delete(key);
