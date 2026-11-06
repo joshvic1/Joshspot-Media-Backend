@@ -40,7 +40,7 @@ const seedCrmUsers = async () => {
           password: hashedPassword,
           role: user.role,
         },
-        { upsert: true, new: true },
+        { upsert: true, returnDocument: 'after' },
       );
 
       console.log(`${user.role} user ready: ${user.email}`);

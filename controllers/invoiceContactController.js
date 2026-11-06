@@ -9,7 +9,7 @@ exports.update=async(req,res)=>{
  try{
   const row=await Invoice.findOneAndUpdate({_id:req.params.id,status:'paid',deletedAt:null,
    $and:['receiptClaimedAt','courseEmailClaimedAt'].map(key=>({$or:[{[key]:null},{[key]:{$lt:new Date(Date.now()-120000)}}]}))
-  },{$set:{customerEmail:email,customerPhone:phone}},{new:true});
+  },{$set:{customerEmail:email,customerPhone:phone}},{returnDocument:'after'});
   if(!row)return res.status(409).json({message:'Invoice is unavailable, unpaid, or an email is currently being sent. Refresh and try again.'});
   return res.json({message:'Invoice contact details saved. You can now send to the corrected email.',email:row.customerEmail,phone:row.customerPhone});
  }catch{return res.status(500).json({message:'Unable to update invoice contact details.'});}

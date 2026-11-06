@@ -152,7 +152,7 @@ exports.updateAdsClient = async (req, res) => {
     update.updatedBy = req.staff.staffId;
 
     const client = await AdsClient.findByIdAndUpdate(req.params.id, update, {
-      new: true,
+      returnDocument: 'after',
       runValidators: true,
     });
 

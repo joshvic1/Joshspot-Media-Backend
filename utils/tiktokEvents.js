@@ -51,7 +51,7 @@ async function deliverTikTokPurchase(id) {
       { $or: [{ tiktokPurchaseClaimedAt: null }, { tiktokPurchaseClaimedAt: { $lt: new Date(Date.now() - 120000) } }] },
       { $or: [{ tiktokPurchaseRetryAt: null }, { tiktokPurchaseRetryAt: { $lte: now } }] },
     ],
-  }, { $set: { tiktokPurchaseClaimedAt: now } }, { new: true });
+  }, { $set: { tiktokPurchaseClaimedAt: now } }, { returnDocument: 'after' });
   if (!invoice) return "skipped";
   try {
     if (!eligible(invoice)) throw new Error("Ineligible invoice");

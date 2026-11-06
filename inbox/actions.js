@@ -16,7 +16,7 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
     if (!/^[a-z0-9_-]{1,40}$/.test(keyword) || typeof response !== 'string' || !response.trim() || response.length > 4096) fail(400, 'Use a short keyword and a response of 1–4096 characters.');
     if (!req.body.id && await QuickReply.countDocuments() >= 500) fail(400, 'Up to 500 quick replies are supported.');
     try {
-      const item = req.body.id ? await QuickReply.findByIdAndUpdate(id(req.body.id), { keyword, response, updatedBy: req.actor.id }, { new: true }) : await QuickReply.create({ keyword, response, updatedBy: req.actor.id });
+      const item = req.body.id ? await QuickReply.findByIdAndUpdate(id(req.body.id), { keyword, response, updatedBy: req.actor.id }, { returnDocument: 'after' }) : await QuickReply.create({ keyword, response, updatedBy: req.actor.id });
       if (!item) fail(404, 'Quick reply not found.'); res.json(item);
     } catch (e) { if (e.code === 11000) fail(409, 'That keyword already exists.'); throw e; }
   }));
@@ -53,7 +53,7 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
     await require('./ai/worker').pause(c._id, req.actor, 'HUMAN_REPLY');
     if (!invoice) { try { invoice = await Invoice.create({ automationKey: key, token: randomUUID(), amount, customerName: c.contact.name, customerPhone: c.contact.phone, customerEmail: c.contact.email, inboxContact: c.contact._id, inboxConversation: c._id, note: 'Joshspot Inbox invoice', expiresAt: new Date(Date.now() + 8 * 3600000) }); } catch (e) { if (e.code !== 11000) throw e; invoice = await Invoice.findOne({ automationKey: key }); } }
     if (!invoice.accountNumber) {
-      const claimed = await Invoice.findOneAndUpdate({ _id: invoice._id, automationGenerating: { $ne: true }, reference: { $exists: false } }, { $set: { automationGenerating: true } }, { new: true });
+      const claimed = await Invoice.findOneAndUpdate({ _id: invoice._id, automationGenerating: { $ne: true }, reference: { $exists: false } }, { $set: { automationGenerating: true } }, { returnDocument: 'after' });
       if (!claimed) fail(409, 'Invoice generation is processing or needs review. Do not create another invoice.');
       try { invoice = await invoiceService.generateInvoiceTransfer(claimed); } catch { fail(502, 'Payment account generation needs review before retrying.'); }
     }

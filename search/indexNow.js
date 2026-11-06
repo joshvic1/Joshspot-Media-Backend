@@ -38,7 +38,7 @@ async function processQueue(fetcher = fetch) {
   if (process.env.INDEXNOW_ENABLED !== 'true') return;
   for (let count = 0; count < 25; count++) {
     const now = new Date();
-    const entry = await Entry.findOneAndUpdate({ pending: true, nextAttempt: { $lte: now }, $or: [{ leaseUntil: { $exists: false } }, { leaseUntil: { $lte: now } }] }, { $set: { leaseUntil: new Date(Date.now() + 60000) } }, { new: true }).lean();
+    const entry = await Entry.findOneAndUpdate({ pending: true, nextAttempt: { $lte: now }, $or: [{ leaseUntil: { $exists: false } }, { leaseUntil: { $lte: now } }] }, { $set: { leaseUntil: new Date(Date.now() + 60000) } }, { returnDocument: 'after' }).lean();
     if (!entry) break;
     let status = 0, error = '';
     try {

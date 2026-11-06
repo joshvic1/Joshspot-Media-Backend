@@ -54,7 +54,7 @@ router.put('/admin/posts/:id',wrap(async(req,res)=>{
   if(!old)return res.status(404).json({message:'Article not found.'});
   if(data.status==='published'&&!old.publishedAt)data.publishedAt=new Date();
   if(data.status==='published'&&search.changed(old,data))data.seoUpdatedAt=new Date();
-  const saved=await Post.findOneAndUpdate({_id:old._id,__v:req.body.__v},{$set:data,$inc:{__v:1}},{new:true});
+  const saved=await Post.findOneAndUpdate({_id:old._id,__v:req.body.__v},{$set:data,$inc:{__v:1}},{returnDocument:'after'});
   if(!saved)return res.status(409).json({message:'This article changed in another tab. Reload it before saving.'});await search.articleChanged(old,saved);res.json(saved);
 }));
 router.delete('/admin/posts/:id',wrap(async(req,res)=>{

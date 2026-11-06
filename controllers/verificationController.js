@@ -88,7 +88,7 @@ exports.updateVerificationClient = async (req, res) => {
     }
 
     const client = await VerificationClient.findByIdAndUpdate(req.params.id, update, {
-      new: true,
+      returnDocument: 'after',
       runValidators: true,
     });
 

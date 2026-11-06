@@ -107,7 +107,7 @@ exports.remindCoursePayment = async (req, res) => {
     claimed = await Invoice.findOneAndUpdate({ _id: invoice._id, status: { $ne: "paid" }, $and: [
       { $or: [{ reminderSentAt: { $exists: false } }, { reminderSentAt: { $lt: new Date(Date.now() - 86400000) } }] },
       { $or: [{ reminderClaimedAt: { $exists: false } }, { reminderClaimedAt: { $lt: new Date(Date.now() - 300000) } }] },
-    ] }, { $set: { reminderClaimedAt: now } }, { new: true });
+    ] }, { $set: { reminderClaimedAt: now } }, { returnDocument: 'after' });
     if (!claimed) return res.status(429).json({ message: "A reminder was already sent in the last 24 hours, or is being sent now." });
     const courseName = invoice.product === "whatsapp-course" ? "WhatsApp Status ads course" : "TikTok, Facebook and Instagram ads course";
     const retryUrl = `${(process.env.CLIENT_URL || "https://joshspotmedia.com").replace(/\/$/, "")}/${invoice.product === "whatsapp-course" ? "whatsapp" : "course"}`;

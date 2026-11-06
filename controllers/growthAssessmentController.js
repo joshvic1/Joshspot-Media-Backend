@@ -271,7 +271,7 @@ exports.markGrowthAssessmentCalled = async (req, res) => {
         called: true,
         calledAt: new Date(),
       },
-      { new: true },
+      { returnDocument: 'after' },
     );
 
     if (!assessment) {

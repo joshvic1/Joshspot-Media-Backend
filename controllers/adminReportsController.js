@@ -82,7 +82,7 @@ exports.deleteRecord = async (req, res) => {
   if (!model || !/^[a-f\d]{24}$/i.test(req.params.id)) return res.status(400).json({ message: "Invalid record." });
   try {
     const update = req.method === "DELETE" ? { $set: { deletedAt: new Date() } } : { $unset: { deletedAt: 1 } };
-    const record = await model.findByIdAndUpdate(req.params.id, update, { new: true });
+    const record = await model.findByIdAndUpdate(req.params.id, update, { returnDocument: 'after' });
     if (!record) return res.status(404).json({ message: "Record not found." });
     return res.json({ message: req.method === "DELETE" ? "Record deleted from CRM views. You can undo this." : "Record restored." });
   } catch { return res.status(500).json({ message: "Unable to update this record." }); }

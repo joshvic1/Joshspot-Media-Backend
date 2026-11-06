@@ -176,7 +176,7 @@ exports.updateClient = async (req, res) => {
     update.updatedBy = req.staff.staffId;
 
     const client = await Client.findByIdAndUpdate(req.params.id, update, {
-      new: true,
+      returnDocument: 'after',
       runValidators: true,
     });
 

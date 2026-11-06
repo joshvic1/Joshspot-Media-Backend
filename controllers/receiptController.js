@@ -18,7 +18,7 @@ exports.sendReceipt = async (req,res) => {
     claimed = await Invoice.findOneAndUpdate({_id:invoice._id,status:'paid',deletedAt:null,
       $and:[{$or:[{receiptClaimedAt:null},{receiptClaimedAt:{$lt:new Date(Date.now()-120000)}}]},
         {$or:[{receiptSentAt:null},{receiptSentAt:{$lt:new Date(Date.now()-60000)}}]}],
-    },{$set:{receiptClaimedAt:now,customerEmail:email,customerName:name}},{new:true});
+    },{$set:{receiptClaimedAt:now,customerEmail:email,customerName:name}},{returnDocument:'after'});
     if (!claimed) return res.status(429).json({message:'A receipt is being sent or was sent within the last minute. Please wait before retrying.'});
     const {data,error} = await new Resend(process.env.RESEND_API_KEY).emails.send({
       from:process.env.RESEND_FROM_EMAIL || 'Joshspot Media <booking@joshspotmedia.com>',to:email,...receipt(claimed),

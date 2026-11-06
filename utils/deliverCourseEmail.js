@@ -19,7 +19,7 @@ async function deliverCourseEmail(id, { resend = false } = {}) {
       { $or: [{ courseEmailClaimedAt: null }, { courseEmailClaimedAt: { $lt: new Date(Date.now() - 120000) } }] },
       resend ? { $or: [{ courseEmailSentAt: null }, { courseEmailSentAt: { $lt: new Date(Date.now() - 60000) } }] } : { courseEmailSentAt: null },
     ],
-  }, { $set: { courseEmailClaimedAt: now, courseEmailQueuedAt: now } }, { new: true });
+  }, { $set: { courseEmailClaimedAt: now, courseEmailQueuedAt: now } }, { returnDocument: 'after' });
   if (!claimed) return "busy";
   try {
     if (!process.env.RESEND_API_KEY) throw new Error("Resend is not configured");
