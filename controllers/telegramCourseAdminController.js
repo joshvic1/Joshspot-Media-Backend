@@ -3,7 +3,7 @@ const Channel = require('../models/TelegramCourseChannel');
 const Identity = require('../models/TelegramCourseIdentity');
 const Access = require('../models/TelegramCourseAccess');
 const telegram = require('../telegram/client');
-const { revokeIdentity, restoreIdentity } = require('../telegram/access');
+const { revokeIdentity, restoreIdentity, resetIdentityBinding } = require('../telegram/access');
 
 const PRODUCTS = new Set(['ads-course', 'whatsapp-course']);
 
@@ -46,7 +46,7 @@ function cleanChannelInput(body) {
 }
 
 async function accessRows() {
-  const identities = await Identity.find({}).sort({ updatedAt: -1 }).lean();
+  const identities = await Identity.find({ bindingReleasedAt: { $exists: false } }).sort({ updatedAt: -1 }).lean();
   const identityIds = identities.map((item) => item._id);
   const accesses = identityIds.length
     ? await Access.find({ identity: { $in: identityIds } }).populate('channel', 'title product active').lean()
@@ -180,5 +180,19 @@ exports.restore = async (req, res) => {
   } catch (error) {
     console.error('TELEGRAM COURSE RESTORE ERROR', { message: error.message, telegram: error.telegram });
     return res.status(error.status || 502).json({ message: 'Telegram could not restore this buyer’s access. Check the channel mapping and bot permissions.' });
+  }
+};
+
+exports.resetBinding = async (req, res) => {
+  try {
+    const identity = await findIdentity(req, res);
+    if (!identity) return;
+    if (identity.bindingReleasedAt) return res.status(409).json({ message: 'This Telegram account has already been reset.' });
+    const reset = await resetIdentityBinding(identity, String(req.body?.reason || '').trim());
+    if (reset.alreadyReleased) return res.status(409).json({ message: 'This Telegram account has already been reset.' });
+    return res.json({ message: 'The old Telegram account was removed. The next different Telegram account that enters this paid email can now receive access.' });
+  } catch (error) {
+    console.error('TELEGRAM COURSE RESET BINDING ERROR', { message: error.message, telegram: error.telegram });
+    return res.status(error.status || 502).json({ message: 'Telegram could not remove the old account from every mapped channel. The email remains protected.' });
   }
 };

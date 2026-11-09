@@ -13,6 +13,7 @@ const Channel = require('../models/TelegramCourseChannel');
 const Identity = require('../models/TelegramCourseIdentity');
 const Invite = require('../models/TelegramCourseInvite');
 const Access = require('../models/TelegramCourseAccess');
+const BindingAudit = require('../models/TelegramCourseBindingAudit');
 const telegram = require('../telegram/client');
 const courseAccess = require('../telegram/access');
 
@@ -73,7 +74,16 @@ async function main() {
     assert.equal(restored.revokedAt, undefined);
     assert.equal(calls.filter((call) => call.method === 'unbanChatMember').length, 2);
     assert.equal(calls.filter((call) => call.method === 'sendMessage').length, 2);
-    console.log('PASS: Telegram course access binds the first paid-email account, issues protected join requests, rejects another account, and revokes/restores access without external calls.');
+
+    const reset = await courseAccess.resetIdentityBinding(await Identity.findById(first.identity._id), 'customer changed Telegram account');
+    assert.equal(reset.alreadyReleased, false);
+    assert.ok(reset.identity.bindingReleasedAt);
+    assert.equal(await BindingAudit.countDocuments({ email }), 1);
+    assert.equal((await courseAccess.bindIdentity({ telegramUser: { id: 500 }, email })).reason, 'released_account');
+    const rebound = await courseAccess.bindIdentity({ telegramUser: { id: 501, username: 'newbuyer' }, email });
+    assert.equal(rebound.ok, true);
+    assert.equal(String(rebound.identity._id), String(first.identity._id));
+    console.log('PASS: Telegram course access binds the first paid-email account, issues protected join requests, revokes/restores access, and securely releases an email for one replacement account without external calls.');
   } finally {
     await mongoose.disconnect();
     await mongo.stop();

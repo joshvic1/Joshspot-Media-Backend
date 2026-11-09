@@ -31,4 +31,5 @@ router.patch("/telegram-access/channels/:id", adminAuth, telegramCourseAdmin.upd
 router.delete("/telegram-access/channels/:id", adminAuth, telegramCourseAdmin.deactivateChannel);
 router.post("/telegram-access/:id/revoke", adminAuth, telegramCourseAdmin.revoke);
 router.post("/telegram-access/:id/restore", adminAuth, telegramCourseAdmin.restore);
+router.post("/telegram-access/:id/reset-binding", adminAuth, telegramCourseAdmin.resetBinding);
 module.exports = router;

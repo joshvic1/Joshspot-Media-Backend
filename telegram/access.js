@@ -4,6 +4,7 @@ const Channel = require('../models/TelegramCourseChannel');
 const Identity = require('../models/TelegramCourseIdentity');
 const Invite = require('../models/TelegramCourseInvite');
 const Access = require('../models/TelegramCourseAccess');
+const BindingAudit = require('../models/TelegramCourseBindingAudit');
 const telegram = require('./client');
 
 const COURSE_PRODUCTS = new Set(['ads-course', 'whatsapp-course']);
@@ -65,8 +66,10 @@ async function bindIdentity({ telegramUser, email, accessToken = '' }) {
 
   const telegramUserId = String(telegramUser.id);
   let identity = await Identity.findOne({ email: normalized });
-  if (identity && identity.telegramUserId !== telegramUserId) return { ok: false, reason: 'bound_elsewhere' };
-  if (identity?.revokedAt) return { ok: false, reason: 'revoked' };
+  const releasedBinding = Boolean(identity?.bindingReleasedAt);
+  if (identity && !releasedBinding && identity.telegramUserId !== telegramUserId) return { ok: false, reason: 'bound_elsewhere' };
+  if (identity?.revokedAt && !releasedBinding) return { ok: false, reason: 'revoked' };
+  if (releasedBinding && await BindingAudit.exists({ email: normalized, releasedTelegramUserId: telegramUserId })) return { ok: false, reason: 'released_account' };
 
   const values = {
     telegramUserId,
@@ -83,7 +86,12 @@ async function bindIdentity({ telegramUser, email, accessToken = '' }) {
       if (!identity || identity.telegramUserId !== telegramUserId) return { ok: false, reason: 'bound_elsewhere' };
     }
   } else {
-    identity = await Identity.findByIdAndUpdate(identity._id, { $set: values }, { returnDocument: 'after' });
+    const update = { $set: values };
+    if (releasedBinding) {
+      update.$set.boundAt = new Date();
+      update.$unset = { bindingReleasedAt: 1, bindingReleasedReason: 1, revokedAt: 1, revokedReason: 1 };
+    }
+    identity = await Identity.findByIdAndUpdate(identity._id, update, { returnDocument: 'after' });
   }
   return { ok: true, identity, invoices };
 }
@@ -139,7 +147,7 @@ async function approveJoinRequest(request) {
   }
   const identity = invite.identity;
   const channel = invite.channel;
-  const permitted = identity && channel && !identity.revokedAt && invite.telegramUserId === telegramUserId && String(channel.chatId) === String(request.chat.id) && (await entitledProducts(identity.email)).includes(channel.product);
+  const permitted = identity && channel && !identity.revokedAt && !identity.bindingReleasedAt && invite.telegramUserId === telegramUserId && String(channel.chatId) === String(request.chat.id) && (await entitledProducts(identity.email)).includes(channel.product);
   if (!permitted) {
     await Invite.updateOne({ _id: invite._id }, { $set: { status: 'declined', declinedAt: new Date() } });
     await telegram.call('declineChatJoinRequest', { chat_id: request.chat.id, user_id: request.from.id });
@@ -183,4 +191,41 @@ async function restoreIdentity(identity) {
   return restored;
 }
 
-module.exports = { COURSE_PRODUCTS, normalizeEmail, botUrl, paidInvoices, ensureInvoiceAccessToken, telegramUrlForInvoice, bindIdentity, sendCourseLinks, approveJoinRequest, revokeIdentity, restoreIdentity };
+async function resetIdentityBinding(identity, reason = '') {
+  if (identity.bindingReleasedAt) return { identity, alreadyReleased: true };
+  const releaseReason = String(reason || 'Administrator reset linked Telegram account.').slice(0, 500);
+  const previous = {
+    telegramUserId: String(identity.telegramUserId),
+    telegramUsername: String(identity.telegramUsername || ''),
+    telegramName: String(identity.telegramName || ''),
+  };
+
+  // First remove the old account from Telegram. If this fails, the email must
+  // stay protected and must not become available to another account locally.
+  await revokeIdentity(identity, releaseReason);
+  await Invite.updateMany({ identity: identity._id, status: 'active' }, { $set: { status: 'revoked' } });
+  await BindingAudit.create({
+    identity: identity._id,
+    email: identity.email,
+    releasedTelegramUserId: previous.telegramUserId,
+    releasedTelegramUsername: previous.telegramUsername,
+    releasedTelegramName: previous.telegramName,
+    reason: releaseReason,
+  });
+
+  const released = await Identity.findByIdAndUpdate(identity._id, {
+    $set: {
+      // Retain the paid-email history while making the account available for
+      // one new Telegram identity to claim.
+      telegramUserId: `released:${identity._id}:${crypto.randomBytes(10).toString('hex')}`,
+      telegramUsername: '',
+      telegramName: '',
+      bindingReleasedAt: new Date(),
+      bindingReleasedReason: releaseReason,
+    },
+    $unset: { revokedAt: 1, revokedReason: 1 },
+  }, { returnDocument: 'after' });
+  return { identity: released, alreadyReleased: false };
+}
+
+module.exports = { COURSE_PRODUCTS, normalizeEmail, botUrl, paidInvoices, ensureInvoiceAccessToken, telegramUrlForInvoice, bindIdentity, sendCourseLinks, approveJoinRequest, revokeIdentity, restoreIdentity, resetIdentityBinding };

@@ -40,7 +40,7 @@ router.post('/webhook', async (req, res) => {
     if (!session) { await reply(message.chat.id, 'Tap Start, then enter the email address you used while paying for your course.'); return; }
     const result = await access.bindIdentity({ telegramUser: user, email: text, accessToken: session.accessToken });
     if (!result.ok) {
-      const messages = { invalid_email: 'Please enter a valid email address.', bound_elsewhere: 'This course email is already linked to another Telegram account. Please contact support if you need help.', revoked: 'Course access is currently unavailable. Please contact support.', not_paid: 'We could not confirm a paid course with that email. Please make sure you enter the email used while paying.' };
+      const messages = { invalid_email: 'Please enter a valid email address.', bound_elsewhere: 'This course email is already linked to another Telegram account. Please contact support if you need help.', released_account: 'This Telegram account was removed from the course. Please contact support if you need help.', revoked: 'Course access is currently unavailable. Please contact support.', not_paid: 'We could not confirm a paid course with that email. Please make sure you enter the email used while paying.' };
       await reply(message.chat.id, messages[result.reason] || 'We could not complete course access. Please try again later.');
       return;
     }

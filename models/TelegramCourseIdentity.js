@@ -9,6 +9,8 @@ const schema = new mongoose.Schema({
   lastAccessAt: { type: Date, default: Date.now },
   revokedAt: Date,
   revokedReason: { type: String, default: '', trim: true, maxlength: 500 },
+  bindingReleasedAt: Date,
+  bindingReleasedReason: { type: String, default: '', trim: true, maxlength: 500 },
 }, { timestamps: true });
 
 schema.index({ email: 1, telegramUserId: 1 });
