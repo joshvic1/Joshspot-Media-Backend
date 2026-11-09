@@ -276,6 +276,60 @@ router.get('/conversations/:id/crm/:kind/:recordId', wrap(async (req, res) => {
   if (kind !== 'AdsClient' && !req.actor.admin && req.actor.role !== 'SS') delete record.amountPaid;
   res.json({ record });
 }));
+// Course access is deliberately an administrator-only Inbox recovery action.
+// It uses the already verified, paid Invoice record; it never treats a contact
+// profile field alone as proof that a course was purchased.
+router.get('/conversations/:id/course-access', wrap(async (req, res) => {
+  if (!req.actor.admin) fail(403, 'Only administrators can resend course access.');
+  const conversation = await conversationFor(req);
+  const Invoice = require('../models/Invoice');
+  const phoneMatch = require('./crmPhoneMatch')(conversation.contact.phone);
+  const courseProduct = { $or: [{ product: { $in: ['ads-course', 'whatsapp-course'] } }, { note: /^Course purchase - WhatsApp:/ }] };
+  const association = { $or: [{ customerPhone: phoneMatch }, { inboxContact: conversation.contact._id }] };
+  const invoices = await Invoice.find({ $and: [{ deletedAt: null, status: 'paid' }, courseProduct, association] })
+    .select('product amount customerEmail paidAt createdAt')
+    .sort({ paidAt: -1, createdAt: -1 }).lean();
+  // Show at most one (the most recently paid) record for each product. This
+  // avoids making an admin choose between duplicate checkout attempts.
+  const byProduct = new Map();
+  for (const invoice of invoices) {
+    const product = invoice.product === 'whatsapp-course' ? 'whatsapp-course' : 'ads-course';
+    if (!byProduct.has(product)) byProduct.set(product, invoice);
+  }
+  res.json({ courses: [...byProduct.values()].map((invoice) => ({
+    id: String(invoice._id), product: invoice.product === 'whatsapp-course' ? 'whatsapp-course' : 'ads-course', amount: invoice.amount,
+    email: invoice.customerEmail || '', paidAt: invoice.paidAt || invoice.createdAt,
+  })) });
+}));
+router.post('/conversations/:id/course-access/:invoiceId/resend', wrap(async (req, res) => {
+  if (!req.actor.admin) fail(403, 'Only administrators can resend course access.');
+  await rateLimit(req, 20, 'course-access');
+  const conversation = await conversationFor(req);
+  const Invoice = require('../models/Invoice');
+  const phoneMatch = require('./crmPhoneMatch')(conversation.contact.phone);
+  const courseProduct = { $or: [{ product: { $in: ['ads-course', 'whatsapp-course'] } }, { note: /^Course purchase - WhatsApp:/ }] };
+  const association = { $or: [{ customerPhone: phoneMatch }, { inboxContact: conversation.contact._id }] };
+  let invoice = await Invoice.findOne({ _id: id(req.params.invoiceId), deletedAt: null, status: 'paid', $and: [courseProduct, association] });
+  if (!invoice) fail(404, 'No verified course payment was found for this contact.');
+  const enteredEmail = req.body && Object.hasOwn(req.body, 'email') ? text(req.body.email, 254).toLowerCase() : '';
+  if (enteredEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(enteredEmail)) fail(400, 'Enter a valid email address.');
+  if (!invoice.customerEmail && !enteredEmail) fail(400, 'Enter an email address before resending course access.');
+  if (enteredEmail && enteredEmail !== invoice.customerEmail) {
+    await Invoice.updateOne({ _id: invoice._id, status: 'paid' }, { $set: { customerEmail: enteredEmail } });
+    // Keep the Inbox profile useful too, while the paid invoice remains the
+    // authoritative delivery record and payment proof.
+    await Contact.updateOne({ _id: conversation.contact._id }, { $set: { email: enteredEmail }, $inc: { revision: 1 } });
+    invoice = await Invoice.findById(invoice._id);
+  }
+  const { canEmailCourse, deliverCourseEmail } = require('../utils/deliverCourseEmail');
+  if (!canEmailCourse(invoice)) fail(409, 'This course payment is not eligible for access delivery.');
+  let delivered;
+  try { delivered = await deliverCourseEmail(invoice._id, { resend: true }); }
+  catch { fail(502, 'The course access email could not be sent right now. Please try again.'); }
+  if (delivered === 'busy') fail(429, 'This course access email was just sent. Please wait one minute before sending it again.');
+  await service.activity(conversation._id, req.actor, `Resent ${invoice.product === 'whatsapp-course' ? 'WhatsApp Status ads' : 'TikTok, Facebook & Instagram ads'} course access email`);
+  res.json({ message: `Course access instructions were sent to ${invoice.customerEmail}.`, email: invoice.customerEmail });
+}));
 router.delete('/conversations/:id',wrap(async(req,res)=>{
   if(!req.actor.admin)fail(403,'Only administrators can delete chats.');
   if(req.body.confirm!==true)fail(400,'Confirm permanent chat deletion.');
@@ -370,7 +424,8 @@ router.post('/conversations/:id/read', wrap(async (req, res) => {
 router.post('/conversations/:id/media', wrap(async (req, res) => {
   await rateLimit(req, 60); const conversation = await conversationFor(req);
   if (!policy.canReply(req.actor, conversation)) fail(403, 'Claim this conversation before attaching files.');
-  if (!policy.windowOpen(conversation.lastInboundAt)) fail(400, 'The reply window is closed. Send an approved template.');
+  const templateMedia = req.body.templateMedia === true;
+  if (!policy.windowOpen(conversation.lastInboundAt) && !templateMedia) fail(400, 'The reply window is closed. Send an approved template.');
   const encoded = text(req.body.data, 7000000); let buffer = Buffer.from(encoded, 'base64');
   if (!buffer.length || buffer.length > 5 * 1024 * 1024) fail(400, 'Choose a file smaller than 5 MB.');
   if(req.body.recording===true)buffer=await require('./recording')(buffer);
@@ -379,7 +434,7 @@ router.post('/conversations/:id/media', wrap(async (req, res) => {
   const name = text(req.body.recording===true?'voice-note.ogg':req.body.name || 'attachment', 120).replace(/[^\w. -]/g, '_');
   const mediaId = await provider.upload(buffer, mime, name);
   const media = { id: mediaId, mime, name };
-  const ticket = jwt.sign({ media, conversation: String(conversation._id), actor: req.actor.id, purpose: 'inbox-media' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  const ticket = jwt.sign({ media, conversation: String(conversation._id), actor: req.actor.id, purpose: templateMedia ? 'inbox-template-media' : 'inbox-media' }, process.env.JWT_SECRET, { expiresIn: '1h' });
   res.json({ ticket, name, type: mime === 'application/pdf' ? 'document' : mime.split('/')[0] });
 }));
 router.post('/conversations/:id/messages', wrap(async (req, res) => {
@@ -396,7 +451,14 @@ router.post('/conversations/:id/messages', wrap(async (req, res) => {
   if (type === 'template') {
     const template = await Template.findById(id(req.body.templateId)).lean();
     if (!template || !template.syncedAt || Date.now() - new Date(template.syncedAt).getTime() > 86400000) fail(400, 'Refresh templates before sending.');
-    const result = policy.templatePayload(template, req.body.values || {}); body = result.preview; providerPayload = result.payload;
+    const fields = policy.templateFields(template); const templateMedia = {};
+    for (const field of fields.filter(item => item.kind === 'media')) {
+      const token = req.body.values?.[field.key]; let ticket;
+      try { ticket = jwt.verify(token, process.env.JWT_SECRET); } catch { fail(400, `Upload the ${field.mediaType} required by this template.`); }
+      if (!['inbox-media', 'inbox-template-media'].includes(ticket.purpose) || ticket.actor !== req.actor.id || ticket.conversation !== String(conversation._id) || ticket.media?.mime !== ({ image:'image/jpeg', video:'video/mp4', document:'application/pdf' }[field.mediaType]) && !(field.mediaType==='image' && ticket.media?.mime==='image/png')) fail(400, `Upload a valid ${field.mediaType} for this template header.`);
+      templateMedia[field.key] = { ...ticket.media, type: field.mediaType };
+    }
+    const result = policy.templatePayload(template, req.body.values || {}, templateMedia); body = result.preview; providerPayload = result.payload;
   } else if (['image', 'document', 'audio', 'video'].includes(type)) {
     let ticket; try { ticket = jwt.verify(req.body.ticket, process.env.JWT_SECRET); } catch { fail(400, 'Attachment expired. Upload it again.'); }
     if (ticket.purpose !== 'inbox-media' || ticket.actor !== req.actor.id || ticket.conversation !== String(conversation._id)) fail(400, 'Invalid attachment.');

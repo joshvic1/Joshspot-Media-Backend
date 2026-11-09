@@ -1,8 +1,10 @@
 const axios = require("axios");
 const { v4: uuidv4 } = require("uuid");
+const crypto = require("node:crypto");
 const Invoice = require("../models/Invoice");
 const { canEmailCourse, deliverCourseEmail, queueCourseEmail } = require("../utils/deliverCourseEmail");
-const { courses, isPaidCourse, whatsappCourseUrl } = require("../utils/courseAccess");
+const { isPaidCourse } = require("../utils/courseAccess");
+const { botUrl } = require('../telegram/access');
 
 const PAYSTACK_BASE_URL = "https://api.paystack.co";
 const INVOICE_LIFETIME_HOURS = 8;
@@ -26,7 +28,7 @@ const getPublicInvoice = (invoice) => ({
   expiresAt: invoice.expiresAt,
   paidAt: invoice.paidAt,
   createdAt: invoice.createdAt,
-  ...(invoice.product === "whatsapp-course" && invoice.status === "paid" && invoice.amount === 10000 ? { contactUrl: whatsappCourseUrl } : isPaidCourse(invoice) ? { courses } : {}),
+  ...((isPaidCourse(invoice) || (invoice.product === 'whatsapp-course' && invoice.status === 'paid' && invoice.amount === 10000)) ? { telegramAccessUrl: botUrl(invoice) } : {}),
 });
 
 const refreshInvoiceStatus = async (invoice, strict = false) => {
@@ -145,6 +147,7 @@ exports.createInvoice = async (req, res) => {
     if (customerEmail && (customerEmail.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail))) {
       return res.status(400).json({ message: "Please enter a valid email address." });
     }
+    if (coursePurchase && !customerEmail) return res.status(400).json({ message: "Please enter the email address you will use to access your course." });
     if (coursePurchase && (!customerName || customerName.length > 150 || !/^\+?\d{7,15}$/.test(customerPhone || String(req.body.note).split("WhatsApp:")[1]?.trim() || ""))) {
       return res.status(400).json({ message: "Please enter your name and a valid WhatsApp number." });
     }
@@ -162,6 +165,7 @@ exports.createInvoice = async (req, res) => {
       customerName,
       customerEmail,
       customerPhone,
+      ...(coursePurchase ? { telegramAccessToken: crypto.randomBytes(24).toString('base64url') } : {}),
       ...(coursePurchase ? {courseWhatsappDueAt:new Date(Date.now()+20*60000)} : {}),
       product: whatsappCourse ? "whatsapp-course" : coursePurchase ? "ads-course" : "",
       ...(coursePurchase ? { attribution: sanitizeAttribution(req.body.attribution) } : {}),
@@ -244,16 +248,13 @@ exports.listInvoices = async (req, res) => {
 
 exports.emailCourseAccess = async (req, res) => {
   try {
-    const email = String(req.body?.email || "").trim().toLowerCase();
-    if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ message: "Please enter a valid email address." });
     const invoice = await Invoice.findOne({ token: req.params.token });
     if (!invoice) return res.status(404).json({ message: "Invoice not found." });
     await refreshInvoiceStatus(invoice);
     if (!canEmailCourse(invoice)) return res.status(403).json({ message: "Your course payment must be confirmed first." });
-    await Invoice.updateOne({ _id: invoice._id }, { $set: { customerEmail: email } });
     const result = await deliverCourseEmail(invoice._id, { resend: true });
     if (result === "busy") return res.status(429).json({ message: "Your email is being sent, or was just sent. Please check your inbox and spam folder." });
-    return res.json({ message: "The video links has been sent to your email. Also check your spam folder too incase you can't find it in your inbox." });
+    return res.json({ message: "Course access instructions have been sent to your email. Also check your spam folder." });
   } catch {
     return res.status(503).json({ message: "Email delivery is delayed. Your address is saved and we will retry automatically. You can also use the access button on this page." });
   }

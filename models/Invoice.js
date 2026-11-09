@@ -38,6 +38,7 @@ const invoiceSchema = new mongoose.Schema({
     browser: { type: String, default: "unknown" },
   },
   product: { type: String, default: "", index: true },
+  telegramAccessToken: { type: String, sparse: true, unique: true },
   reminderSentAt: Date,
   courseWhatsappConsentAt: Date,
   courseWhatsappDueAt: Date,

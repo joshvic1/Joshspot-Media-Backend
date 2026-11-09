@@ -10,6 +10,7 @@ for(const file of ['../utils/tiktokEvents','../utils/deliverCourseEmail']) {
 }
 const Invoice=require('../models/Invoice');
 const flw=require('../utils/flutterwaveCoursePayment');
+const settings=require('../utils/generalSettings');settings.gateway=async()=> 'flutterwave';settings.ready=()=>true;
 const controller=require('../controllers/invoiceController');
 let posts=0, gets=0, verified;
 axios.post=async(url,body)=>{posts++;assert.ok(url.includes('flutterwave.com'));assert.equal(body.is_permanent,false);assert.equal(body.firstname,'Test');assert.equal(body.narration,'Joshspot Media Course - Test');return {data:{status:'success',data:{account_number:'1234567890',bank_name:'Test bank',note:'Please make a bank transfer to Test Course',amount:body.amount+100,expiry_date:new Date(Date.now()+3600000).toISOString(),order_ref:'order'}}};};
@@ -21,7 +22,7 @@ const response=()=>({code:200,status(n){this.code=n;return this},json(x){this.bo
   await mongoose.connect(mongo.getUri());
   for(const product of ['ads-course','whatsapp-course']) {
    const res=response();
-   await controller.createInvoice({body:{product,customerName:'Test Buyer',customerPhone:'+2348000000000',amount:1},headers:{},get:()=>''},res);
+   await controller.createInvoice({body:{product,customerName:'Test Buyer',customerPhone:'+2348000000000',customerEmail:`${product}@example.com`,amount:1},headers:{},get:()=>''},res);
    assert.equal(res.code,201,JSON.stringify(res.body));
    const i=await Invoice.findOne({token:res.body.invoice.token});
    assert.equal(i.paymentProvider,'flutterwave');assert.equal(i.amount,product==='ads-course'?8000:10000);assert.equal(i.transferAmount,i.amount+100);assert.equal(i.status,'pending');

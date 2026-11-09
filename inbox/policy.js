@@ -18,34 +18,95 @@ function signature(raw, header, secret) {
   const expected = `sha256=${crypto.createHmac('sha256', secret).update(raw).digest('hex')}`;
   return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(header));
 }
+const variablePattern = /\{\{([^}]+)\}\}/g;
+const textFields = (component, prefix) => {
+  const variables = [...new Set([...String(component.text || '').matchAll(variablePattern)].map(match => match[1].trim()))];
+  const numbered = variables.every(value => /^\d+$/.test(value));
+  if (numbered && variables.some((value, index) => Number(value) !== index + 1)) return [];
+  return variables.map((position) => ({ key: `${prefix}.${position}`, component: prefix.split('.')[0], position, kind: 'text', parameterName: numbered ? null : position }));
+};
 function templateFields(template) {
   const fields = [];
   for (const component of template.components || []) {
-    // Fixed buttons are already defined in Meta's approved template and need no send parameters.
-    if(component.type==='BUTTONS'){
-      if(!Array.isArray(component.buttons)||!component.buttons.length||component.buttons.some(button=>!['URL','PHONE_NUMBER','QUICK_REPLY'].includes(button.type)||/\{\{/.test(JSON.stringify(button))))return null;
+    const type = String(component.type || '').toUpperCase();
+    if (type === 'HEADER') {
+      const format = String(component.format || 'TEXT').toUpperCase();
+      if (format === 'TEXT') fields.push(...textFields(component, 'header'));
+      else if (['IMAGE', 'VIDEO', 'DOCUMENT'].includes(format)) fields.push({ key: 'header.media', component: 'header', kind: 'media', mediaType: format.toLowerCase() });
+      else if (format === 'LOCATION') ['latitude', 'longitude', 'name', 'address'].forEach(part => fields.push({ key: `header.location.${part}`, component: 'header', kind: 'location', locationPart: part }));
       continue;
     }
-    if (!['HEADER', 'BODY', 'FOOTER'].includes(component.type) || (component.type === 'HEADER' && component.format !== 'TEXT')) return null;
-    const variables = [...new Set([...String(component.text || '').matchAll(/\{\{([^}]+)\}\}/g)].map((match) => match[1]))];
-    if (variables.some((v, i) => v !== String(i + 1))) return null;
-    variables.forEach((key) => fields.push({ key: `${component.type.toLowerCase()}.${key}`, component: component.type.toLowerCase(), position: key }));
+    if (type === 'BODY') { fields.push(...textFields(component, 'body')); continue; }
+    if (type !== 'BUTTONS') continue;
+    (component.buttons || []).forEach((button, index) => {
+      const buttonType = String(button.type || '').toUpperCase();
+      const prefix = `button.${index}`;
+      if (buttonType === 'FLOW') fields.push({ key: `${prefix}.flow_token`, component: 'button', index, subType: 'flow', kind: 'flow' });
+      const source = buttonType === 'URL' ? button.url : buttonType === 'COPY_CODE' ? (button.example?.[0] || button.text) : buttonType === 'QUICK_REPLY' ? button.payload : '';
+      const variables = [...new Set([...String(source || '').matchAll(variablePattern)].map(match => match[1].trim()))];
+      variables.forEach(position => fields.push({ key: `${prefix}.${buttonType.toLowerCase()}.${position}`, component: 'button', index, subType: buttonType.toLowerCase(), position, kind: 'button', parameterName: /^\d+$/.test(position) ? null : position }));
+    });
   }
   return fields;
 }
-function templatePayload(template, values) {
+const templateError = message => Object.assign(new Error(message), { status: 400 });
+const requiredText = (values, field) => {
+  const value = values?.[field.key];
+  if (typeof value !== 'string' || !value.trim() || value.length > 500) throw templateError(`Fill in ${field.key.replaceAll('.', ' ')} (maximum 500 characters).`);
+  return value.trim();
+};
+function templatePayload(template, values = {}, media = {}) {
   const fields = templateFields(template);
-  if (template.status !== 'APPROVED' || !fields) throw Object.assign(new Error('Choose an approved text template supported by this inbox.'), { status: 400 });
+  if (template.status !== 'APPROVED') throw templateError('Choose an approved WhatsApp template.');
   const components = [];
-  for (const field of fields) {
-    const text = values?.[field.key];
-    if (typeof text !== 'string' || !text.trim() || text.length > 500) throw Object.assign(new Error('Fill in every template variable (maximum 500 characters each).'), { status: 400 });
-    let component = components.find((item) => item.type === field.component);
-    if (!component) { component = { type: field.component, parameters: [] }; components.push(component); }
-    component.parameters.push({ type: 'text', text: text.trim() });
+  const add = component => { components.push(component); return component; };
+  for (const component of template.components || []) {
+    const type = String(component.type || '').toUpperCase();
+    if (type === 'HEADER' || type === 'BODY') {
+      const prefix = type.toLowerCase(); const matching = fields.filter(field => field.component === prefix);
+      if (!matching.length) continue;
+      const mediaField = matching.find(field => field.kind === 'media');
+      if (mediaField) {
+        const item = media[mediaField.key];
+        if (!item?.id || item.type !== mediaField.mediaType) throw templateError(`Upload a ${mediaField.mediaType} for this template header.`);
+        add({ type: prefix, parameters: [{ type: mediaField.mediaType, [mediaField.mediaType]: { id: item.id, ...(mediaField.mediaType === 'document' && item.name ? { filename: item.name } : {}) } }] });
+        continue;
+      }
+      const location = matching.filter(field => field.kind === 'location');
+      if (location.length) {
+        const latitude = Number(values['header.location.latitude']), longitude = Number(values['header.location.longitude']);
+        if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || Math.abs(latitude) > 90 || Math.abs(longitude) > 180) throw templateError('Enter a valid header location latitude and longitude.');
+        add({ type: 'header', parameters: [{ type: 'location', location: { latitude, longitude, name: requiredText(values, location.find(field => field.locationPart === 'name')), address: requiredText(values, location.find(field => field.locationPart === 'address')) } }] });
+        continue;
+      }
+      const parameters = matching.filter(field => field.kind === 'text').map(field => ({ type: 'text', text: requiredText(values, field), ...(field.parameterName ? { parameter_name: field.parameterName } : {}) }));
+      if (parameters.length) add({ type: prefix, parameters });
+      continue;
+    }
+    if (type !== 'BUTTONS') continue;
+    (component.buttons || []).forEach((button, index) => {
+      const matching = fields.filter(field => field.component === 'button' && field.index === index);
+      if (!matching.length) return;
+      const subType = matching[0].subType;
+      let parameters;
+      if (subType === 'flow') parameters = [{ type: 'action', action: { flow_token: requiredText(values, matching[0]) } }];
+      else parameters = matching.map(field => {
+        const value = requiredText(values, field);
+        if (subType === 'quick_reply') return { type: 'payload', payload: value };
+        if (subType === 'copy_code') return { type: 'coupon_code', coupon_code: value };
+        return { type: 'text', text: value, ...(field.parameterName ? { parameter_name: field.parameterName } : {}) };
+      });
+      add({ type: 'button', sub_type: subType, index: String(index), parameters });
+    });
   }
-  const preview = (template.components || []).map((c) => String(c.text || '').replace(/\{\{(\d+)\}\}/g, (_, key) => values[`${c.type.toLowerCase()}.${key}`] || '')).filter(Boolean).join('\n');
-  return { payload: { name: template.name, language: { code: template.language }, components }, preview };
+  const preview = (template.components || []).flatMap(component => {
+    const type = String(component.type || '').toUpperCase();
+    if (type === 'HEADER' && ['IMAGE', 'VIDEO', 'DOCUMENT', 'LOCATION'].includes(String(component.format || '').toUpperCase())) return [`[${String(component.format).toLowerCase()} header]`];
+    if (type === 'BUTTONS') return (component.buttons || []).map(button => button.text ? `Button: ${button.text}` : '').filter(Boolean);
+    const prefix = type.toLowerCase(); const rendered = String(component.text || '').replace(variablePattern, (_, key) => values[`${prefix}.${key.trim()}`] || `{{${key}}}`);
+    return rendered ? [rendered] : [];
+  }).join('\n');
+  return { payload: { name: template.name, language: { code: template.language }, components }, preview: preview || `[${template.name} template]` };
 }
 const ranks = { queued: 0, sending: 1, unknown: 1, sent: 2, delivered: 3, read: 4, failed: -1 };
 const statusCanAdvance = (current, next) => next === 'failed' ? !['delivered', 'read', 'failed'].includes(current) : current === 'failed' && next === 'sent' ? false : (ranks[next] ?? -1) > (ranks[current] ?? -1);

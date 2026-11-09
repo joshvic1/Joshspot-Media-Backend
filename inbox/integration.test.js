@@ -422,6 +422,19 @@ test('closed reply window rejects text but permits approved templates', async ()
   assert.equal(result.status, 201); assert.equal(result.data.text, 'Hello Ada');
   await service.processOutbox(); assert.equal(sent.length, 1); assert.equal(sent[0].message.providerPayload.name, 'follow_up');
 });
+test('closed reply window supports named values, dynamic buttons and template media headers', async () => {
+  const conversation = await fixture(); await Conversation.updateOne({ _id: conversation._id }, { lastInboundAt: new Date(Date.now() - 86400001) });
+  const template = await Template.create({ externalId: 'media-template', name: 'media_follow_up', language: 'en', status: 'APPROVED', components: [{ type: 'HEADER', format: 'IMAGE' }, { type: 'BODY', text: 'Hi {{customer_name}}' }, { type: 'BUTTONS', buttons: [{ type: 'URL', text: 'Open offer', url: 'https://example.test/{{offer_code}}' }] }], syncedAt: new Date() });
+  const png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aK1sAAAAASUVORK5CYII=';
+  const upload = await request(`/conversations/${conversation._id}/media`, { role: 'agent', method: 'POST', body: { data: png, name: 'offer.png', templateMedia: true } });
+  assert.equal(upload.status, 200); assert.equal((await request(`/conversations/${conversation._id}/media`, { role: 'agent', method: 'POST', body: { data: png, name: 'offer.png' } })).status, 400);
+  const result = await request(`/conversations/${conversation._id}/messages`, { role: 'agent', method: 'POST', body: { type: 'template', templateId: String(template._id), values: { 'header.media': upload.data.ticket, 'body.customer_name': 'Ada', 'button.0.url.offer_code': 'welcome' }, clientId: crypto.randomUUID() } });
+  assert.equal(result.status, 201); assert.match(result.data.text, /Hi Ada/); await service.processOutbox();
+  assert.equal(sent.length, 1); const components = sent[0].message.providerPayload.components;
+  assert.deepEqual(components[0], { type: 'header', parameters: [{ type: 'image', image: { id: 'test-upload' } }] });
+  assert.deepEqual(components[1].parameters[0], { type: 'text', parameter_name: 'customer_name', text: 'Ada' });
+  assert.equal(components[2].sub_type, 'url');
+});
 test('window and assignment are rechecked at send time', async () => {
   const conversation = await fixture(); const result = await request(`/conversations/${conversation._id}/messages`, { role: 'agent', method: 'POST', body: outgoing() });
   await Conversation.updateOne({ _id: conversation._id }, { assignedTo: second._id });
@@ -512,6 +525,29 @@ const shortcutModels = require('./shortcuts');
     assert.equal(staffResult.data[0].name, 'Ada Business'); assert.equal(JSON.stringify(staffResult.data).includes('private-'), false);
     const adminResult = await request(`/conversations/${conversation._id}/crm`); assert.equal(adminResult.data.length, 2); assert.equal(JSON.stringify(adminResult.data).includes('private-'), false);
   } finally { await Client.deleteMany({}); await Invoice.deleteMany({}); }
+});
+test('administrator can resend verified course access from a contact profile without exposing it to staff', async () => {
+  const conversation = await fixture();
+  const delivery = require('../utils/deliverCourseEmail');
+  const originalCanEmail = delivery.canEmailCourse; const originalDeliver = delivery.deliverCourseEmail;
+  const sent = [];
+  delivery.canEmailCourse = (invoice) => invoice.status === 'paid' && ['ads-course', 'whatsapp-course'].includes(invoice.product);
+  delivery.deliverCourseEmail = async (invoiceId, options) => { sent.push({ invoiceId: String(invoiceId), options }); return 'sent'; };
+  try {
+    const ads = await Invoice.create({ token: 'course-profile-ads', customerName: 'Ada', customerPhone: '+2348012345678', amount: 8000, product: 'ads-course', status: 'paid' });
+    const whatsapp = await Invoice.create({ token: 'course-profile-wa', customerName: 'Ada', customerPhone: '+2348012345678', customerEmail: 'ada@example.test', amount: 10000, product: 'whatsapp-course', status: 'paid' });
+    assert.equal((await request(`/conversations/${conversation._id}/course-access`, { role: 'agent' })).status, 403);
+    const list = await request(`/conversations/${conversation._id}/course-access`);
+    assert.equal(list.status, 200); assert.equal(list.data.courses.length, 2);
+    assert.equal(list.data.courses.find((course) => course.id === String(ads._id)).email, '');
+    assert.equal((await request(`/conversations/${conversation._id}/course-access/${ads._id}/resend`, { method: 'POST', body: {} })).status, 400);
+    const resentAds = await request(`/conversations/${conversation._id}/course-access/${ads._id}/resend`, { method: 'POST', body: { email: 'ada-course@example.test' } });
+    assert.equal(resentAds.status, 200); assert.equal((await Invoice.findById(ads._id)).customerEmail, 'ada-course@example.test');
+    assert.equal((await Contact.findById(conversation.contact)).email, 'ada-course@example.test');
+    const resentWhatsapp = await request(`/conversations/${conversation._id}/course-access/${whatsapp._id}/resend`, { method: 'POST', body: {} });
+    assert.equal(resentWhatsapp.status, 200); assert.deepEqual(sent.map((item) => item.options), [{ resend: true }, { resend: true }]);
+    assert.equal(await Message.countDocuments({ conversation: conversation._id, type: 'activity', text: /Resent .* course access email/ }), 2);
+  } finally { delivery.canEmailCourse = originalCanEmail; delivery.deliverCourseEmail = originalDeliver; }
 });
 test('follow-up scheduling validates dates, permissions and revisions', async () => {
   const conversation = await fixture(); const url = `/conversations/${conversation._id}`;

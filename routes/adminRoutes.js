@@ -22,4 +22,13 @@ router.post("/records/:kind/:id/restore", adminAuth, reports.deleteRecord);
 
 router.get("/general-settings", adminAuth, require("../utils/generalSettings").get);
 router.put("/general-settings", adminAuth, require("../utils/generalSettings").save);
+
+const telegramCourseAdmin = require("../controllers/telegramCourseAdminController");
+router.get("/telegram-access", adminAuth, telegramCourseAdmin.status);
+router.post("/telegram-access/setup", adminAuth, telegramCourseAdmin.setupWebhook);
+router.post("/telegram-access/channels", adminAuth, telegramCourseAdmin.saveChannel);
+router.patch("/telegram-access/channels/:id", adminAuth, telegramCourseAdmin.updateChannel);
+router.delete("/telegram-access/channels/:id", adminAuth, telegramCourseAdmin.deactivateChannel);
+router.post("/telegram-access/:id/revoke", adminAuth, telegramCourseAdmin.revoke);
+router.post("/telegram-access/:id/restore", adminAuth, telegramCourseAdmin.restore);
 module.exports = router;

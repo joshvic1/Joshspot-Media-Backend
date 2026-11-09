@@ -7,9 +7,9 @@ test('reminders fail closed on verification errors and respect confirmed payment
   flw.refresh=async()=>{throw {response:{status:400,data:{message:'No transaction found'}}}};assert.equal(await r.verifyUnpaid({reference:'x',paymentProvider:'flutterwave'}),true);
  }finally{flw.refresh=original;}
 });
-test('static approved buttons need no invented parameters; dynamic and call components remain unsupported',()=>{
+test('static approved buttons need no invented parameters and dynamic buttons remain unsuitable for the dedicated reminder',()=>{
  const t={name:'course',language:'en',status:'APPROVED',components:[{type:'BODY',text:'Get the course'},{type:'BUTTONS',buttons:[{type:'URL',text:'Buy',url:'https://joshspotmedia.com/course'}]}]};
  assert.deepEqual(policy.templatePayload(t,{}).payload.components,[]);
- t.components[1].buttons[0].url+='{{1}}';assert.equal(policy.templateFields(t),null);
- assert.equal(policy.templateFields({components:[{type:'CALL_PERMISSION_REQUEST'}]}),null);
+ t.components[1].buttons[0].url+='{{1}}';assert.equal(policy.templateFields(t)[0].key,'button.0.url.1');
+ assert.deepEqual(policy.templateFields({components:[{type:'CALL_PERMISSION_REQUEST'}]}),[]);
 });

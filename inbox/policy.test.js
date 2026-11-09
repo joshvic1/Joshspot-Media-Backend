@@ -32,15 +32,27 @@ test('webhook signature authenticates the exact bytes', () => {
   assert.equal(p.signature(raw, signature, ''), false);
   assert.equal(p.signature(raw, 'sha256=oops', secret), false);
 });
-test('template variables must match an approved supported template', () => {
+test('template variables support numbered and named approved template parameters', () => {
   const template = { name: 'welcome', language: 'en', status: 'APPROVED', components: [{ type: 'BODY', text: 'Hello {{1}}, your course is {{2}}.' }] };
   const result = p.templatePayload(template, { 'body.1': 'Ada', 'body.2': 'WhatsApp Ads' });
   assert.equal(result.preview, 'Hello Ada, your course is WhatsApp Ads.');
   assert.equal(result.payload.components[0].parameters.length, 2);
   assert.throws(() => p.templatePayload(template, { 'body.1': 'Ada' }));
   assert.throws(() => p.templatePayload({ ...template, status: 'PENDING' }, {}));
-  assert.equal(p.templateFields({ components: [{ type: 'BUTTONS', buttons: [] }] }), null);
-  assert.equal(p.templateFields({ components: [{ type: 'BODY', text: 'Hi {{customer}}' }] }), null);
+  assert.deepEqual(p.templateFields({ components: [{ type: 'BUTTONS', buttons: [] }] }), []);
+  const named = { name: 'named', language: 'en', status: 'APPROVED', components: [{ type: 'BODY', text: 'Hi {{customer_name}}' }] };
+  const namedResult = p.templatePayload(named, { 'body.customer_name': 'Ada' });
+  assert.deepEqual(namedResult.payload.components[0].parameters[0], { type: 'text', parameter_name: 'customer_name', text: 'Ada' });
+});
+test('template payload supports media headers, dynamic buttons and locations', () => {
+  const media = { name: 'photo', language: 'en', status: 'APPROVED', components: [{ type: 'HEADER', format: 'IMAGE' }, { type: 'BODY', text: 'Hi {{1}}' }, { type: 'BUTTONS', buttons: [{ type: 'URL', text: 'Open', url: 'https://example.test/{{1}}' }] }] };
+  const fields = p.templateFields(media); assert.equal(fields.find(field => field.kind === 'media').key, 'header.media'); assert.ok(fields.find(field => field.key === 'button.0.url.1'));
+  const result = p.templatePayload(media, { 'body.1': 'Ada', 'button.0.url.1': 'offer', 'header.media': 'untrusted' }, { 'header.media': { id: 'media-id', type: 'image', name: 'photo.png' } });
+  assert.deepEqual(result.payload.components[0], { type: 'header', parameters: [{ type: 'image', image: { id: 'media-id' } }] });
+  assert.deepEqual(result.payload.components[2], { type: 'button', sub_type: 'url', index: '0', parameters: [{ type: 'text', text: 'offer' }] });
+  const location = { name: 'location', language: 'en', status: 'APPROVED', components: [{ type: 'HEADER', format: 'LOCATION' }] };
+  const locationResult = p.templatePayload(location, { 'header.location.latitude': '6.5244', 'header.location.longitude': '3.3792', 'header.location.name': 'Lagos', 'header.location.address': 'Nigeria' });
+  assert.equal(locationResult.payload.components[0].parameters[0].location.name, 'Lagos');
 });
 test('delivery states do not regress and only assigned agents can reply', () => {
   assert.equal(p.statusCanAdvance('read', 'sent'), false);

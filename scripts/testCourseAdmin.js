@@ -51,6 +51,8 @@ async function webhook({ amount = 800000, currency = "NGN", signatureValid = tru
     "node:crypto": crypto,
     "../models/Booking": { findOne: async () => null },
     "../utils/bookingPayment": { matchesBookingPayment: () => false },
+    "../utils/deliverCourseEmail": { queueCourseEmail: async () => {} },
+    "../utils/tiktokEvents": { queueTikTokPurchase: async () => {} },
     "../models/Invoice": { findOne: async () => base, updateOne: async (query, update) => { assert.equal(update.$set.status, "paid"); updates++; } },
   });
   const body = { event: "charge.success", data: { status: "success", reference: "test", amount, currency } };
@@ -64,12 +66,17 @@ async function webhook({ amount = 800000, currency = "NGN", signatureValid = tru
 async function createCheckout(fail = false) {
   let saved;
   const controller = load("../controllers/invoiceController.js", {
+    "node:crypto": crypto,
     axios: { post: async () => {
       assert.ok(saved.reference, "Save the reference before contacting Paystack");
       if (fail) throw new Error("Network failure");
       return { data: { data: { reference: saved.reference, status: "pending", account_number: "1234567890" } } };
     } },
     uuid: { v4: () => "test-reference" }, resend: {}, "../utils/courseAccess": access,
+    "../utils/deliverCourseEmail": { canEmailCourse: () => false, deliverCourseEmail: async () => {}, queueCourseEmail: async () => {} },
+    "../telegram/access": { botUrl: () => "" },
+    "../utils/generalSettings": { gateway: async () => "paystack", ready: () => true },
+    "../utils/courseAttribution": value => value || { source: "unknown", browser: "unknown", method: "none" },
     "../models/Invoice": { create: async (fields) => {
       saved = { ...fields, status: "draft", save: async () => {} }; return saved;
     } },

@@ -3,6 +3,7 @@ const fs = require("node:fs");
 const vm = require("node:vm");
 const path = require("node:path");
 const crypto = require("node:crypto");
+process.env.TELEGRAM_BOT_USERNAME = "joshspot_course_test_bot";
 const access = require("../utils/courseAccess");
 const content = require("../utils/courseEmailContent");
 const { resolveService } = require("../utils/serviceCatalog");
@@ -40,7 +41,7 @@ const delivery = load("utils/deliverCourseEmail.js", {
   } }; } } },
 });
 function invoice(product = "ads-course", status = "paid", email = "test@example.com") {
-  return { _id: "test", product, status, amount: product === "whatsapp-course" ? 10000 : 8000, customerEmail: email, reference: "test-ref" };
+  return { _id: "test", product, status, amount: product === "whatsapp-course" ? 10000 : 8000, customerEmail: email, reference: "test-ref", telegramAccessToken: "test-access-token" };
 }
 (async () => {
   row = invoice("ads-course", "pending");
@@ -48,10 +49,10 @@ function invoice(product = "ads-course", status = "paid", email = "test@example.
   row = invoice("ads-course", "paid", "");
   await delivery.queueCourseEmail(row); assert.equal(sends.length, 0);
   row = invoice(); await Promise.all([delivery.queueCourseEmail(row), delivery.queueCourseEmail(row)]);
-  assert.equal(sends.length, 1); assert.ok(row.courseEmailSentAt); assert.match(sends[0].payload.text, /t.me/);
+  assert.equal(sends.length, 1); assert.ok(row.courseEmailSentAt); assert.match(sends[0].payload.text, /t\.me\/joshspot_course_test_bot\?start=test-access-token/);
   await delivery.queueCourseEmail(row); assert.equal(sends.length, 1);
   row = invoice("whatsapp-course"); await delivery.queueCourseEmail(row);
-  assert.ok(sends.at(-1).payload.text.includes("https://t.me/+LimBMFUxVvphZTU0")); assert.ok(!sends.at(-1).payload.text.includes("https://wa.me/"));
+  assert.ok(sends.at(-1).payload.text.includes("https://t.me/joshspot_course_test_bot?start=test-access-token")); assert.ok(!sends.at(-1).payload.text.includes("https://wa.me/"));
   row = invoice(); reject = true; await delivery.queueCourseEmail(row);
   assert.ok(row.courseEmailQueuedAt); assert.ok(row.courseEmailRetryAt); assert.equal(row.courseEmailSentAt, undefined);
   const retryKey = sends.at(-1).options.idempotencyKey;

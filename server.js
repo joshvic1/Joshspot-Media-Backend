@@ -74,6 +74,7 @@ app.use("/api/crm", crmRoutes);
 app.use("/api/growth-assessment", growthAssessmentRoutes);
 app.use("/api/invoice", invoiceRoutes);
 app.use("/api/inbox", require("./inbox/routes"));
+app.use("/api/telegram", require("./telegram/routes"));
 if (require('./inbox/workerPolicy').workerEnabled()) {
   const inboxTimer = setInterval(() => require("./inbox/service").tick(), 5000);
   inboxTimer.unref();
