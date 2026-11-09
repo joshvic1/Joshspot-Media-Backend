@@ -1,7 +1,11 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
-  const token = req.headers.authorization;
+  // Existing admin pages send the raw JWT, while newer proxied pages use the
+  // standard "Bearer <JWT>" form. Both represent the same authenticated
+  // session, so normalize before verification instead of rejecting one form.
+  const authorization = String(req.headers.authorization || "").trim();
+  const token = authorization.replace(/^Bearer\s+/i, "");
 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
