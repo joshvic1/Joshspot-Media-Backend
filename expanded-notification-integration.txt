@@ -1,0 +1,30 @@
+TAP version 13
+# Subtest: push preferences default off, validate endpoints and protect recipient access
+ok 1 - push preferences default off, validate endpoints and protect recipient access
+  ---
+  duration_ms: 3005.8222
+  ...
+# Subtest: push message previews default on and can be hidden
+ok 2 - push message previews default on and can be hidden
+  ---
+  duration_ms: 112.8314
+  ...
+# Subtest: staff DM device push names sender, links to message and respects disabled preference
+ok 3 - staff DM device push names sender, links to message and respects disabled preference
+  ---
+  duration_ms: 169.6318
+  ...
+# Subtest: due follow-up alerts go to their scheduler once, survive transfer, and do not send customer messages
+ok 4 - due follow-up alerts go to their scheduler once, survive transfer, and do not send customer messages
+  ---
+  duration_ms: 310.0494
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5591.6231

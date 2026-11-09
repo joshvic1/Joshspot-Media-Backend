@@ -1,0 +1,45 @@
+TAP version 13
+# Subtest: LIVE human request assigns CSS immediately, notifies once and sends only one handoff response
+ok 1 - LIVE human request assigns CSS immediately, notifies once and sends only one handoff response
+  ---
+  duration_ms: 16281.2569
+  ...
+# Subtest: interrupted handoff activity is recovered once and manual assignment cancels recovery
+ok 2 - interrupted handoff activity is recovered once and manual assignment cancels recovery
+  ---
+  duration_ms: 1102.8114
+  ...
+# Subtest: Waiting response performs real CSS handoff rather than leaving an unassigned chat
+ok 3 - Waiting response performs real CSS handoff rather than leaving an unassigned chat
+  ---
+  duration_ms: 759.226
+  ...
+# Subtest: Structured DRAFT media handoff is a suggestion with no assignment or notification
+ok 4 - Structured DRAFT media handoff is a suggestion with no assignment or notification
+  ---
+  duration_ms: 446.5955
+  ...
+# Subtest: Verified payment reconciliation pauses sales and hands off without new customer input
+ok 5 - Verified payment reconciliation pauses sales and hands off without new customer input
+  ---
+  duration_ms: 550.1051
+  ...
+# Subtest: push preferences default off, validate endpoints and protect recipient access
+ok 6 - push preferences default off, validate endpoints and protect recipient access
+  ---
+  duration_ms: 221.7655
+  ...
+# Subtest: push message previews default on and can be hidden
+ok 7 - push message previews default on and can be hidden
+  ---
+  duration_ms: 103.816
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 34125.004

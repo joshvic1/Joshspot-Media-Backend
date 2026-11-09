@@ -1,0 +1,15 @@
+TAP version 13
+# Subtest: compatible audio uses separate rate limits and scoped seekable playback tickets
+ok 1 - compatible audio uses separate rate limits and scoped seekable playback tickets
+  ---
+  duration_ms: 7003.1235
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11700.4252

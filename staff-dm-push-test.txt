@@ -1,0 +1,15 @@
+TAP version 13
+# Subtest: staff DM device push names sender, links to message and respects disabled preference
+ok 1 - staff DM device push names sender, links to message and respects disabled preference
+  ---
+  duration_ms: 11406.2769
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 36557.3802

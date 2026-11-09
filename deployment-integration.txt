@@ -1,0 +1,30 @@
+TAP version 13
+# Subtest: CRM shortcuts preserve Ads and Verification fields and CSS amount permissions
+ok 1 - CRM shortcuts preserve Ads and Verification fields and CSS amount permissions
+  ---
+  duration_ms: 2849.928
+  ...
+# Subtest: staff access: legacy CSS handoff settings route to sales and never fall back to support
+ok 2 - staff access: legacy CSS handoff settings route to sales and never fall back to support
+  ---
+  duration_ms: 453.3792
+  ...
+# Subtest: V1 repetition guard routes to sales without sending duplicate (structured=false)
+ok 3 - V1 repetition guard routes to sales without sending duplicate (structured=false)
+  ---
+  duration_ms: 442.9466
+  ...
+# Subtest: V1 repetition guard routes to sales without sending duplicate (structured=true)
+ok 4 - V1 repetition guard routes to sales without sending duplicate (structured=true)
+  ---
+  duration_ms: 399.8266
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7325.3602

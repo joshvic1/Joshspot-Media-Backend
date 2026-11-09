@@ -1,0 +1,20 @@
+TAP version 13
+# Subtest: CRM lookup exposes service context without credentials or staff-visible payments
+ok 1 - CRM lookup exposes service context without credentials or staff-visible payments
+  ---
+  duration_ms: 19244.6405
+  ...
+# Subtest: CRM detail views are contact scoped, mask staff phones and restrict invoices to admin
+ok 2 - CRM detail views are contact scoped, mask staff phones and restrict invoices to admin
+  ---
+  duration_ms: 354.166
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 77219.9936

@@ -1,0 +1,20 @@
+TAP version 13
+# Subtest: Staff shortcuts mask identity, lock CRM identity and restrict admin libraries
+ok 1 - Staff shortcuts mask identity, lock CRM identity and restrict admin libraries
+  ---
+  duration_ms: 12783.5835
+  ...
+# Subtest: CRM shortcuts preserve Ads and Verification fields and CSS amount permissions
+ok 2 - CRM shortcuts preserve Ads and Verification fields and CSS amount permissions
+  ---
+  duration_ms: 260.7187
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 49049.5034

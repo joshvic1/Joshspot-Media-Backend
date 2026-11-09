@@ -1,0 +1,100 @@
+TAP version 13
+# Subtest: working hours exclude nights and respect non-working days
+ok 1 - working hours exclude nights and respect non-working days
+  ---
+  duration_ms: 5.9861
+  ...
+# Subtest: completed five-minute blocks match owner examples exactly
+ok 2 - completed five-minute blocks match owner examples exactly
+  ---
+  duration_ms: 0.6203
+  ...
+# Subtest: separate conversation waits contribute to averages; pending waits remain provisional
+ok 3 - separate conversation waits contribute to averages; pending waits remain provisional
+  ---
+  duration_ms: 1.7672
+  ...
+# Subtest: ownership transfer starts new clock and failed sends/notes do not answer
+ok 4 - ownership transfer starts new clock and failed sends/notes do not answer
+  ---
+  duration_ms: 1.9705
+  ...
+# Subtest: AI handoff adopts the customer timestamp and AI acknowledgment cannot end the wait
+ok 5 - AI handoff adopts the customer timestamp and AI acknowledgment cannot end the wait
+  ---
+  duration_ms: 0.6488
+  ...
+# Subtest: unanswered transfer time counts for each owner, stops on transfer and excludes overnight
+ok 6 - unanswered transfer time counts for each owner, stops on transfer and excludes overnight
+  ---
+  duration_ms: 1.0468
+  ...
+# Subtest: answered waits do not restart or double count on later reassignment
+ok 7 - answered waits do not restart or double count on later reassignment
+  ---
+  duration_ms: 0.5391
+  ...
+# Subtest: Sunday and overnight never accumulate time, even with legacy seven-day rules
+ok 8 - Sunday and overnight never accumulate time, even with legacy seven-day rules
+  ---
+  duration_ms: 0.3321
+  ...
+# Subtest: offline pauses answered, pending and transferred waits without double subtraction
+ok 9 - offline pauses answered, pending and transferred waits without double subtraction
+  ---
+  duration_ms: 1.6848
+  ...
+# Subtest: consecutive customer messages count once from the latest message
+ok 10 - consecutive customer messages count once from the latest message
+  ---
+  duration_ms: 1.3084
+  ...
+# Subtest: no staff timer before handoff; latest inbound survives handoff acknowledgment and course automation
+ok 11 - no staff timer before handoff; latest inbound survives handoff acknowledgment and course automation
+  ---
+  duration_ms: 0.775
+  ...
+# Subtest: normal AI answer before handoff leaves no unanswered period to charge
+ok 12 - normal AI answer before handoff leaves no unanswered period to charge
+  ---
+  duration_ms: 0.3267
+  ...
+# Subtest: resolution counts the full wait and a later staff reply extends the same sample once
+ok 13 - resolution counts the full wait and a later staff reply extends the same sample once
+  ---
+  duration_ms: 0.6937
+  ...
+# Subtest: new inbound after resolving preserves the old sample and starts a fresh wait
+ok 14 - new inbound after resolving preserves the old sample and starts a fresh wait
+  ---
+  duration_ms: 0.4631
+  ...
+# Subtest: notes, failed replies and automated reminders cannot extend a resolved wait
+ok 15 - notes, failed replies and automated reminders cannot extend a resolved wait
+  ---
+  duration_ms: 0.5836
+  ...
+# Subtest: transfer after resolution cannot erase earlier time when staff later reply
+ok 16 - transfer after resolution cannot erase earlier time when staff later reply
+  ---
+  duration_ms: 0.6489
+  ...
+# Subtest: a different human replying after resolution cannot erase the recorded handling time
+ok 17 - a different human replying after resolution cannot erase the recorded handling time
+  ---
+  duration_ms: 0.3477
+  ...
+# Subtest: gateway defaults, save validation and unavailable providers
+ok 18 - gateway defaults, save validation and unavailable providers
+  ---
+  duration_ms: 4.4036
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1591.2394

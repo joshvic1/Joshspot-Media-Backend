@@ -1,0 +1,531 @@
+TAP version 13
+# Subtest: quoted replies stay in their conversation and incoming reply context is preserved
+ok 1 - quoted replies stay in their conversation and incoming reply context is preserved
+  ---
+  duration_ms: 8359.0812
+  ...
+# Subtest: Staff shortcuts mask identity, lock CRM identity and restrict admin libraries
+ok 2 - Staff shortcuts mask identity, lock CRM identity and restrict admin libraries
+  ---
+  duration_ms: 451.9168
+  ...
+# Subtest: CRM shortcuts preserve Ads and Verification fields and CSS amount permissions
+ok 3 - CRM shortcuts preserve Ads and Verification fields and CSS amount permissions
+  ---
+  duration_ms: 323.0926
+  ...
+# (node:53440) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Invoice shortcut queues once and checks payment without sending a message
+ok 4 - Invoice shortcut queues once and checks payment without sending a message
+  ---
+  duration_ms: 445.9821
+  ...
+# Subtest: admin deletion purges Inbox data and saved media but preserves invoices and other customers
+ok 5 - admin deletion purges Inbox data and saved media but preserves invoices and other customers
+  ---
+  duration_ms: 411.3405
+  ...
+# Subtest: AI configuration is admin-only and initialization is idempotent DRAFT
+ok 6 - AI configuration is admin-only and initialization is idempotent DRAFT
+  ---
+  duration_ms: 575.4388
+  ...
+# Subtest: AI DRAFT persists a suggestion, does not send, and duplicate webhooks do not regenerate
+ok 7 - AI DRAFT persists a suggestion, does not send, and duplicate webhooks do not regenerate
+  ---
+  duration_ms: 418.9014
+  ...
+# Subtest: AI LIVE uses existing outbox and takeover cancels queued output
+ok 8 - AI LIVE uses existing outbox and takeover cancels queued output
+  ---
+  duration_ms: 306.0268
+  ...
+# Subtest: AI LIVE delivers normally and human takeover during generation suppresses output
+ok 9 - AI LIVE delivers normally and human takeover during generation suppresses output
+  ---
+  duration_ms: 466.0247
+  ...
+# Subtest: AI batches rapid messages and media/errors hand off without sending content to model
+ok 10 - AI batches rapid messages and media/errors hand off without sending content to model
+  ---
+  duration_ms: 443.7793
+  ...
+# Subtest: AI provider failures and sensitive text preserve input and route to a human
+ok 11 - AI provider failures and sensitive text preserve input and route to a human
+  ---
+  duration_ms: 461.118
+  ...
+# Subtest: AI test mode performs no invoice or WhatsApp writes; unavailable invoice generation hands off
+ok 12 - AI test mode performs no invoice or WhatsApp writes; unavailable invoice generation hands off
+  ---
+  duration_ms: 463.1788
+  ...
+# Subtest: AI invoice action reuses the existing Invoice and account and never retries uncertain account creation
+ok 13 - AI invoice action reuses the existing Invoice and account and never retries uncertain account creation
+  ---
+  duration_ms: 356.419
+  ...
+# Subtest: AI worker lease prevents two workers generating for one conversation
+ok 14 - AI worker lease prevents two workers generating for one conversation
+  ---
+  duration_ms: 956.5663
+  ...
+# Subtest: AI limits report their exact reason and blocked attempts do not inflate counters
+ok 15 - AI limits report their exact reason and blocked attempts do not inflate counters
+  ---
+  duration_ms: 699.3353
+  ...
+# Subtest: business pack installs all approved entries once and preserves rollout and prices
+ok 16 - business pack installs all approved entries once and preserves rollout and prices
+  ---
+  duration_ms: 1290.4492
+  ...
+# Subtest: LIVE human request assigns sales immediately without notifications and sends only one handoff response
+ok 17 - LIVE human request assigns sales immediately without notifications and sends only one handoff response
+  ---
+  duration_ms: 506.3195
+  ...
+# Subtest: DRAFT human request is assigned to sales without automatic sending and sales can approve it
+ok 18 - DRAFT human request is assigned to sales without automatic sending and sales can approve it
+  ---
+  duration_ms: 425.0291
+  ...
+# Subtest: missing fallback chooses SS and absent SS remains visible and retries without duplicate notices
+ok 19 - missing fallback chooses SS and absent SS remains visible and retries without duplicate notices
+  ---
+  duration_ms: 386.5691
+  ...
+# Subtest: interrupted handoff activity is recovered once and manual assignment cancels recovery
+ok 20 - interrupted handoff activity is recovered once and manual assignment cancels recovery
+  ---
+  duration_ms: 498.3453
+  ...
+# Subtest: All includes resolved chats and Mine never treats unassigned chats as admin assignments
+ok 21 - All includes resolved chats and Mine never treats unassigned chats as admin assignments
+  ---
+  duration_ms: 156.2016
+  ...
+# Subtest: reactions send to WhatsApp, replace/remove and enforce permissions
+ok 22 - reactions send to WhatsApp, replace/remove and enforce permissions
+  ---
+  duration_ms: 208.031
+  ...
+# Subtest: note reactions stay internal and customer reaction webhooks update original messages
+ok 23 - note reactions stay internal and customer reaction webhooks update original messages
+  ---
+  duration_ms: 178.3289
+  ...
+# Subtest: authentication and existing restricted roles are enforced
+ok 24 - authentication and existing restricted roles are enforced
+  ---
+  duration_ms: 69.6868
+  ...
+# Subtest: signed webhook is durably acknowledged and duplicate deliveries create one message/contact
+ok 25 - signed webhook is durably acknowledged and duplicate deliveries create one message/contact
+  ---
+  duration_ms: 121.3095
+  ...
+# Subtest: staff cannot claim unassigned chats; only admin assigns them
+ok 26 - staff cannot claim unassigned chats; only admin assigns them
+  ---
+  duration_ms: 74.8652
+  ...
+# Subtest: other agents cannot read, reply, modify or download an assigned conversation
+ok 27 - other agents cannot read, reply, modify or download an assigned conversation
+  ---
+  duration_ms: 135.859
+  ...
+# Subtest: internal notes never enter the outbound provider queue
+ok 28 - internal notes never enter the outbound provider queue
+  ---
+  duration_ms: 97.7188
+  ...
+# Subtest: repeated send requests share one durable message and one provider send
+ok 29 - repeated send requests share one durable message and one provider send
+  ---
+  duration_ms: 171.8092
+  ...
+# Subtest: closed reply window rejects text but permits approved templates
+ok 30 - closed reply window rejects text but permits approved templates
+  ---
+  duration_ms: 257.3
+  ...
+# Subtest: window and assignment are rechecked at send time
+ok 31 - window and assignment are rechecked at send time
+  ---
+  duration_ms: 144.5482
+  ...
+# Subtest: provider timeouts become uncertain and cannot be blindly retried
+ok 32 - provider timeouts become uncertain and cannot be blindly retried
+  ---
+  duration_ms: 193.7654
+  ...
+# Subtest: out-of-order status webhooks cannot regress a read receipt
+ok 33 - out-of-order status webhooks cannot regress a read receipt
+  ---
+  duration_ms: 218.6029
+  ...
+# Subtest: same-second inbound messages stay unread until the second message is read
+ok 34 - same-second inbound messages stay unread until the second message is read
+  ---
+  duration_ms: 179.6895
+  ...
+# Subtest: new messages reopen resolved conversations even in the same second, duplicates do not
+ok 35 - new messages reopen resolved conversations even in the same second, duplicates do not
+  ---
+  duration_ms: 157.1272
+  ...
+# Subtest: contact edits have revision checks and missing configuration never reports success
+ok 36 - contact edits have revision checks and missing configuration never reports success
+  ---
+  duration_ms: 173.466
+  ...
+# Subtest: message pagination is bounded and does not repeat rows
+ok 37 - message pagination is bounded and does not repeat rows
+  ---
+  duration_ms: 239.1613
+  ...
+# Subtest: media validation rejects executable content before provider upload
+ok 38 - media validation rejects executable content before provider upload
+  ---
+  duration_ms: 109.5618
+  ...
+# Subtest: concurrent delivery callbacks preserve the highest receipt state
+ok 39 - concurrent delivery callbacks preserve the highest receipt state
+  ---
+  duration_ms: 206.6457
+  ...
+# Subtest: old attempt callbacks cannot alter a retried message
+ok 40 - old attempt callbacks cannot alter a retried message
+  ---
+  duration_ms: 300.0257
+  ...
+# Subtest: invalid signature, verification challenge and wrong phone routing are handled
+ok 41 - invalid signature, verification challenge and wrong phone routing are handled
+  ---
+  duration_ms: 44.912
+  ...
+# Subtest: CRM lookup exposes service context without credentials or staff-visible payments
+ok 42 - CRM lookup exposes service context without credentials or staff-visible payments
+  ---
+  duration_ms: 135.5852
+  ...
+# Subtest: follow-up scheduling validates dates, permissions and revisions
+ok 43 - follow-up scheduling validates dates, permissions and revisions
+  ---
+  duration_ms: 263.7623
+  ...
+# Subtest: contact filters remain scoped and media/activity views only return their types
+ok 44 - contact filters remain scoped and media/activity views only return their types
+  ---
+  duration_ms: 182.0427
+  ...
+# Subtest: templates can be filtered by category, status and language
+ok 45 - templates can be filtered by category, status and language
+  ---
+  duration_ms: 48.1479
+  ...
+# Subtest: history is bounded by 24 hours and 50 messages, skips empty days and targets old notes
+ok 46 - history is bounded by 24 hours and 50 messages, skips empty days and targets old notes
+  ---
+  duration_ms: 280.5289
+  ...
+# Subtest: mentions are idempotent and preserve customer-support assigned-only access
+ok 47 - mentions are idempotent and preserve customer-support assigned-only access
+  ---
+  duration_ms: 327.1827
+  ...
+# Subtest: conversation pages contain twenty unique rows
+ok 48 - conversation pages contain twenty unique rows
+  ---
+  duration_ms: 281.8924
+  ...
+# Subtest: delta cursor returns status changes without reloading unchanged history
+ok 49 - delta cursor returns status changes without reloading unchanged history
+  ---
+  duration_ms: 153.2568
+  ...
+# Subtest: stream tickets are scoped, single-use and carry no message contents
+ok 50 - stream tickets are scoped, single-use and carry no message contents
+  ---
+  duration_ms: 76.3869
+  ...
+# Subtest: durable pending mentions repair once after interruption
+ok 51 - durable pending mentions repair once after interruption
+  ---
+  duration_ms: 115.0812
+  ...
+# Subtest: a mismatched worker cannot claim a routed webhook or erase its payload
+ok 52 - a mismatched worker cannot claim a routed webhook or erase its payload
+  ---
+  duration_ms: 302.4554
+  ...
+# Inbox webhook processing failed 6ad376ed3e7a32185df6639c PHONE_NUMBER_MISMATCH
+# Subtest: legacy wrong-phone payload is blocked and retained rather than silently completed
+ok 53 - legacy wrong-phone payload is blocked and retained rather than silently completed
+  ---
+  duration_ms: 67.8998
+  ...
+# Subtest: a mismatched outbound worker leaves the message queued for the correct worker
+ok 54 - a mismatched outbound worker leaves the message queued for the correct worker
+  ---
+  duration_ms: 237.1369
+  ...
+# Subtest: connection diagnostics are restricted to administrators
+ok 55 - connection diagnostics are restricted to administrators
+  ---
+  duration_ms: 68.3638
+  ...
+# Subtest: R2 media links and keep controls enforce conversation access and retention state
+ok 56 - R2 media links and keep controls enforce conversation access and retention state
+  ---
+  duration_ms: 210.046
+  ...
+# Subtest: Unlimited AI usage counts calls without enforcing global, conversation or turn caps
+ok 57 - Unlimited AI usage counts calls without enforcing global, conversation or turn caps
+  ---
+  duration_ms: 673.4169
+  ...
+# Subtest: Unlimited migration updates existing settings once and preserves later admin limits
+ok 58 - Unlimited migration updates existing settings once and preserves later admin limits
+  ---
+  duration_ms: 328.0244
+  ...
+# Subtest: Legacy conversations missing AI version complete pending replies exactly once
+ok 59 - Legacy conversations missing AI version complete pending replies exactly once
+  ---
+  duration_ms: 438.638
+  ...
+# Subtest: Onboarding stays with AI without assignment or notification
+ok 60 - Onboarding stays with AI without assignment or notification
+  ---
+  duration_ms: 540.1426
+  ...
+# Subtest: Primary document is admin-only, saves long text intact and rejects stale overwrites
+ok 61 - Primary document is admin-only, saves long text intact and rejects stale overwrites
+  ---
+  duration_ms: 465.5519
+  ...
+# Subtest: Waiting response performs real sales handoff rather than leaving an unassigned chat
+ok 62 - Waiting response performs real sales handoff rather than leaving an unassigned chat
+  ---
+  duration_ms: 396.3807
+  ...
+# Subtest: Structured migration preserves prices, mode, legacy knowledge and is idempotent
+ok 63 - Structured migration preserves prices, mode, legacy knowledge and is idempotent
+  ---
+  duration_ms: 431.666
+  ...
+# Subtest: Structured DRAFT media handoff is a suggestion with no assignment or notification
+ok 64 - Structured DRAFT media handoff is a suggestion with no assignment or notification
+  ---
+  duration_ms: 435.3364
+  ...
+# Subtest: Structured LIVE missing staff acknowledges once, persists pending assignment and recovers
+ok 65 - Structured LIVE missing staff acknowledges once, persists pending assignment and recovers
+  ---
+  duration_ms: 426.6513
+  ...
+# Subtest: Payment reminders are durable and cancelled at send time after paid or human takeover
+ok 66 - Payment reminders are durable and cancelled at send time after paid or human takeover
+  ---
+  duration_ms: 537.1194
+  ...
+# Subtest: Verified payment reconciliation pauses sales and hands off without new customer input
+ok 67 - Verified payment reconciliation pauses sales and hands off without new customer input
+  ---
+  duration_ms: 387.824
+  ...
+# Subtest: Structured Test Agent simulates invoice and verified payment without business side effects
+ok 68 - Structured Test Agent simulates invoice and verified payment without business side effects
+  ---
+  duration_ms: 456.5446
+  ...
+# Subtest: Admin corrections invalidate stale quotes and reminders without touching financial records
+ok 69 - Admin corrections invalidate stale quotes and reminders without touching financial records
+  ---
+  duration_ms: 403.9127
+  ...
+# Subtest: CSS sees assigned chats only and cannot return to AI even when enabled
+ok 70 - CSS sees assigned chats only and cannot return to AI even when enabled
+  ---
+  duration_ms: 237.2055
+  ...
+# Subtest: approving a DRAFT reply keeps unassigned AI conversation active
+ok 71 - approving a DRAFT reply keeps unassigned AI conversation active
+  ---
+  duration_ms: 121.4911
+  ...
+# Subtest: legacy CRM phone formats link Setup Verification and Ads consistently
+ok 72 - legacy CRM phone formats link Setup Verification and Ads consistently
+  ---
+  duration_ms: 126.0707
+  ...
+# Subtest: conversation previews expose current outgoing status only
+ok 73 - conversation previews expose current outgoing status only
+  ---
+  duration_ms: 235.8708
+  ...
+# Subtest: push preferences default off, validate endpoints and protect recipient access
+ok 74 - push preferences default off, validate endpoints and protect recipient access
+  ---
+  duration_ms: 163.2965
+  ...
+# Subtest: push message previews default on and can be hidden
+ok 75 - push message previews default on and can be hidden
+  ---
+  duration_ms: 78.3729
+  ...
+# Subtest: interrupted deletion stays hidden and recovery completes after a worker releases it
+ok 76 - interrupted deletion stays hidden and recovery completes after a worker releases it
+  ---
+  duration_ms: 149.9673
+  ...
+# (node:53440) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:53440) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:53440) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# Subtest: paid invoice contact correction validates fields and preserves financial data
+ok 77 - paid invoice contact correction validates fields and preserves financial data
+  ---
+  duration_ms: 86.2862
+  ...
+# Subtest: course WhatsApp reminder queues once without AI and cancels when payment arrives
+ok 78 - course WhatsApp reminder queues once without AI and cancels when payment arrives
+  ---
+  duration_ms: 223.3998
+  ...
+# Subtest: course reminders work without checkbox consent, wait twenty minutes and respect newer checkouts and opt-outs
+ok 79 - course reminders work without checkbox consent, wait twenty minutes and respect newer checkouts and opt-outs
+  ---
+  duration_ms: 271.6241
+  ...
+# Subtest: invoice reminders only consider newest customer invoice across phone formats
+ok 80 - invoice reminders only consider newest customer invoice across phone formats
+  ---
+  duration_ms: 425.9961
+  ...
+# Subtest: manual invoice follow-ups work with human ownership and cancel after payment or newer invoice
+ok 81 - manual invoice follow-ups work with human ownership and cancel after payment or newer invoice
+  ---
+  duration_ms: 615.0266
+  ...
+# Subtest: training quick reply sends course link once without AI and preserves staff assignment
+ok 82 - training quick reply sends course link once without AI and preserves staff assignment
+  ---
+  duration_ms: 301.5039
+  ...
+# Subtest: mark all notifications read is recipient scoped and includes unloaded pages
+ok 83 - mark all notifications read is recipient scoped and includes unloaded pages
+  ---
+  duration_ms: 258.1635
+  ...
+# Subtest: voice recording converts in memory and uploads only to Meta with a scoped audio ticket
+ok 84 - voice recording converts in memory and uploads only to Meta with a scoped audio ticket
+  ---
+  duration_ms: 2601.6785
+  ...
+# Subtest: WhatsApp course reminders use course-specific payment checks, wording and button link
+ok 85 - WhatsApp course reminders use course-specific payment checks, wording and button link
+  ---
+  duration_ms: 216.5802
+  ...
+# Subtest: conversation unread counts are per viewer and clear through read receipts
+ok 86 - conversation unread counts are per viewer and clear through read receipts
+  ---
+  duration_ms: 284.2957
+  ...
+# Subtest: assigned staff transfer and Administrator mentions preserve ownership safeguards
+ok 87 - assigned staff transfer and Administrator mentions preserve ownership safeguards
+  ---
+  duration_ms: 331.8706
+  ...
+# Subtest: opening unread history targets viewer first unread and keeps newer pages
+ok 88 - opening unread history targets viewer first unread and keeps newer pages
+  ---
+  duration_ms: 480.5034
+  ...
+# Subtest: typing presence is scoped, expires and clears without exposing draft text
+ok 89 - typing presence is scoped, expires and clears without exposing draft text
+  ---
+  duration_ms: 190.4179
+  ...
+# Subtest: CRM detail views are contact scoped, mask staff phones and restrict invoices to admin
+ok 90 - CRM detail views are contact scoped, mask staff phones and restrict invoices to admin
+  ---
+  duration_ms: 169.3127
+  ...
+# Subtest: resolving records an atomic timing event, keeps assignment and inbound reopens
+ok 91 - resolving records an atomic timing event, keeps assignment and inbound reopens
+  ---
+  duration_ms: 133.5172
+  ...
+# Subtest: alerts hide old handoffs and count only tagged notes
+ok 92 - alerts hide old handoffs and count only tagged notes
+  ---
+  duration_ms: 130.3287
+  ...
+# Subtest: staff access: assigned only, AI private, tagged colleague can read and add notes only
+ok 93 - staff access: assigned only, AI private, tagged colleague can read and add notes only
+  ---
+  duration_ms: 362.176
+  ...
+# Subtest: staff access: transfer saves optional internal note and changes ownership
+ok 94 - staff access: transfer saves optional internal note and changes ownership
+  ---
+  duration_ms: 153.1208
+  ...
+# Subtest: staff access: legacy CSS handoff settings route to sales and never fall back to support
+ok 95 - staff access: legacy CSS handoff settings route to sales and never fall back to support
+  ---
+  duration_ms: 336.2316
+  ...
+# Subtest: local development never implicitly consumes production Inbox jobs
+ok 96 - local development never implicitly consumes production Inbox jobs
+  ---
+  duration_ms: 5.7159
+  ...
+# Subtest: normalizes Nigerian local, international and formatted phone numbers
+ok 97 - normalizes Nigerian local, international and formatted phone numbers
+  ---
+  duration_ms: 0.872
+  ...
+# Subtest: 24-hour window closes at the exact boundary
+ok 98 - 24-hour window closes at the exact boundary
+  ---
+  duration_ms: 0.3545
+  ...
+# Subtest: webhook signature authenticates the exact bytes
+ok 99 - webhook signature authenticates the exact bytes
+  ---
+  duration_ms: 1.3319
+  ...
+# Subtest: template variables must match an approved supported template
+ok 100 - template variables must match an approved supported template
+  ---
+  duration_ms: 1.0904
+  ...
+# Subtest: delivery states do not regress and only assigned agents can reply
+ok 101 - delivery states do not regress and only assigned agents can reply
+  ---
+  duration_ms: 0.3196
+  ...
+# Subtest: only mentions are recorded; existing nonmention events remain ineligible
+ok 102 - only mentions are recorded; existing nonmention events remain ineligible
+  ---
+  duration_ms: 1.9963
+  ...
+# Subtest: existing device preferences cannot re-enable nonmention notifications
+ok 103 - existing device preferences cannot re-enable nonmention notifications
+  ---
+  duration_ms: 3.4554
+  ...
+1..103
+# tests 103
+# suites 0
+# pass 103
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 59054.7441

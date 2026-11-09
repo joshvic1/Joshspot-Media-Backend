@@ -1,0 +1,430 @@
+TAP version 13
+# Subtest: whole turn retains all slots and uses daily calculator, never model arithmetic
+ok 1 - whole turn retains all slots and uses daily calculator, never model arithmetic
+  ---
+  duration_ms: 109.9037
+  ...
+# Subtest: combined setup and management sums each service once
+ok 2 - combined setup and management sums each service once
+  ---
+  duration_ms: 11.6851
+  ...
+# Subtest: evidence and contradiction validation never requires matching phrases
+ok 3 - evidence and contradiction validation never requires matching phrases
+  ---
+  duration_ms: 3.1554
+  ...
+# Subtest: sent questions anchor answers; failed and queued drafts do not
+ok 4 - sent questions anchor answers; failed and queued drafts do not
+  ---
+  duration_ms: 2.3987
+  ...
+# Subtest: knowledge becomes eligible in the same turn after extraction
+ok 5 - knowledge becomes eligible in the same turn after extraction
+  ---
+  duration_ms: 31.9674
+  ...
+# Subtest: course exploration does not erase advertising purchase
+ok 6 - course exploration does not erase advertising purchase
+  ---
+  duration_ms: 5.0067
+  ...
+# Subtest: deferral pauses pressure but allows daily recommendations
+ok 7 - deferral pauses pressure but allows daily recommendations
+  ---
+  duration_ms: 14.3757
+  ...
+# Subtest: explicit correction supersedes evidence and detaches an obsolete invoice
+ok 8 - explicit correction supersedes evidence and detaches an obsolete invoice
+  ---
+  duration_ms: 11.6386
+  ...
+# Subtest: unconfirmed budget basis is clarified, not guessed
+ok 9 - unconfirmed budget basis is clarified, not guessed
+  ---
+  duration_ms: 4.8585
+  ...
+# Subtest: multi-platform shared budget is not silently doubled
+ok 10 - multi-platform shared budget is not silently doubled
+  ---
+  duration_ms: 5.9716
+  ...
+# Subtest: invoices require consent AND payment request and stay deterministic
+ok 11 - invoices require consent AND payment request and stay deterministic
+  ---
+  duration_ms: 11.1618
+  ...
+# Subtest: missing account does not silently consent to buying setup
+ok 12 - missing account does not silently consent to buying setup
+  ---
+  duration_ms: 4.0823
+  ...
+# Subtest: negotiation cannot lower a quote
+ok 13 - negotiation cannot lower a quote
+  ---
+  duration_ms: 4.0868
+  ...
+# Subtest: financial and question content cannot bypass the final composer
+ok 14 - financial and question content cannot bypass the final composer
+  ---
+  duration_ms: 0.6302
+  ...
+# Subtest: media, verified payments and explicit humans use actual handoff action
+ok 15 - media, verified payments and explicit humans use actual handoff action
+  ---
+  duration_ms: 2.7918
+  ...
+# Subtest: live V2 can be selected without backend approval
+ok 16 - live V2 can be selected without backend approval
+  ---
+  duration_ms: 1068.5686
+  ...
+# Subtest: selecting course and resuming ads restores purchase facts, not old consent
+ok 17 - selecting course and resuming ads restores purchase facts, not old consent
+  ---
+  duration_ms: 8.2748
+  ...
+# Subtest: a verified existing invoice amount beats newly edited service pricing
+ok 18 - a verified existing invoice amount beats newly edited service pricing
+  ---
+  duration_ms: 3.8383
+  ...
+# Subtest: admin corrections update provenance instead of fighting the projected legacy state
+ok 19 - admin corrections update provenance instead of fighting the projected legacy state
+  ---
+  duration_ms: 2.4726
+  ...
+# Subtest: unapproved knowledge and forbidden financial state writes fail closed
+ok 20 - unapproved knowledge and forbidden financial state writes fail closed
+  ---
+  duration_ms: 1.119
+  ...
+# Subtest: same-turn course interpretation retrieves authoritative course; greeting fetches nothing
+ok 21 - same-turn course interpretation retrieves authoritative course; greeting fetches nothing
+  ---
+  duration_ms: 13.6854
+  ...
+# Subtest: business answer cannot skip knowledge; request coverage cannot silently drop a question
+ok 22 - business answer cannot skip knowledge; request coverage cannot silently drop a question
+  ---
+  duration_ms: 5.361
+  ...
+# Subtest: course detour keeps purchase, explicit switch replaces, returning evidence restores selection
+ok 23 - course detour keeps purchase, explicit switch replaces, returning evidence restores selection
+  ---
+  duration_ms: 2.9232
+  ...
+# Subtest: fabricated evidence and guessed keys rejected before purchase mutation
+ok 24 - fabricated evidence and guessed keys rejected before purchase mutation
+  ---
+  duration_ms: 2.9904
+  ...
+# Subtest: semantic service resolver works without memorized IDs; invalid tool gets one correction
+ok 25 - semantic service resolver works without memorized IDs; invalid tool gets one correction
+  ---
+  duration_ms: 4.0314
+  ...
+# Subtest: setup schema excludes campaign fields; paid options require evidence; testing is default
+ok 26 - setup schema excludes campaign fields; paid options require evidence; testing is default
+  ---
+  duration_ms: 102.0916
+  ...
+# Subtest: model may not add setup to evidence-selected management
+ok 27 - model may not add setup to evidence-selected management
+  ---
+  duration_ms: 2.1599
+  ...
+# Subtest: confirmed fields and irrelevant setup/course questions are rejected
+ok 28 - confirmed fields and irrelevant setup/course questions are rejected
+  ---
+  duration_ms: 1.29
+  ...
+# Subtest: unsupported numeric claim blocked: ₦15,000
+ok 29 - unsupported numeric claim blocked: ₦15,000
+  ---
+  duration_ms: 1.794
+  ...
+# Subtest: unsupported numeric claim blocked: 15,000 NGN
+ok 30 - unsupported numeric claim blocked: 15,000 NGN
+  ---
+  duration_ms: 1.0417
+  ...
+# Subtest: unsupported numeric claim blocked: NGN 15,000
+ok 31 - unsupported numeric claim blocked: NGN 15,000
+  ---
+  duration_ms: 0.3456
+  ...
+# Subtest: unsupported numeric claim blocked: 15000 naira
+ok 32 - unsupported numeric claim blocked: 15000 naira
+  ---
+  duration_ms: 0.199
+  ...
+# Subtest: unsupported numeric claim blocked: about 15k
+ok 33 - unsupported numeric claim blocked: about 15k
+  ---
+  duration_ms: 0.1644
+  ...
+# Subtest: unsupported numeric claim blocked: approximately 15,000
+ok 34 - unsupported numeric claim blocked: approximately 15,000
+  ---
+  duration_ms: 0.1542
+  ...
+# Subtest: unsupported numeric claim blocked: 15k setup fee
+ok 35 - unsupported numeric claim blocked: 15k setup fee
+  ---
+  duration_ms: 0.1532
+  ...
+# Subtest: unsupported numeric claim blocked: 15,000 for setup
+ok 36 - unsupported numeric claim blocked: 15,000 for setup
+  ---
+  duration_ms: 0.1495
+  ...
+# Subtest: unsupported numeric claim blocked: fifteen thousand naira
+ok 37 - unsupported numeric claim blocked: fifteen thousand naira
+  ---
+  duration_ms: 1.4077
+  ...
+# Subtest: unsupported numeric claim blocked: ＄１５０００
+ok 38 - unsupported numeric claim blocked: ＄１５０００
+  ---
+  duration_ms: 0.2451
+  ...
+# Subtest: unsupported numeric claim blocked: the setup is free
+ok 39 - unsupported numeric claim blocked: the setup is free
+  ---
+  duration_ms: 0.601
+  ...
+# Subtest: trusted amount tokens bind source/path; invented tokens and envelopes never render
+ok 40 - trusted amount tokens bind source/path; invented tokens and envelopes never render
+  ---
+  duration_ms: 2.7789
+  ...
+# Subtest: model-classified human paraphrases invoke handoff without backend phrase matching
+ok 41 - model-classified human paraphrases invoke handoff without backend phrase matching
+  ---
+  duration_ms: 2.3477
+  ...
+# Subtest: deferral overrides earlier invoice permission at tool boundary
+ok 42 - deferral overrides earlier invoice permission at tool boundary
+  ---
+  duration_ms: 1.0218
+  ...
+# Subtest: structured multi-question plan retrieves each source and final coverage contains both
+ok 43 - structured multi-question plan retrieves each source and final coverage contains both
+  ---
+  duration_ms: 2.4047
+  ...
+# Subtest: payment request plus question retrieves facts and executes simulated invoice before final answer
+ok 44 - payment request plus question retrieves facts and executes simulated invoice before final answer
+  ---
+  duration_ms: 34.4647
+  ...
+# Subtest: 15-day plan source is authoritative and fixed package needs no customer ad budget
+ok 45 - 15-day plan source is authoritative and fixed package needs no customer ad budget
+  ---
+  duration_ms: 3.9913
+  ...
+# Subtest: budget correction invalidates quote without losing service selection; counteroffer keeps it
+ok 46 - budget correction invalidates quote without losing service selection; counteroffer keeps it
+  ---
+  duration_ms: 3.0378
+  ...
+# Subtest: financial output repair gets one attempt; unsupported amount never escapes
+ok 47 - financial output repair gets one attempt; unsupported amount never escapes
+  ---
+  duration_ms: 10.7131
+  ...
+# Subtest: payment paraphrase fixtures resolve contextual request through same contract, not phrase rules
+ok 48 - payment paraphrase fixtures resolve contextual request through same contract, not phrase rules
+  ---
+  duration_ms: 37.7267
+  ...
+# Subtest: setup price uses semantic catalogue mapping without campaign fields or model IDs
+ok 49 - setup price uses semantic catalogue mapping without campaign fields or model IDs
+  ---
+  duration_ms: 62.8105
+  ...
+# Subtest: management daily budget uses unchanged calculator, approved testing default
+ok 50 - management daily budget uses unchanged calculator, approved testing default
+  ---
+  duration_ms: 57.1185
+  ...
+# Subtest: recommendation resolves plans without inventing budget
+ok 51 - recommendation resolves plans without inventing budget
+  ---
+  duration_ms: 5.9503
+  ...
+# Subtest: 15-day package retrieves265000=200000+65000
+ok 52 - 15-day package retrieves265000=200000+65000
+  ---
+  duration_ms: 8.1252
+  ...
+# Subtest: mixed pairs and whole-purchase cap preserve scope
+ok 53 - mixed pairs and whole-purchase cap preserve scope
+  ---
+  duration_ms: 13.3568
+  ...
+# Subtest: course detour keeps management; explicit switch and return replace deliberately
+ok 54 - course detour keeps management; explicit switch and return replace deliberately
+  ---
+  duration_ms: 22.4943
+  ...
+# Subtest: deferral suppresses invoice and payment question; fresh request resumes
+ok 55 - deferral suppresses invoice and payment question; fresh request resumes
+  ---
+  duration_ms: 14.6739
+  ...
+# Subtest: payment claim cannot mark paid
+ok 56 - payment claim cannot mark paid
+  ---
+  duration_ms: 8.4584
+  ...
+# Subtest: human current evidence bypasses business data retrieval and simulates handoff
+ok 57 - human current evidence bypasses business data retrieval and simulates handoff
+  ---
+  duration_ms: 11.4108
+  ...
+# Subtest: multiple requests resolve independently; missing creative knowledge is explicit
+ok 58 - multiple requests resolve independently; missing creative knowledge is explicit
+  ---
+  duration_ms: 10.7739
+  ...
+# Subtest: knowledge eligibility honors metadata and excluded service
+ok 59 - knowledge eligibility honors metadata and excluded service
+  ---
+  duration_ms: 0.8867
+  ...
+# Subtest: missing approved knowledge hands off before composition or invoice, preserving purchase
+ok 60 - missing approved knowledge hands off before composition or invoice, preserving purchase
+  ---
+  duration_ms: 9.8365
+  ...
+# Subtest: composer can reject insufficient retrieved facts; candidate is discarded, no repair
+ok 61 - composer can reject insufficient retrieved facts; candidate is discarded, no repair
+  ---
+  duration_ms: 9.558
+  ...
+# Subtest: authoritative price/payment facts do not require matching knowledge articles
+ok 62 - authoritative price/payment facts do not require matching knowledge articles
+  ---
+  duration_ms: 12.3693
+  ...
+# Subtest: empty or other-platform knowledge cannot prevent a knowledge handoff
+ok 63 - empty or other-platform knowledge cannot prevent a knowledge handoff
+  ---
+  duration_ms: 4.2482
+  ...
+# Subtest: missing customer duration stays a clarification, not a knowledge handoff
+ok 64 - missing customer duration stays a clarification, not a knowledge handoff
+  ---
+  duration_ms: 6.4421
+  ...
+# Subtest: knowledge handoff rechecks ownership before assignment
+ok 65 - knowledge handoff rechecks ownership before assignment
+  ---
+  duration_ms: 4.0183
+  ...
+# Subtest: natural trusted financial wording The setup fee is 20k.
+ok 66 - natural trusted financial wording The setup fee is 20k.
+  ---
+  duration_ms: 5.3751
+  ...
+# Subtest: natural trusted financial wording Setup costs 20,000 naira.
+ok 67 - natural trusted financial wording Setup costs 20,000 naira.
+  ---
+  duration_ms: 4.447
+  ...
+# Subtest: natural trusted financial wording Setup fee: ₦20,000.
+ok 68 - natural trusted financial wording Setup fee: ₦20,000.
+  ---
+  duration_ms: 9.8296
+  ...
+# Subtest: natural trusted financial wording Setup fee is NGN 20,000.
+ok 69 - natural trusted financial wording Setup fee is NGN 20,000.
+  ---
+  duration_ms: 5.3211
+  ...
+# Subtest: same amount wrong role and invented amount rejected
+ok 70 - same amount wrong role and invented amount rejected
+  ---
+  duration_ms: 4.8127
+  ...
+# Subtest: financial roles remain distinct in a natural combined sentence and word amounts
+ok 71 - financial roles remain distinct in a natural combined sentence and word amounts
+  ---
+  duration_ms: 4.7476
+  ...
+# Subtest: negation in another clause cannot authorize a guarantee or false payment claim
+ok 72 - negation in another clause cannot authorize a guarantee or false payment claim
+  ---
+  duration_ms: 4.4147
+  ...
+# Subtest: existing invoice does not force payment details into an unrelated answer
+ok 73 - existing invoice does not force payment details into an unrelated answer
+  ---
+  duration_ms: 5.516
+  ...
+# Subtest: Facebook and Instagram normalize to one Meta purchase; a switch clears old whole-purchase cap
+ok 74 - Facebook and Instagram normalize to one Meta purchase; a switch clears old whole-purchase cap
+  ---
+  duration_ms: 5.52
+  ...
+# Subtest: ordinary customer budget and duration allowed; URL and envelope blocked
+ok 75 - ordinary customer budget and duration allowed; URL and envelope blocked
+  ---
+  duration_ms: 6.8948
+  ...
+# Subtest: current evidence required; historical requests cannot be invented
+ok 76 - current evidence required; historical requests cannot be invented
+  ---
+  duration_ms: 2.9054
+  ...
+# Subtest: composer repairs once only; no autonomous tool loop
+ok 77 - composer repairs once only; no autonomous tool loop
+  ---
+  duration_ms: 7.6495
+  ...
+# Subtest: ownership invalidation blocks final send
+ok 78 - ownership invalidation blocks final send
+  ---
+  duration_ms: 7.1607
+  ...
+# Subtest: test session ignores client state and never invokes financial port
+ok 79 - test session ignores client state and never invokes financial port
+  ---
+  duration_ms: 6.1903
+  ...
+# Subtest: all engines selectable, default remains V1, V4 live manual gate
+ok 80 - all engines selectable, default remains V1, V4 live manual gate
+  ---
+  duration_ms: 1209.9159
+  ...
+# Subtest: model adapter sends structured outputs, no tools, separate stage models
+ok 81 - model adapter sends structured outputs, no tools, separate stage models
+  ---
+  duration_ms: 152.1933
+  ...
+# Subtest: composer receives delivered history and current interruption, not failed drafts
+ok 82 - composer receives delivered history and current interruption, not failed drafts
+  ---
+  duration_ms: 5.9535
+  ...
+# Subtest: WhatsApp course resolves its own price/link; no invoice and no ads-course mixup
+ok 83 - WhatsApp course resolves its own price/link; no invoice and no ads-course mixup
+  ---
+  duration_ms: 32.1182
+  ...
+# Subtest: course default never re-enables a disabled business record
+ok 84 - course default never re-enables a disabled business record
+  ---
+  duration_ms: 0.5601
+  ...
+1..84
+# tests 84
+# suites 0
+# pass 84
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2382.7774

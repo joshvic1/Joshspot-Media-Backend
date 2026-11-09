@@ -1,0 +1,87 @@
+TAP version 13
+# Subtest: sanitizes pasted HTML while keeping article formatting
+ok 1 - sanitizes pasted HTML while keeping article formatting
+  ---
+  duration_ms: 780.3228
+  ...
+# (node:3088) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:3088) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:3088) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:3088) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# Subtest: admin-only lifecycle, private drafts, safe updates, immediate unpublish and delete
+ok 2 - admin-only lifecycle, private drafts, safe updates, immediate unpublish and delete
+  ---
+  duration_ms: 477.3661
+  ...
+# Subtest: image upload validates signatures, requires admin and returns durable image URL
+ok 3 - image upload validates signatures, requires admin and returns durable image URL
+  ---
+  duration_ms: 31.8371
+  ...
+# Subtest: Evil BTC repetition hands off; formatting differences also match
+ok 4 - Evil BTC repetition hands off; formatting differences also match
+  ---
+  duration_ms: 6.9949
+  ...
+# Subtest: customer requests to resend or clarify permit repetition
+ok 5 - customer requests to resend or clarify permit repetition
+  ---
+  duration_ms: 1.2782
+  ...
+# Subtest: failed, unsent, notes, staff replies and reminders are not evidence
+ok 6 - failed, unsent, notes, staff replies and reminders are not evidence
+  ---
+  duration_ms: 0.6416
+  ...
+# Subtest: new prices and useful new answers are not rejected; invoice actions untouched
+ok 7 - new prices and useful new answers are not rejected; invoice actions untouched
+  ---
+  duration_ms: 0.6294
+  ...
+# Subtest: only approved public paths; no private/query/foreign/noindex URLs
+ok 8 - only approved public paths; no private/query/foreign/noindex URLs
+  ---
+  duration_ms: 885.9562
+  ...
+# Subtest: publish, update, rename, unpublish, delete; unchanged saves and drafts do not submit
+ok 9 - publish, update, rename, unpublish, delete; unchanged saves and drafts do not submit
+  ---
+  duration_ms: 59.3498
+  ...
+# (node:14076) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:14076) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:14076) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:14076) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:14076) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:14076) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:14076) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:14076) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# Subtest: disabled by default; dedup, key format, success and retry backoff
+ok 10 - disabled by default; dedup, key format, success and retry backoff
+  ---
+  duration_ms: 53.0942
+  ...
+# (node:14076) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:14076) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:14076) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# Subtest: lease prevents concurrent sends and a changed article stays pending during a send
+ok 11 - lease prevents concurrent sends and a changed article stays pending during a send
+  ---
+  duration_ms: 18.5159
+  ...
+# Subtest: reconciles published articles, code pages and deletions; rejects corrupt manifests
+ok 12 - reconciles published articles, code pages and deletions; rejects corrupt manifests
+  ---
+  duration_ms: 59.7969
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5810.9394

@@ -1,0 +1,55 @@
+TAP version 13
+# Subtest: earnings permissions, cap, audited adjustment and finalization lock
+ok 1 - earnings permissions, cap, audited adjustment and finalization lock
+  ---
+  duration_ms: 1179.761
+  ...
+# Subtest: pending records prevent finalization and config changes preserve existing month rules
+ok 2 - pending records prevent finalization and config changes preserve existing month rules
+  ---
+  duration_ms: 60.0146
+  ...
+# Subtest: reconciliation is idempotent and ownership is captured with assignment
+ok 3 - reconciliation is idempotent and ownership is captured with assignment
+  ---
+  duration_ms: 43.4172
+  ...
+# Subtest: late replies are unique, paginated and hide names after reassignment
+ok 4 - late replies are unique, paginated and hide names after reassignment
+  ---
+  duration_ms: 162.8043
+  ...
+# Subtest: working hours exclude nights and respect non-working days
+ok 5 - working hours exclude nights and respect non-working days
+  ---
+  duration_ms: 3.1233
+  ...
+# Subtest: completed five-minute blocks match owner examples exactly
+ok 6 - completed five-minute blocks match owner examples exactly
+  ---
+  duration_ms: 0.3483
+  ...
+# Subtest: every inbound message counts; pending waits remain provisional
+ok 7 - every inbound message counts; pending waits remain provisional
+  ---
+  duration_ms: 0.5123
+  ...
+# Subtest: ownership transfer starts new clock and failed sends/notes do not answer
+ok 8 - ownership transfer starts new clock and failed sends/notes do not answer
+  ---
+  duration_ms: 0.6075
+  ...
+# Subtest: unassigned time and automated replies never become staff deductions
+ok 9 - unassigned time and automated replies never become staff deductions
+  ---
+  duration_ms: 0.2571
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2728.4055

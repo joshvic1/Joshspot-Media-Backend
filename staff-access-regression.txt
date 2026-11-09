@@ -1,0 +1,768 @@
+TAP version 13
+# Subtest: quoted replies stay in their conversation and incoming reply context is preserved
+ok 1 - quoted replies stay in their conversation and incoming reply context is preserved
+  ---
+  duration_ms: 5881.2866
+  ...
+# Subtest: Staff shortcuts mask identity, lock CRM identity and restrict admin libraries
+ok 2 - Staff shortcuts mask identity, lock CRM identity and restrict admin libraries
+  ---
+  duration_ms: 679.0254
+  ...
+# Subtest: CRM shortcuts preserve Ads and Verification fields and CSS amount permissions
+ok 3 - CRM shortcuts preserve Ads and Verification fields and CSS amount permissions
+  ---
+  duration_ms: 426.9417
+  ...
+# (node:45480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Invoice shortcut queues once and checks payment without sending a message
+ok 4 - Invoice shortcut queues once and checks payment without sending a message
+  ---
+  duration_ms: 502.6664
+  ...
+# Subtest: admin deletion purges Inbox data and saved media but preserves invoices and other customers
+ok 5 - admin deletion purges Inbox data and saved media but preserves invoices and other customers
+  ---
+  duration_ms: 707.1093
+  ...
+# Subtest: AI configuration is admin-only and initialization is idempotent DRAFT
+ok 6 - AI configuration is admin-only and initialization is idempotent DRAFT
+  ---
+  duration_ms: 499.2957
+  ...
+# Subtest: AI DRAFT persists a suggestion, does not send, and duplicate webhooks do not regenerate
+ok 7 - AI DRAFT persists a suggestion, does not send, and duplicate webhooks do not regenerate
+  ---
+  duration_ms: 441.9102
+  ...
+# Subtest: AI LIVE uses existing outbox and takeover cancels queued output
+ok 8 - AI LIVE uses existing outbox and takeover cancels queued output
+  ---
+  duration_ms: 370.695
+  ...
+# Subtest: AI LIVE delivers normally and human takeover during generation suppresses output
+ok 9 - AI LIVE delivers normally and human takeover during generation suppresses output
+  ---
+  duration_ms: 443.5353
+  ...
+# Subtest: AI batches rapid messages and media/errors hand off without sending content to model
+not ok 10 - AI batches rapid messages and media/errors hand off without sending content to model
+  ---
+  duration_ms: 408.8194
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\integration.test.js:203:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + '6ad376555d90714b439148e8'
+    - '6ad376555d90714b439148ea'
+                              ^
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '6ad376555d90714b439148ea'
+  actual: '6ad376555d90714b439148e8'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\integration.test.js:210:137)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: AI provider failures and sensitive text preserve input and route to a human
+ok 11 - AI provider failures and sensitive text preserve input and route to a human
+  ---
+  duration_ms: 475.4866
+  ...
+# Subtest: AI test mode performs no invoice or WhatsApp writes; unavailable invoice generation hands off
+ok 12 - AI test mode performs no invoice or WhatsApp writes; unavailable invoice generation hands off
+  ---
+  duration_ms: 460.636
+  ...
+# Subtest: AI invoice action reuses the existing Invoice and account and never retries uncertain account creation
+ok 13 - AI invoice action reuses the existing Invoice and account and never retries uncertain account creation
+  ---
+  duration_ms: 336.8863
+  ...
+# Subtest: AI worker lease prevents two workers generating for one conversation
+ok 14 - AI worker lease prevents two workers generating for one conversation
+  ---
+  duration_ms: 372.9806
+  ...
+# Subtest: AI limits report their exact reason and blocked attempts do not inflate counters
+ok 15 - AI limits report their exact reason and blocked attempts do not inflate counters
+  ---
+  duration_ms: 430.7
+  ...
+# Subtest: business pack installs all approved entries once and preserves rollout and prices
+ok 16 - business pack installs all approved entries once and preserves rollout and prices
+  ---
+  duration_ms: 806.5058
+  ...
+# Subtest: LIVE human request assigns CSS immediately, notifies once and sends only one handoff response
+not ok 17 - LIVE human request assigns CSS immediately, notifies once and sends only one handoff response
+  ---
+  duration_ms: 324.8307
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\integration.test.js:274:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + '6ad376585d90714b43914e67'
+    - '6ad376585d90714b43914e69'
+                              ^
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '6ad376585d90714b43914e69'
+  actual: '6ad376585d90714b43914e67'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\integration.test.js:279:9)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: DRAFT human request is assigned to CSS without automatic sending and CSS can approve it
+not ok 18 - DRAFT human request is assigned to CSS without automatic sending and CSS can approve it
+  ---
+  duration_ms: 307.518
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\integration.test.js:285:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + '6ad376595d90714b43914f07'
+    - '6ad376595d90714b43914f09'
+                              ^
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '6ad376595d90714b43914f09'
+  actual: '6ad376595d90714b43914f07'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\integration.test.js:288:9)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: missing fallback chooses CSS and absent CSS remains visible and retries without duplicate notices
+not ok 19 - missing fallback chooses CSS and absent CSS remains visible and retries without duplicate notices
+  ---
+  duration_ms: 314.9173
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\integration.test.js:292:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + ObjectId {
+    +   buffer: Buffer(12) [Uint8Array] [
+    +     106,
+    +     211,
+    +     118,
+    +     89,
+    +     93,
+    +     144,
+    +     113,
+    +     75,
+    +     67,
+    +     145,
+    +     79,
+    +     166
+    +   ]
+    + }
+    - null
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: ~
+  actual:
+    buffer:
+      0: 106
+      1: 211
+      2: 118
+      3: 89
+      4: 93
+      5: 144
+      6: 113
+      7: 75
+      8: 67
+      9: 145
+      10: 79
+      11: 166
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\integration.test.js:296:9)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: interrupted handoff activity is recovered once and manual assignment cancels recovery
+not ok 20 - interrupted handoff activity is recovered once and manual assignment cancels recovery
+  ---
+  duration_ms: 325.1506
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\integration.test.js:303:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + '6ad376595d90714b43915046'
+    - '6ad376595d90714b43915048'
+                              ^
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '6ad376595d90714b43915048'
+  actual: '6ad376595d90714b43915046'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\integration.test.js:307:56)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: All includes resolved chats and Mine never treats unassigned chats as admin assignments
+ok 21 - All includes resolved chats and Mine never treats unassigned chats as admin assignments
+  ---
+  duration_ms: 169.0785
+  ...
+# Subtest: reactions send to WhatsApp, replace/remove and enforce permissions
+ok 22 - reactions send to WhatsApp, replace/remove and enforce permissions
+  ---
+  duration_ms: 195.0136
+  ...
+# Subtest: note reactions stay internal and customer reaction webhooks update original messages
+ok 23 - note reactions stay internal and customer reaction webhooks update original messages
+  ---
+  duration_ms: 114.756
+  ...
+# Subtest: authentication and existing restricted roles are enforced
+not ok 24 - authentication and existing restricted roles are enforced
+  ---
+  duration_ms: 51.0401
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\integration.test.js:359:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    401 !== 403
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 403
+  actual: 401
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\integration.test.js:364:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: signed webhook is durably acknowledged and duplicate deliveries create one message/contact
+ok 25 - signed webhook is durably acknowledged and duplicate deliveries create one message/contact
+  ---
+  duration_ms: 105.5722
+  ...
+# Subtest: only one representative can win a simultaneous claim
+not ok 26 - only one representative can win a simultaneous claim
+  ---
+  duration_ms: 53.2088
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\integration.test.js:379:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\integration.test.js:382:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: other agents cannot read, reply, modify or download an assigned conversation
+ok 27 - other agents cannot read, reply, modify or download an assigned conversation
+  ---
+  duration_ms: 94.494
+  ...
+# Subtest: internal notes never enter the outbound provider queue
+ok 28 - internal notes never enter the outbound provider queue
+  ---
+  duration_ms: 90.7507
+  ...
+# Subtest: repeated send requests share one durable message and one provider send
+ok 29 - repeated send requests share one durable message and one provider send
+  ---
+  duration_ms: 112.762
+  ...
+# Subtest: closed reply window rejects text but permits approved templates
+ok 30 - closed reply window rejects text but permits approved templates
+  ---
+  duration_ms: 126.7265
+  ...
+# Subtest: window and assignment are rechecked at send time
+ok 31 - window and assignment are rechecked at send time
+  ---
+  duration_ms: 116.8354
+  ...
+# Subtest: provider timeouts become uncertain and cannot be blindly retried
+ok 32 - provider timeouts become uncertain and cannot be blindly retried
+  ---
+  duration_ms: 122.8022
+  ...
+# Subtest: out-of-order status webhooks cannot regress a read receipt
+ok 33 - out-of-order status webhooks cannot regress a read receipt
+  ---
+  duration_ms: 157.4926
+  ...
+# Subtest: same-second inbound messages stay unread until the second message is read
+ok 34 - same-second inbound messages stay unread until the second message is read
+  ---
+  duration_ms: 95.7007
+  ...
+# Subtest: new messages reopen resolved conversations even in the same second, duplicates do not
+ok 35 - new messages reopen resolved conversations even in the same second, duplicates do not
+  ---
+  duration_ms: 106.068
+  ...
+# Subtest: contact edits have revision checks and missing configuration never reports success
+ok 36 - contact edits have revision checks and missing configuration never reports success
+  ---
+  duration_ms: 503.8843
+  ...
+# Subtest: message pagination is bounded and does not repeat rows
+ok 37 - message pagination is bounded and does not repeat rows
+  ---
+  duration_ms: 148.436
+  ...
+# Subtest: media validation rejects executable content before provider upload
+ok 38 - media validation rejects executable content before provider upload
+  ---
+  duration_ms: 86.8689
+  ...
+# Subtest: concurrent delivery callbacks preserve the highest receipt state
+ok 39 - concurrent delivery callbacks preserve the highest receipt state
+  ---
+  duration_ms: 142.3537
+  ...
+# Subtest: old attempt callbacks cannot alter a retried message
+ok 40 - old attempt callbacks cannot alter a retried message
+  ---
+  duration_ms: 185.2416
+  ...
+# Subtest: invalid signature, verification challenge and wrong phone routing are handled
+ok 41 - invalid signature, verification challenge and wrong phone routing are handled
+  ---
+  duration_ms: 55.248
+  ...
+# Subtest: CRM lookup exposes service context without credentials or staff-visible payments
+ok 42 - CRM lookup exposes service context without credentials or staff-visible payments
+  ---
+  duration_ms: 91.4971
+  ...
+# Subtest: follow-up scheduling validates dates, permissions and revisions
+ok 43 - follow-up scheduling validates dates, permissions and revisions
+  ---
+  duration_ms: 222.1368
+  ...
+# Subtest: contact filters remain scoped and media/activity views only return their types
+ok 44 - contact filters remain scoped and media/activity views only return their types
+  ---
+  duration_ms: 131.6796
+  ...
+# Subtest: templates can be filtered by category, status and language
+ok 45 - templates can be filtered by category, status and language
+  ---
+  duration_ms: 35.4462
+  ...
+# Subtest: history is bounded by 24 hours and 50 messages, skips empty days and targets old notes
+ok 46 - history is bounded by 24 hours and 50 messages, skips empty days and targets old notes
+  ---
+  duration_ms: 189.9247
+  ...
+# Subtest: mentions are idempotent and preserve customer-support assigned-only access
+not ok 47 - mentions are idempotent and preserve customer-support assigned-only access
+  ---
+  duration_ms: 139.835
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\integration.test.js:566:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    200 !== 404
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 404
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\integration.test.js:577:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: conversation pages contain twenty unique rows
+ok 48 - conversation pages contain twenty unique rows
+  ---
+  duration_ms: 178.4271
+  ...
+# Subtest: delta cursor returns status changes without reloading unchanged history
+ok 49 - delta cursor returns status changes without reloading unchanged history
+  ---
+  duration_ms: 102.4617
+  ...
+# Subtest: stream tickets are scoped, single-use and carry no message contents
+ok 50 - stream tickets are scoped, single-use and carry no message contents
+  ---
+  duration_ms: 70.8227
+  ...
+# Subtest: durable pending mentions repair once after interruption
+ok 51 - durable pending mentions repair once after interruption
+  ---
+  duration_ms: 77.9643
+  ...
+# Subtest: a mismatched worker cannot claim a routed webhook or erase its payload
+ok 52 - a mismatched worker cannot claim a routed webhook or erase its payload
+  ---
+  duration_ms: 61.943
+  ...
+# Inbox webhook processing failed 6ad3765e5d90714b439158a2 PHONE_NUMBER_MISMATCH
+# Subtest: legacy wrong-phone payload is blocked and retained rather than silently completed
+ok 53 - legacy wrong-phone payload is blocked and retained rather than silently completed
+  ---
+  duration_ms: 42.3202
+  ...
+# Subtest: a mismatched outbound worker leaves the message queued for the correct worker
+ok 54 - a mismatched outbound worker leaves the message queued for the correct worker
+  ---
+  duration_ms: 136.5733
+  ...
+# Subtest: connection diagnostics are restricted to administrators
+ok 55 - connection diagnostics are restricted to administrators
+  ---
+  duration_ms: 52.8411
+  ...
+# Subtest: R2 media links and keep controls enforce conversation access and retention state
+ok 56 - R2 media links and keep controls enforce conversation access and retention state
+  ---
+  duration_ms: 147.7399
+  ...
+# Subtest: Unlimited AI usage counts calls without enforcing global, conversation or turn caps
+ok 57 - Unlimited AI usage counts calls without enforcing global, conversation or turn caps
+  ---
+  duration_ms: 383.1865
+  ...
+# Subtest: Unlimited migration updates existing settings once and preserves later admin limits
+ok 58 - Unlimited migration updates existing settings once and preserves later admin limits
+  ---
+  duration_ms: 302.2616
+  ...
+# Subtest: Legacy conversations missing AI version complete pending replies exactly once
+ok 59 - Legacy conversations missing AI version complete pending replies exactly once
+  ---
+  duration_ms: 367.5432
+  ...
+# Subtest: Onboarding stays with AI without assignment or notification
+ok 60 - Onboarding stays with AI without assignment or notification
+  ---
+  duration_ms: 280.7574
+  ...
+# Subtest: Primary document is admin-only, saves long text intact and rejects stale overwrites
+ok 61 - Primary document is admin-only, saves long text intact and rejects stale overwrites
+  ---
+  duration_ms: 295.5657
+  ...
+# Subtest: Waiting response performs real CSS handoff rather than leaving an unassigned chat
+not ok 62 - Waiting response performs real CSS handoff rather than leaving an unassigned chat
+  ---
+  duration_ms: 332.0119
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\integration.test.js:740:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + '6ad376605d90714b43915c5c'
+    - '6ad376605d90714b43915c5e'
+                              ^
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '6ad376605d90714b43915c5e'
+  actual: '6ad376605d90714b43915c5c'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\integration.test.js:745:9)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: Structured migration preserves prices, mode, legacy knowledge and is idempotent
+ok 63 - Structured migration preserves prices, mode, legacy knowledge and is idempotent
+  ---
+  duration_ms: 551.4429
+  ...
+# Subtest: Structured DRAFT media handoff is a suggestion with no assignment or notification
+ok 64 - Structured DRAFT media handoff is a suggestion with no assignment or notification
+  ---
+  duration_ms: 468.1814
+  ...
+# Subtest: Structured LIVE missing staff acknowledges once, persists pending assignment and recovers
+not ok 65 - Structured LIVE missing staff acknowledges once, persists pending assignment and recovers
+  ---
+  duration_ms: 395.5648
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\integration.test.js:769:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'ASSIGNED'
+    - 'PENDING_HUMAN_ASSIGNMENT'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'PENDING_HUMAN_ASSIGNMENT'
+  actual: 'ASSIGNED'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\integration.test.js:772:52)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: Payment reminders are durable and cancelled at send time after paid or human takeover
+ok 66 - Payment reminders are durable and cancelled at send time after paid or human takeover
+  ---
+  duration_ms: 460.8876
+  ...
+# Subtest: Verified payment reconciliation pauses sales and hands off without new customer input
+not ok 67 - Verified payment reconciliation pauses sales and hands off without new customer input
+  ---
+  duration_ms: 245.2449
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\integration.test.js:789:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + '6ad376625d90714b43915fad'
+    - '6ad376625d90714b43915faf'
+                              ^
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '6ad376625d90714b43915faf'
+  actual: '6ad376625d90714b43915fad'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\integration.test.js:793:207)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: Structured Test Agent simulates invoice and verified payment without business side effects
+ok 68 - Structured Test Agent simulates invoice and verified payment without business side effects
+  ---
+  duration_ms: 263.2483
+  ...
+# Subtest: Admin corrections invalidate stale quotes and reminders without touching financial records
+ok 69 - Admin corrections invalidate stale quotes and reminders without touching financial records
+  ---
+  duration_ms: 257.7697
+  ...
+# Subtest: CSS sees assigned chats only and cannot return to AI even when enabled
+ok 70 - CSS sees assigned chats only and cannot return to AI even when enabled
+  ---
+  duration_ms: 181.8765
+  ...
+# Subtest: approving a DRAFT reply keeps unassigned AI conversation active
+ok 71 - approving a DRAFT reply keeps unassigned AI conversation active
+  ---
+  duration_ms: 86.9232
+  ...
+# Subtest: legacy CRM phone formats link Setup Verification and Ads consistently
+ok 72 - legacy CRM phone formats link Setup Verification and Ads consistently
+  ---
+  duration_ms: 91.6136
+  ...
+# Subtest: conversation previews expose current outgoing status only
+ok 73 - conversation previews expose current outgoing status only
+  ---
+  duration_ms: 170.2725
+  ...
+# Subtest: push preferences default off, validate endpoints and protect recipient access
+ok 74 - push preferences default off, validate endpoints and protect recipient access
+  ---
+  duration_ms: 117.7221
+  ...
+# Subtest: push message previews default on and can be hidden
+ok 75 - push message previews default on and can be hidden
+  ---
+  duration_ms: 56.8478
+  ...
+# Subtest: interrupted deletion stays hidden and recovery completes after a worker releases it
+ok 76 - interrupted deletion stays hidden and recovery completes after a worker releases it
+  ---
+  duration_ms: 101.3909
+  ...
+# (node:45480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:45480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:45480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# Subtest: paid invoice contact correction validates fields and preserves financial data
+ok 77 - paid invoice contact correction validates fields and preserves financial data
+  ---
+  duration_ms: 47.5152
+  ...
+# Subtest: course WhatsApp reminder queues once without AI and cancels when payment arrives
+ok 78 - course WhatsApp reminder queues once without AI and cancels when payment arrives
+  ---
+  duration_ms: 164.7259
+  ...
+# Subtest: course reminders work without checkbox consent, wait twenty minutes and respect newer checkouts and opt-outs
+ok 79 - course reminders work without checkbox consent, wait twenty minutes and respect newer checkouts and opt-outs
+  ---
+  duration_ms: 94.7309
+  ...
+# Subtest: invoice reminders only consider newest customer invoice across phone formats
+ok 80 - invoice reminders only consider newest customer invoice across phone formats
+  ---
+  duration_ms: 227.6138
+  ...
+# Subtest: manual invoice follow-ups work with human ownership and cancel after payment or newer invoice
+ok 81 - manual invoice follow-ups work with human ownership and cancel after payment or newer invoice
+  ---
+  duration_ms: 411.6332
+  ...
+# Subtest: training quick reply sends course link once without AI and preserves staff assignment
+ok 82 - training quick reply sends course link once without AI and preserves staff assignment
+  ---
+  duration_ms: 165.3482
+  ...
+# Subtest: mark all notifications read is recipient scoped and includes unloaded pages
+ok 83 - mark all notifications read is recipient scoped and includes unloaded pages
+  ---
+  duration_ms: 112.2684
+  ...
+# Subtest: voice recording converts in memory and uploads only to Meta with a scoped audio ticket
+ok 84 - voice recording converts in memory and uploads only to Meta with a scoped audio ticket
+  ---
+  duration_ms: 1631.8908
+  ...
+# Subtest: WhatsApp course reminders use course-specific payment checks, wording and button link
+ok 85 - WhatsApp course reminders use course-specific payment checks, wording and button link
+  ---
+  duration_ms: 124.8761
+  ...
+# Subtest: conversation unread counts are per viewer and clear through read receipts
+ok 86 - conversation unread counts are per viewer and clear through read receipts
+  ---
+  duration_ms: 201.8641
+  ...
+# Subtest: assigned staff transfer and Administrator mentions preserve ownership safeguards
+ok 87 - assigned staff transfer and Administrator mentions preserve ownership safeguards
+  ---
+  duration_ms: 243.6679
+  ...
+# Subtest: opening unread history targets viewer first unread and keeps newer pages
+ok 88 - opening unread history targets viewer first unread and keeps newer pages
+  ---
+  duration_ms: 300.7526
+  ...
+# Subtest: typing presence is scoped, expires and clears without exposing draft text
+ok 89 - typing presence is scoped, expires and clears without exposing draft text
+  ---
+  duration_ms: 165.55
+  ...
+# Subtest: CRM detail views are contact scoped, mask staff phones and restrict invoices to admin
+ok 90 - CRM detail views are contact scoped, mask staff phones and restrict invoices to admin
+  ---
+  duration_ms: 149.5259
+  ...
+# Subtest: resolving records an atomic timing event, keeps assignment and inbound reopens
+ok 91 - resolving records an atomic timing event, keeps assignment and inbound reopens
+  ---
+  duration_ms: 119.8802
+  ...
+# Subtest: alerts hide old handoffs and count only tagged notes
+ok 92 - alerts hide old handoffs and count only tagged notes
+  ---
+  duration_ms: 131.9567
+  ...
+# Subtest: staff access: assigned only, AI private, tagged colleague can read and add notes only
+ok 93 - staff access: assigned only, AI private, tagged colleague can read and add notes only
+  ---
+  duration_ms: 368.6628
+  ...
+# Subtest: staff access: transfer saves optional internal note and changes ownership
+ok 94 - staff access: transfer saves optional internal note and changes ownership
+  ---
+  duration_ms: 155.5997
+  ...
+# Subtest: staff access: legacy CSS handoff settings route to sales and never fall back to support
+ok 95 - staff access: legacy CSS handoff settings route to sales and never fall back to support
+  ---
+  duration_ms: 352.8886
+  ...
+# Subtest: local development never implicitly consumes production Inbox jobs
+ok 96 - local development never implicitly consumes production Inbox jobs
+  ---
+  duration_ms: 296.0166
+  ...
+# Subtest: normalizes Nigerian local, international and formatted phone numbers
+ok 97 - normalizes Nigerian local, international and formatted phone numbers
+  ---
+  duration_ms: 2.3608
+  ...
+# Subtest: 24-hour window closes at the exact boundary
+ok 98 - 24-hour window closes at the exact boundary
+  ---
+  duration_ms: 0.8037
+  ...
+# Subtest: webhook signature authenticates the exact bytes
+ok 99 - webhook signature authenticates the exact bytes
+  ---
+  duration_ms: 3.1912
+  ...
+# Subtest: template variables must match an approved supported template
+ok 100 - template variables must match an approved supported template
+  ---
+  duration_ms: 7.4212
+  ...
+# Subtest: delivery states do not regress and only assigned agents can reply
+ok 101 - delivery states do not regress and only assigned agents can reply
+  ---
+  duration_ms: 0.6923
+  ...
+# Subtest: only mentions are recorded; existing nonmention events remain ineligible
+ok 102 - only mentions are recorded; existing nonmention events remain ineligible
+  ---
+  duration_ms: 31.8266
+  ...
+# Subtest: existing device preferences cannot re-enable nonmention notifications
+ok 103 - existing device preferences cannot re-enable nonmention notifications
+  ---
+  duration_ms: 9.2178
+  ...
+1..103
+# tests 103
+# suites 0
+# pass 92
+# fail 11
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 39615.953

@@ -1,0 +1,549 @@
+TAP version 13
+# Subtest: same-turn course interpretation retrieves authoritative course; greeting fetches nothing
+ok 1 - same-turn course interpretation retrieves authoritative course; greeting fetches nothing
+  ---
+  duration_ms: 14.6535
+  ...
+# Subtest: business answer cannot skip knowledge; request coverage cannot silently drop a question
+ok 2 - business answer cannot skip knowledge; request coverage cannot silently drop a question
+  ---
+  duration_ms: 5.2433
+  ...
+# Subtest: course detour keeps purchase, explicit switch replaces, returning evidence restores selection
+ok 3 - course detour keeps purchase, explicit switch replaces, returning evidence restores selection
+  ---
+  duration_ms: 3.6925
+  ...
+# Subtest: fabricated evidence and guessed keys rejected before purchase mutation
+ok 4 - fabricated evidence and guessed keys rejected before purchase mutation
+  ---
+  duration_ms: 2.0212
+  ...
+# Subtest: semantic service resolver works without memorized IDs; invalid tool gets one correction
+ok 5 - semantic service resolver works without memorized IDs; invalid tool gets one correction
+  ---
+  duration_ms: 3.9404
+  ...
+# Subtest: setup schema excludes campaign fields; paid options require evidence; testing is default
+ok 6 - setup schema excludes campaign fields; paid options require evidence; testing is default
+  ---
+  duration_ms: 111.4863
+  ...
+# Subtest: model may not add setup to evidence-selected management
+ok 7 - model may not add setup to evidence-selected management
+  ---
+  duration_ms: 3.3021
+  ...
+# Subtest: confirmed fields and irrelevant setup/course questions are rejected
+ok 8 - confirmed fields and irrelevant setup/course questions are rejected
+  ---
+  duration_ms: 1.9557
+  ...
+# Subtest: unsupported numeric claim blocked: ₦15,000
+ok 9 - unsupported numeric claim blocked: ₦15,000
+  ---
+  duration_ms: 5.8257
+  ...
+# Subtest: unsupported numeric claim blocked: 15,000 NGN
+ok 10 - unsupported numeric claim blocked: 15,000 NGN
+  ---
+  duration_ms: 1.8685
+  ...
+# Subtest: unsupported numeric claim blocked: NGN 15,000
+ok 11 - unsupported numeric claim blocked: NGN 15,000
+  ---
+  duration_ms: 0.6569
+  ...
+# Subtest: unsupported numeric claim blocked: 15000 naira
+ok 12 - unsupported numeric claim blocked: 15000 naira
+  ---
+  duration_ms: 0.3862
+  ...
+# Subtest: unsupported numeric claim blocked: about 15k
+ok 13 - unsupported numeric claim blocked: about 15k
+  ---
+  duration_ms: 0.2779
+  ...
+# Subtest: unsupported numeric claim blocked: approximately 15,000
+ok 14 - unsupported numeric claim blocked: approximately 15,000
+  ---
+  duration_ms: 0.293
+  ...
+# Subtest: unsupported numeric claim blocked: 15k setup fee
+ok 15 - unsupported numeric claim blocked: 15k setup fee
+  ---
+  duration_ms: 0.2817
+  ...
+# Subtest: unsupported numeric claim blocked: 15,000 for setup
+ok 16 - unsupported numeric claim blocked: 15,000 for setup
+  ---
+  duration_ms: 0.29
+  ...
+# Subtest: unsupported numeric claim blocked: fifteen thousand naira
+ok 17 - unsupported numeric claim blocked: fifteen thousand naira
+  ---
+  duration_ms: 1.6839
+  ...
+# Subtest: unsupported numeric claim blocked: ＄１５０００
+ok 18 - unsupported numeric claim blocked: ＄１５０００
+  ---
+  duration_ms: 0.3748
+  ...
+# Subtest: unsupported numeric claim blocked: the setup is free
+ok 19 - unsupported numeric claim blocked: the setup is free
+  ---
+  duration_ms: 1.0422
+  ...
+# Subtest: trusted amount tokens bind source/path; invented tokens and envelopes never render
+ok 20 - trusted amount tokens bind source/path; invented tokens and envelopes never render
+  ---
+  duration_ms: 5.2732
+  ...
+# Subtest: model-classified human paraphrases invoke handoff without backend phrase matching
+ok 21 - model-classified human paraphrases invoke handoff without backend phrase matching
+  ---
+  duration_ms: 4.9857
+  ...
+# Subtest: deferral overrides earlier invoice permission at tool boundary
+ok 22 - deferral overrides earlier invoice permission at tool boundary
+  ---
+  duration_ms: 1.4215
+  ...
+# Subtest: structured multi-question plan retrieves each source and final coverage contains both
+ok 23 - structured multi-question plan retrieves each source and final coverage contains both
+  ---
+  duration_ms: 2.4617
+  ...
+# Subtest: payment request plus question retrieves facts and executes simulated invoice before final answer
+ok 24 - payment request plus question retrieves facts and executes simulated invoice before final answer
+  ---
+  duration_ms: 32.6125
+  ...
+# Subtest: 15-day plan source is authoritative and fixed package needs no customer ad budget
+ok 25 - 15-day plan source is authoritative and fixed package needs no customer ad budget
+  ---
+  duration_ms: 4.1802
+  ...
+# Subtest: budget correction invalidates quote without losing service selection; counteroffer keeps it
+ok 26 - budget correction invalidates quote without losing service selection; counteroffer keeps it
+  ---
+  duration_ms: 1.8347
+  ...
+# Subtest: financial output repair gets one attempt; unsupported amount never escapes
+ok 27 - financial output repair gets one attempt; unsupported amount never escapes
+  ---
+  duration_ms: 12.3122
+  ...
+# Subtest: payment paraphrase fixtures resolve contextual request through same contract, not phrase rules
+ok 28 - payment paraphrase fixtures resolve contextual request through same contract, not phrase rules
+  ---
+  duration_ms: 8.9605
+  ...
+# Subtest: setup price uses semantic catalogue mapping without campaign fields or model IDs
+ok 29 - setup price uses semantic catalogue mapping without campaign fields or model IDs
+  ---
+  duration_ms: 84.4494
+  ...
+# Subtest: management daily budget uses unchanged calculator, approved testing default
+ok 30 - management daily budget uses unchanged calculator, approved testing default
+  ---
+  duration_ms: 70.2176
+  ...
+# Subtest: recommendation resolves plans without inventing budget
+ok 31 - recommendation resolves plans without inventing budget
+  ---
+  duration_ms: 4.7001
+  ...
+# Subtest: 15-day package retrieves265000=200000+65000
+ok 32 - 15-day package retrieves265000=200000+65000
+  ---
+  duration_ms: 6.9584
+  ...
+# Subtest: mixed pairs and whole-purchase cap preserve scope
+ok 33 - mixed pairs and whole-purchase cap preserve scope
+  ---
+  duration_ms: 10.9051
+  ...
+# Subtest: course detour keeps management; explicit switch and return replace deliberately
+ok 34 - course detour keeps management; explicit switch and return replace deliberately
+  ---
+  duration_ms: 27.9016
+  ...
+# Subtest: deferral suppresses invoice and payment question; fresh request resumes
+ok 35 - deferral suppresses invoice and payment question; fresh request resumes
+  ---
+  duration_ms: 16.7193
+  ...
+# Subtest: payment claim cannot mark paid
+ok 36 - payment claim cannot mark paid
+  ---
+  duration_ms: 13.4434
+  ...
+# Subtest: human current evidence bypasses business data retrieval and simulates handoff
+ok 37 - human current evidence bypasses business data retrieval and simulates handoff
+  ---
+  duration_ms: 14.1657
+  ...
+# Subtest: multiple requests resolve independently; missing creative knowledge is explicit
+ok 38 - multiple requests resolve independently; missing creative knowledge is explicit
+  ---
+  duration_ms: 10.2722
+  ...
+# Subtest: knowledge eligibility honors metadata and excluded service
+ok 39 - knowledge eligibility honors metadata and excluded service
+  ---
+  duration_ms: 1.0562
+  ...
+# Subtest: missing approved knowledge hands off before composition or invoice, preserving purchase
+ok 40 - missing approved knowledge hands off before composition or invoice, preserving purchase
+  ---
+  duration_ms: 15.0171
+  ...
+# Subtest: composer can reject insufficient retrieved facts; candidate is discarded, no repair
+ok 41 - composer can reject insufficient retrieved facts; candidate is discarded, no repair
+  ---
+  duration_ms: 8.7025
+  ...
+# Subtest: authoritative price/payment facts do not require matching knowledge articles
+ok 42 - authoritative price/payment facts do not require matching knowledge articles
+  ---
+  duration_ms: 8.4966
+  ...
+# Subtest: empty or other-platform knowledge cannot prevent a knowledge handoff
+ok 43 - empty or other-platform knowledge cannot prevent a knowledge handoff
+  ---
+  duration_ms: 4.7628
+  ...
+# Subtest: missing customer duration stays a clarification, not a knowledge handoff
+ok 44 - missing customer duration stays a clarification, not a knowledge handoff
+  ---
+  duration_ms: 5.5047
+  ...
+# Subtest: knowledge handoff rechecks ownership before assignment
+ok 45 - knowledge handoff rechecks ownership before assignment
+  ---
+  duration_ms: 3.9934
+  ...
+# Subtest: natural trusted financial wording The setup fee is 20k.
+ok 46 - natural trusted financial wording The setup fee is 20k.
+  ---
+  duration_ms: 7.2069
+  ...
+# Subtest: natural trusted financial wording Setup costs 20,000 naira.
+ok 47 - natural trusted financial wording Setup costs 20,000 naira.
+  ---
+  duration_ms: 8.6596
+  ...
+# Subtest: natural trusted financial wording Setup fee: ₦20,000.
+ok 48 - natural trusted financial wording Setup fee: ₦20,000.
+  ---
+  duration_ms: 10.6398
+  ...
+# Subtest: natural trusted financial wording Setup fee is NGN 20,000.
+ok 49 - natural trusted financial wording Setup fee is NGN 20,000.
+  ---
+  duration_ms: 4.476
+  ...
+# Subtest: same amount wrong role and invented amount rejected
+ok 50 - same amount wrong role and invented amount rejected
+  ---
+  duration_ms: 6.3234
+  ...
+# Subtest: financial roles remain distinct in a natural combined sentence and word amounts
+ok 51 - financial roles remain distinct in a natural combined sentence and word amounts
+  ---
+  duration_ms: 9.2536
+  ...
+# Subtest: negation in another clause cannot authorize a guarantee or false payment claim
+ok 52 - negation in another clause cannot authorize a guarantee or false payment claim
+  ---
+  duration_ms: 8.2697
+  ...
+# Subtest: existing invoice does not force payment details into an unrelated answer
+ok 53 - existing invoice does not force payment details into an unrelated answer
+  ---
+  duration_ms: 6.8445
+  ...
+# Subtest: Facebook and Instagram normalize to one Meta purchase; a switch clears old whole-purchase cap
+ok 54 - Facebook and Instagram normalize to one Meta purchase; a switch clears old whole-purchase cap
+  ---
+  duration_ms: 3.5945
+  ...
+# Subtest: ordinary customer budget and duration allowed; URL and envelope blocked
+ok 55 - ordinary customer budget and duration allowed; URL and envelope blocked
+  ---
+  duration_ms: 6.0413
+  ...
+# Subtest: current evidence required; historical requests cannot be invented
+ok 56 - current evidence required; historical requests cannot be invented
+  ---
+  duration_ms: 4.1578
+  ...
+# Subtest: composer repairs once only; no autonomous tool loop
+ok 57 - composer repairs once only; no autonomous tool loop
+  ---
+  duration_ms: 5.996
+  ...
+# Subtest: ownership invalidation blocks final send
+ok 58 - ownership invalidation blocks final send
+  ---
+  duration_ms: 4.8811
+  ...
+# Subtest: test session ignores client state and never invokes financial port
+ok 59 - test session ignores client state and never invokes financial port
+  ---
+  duration_ms: 6.0217
+  ...
+# Subtest: all engines selectable, default remains V1, V4 live manual gate
+ok 60 - all engines selectable, default remains V1, V4 live manual gate
+  ---
+  duration_ms: 1660.0697
+  ...
+# Subtest: model adapter sends structured outputs, no tools, separate stage models
+ok 61 - model adapter sends structured outputs, no tools, separate stage models
+  ---
+  duration_ms: 211.6516
+  ...
+# Subtest: composer receives delivered history and current interruption, not failed drafts
+ok 62 - composer receives delivered history and current interruption, not failed drafts
+  ---
+  duration_ms: 8.3975
+  ...
+# Subtest: WhatsApp course resolves its own price/link; no invoice and no ads-course mixup
+ok 63 - WhatsApp course resolves its own price/link; no invoice and no ads-course mixup
+  ---
+  duration_ms: 9.5732
+  ...
+# Subtest: course default never re-enables a disabled business record
+ok 64 - course default never re-enables a disabled business record
+  ---
+  duration_ms: 0.7867
+  ...
+# Subtest: training replies resolve approved inclusions, correct price and course URL
+ok 65 - training replies resolve approved inclusions, correct price and course URL
+  ---
+  duration_ms: 19.0373
+  ...
+# Subtest: course knowledge does not answer unknown technical policies
+ok 66 - course knowledge does not answer unknown technical policies
+  ---
+  duration_ms: 4.5701
+  ...
+# Subtest: disabled course knowledge is not replaced by built-in knowledge
+ok 67 - disabled course knowledge is not replaced by built-in knowledge
+  ---
+  duration_ms: 2.6883
+  ...
+# Subtest: ad DM runs through interpretation, approved answer pack and grounded course response
+ok 68 - ad DM runs through interpretation, approved answer pack and grounded course response
+  ---
+  duration_ms: 8.1473
+  ...
+# Starting the MongoMemoryServer Instance failed, enable debug log for more information. Error:
+#  StdoutInstanceError: Mongod internal error (fassert() failure\\n\\n"})
+#     at MongoInstance.checkErrorInLine (C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\node_modules\\mongodb-memory-server-core\\lib\\util\\MongoInstance.js:428:58)
+#     at MongoInstance.stdoutHandler (C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\node_modules\\mongodb-memory-server-core\\lib\\util\\MongoInstance.js:368:14)
+#     at Socket.emit (node:events:518:28)
+#     at addChunk (node:internal/streams/readable:561:12)
+#     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+#     at Readable.push (node:internal/streams/readable:392:5)
+#     at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+# Subtest: V4 Test Agent owns session, retains actual multi-turn history and has no production side effects
+not ok 69 - V4 Test Agent owns session, retains actual multi-turn history and has no production side effects
+  ---
+  duration_ms: 1055.8172
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:14:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: V4 DRAFT worker preserves old states and cannot send/create invoice
+not ok 70 - V4 DRAFT worker preserves old states and cannot send/create invoice
+  ---
+  duration_ms: 2.4056
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:15:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: TEST mode does not consume production pending messages
+not ok 71 - TEST mode does not consume production pending messages
+  ---
+  duration_ms: 0.3671
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:16:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: takeover during composition cancels draft and outbound
+not ok 72 - takeover during composition cancels draft and outbound
+  ---
+  duration_ms: 0.2287
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:17:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: engine switch during interpretation cancels stale work; four choices save without deleting state
+not ok 73 - engine switch during interpretation cancels stale work; four choices save without deleting state
+  ---
+  duration_ms: 0.3276
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:18:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: V4 simulated invoice draft cannot send; LIVE save requires explicit approval
+not ok 74 - V4 simulated invoice draft cannot send; LIVE save requires explicit approval
+  ---
+  duration_ms: 0.1917
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:19:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: V4 test handoff stops follow-up AI without actual assignments
+not ok 75 - V4 test handoff stops follow-up AI without actual assignments
+  ---
+  duration_ms: 0.5718
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:20:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: mocked LIVE handoff assigns before composing and queues exactly one guarded acknowledgement
+not ok 76 - mocked LIVE handoff assigns before composing and queues exactly one guarded acknowledgement
+  ---
+  duration_ms: 0.2162
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:22:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: missing knowledge invokes actual assignment infrastructure and queues only fallback in isolated DB
+not ok 77 - missing knowledge invokes actual assignment infrastructure and queues only fallback in isolated DB
+  ---
+  duration_ms: 1.5264
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:39:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: financial adapter reuses existing generator idempotently in ephemeral DB; provider is stubbed
+not ok 78 - financial adapter reuses existing generator idempotently in ephemeral DB; provider is stubbed
+  ---
+  duration_ms: 0.6796
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:53:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+not ok 79 - C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js
+  ---
+  duration_ms: 0.8356
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:11:1'
+  failureType: 'hookFailed'
+  error: "Cannot read properties of undefined (reading 'close')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    C:\Users\pc\Desktop\joshspot-media\backend\inbox\ai\v4\integration.test.js:11:67
+    new Promise (<anonymous>)
+    TestContext.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\ai\v4\integration.test.js:11:45)
+    TestHook.runInAsyncScope (node:async_hooks:211:14)
+    TestHook.run (node:internal/test_runner/test:979:25)
+    TestHook.run (node:internal/test_runner/test:1270:18)
+    TestHook.run (node:internal/util:544:20)
+    Test.runHook (node:internal/test_runner/test:898:20)
+    after (node:internal/test_runner/test:938:20)
+    Test.run (node:internal/test_runner/test:987:13)
+  ...
+1..79
+# tests 79
+# suites 0
+# pass 68
+# fail 11
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 17360.3186

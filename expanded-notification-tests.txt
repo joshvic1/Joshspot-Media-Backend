@@ -1,0 +1,20 @@
+TAP version 13
+# Subtest: supported alert types record events but unknown types do not
+ok 1 - supported alert types record events but unknown types do not
+  ---
+  duration_ms: 2.311
+  ...
+# Subtest: old preferences stay quiet until the user opts in to expanded alerts
+ok 2 - old preferences stay quiet until the user opts in to expanded alerts
+  ---
+  duration_ms: 3.149
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 987.478

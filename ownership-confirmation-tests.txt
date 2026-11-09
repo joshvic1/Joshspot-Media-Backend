@@ -1,0 +1,45 @@
+TAP version 13
+# Subtest: ownership transfer starts new clock and failed sends/notes do not answer
+ok 1 - ownership transfer starts new clock and failed sends/notes do not answer
+  ---
+  duration_ms: 3.4497
+  ...
+# Subtest: notes, failed replies and automated reminders cannot extend a resolved wait
+ok 2 - notes, failed replies and automated reminders cannot extend a resolved wait
+  ---
+  duration_ms: 1.6652
+  ...
+# Subtest: internal notes never enter the outbound provider queue
+ok 3 - internal notes never enter the outbound provider queue
+  ---
+  duration_ms: 2093.1312
+  ...
+# Subtest: history is bounded by 24 hours and 50 messages, skips empty days and targets old notes
+ok 4 - history is bounded by 24 hours and 50 messages, skips empty days and targets old notes
+  ---
+  duration_ms: 279.237
+  ...
+# Subtest: alerts hide old handoffs and count only tagged notes
+ok 5 - alerts hide old handoffs and count only tagged notes
+  ---
+  duration_ms: 172.1646
+  ...
+# Subtest: staff access: assigned only, AI private, tagged colleague can read and add notes only
+ok 6 - staff access: assigned only, AI private, tagged colleague can read and add notes only
+  ---
+  duration_ms: 389.1229
+  ...
+# Subtest: admin replies preserve staff ownership and tagged staff gain full replies after transfer
+ok 7 - admin replies preserve staff ownership and tagged staff gain full replies after transfer
+  ---
+  duration_ms: 366.859
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5747.7624

@@ -1,0 +1,30 @@
+TAP version 13
+# Subtest: Evil BTC repetition hands off; formatting differences also match
+ok 1 - Evil BTC repetition hands off; formatting differences also match
+  ---
+  duration_ms: 5.3113
+  ...
+# Subtest: customer requests to resend or clarify permit repetition
+ok 2 - customer requests to resend or clarify permit repetition
+  ---
+  duration_ms: 0.8483
+  ...
+# Subtest: failed, unsent, notes, staff replies and reminders are not evidence
+ok 3 - failed, unsent, notes, staff replies and reminders are not evidence
+  ---
+  duration_ms: 0.3754
+  ...
+# Subtest: new prices and useful new answers are not rejected; invoice actions untouched
+ok 4 - new prices and useful new answers are not rejected; invoice actions untouched
+  ---
+  duration_ms: 0.4543
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 161.9282

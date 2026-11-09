@@ -1,0 +1,67 @@
+TAP version 13
+# Subtest: sanitizes pasted HTML while keeping article formatting
+ok 1 - sanitizes pasted HTML while keeping article formatting
+  ---
+  duration_ms: 760.771
+  ...
+# (node:24708) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:24708) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:24708) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:24708) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# Subtest: admin-only lifecycle, private drafts, safe updates, immediate unpublish and delete
+ok 2 - admin-only lifecycle, private drafts, safe updates, immediate unpublish and delete
+  ---
+  duration_ms: 342.4905
+  ...
+# Subtest: image upload validates signatures, requires admin and returns durable image URL
+ok 3 - image upload validates signatures, requires admin and returns durable image URL
+  ---
+  duration_ms: 38.2454
+  ...
+# Subtest: only approved public paths; no private/query/foreign/noindex URLs
+ok 4 - only approved public paths; no private/query/foreign/noindex URLs
+  ---
+  duration_ms: 785.5545
+  ...
+# Subtest: publish, update, rename, unpublish, delete; unchanged saves and drafts do not submit
+ok 5 - publish, update, rename, unpublish, delete; unchanged saves and drafts do not submit
+  ---
+  duration_ms: 80.8558
+  ...
+# (node:12540) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:12540) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:12540) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:12540) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:12540) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:12540) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:12540) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:12540) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# Subtest: disabled by default; dedup, key format, success and retry backoff
+ok 6 - disabled by default; dedup, key format, success and retry backoff
+  ---
+  duration_ms: 54.939
+  ...
+# (node:12540) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:12540) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:12540) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# Subtest: lease prevents concurrent sends and a changed article stays pending during a send
+ok 7 - lease prevents concurrent sends and a changed article stays pending during a send
+  ---
+  duration_ms: 19.8632
+  ...
+# Subtest: reconciles published articles, code pages and deletions; rejects corrupt manifests
+ok 8 - reconciles published articles, code pages and deletions; rejects corrupt manifests
+  ---
+  duration_ms: 52.5686
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3029.1884

@@ -1,0 +1,209 @@
+TAP version 13
+# Starting the MongoMemoryServer Instance failed, enable debug log for more information. Error:
+#  StdoutInstanceError: Mongod internal error (fassert() failure\\n\\n"})
+#     at MongoInstance.checkErrorInLine (C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\node_modules\\mongodb-memory-server-core\\lib\\util\\MongoInstance.js:428:58)
+#     at MongoInstance.stdoutHandler (C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\node_modules\\mongodb-memory-server-core\\lib\\util\\MongoInstance.js:368:14)
+#     at Socket.emit (node:events:518:28)
+#     at addChunk (node:internal/streams/readable:561:12)
+#     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+#     at Readable.push (node:internal/streams/readable:392:5)
+#     at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+# Subtest: V4 Test Agent owns session, retains actual multi-turn history and has no production side effects
+not ok 1 - V4 Test Agent owns session, retains actual multi-turn history and has no production side effects
+  ---
+  duration_ms: 431.8868
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:14:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: V4 DRAFT worker preserves old states and cannot send/create invoice
+not ok 2 - V4 DRAFT worker preserves old states and cannot send/create invoice
+  ---
+  duration_ms: 2.1015
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:15:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: TEST mode does not consume production pending messages
+not ok 3 - TEST mode does not consume production pending messages
+  ---
+  duration_ms: 0.2713
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:16:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: takeover during composition cancels draft and outbound
+not ok 4 - takeover during composition cancels draft and outbound
+  ---
+  duration_ms: 0.2022
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:17:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: engine switch during interpretation cancels stale work; four choices save without deleting state
+not ok 5 - engine switch during interpretation cancels stale work; four choices save without deleting state
+  ---
+  duration_ms: 0.252
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:18:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: V4 simulated invoice draft cannot send; LIVE save requires explicit approval
+not ok 6 - V4 simulated invoice draft cannot send; LIVE save requires explicit approval
+  ---
+  duration_ms: 0.1853
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:19:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: V4 test handoff stops follow-up AI without actual assignments
+not ok 7 - V4 test handoff stops follow-up AI without actual assignments
+  ---
+  duration_ms: 0.4591
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:20:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: mocked LIVE handoff assigns before composing and queues exactly one guarded acknowledgement
+not ok 8 - mocked LIVE handoff assigns before composing and queues exactly one guarded acknowledgement
+  ---
+  duration_ms: 0.2171
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:22:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: missing knowledge invokes actual assignment infrastructure and queues only fallback in isolated DB
+not ok 9 - missing knowledge invokes actual assignment infrastructure and queues only fallback in isolated DB
+  ---
+  duration_ms: 1.1155
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:39:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+# Subtest: financial adapter reuses existing generator idempotently in ephemeral DB; provider is stubbed
+not ok 10 - financial adapter reuses existing generator idempotently in ephemeral DB; provider is stubbed
+  ---
+  duration_ms: 0.5882
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:53:1'
+  failureType: 'hookFailed'
+  error: 'Mongod internal error (fassert() failure\\n\\n"})'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    MongoInstance.checkErrorInLine (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:428:58)
+    MongoInstance.stdoutHandler (C:\Users\pc\Desktop\joshspot-media\backend\node_modules\mongodb-memory-server-core\lib\util\MongoInstance.js:368:14)
+    Socket.emit (node:events:518:28)
+    addChunk (node:internal/streams/readable:561:12)
+    readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    Readable.push (node:internal/streams/readable:392:5)
+    Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+  ...
+not ok 11 - C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js
+  ---
+  duration_ms: 0.6796
+  location: 'C:\\Users\\pc\\Desktop\\joshspot-media\\backend\\inbox\\ai\\v4\\integration.test.js:11:1'
+  failureType: 'hookFailed'
+  error: "Cannot read properties of undefined (reading 'close')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    C:\Users\pc\Desktop\joshspot-media\backend\inbox\ai\v4\integration.test.js:11:67
+    new Promise (<anonymous>)
+    TestContext.<anonymous> (C:\Users\pc\Desktop\joshspot-media\backend\inbox\ai\v4\integration.test.js:11:45)
+    TestHook.runInAsyncScope (node:async_hooks:211:14)
+    TestHook.run (node:internal/test_runner/test:979:25)
+    TestHook.run (node:internal/test_runner/test:1270:18)
+    TestHook.run (node:internal/util:544:20)
+    Test.runHook (node:internal/test_runner/test:898:20)
+    after (node:internal/test_runner/test:938:20)
+    Test.run (node:internal/test_runner/test:987:13)
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 0
+# fail 11
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3447.9262
