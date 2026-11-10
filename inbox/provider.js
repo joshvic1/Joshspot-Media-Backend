@@ -10,7 +10,7 @@ function api() {
   return axios.create({ baseURL: `https://graph.facebook.com/${process.env.WHATSAPP_GRAPH_VERSION}`, timeout: 20000, headers: { Authorization: `Bearer ${process.env.WHATSAPP_ACCESS_TOKEN}` } });
 }
 async function send(to, message) {
-  const data = { messaging_product: 'whatsapp', recipient_type: 'individual', to, type: message.type, biz_opaque_callback_data: `${message._id}:${message.attempts}` };
+  const data = { messaging_product: 'whatsapp', recipient_type: 'individual', to, type: message.type, ...(message.deliveryProbe ? {} : { biz_opaque_callback_data: `${message._id}:${message.attempts}` }) };
   if (message.replyTo?.providerId) data.context = { message_id: message.replyTo.providerId };
   if (message.type === 'text') data.text = { body: message.text };
   else if (message.type === 'template') data.template = message.providerPayload;
