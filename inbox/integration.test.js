@@ -74,10 +74,10 @@ test('quoted replies stay in their conversation and incoming reply context is pr
  assert.equal(String((await Message.findOne({providerId:'wamid.reply'})).replyTo.message),String(original._id));
 });
 
-test('delivery diagnostic uses the normal outbox without optional callback metadata', async () => {
+test("delivery diagnostic uses the normal outbox with Meta's minimal text payload", async () => {
  const c = await fixture(false);
  const created = await request(`/conversations/${c._id}/delivery-probe`, {
-   role: 'admin', method: 'POST', body: { confirmation: 'OMIT_OPAQUE_CALLBACK_DATA' }
+   role: 'admin', method: 'POST', body: { confirmation: 'MINIMAL_WHATSAPP_PAYLOAD' }
  });
  assert.equal(created.status, 201);
  const message = await Message.findById(created.data.id).lean();
@@ -88,6 +88,7 @@ test('delivery diagnostic uses the normal outbox without optional callback metad
    axios.create = () => ({ post: async (url, data) => { sentPayload = data; return { data: { messages: [{ id: 'wamid.diagnostic' }] } }; } });
    await providerOriginal.send('2348000000000', message);
    assert.equal(sentPayload.biz_opaque_callback_data, undefined);
+   assert.equal(sentPayload.recipient_type, undefined);
    assert.equal(sentPayload.text.body, message.text);
  }
  finally { axios.create = create; }
