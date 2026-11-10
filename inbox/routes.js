@@ -488,36 +488,6 @@ router.post('/conversations/:id/messages', wrap(async (req, res) => {
   const result = message.toObject(); delete result.providerPayload;
   res.status(201).json(result);
 }));
-// A narrow, admin-only production diagnostic. It cannot send custom content,
-// and uses the same normal outbox/recipient as the chosen conversation.
-router.post('/conversations/:id/delivery-probe', wrap(async (req, res) => {
-  if (!req.actor.admin) fail(403, 'Only an administrator can run a delivery diagnostic.');
-  if (req.body?.confirmation !== 'MINIMAL_WHATSAPP_PAYLOAD') fail(400, 'Delivery diagnostic confirmation is required.');
-  await rateLimit(req, 1, 'delivery-probe');
-  const conversation = await conversationFor(req);
-  if (!provider.configuration().configured) fail(503, 'WhatsApp is not configured.');
-  if (!policy.windowOpen(conversation.lastInboundAt)) fail(400, 'The 24-hour reply window is closed for this diagnostic.');
-  const bucket = Math.floor(Date.now() / 3600000);
-  const clientKey = `delivery-probe-minimal:${conversation._id}:${bucket}`;
-  let message = await Message.findOne({ clientKey });
-  if (!message) {
-    message = await Message.create({
-      conversation: conversation._id,
-      clientKey,
-      direction: 'outbound',
-      type: 'text',
-      text: 'Joshspot delivery diagnostic — please ignore this test message.',
-      author: 'admin',
-      authorName: 'Joshspot delivery diagnostic',
-      status: 'queued',
-      routingPhoneId: process.env.WHATSAPP_PHONE_NUMBER_ID,
-      deliveryProbe: true,
-    });
-    await Conversation.updateOne({ _id: conversation._id }, { $set: { lastMessageId: message._id, lastMessageAt: message.createdAt, preview: message.text.slice(0, 160) } });
-    live.notify();
-  }
-  res.status(201).json({ id: message._id, status: message.status, probe: 'minimal_payload' });
-}));
 router.put('/conversations/:id/messages/:messageId/reaction', wrap(async (req, res) => {
   await rateLimit(req, 60); const conversation = await conversationFor(req);
   if (!policy.canReply(req.actor, conversation)) fail(403, 'Claim this conversation before reacting.');
