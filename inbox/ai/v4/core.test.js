@@ -1,5 +1,6 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const {resolve}=require('./resolver'),{validate}=require('./validation'),{decide}=require('./index');
+const prompts=require('./prompts');
 const config={...require('../defaults').config,engineVersion:'v4',mode:'TEST',invoicesEnabled:true};
 const records=()=>structuredClone(require('../../../evaluations/v3-golden-20261007/evaluation-snapshot.json').records);
 const e={messageId:'now',text:'synthetic evidence'},messages=[{_id:'now',direction:'inbound',type:'text',text:e.text}];
@@ -11,6 +12,11 @@ const run=(p,state={},ps=ports())=>resolve({plan:p,state,messages,records:record
 function budget(p,amount=5000,duration=7,basis='DAILY_AD_SPEND'){p.facts=[{platform:p.current_requests[0].platform,service:p.current_requests[0].service,budget:{amount,basis,currency:'NGN'},duration_days:duration,package_duration_days:null,evidence:e}];return p;}
 function output(message,questions=[]){return {message,unsupported_request_ids:[],covered_request_ids:['r1'],questions_asked:questions};}
 test('setup price uses semantic catalogue mapping without campaign fields or model IDs',async()=>{const r=await run(plan());assert.equal(r.pack.quote.total,20000);assert.equal(r.pack.missing.length,0);assert.equal(r.next.purchaseItems[0].status,'confirmed');assert.ok(r.operations.includes('calculate_quote'));});
+test('TikTok setup price guard excludes onboarding credentials',()=>{
+ assert.equal(require('../defaults').records.find(r=>r.key==='tiktok_setup').data.requirements,'Account setup and guidance.');
+ assert.match(prompts.composer,/TikTok account-setup price enquiry/);
+ assert.match(prompts.composer,/Do not mention email, staff, account-access steps, passwords, OTPs, or verification codes/);
+});
 test('management daily budget uses unchanged calculator, approved testing default',async()=>{const r=await run(budget(plan('ASK_QUOTE','ADS_MANAGEMENT')));assert.equal(r.pack.quote.total,60000);assert.equal(r.pack.quote.lines[0].advertisingBudget,35000);assert.equal(r.pack.quote.items[0].creativeMode,'testing');});
 test('recommendation resolves plans without inventing budget',async()=>{const r=await run(plan('ASK_RECOMMENDATION','ADS_MANAGEMENT'));assert.ok(r.pack.plans.length);assert.ok(!r.pack.missing.includes('budget'));});
 test('15-day package retrieves265000=200000+65000',async()=>{const p=plan('ASK_BREAKDOWN','ADS_MANAGEMENT');p.facts=[{platform:'TIKTOK',service:'ADS_MANAGEMENT',budget:null,duration_days:null,package_duration_days:15,evidence:e}];const r=await run(p);assert.equal(r.pack.quote.total,265000);assert.equal(r.pack.quote.lines[0].advertisingBudget,200000);assert.equal(r.pack.quote.lines[0].managementFee,65000);});
