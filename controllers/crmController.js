@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Client = require("../models/Client");
 const Staff = require("../models/Staff");
+const { linksForClients } = require("../utils/crmInboxLinks");
 
 const MASK = "******";
 
@@ -124,11 +125,15 @@ exports.crmLogin = async (req, res) => {
 exports.getClients = async (req, res) => {
   try {
     const clients = await Client.find().sort({ createdAt: -1 });
+    const inboxLinks = await linksForClients(clients, req.staff);
 
     res.json({
       staff: req.staff,
       permissions: getPermissions(req.staff.role),
-      clients: clients.map((client) => maskClientForRole(client, req.staff.role)),
+      clients: clients.map((client) => ({
+        ...maskClientForRole(client, req.staff.role),
+        inboxConversationId: inboxLinks.get(String(client._id)) || null,
+      })),
     });
   } catch (error) {
     res.status(500).json({ message: "Server error" });

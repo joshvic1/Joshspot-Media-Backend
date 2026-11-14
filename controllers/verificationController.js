@@ -1,4 +1,5 @@
 const VerificationClient = require("../models/VerificationClient");
+const { linksForClients } = require("../utils/crmInboxLinks");
 const {
   getVerificationIdCard,
   uploadVerificationIdCard,
@@ -19,8 +20,12 @@ const maskVerificationClientForRole = (client, role) => {
 exports.getVerificationClients = async (req, res) => {
   try {
     const clients = await VerificationClient.find().sort({ createdAt: -1 });
+    const inboxLinks = await linksForClients(clients, req.staff);
 
-    res.json(clients.map((client) => maskVerificationClientForRole(client, req.staff.role)));
+    res.json(clients.map((client) => ({
+      ...maskVerificationClientForRole(client, req.staff.role),
+      inboxConversationId: inboxLinks.get(String(client._id)) || null,
+    })));
   } catch (error) {
     console.log("GET VERIFICATION CLIENTS ERROR:", error);
     res.status(500).json({ message: "Unable to fetch verification clients" });

@@ -1,4 +1,5 @@
 const AdsClient = require("../models/AdsClient");
+const { linksForClients } = require("../utils/crmInboxLinks");
 
 const MASK = "******";
 
@@ -80,11 +81,15 @@ const pickAdsPublishStatus = (body) => {
 exports.getAdsClients = async (req, res) => {
   try {
     const clients = await AdsClient.find().sort({ createdAt: -1 });
+    const inboxLinks = await linksForClients(clients, req.staff);
 
     res.json({
       staff: req.staff,
       permissions: getPermissions(req.staff.role),
-      clients: clients.map((client) => maskAdsClientForRole(client, req.staff.role)),
+      clients: clients.map((client) => ({
+        ...maskAdsClientForRole(client, req.staff.role),
+        inboxConversationId: inboxLinks.get(String(client._id)) || null,
+      })),
     });
   } catch (error) {
     console.log("GET ADS CLIENTS ERROR:", error);
