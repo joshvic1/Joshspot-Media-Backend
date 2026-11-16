@@ -78,7 +78,7 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
     if (req.params.kind === 'ads' && !req.query.recordId) {
       const historyQuery = crmMatch(c);
       if (req.query.before) historyQuery._id = { $lt: id(req.query.before) };
-      const rows = await require('../models/AdsClient').find(historyQuery).select('businessName servicePaidFor amountPaid adsPublished createdAt').sort({_id:-1}).limit(21).lean();
+      const rows = await require('../models/AdsClient').find(historyQuery).select('businessName servicePaidFor amountPaid adsPublished fundsStatus fundsSent createdAt').sort({_id:-1}).limit(21).lean();
       return res.json({ record: row, records: rows.slice(0,20), next: rows.length > 20 ? String(rows[19]._id) : null });
     }
     res.json({ record: row });
