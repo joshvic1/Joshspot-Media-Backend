@@ -34,6 +34,7 @@ const rolePermissions = {
     canCreate: false,
     fields: [
       "businessName",
+      "amountPaid",
       "servicePaidFor",
       "clientLoginDetails",
       "landingPageLogins",
@@ -173,6 +174,21 @@ exports.createClient = async (req, res) => {
 exports.updateClient = async (req, res) => {
   try {
     const update = pickAllowedFields(req.body, req.staff.role);
+
+    if (Object.prototype.hasOwnProperty.call(req.body, "setupCompleted")) {
+      if (!req.setupDashboardEdit || (!req.staff.admin && req.staff.role !== "SES")) {
+        return res.status(403).json({ message: "Only setup staff or an administrator can complete setup records" });
+      }
+
+      if (typeof req.body.setupCompleted !== "boolean") {
+        return res.status(400).json({ message: "Setup completion status must be true or false" });
+      }
+
+      update.setupCompletedAt = req.body.setupCompleted ? new Date() : null;
+      update.setupCompletedBy = req.body.setupCompleted && req.staff.staffId
+        ? req.staff.staffId
+        : null;
+    }
 
     if (Object.keys(update).length === 0) {
       return res.status(400).json({ message: "No allowed fields to update" });

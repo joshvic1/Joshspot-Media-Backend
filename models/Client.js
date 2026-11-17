@@ -52,6 +52,17 @@ const clientSchema = new mongoose.Schema({
     ref: "Staff",
   },
 
+  setupCompletedAt: {
+    type: Date,
+    default: null,
+  },
+
+  setupCompletedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Staff",
+    default: null,
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,
