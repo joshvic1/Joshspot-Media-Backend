@@ -5,6 +5,13 @@ const { QuickReply, Action, maskPhone } = require('./shortcuts');
 const Invoice = require('../models/Invoice');
 const policy = require('./policy');
 const invoiceService = require('../controllers/invoiceController');
+// These non-secret account details can be changed through environment settings
+// later without changing how manual-transfer invoices are handled.
+const moniepointAccount = () => ({
+  accountNumber: String(process.env.MONIEPOINT_ACCOUNT_NUMBER || '8143017102').trim(),
+  bankName: String(process.env.MONIEPOINT_BANK_NAME || 'Moniepoint').trim(),
+  accountName: String(process.env.MONIEPOINT_ACCOUNT_NAME || 'Joshspot Tv Media').trim(),
+});
 module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
   const router = express.Router();
   const admin = req => { if (!req.actor.admin) fail(403, 'Administrator access required.'); };
@@ -42,6 +49,8 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
     if (!policy.canReply(req.actor, c)) fail(403, 'Claim this conversation before sending an invoice.');
     if (!/^[a-zA-Z0-9-]{16,80}$/.test(req.body.clientId || '')) fail(400, 'A unique request key is required.');
     const amount = Number(req.body.amount); if (!Number.isSafeInteger(amount) || amount < 100 || amount > 100000000) fail(400, 'Enter a whole naira amount between 100 and 100,000,000.');
+    const paymentProvider = String(req.body.paymentProvider || 'paystack').trim().toLowerCase();
+    if (!['paystack', 'moniepoint'].includes(paymentProvider)) fail(400, 'Choose Paystack or Moniepoint.');
     const clientKey = `${req.actor.id}:${c._id}:invoice:${req.body.clientId}`;
     const existing = await Message.findOne({ clientKey }); if (existing) return res.json({ queued: true, messageId: existing._id });
     if (!require('./provider').configuration().configured) fail(503, 'WhatsApp is not connected.');
@@ -49,15 +58,24 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
     const key = `manual:${c._id}:${req.body.clientId}`;
     let invoice = await Invoice.findOne({ automationKey: key });
     if (invoice && invoice.amount !== amount) fail(409, 'This request was already used for a different amount.');
-    if (!process.env.PAYSTACK_SECRET || !/^https:\/\//.test(process.env.CLIENT_URL || '')) fail(503, 'Invoice payments are not configured.');
+    if (invoice && invoice.paymentProvider && invoice.paymentProvider !== paymentProvider) fail(409, 'This request was already used with a different payment method.');
+    if (!/^https:\/\//.test(process.env.CLIENT_URL || '') || (paymentProvider === 'paystack' && !process.env.PAYSTACK_SECRET)) fail(503, 'Invoice payments are not configured.');
     await require('./ai/worker').pause(c._id, req.actor, 'HUMAN_REPLY');
-    if (!invoice) { try { invoice = await Invoice.create({ automationKey: key, token: randomUUID(), amount, customerName: c.contact.name, customerPhone: c.contact.phone, customerEmail: c.contact.email, inboxContact: c.contact._id, inboxConversation: c._id, note: 'Joshspot Inbox invoice', expiresAt: new Date(Date.now() + 8 * 3600000) }); } catch (e) { if (e.code !== 11000) throw e; invoice = await Invoice.findOne({ automationKey: key }); } }
-    if (!invoice.accountNumber) {
+    if (!invoice) { try {
+      invoice = await Invoice.create({
+        automationKey: key, token: randomUUID(), amount, paymentProvider,
+        customerName: c.contact.name, customerPhone: c.contact.phone, customerEmail: c.contact.email,
+        inboxContact: c.contact._id, inboxConversation: c._id, note: 'Joshspot Inbox invoice',
+        ...(paymentProvider === 'moniepoint' ? { ...moniepointAccount(), status: 'pending', providerStatus: 'awaiting_manual_confirmation' } : { expiresAt: new Date(Date.now() + 8 * 3600000) }),
+      });
+    } catch (e) { if (e.code !== 11000) throw e; invoice = await Invoice.findOne({ automationKey: key }); } }
+    if (paymentProvider === 'paystack' && !invoice.accountNumber) {
       const claimed = await Invoice.findOneAndUpdate({ _id: invoice._id, automationGenerating: { $ne: true }, reference: { $exists: false } }, { $set: { automationGenerating: true } }, { returnDocument: 'after' });
       if (!claimed) fail(409, 'Invoice generation is processing or needs review. Do not create another invoice.');
       try { invoice = await invoiceService.generateInvoiceTransfer(claimed); } catch { fail(502, 'Payment account generation needs review before retrying.'); }
     }
-    if (!invoice.accountNumber || !invoice.bankName || !invoice.accountName || invoice.status !== 'pending' || invoice.expiresAt < new Date()) fail(409, 'This invoice is not ready for payment.');
+    const expired = paymentProvider === 'paystack' && invoice.expiresAt && invoice.expiresAt < new Date();
+    if (!invoice.accountNumber || !invoice.bankName || !invoice.accountName || invoice.status !== 'pending' || expired) fail(409, 'This invoice is not ready for payment.');
     c = await conversationFor(req);
     if (!policy.canReply(req.actor, c) || !policy.windowOpen(c.lastInboundAt)) fail(409, 'Conversation ownership or reply window changed. Invoice retained; no message sent.');
     await require('./ai/worker').pause(c._id, req.actor, 'HUMAN_REPLY');

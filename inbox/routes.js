@@ -253,10 +253,32 @@ router.get('/conversations/:id/crm', wrap(async (req, res) => {
     rows.forEach((row) => records.push({ id: row._id, kind: model, name: row.businessName || row.name, service: row.servicePaidFor || row.service, createdAt: row.createdAt, href: route }));
   }
   if (req.actor.admin) {
-    const invoices = await require('../models/Invoice').find({ customerPhone: pattern, deletedAt: null }).select('customerName amount status product createdAt paidAt').sort({ createdAt: -1 }).limit(10).lean();
-    invoices.forEach((row) => records.push({ id: row._id, kind: 'Invoice', name: row.customerName, service: row.product, amount: row.amount, status: row.status, createdAt: row.createdAt, paidAt: row.paidAt, href: '/admin-7812er/invoices' }));
+    const invoices = await require('../models/Invoice').find({ customerPhone: pattern, deletedAt: null }).select('customerName amount status product paymentProvider providerStatus createdAt paidAt').sort({ createdAt: -1 }).limit(10).lean();
+    invoices.forEach((row) => records.push({ id: row._id, kind: 'Invoice', name: row.customerName, service: row.product, amount: row.amount, status: row.status, paymentProvider: row.paymentProvider, providerStatus: row.providerStatus, createdAt: row.createdAt, paidAt: row.paidAt, href: '/admin-7812er/invoices' }));
   }
   res.json(records);
+}));
+router.post('/conversations/:id/crm/invoices/:recordId/confirm-manual-payment', wrap(async (req, res) => {
+  if (!req.actor.admin) fail(403, 'Only administrators can confirm a manual transfer.');
+  const conversation = await conversationFor(req);
+  const Invoice = require('../models/Invoice');
+  const invoice = await Invoice.findOne({
+    _id: id(req.params.recordId),
+    customerPhone: require('./crmPhoneMatch')(conversation.contact.phone),
+    paymentProvider: 'moniepoint',
+    status: 'pending',
+    deletedAt: null,
+  });
+  if (!invoice) fail(409, 'This pending Moniepoint invoice is no longer available to confirm.');
+  const confirmedAt = new Date();
+  invoice.status = 'paid';
+  invoice.paidAt = confirmedAt;
+  invoice.paymentCheckedAt = confirmedAt;
+  invoice.providerStatus = 'manually_confirmed';
+  invoice.manualPaymentConfirmedAt = confirmedAt;
+  invoice.manualPaymentConfirmedBy = req.actor.name || 'Administrator';
+  await invoice.save();
+  res.json({ id: String(invoice._id), status: invoice.status, paidAt: invoice.paidAt, providerStatus: invoice.providerStatus });
 }));
 router.get('/conversations/:id/crm/:kind/:recordId', wrap(async (req, res) => {
   const c = await conversationFor(req);
@@ -264,7 +286,7 @@ router.get('/conversations/:id/crm/:kind/:recordId', wrap(async (req, res) => {
     Client: 'businessName clientNumber amountPaid servicePaidFor landingPageLink createdAt',
     AdsClient: 'businessName clientNumber amountPaid servicePaidFor videoLinks note adsPublished fundsStatus createdAt',
     VerificationClient: 'name businessName clientNumber amountPaid service createdAt',
-    Invoice: 'customerName customerEmail customerPhone product amount status note createdAt paidAt expiresAt reference paymentProvider flutterwaveOrderRef flutterwaveTransactionId'
+    Invoice: 'customerName customerEmail customerPhone product amount status note createdAt paidAt expiresAt reference paymentProvider providerStatus manualPaymentConfirmedAt manualPaymentConfirmedBy flutterwaveOrderRef flutterwaveTransactionId'
   };
   const kind = req.params.kind;
   if (!Object.hasOwn(fields, kind)) fail(400, 'Unknown record type.');

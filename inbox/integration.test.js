@@ -147,6 +147,34 @@ test('Invoice shortcut queues once and checks payment without sending a message'
   } finally { controller.generateInvoiceTransfer = originalGenerate; controller.refreshInvoiceStatus = originalRefresh; if (oldSecret === undefined) delete process.env.PAYSTACK_SECRET; else process.env.PAYSTACK_SECRET = oldSecret; if (oldUrl === undefined) delete process.env.CLIENT_URL; else process.env.CLIENT_URL = oldUrl; }
 });
 
+test('Moniepoint invoice stays pending until an administrator confirms the manual transfer', async () => {
+  const c = await fixture();
+  const oldSecret = process.env.PAYSTACK_SECRET, oldUrl = process.env.CLIENT_URL;
+  delete process.env.PAYSTACK_SECRET; process.env.CLIENT_URL = 'https://example.test';
+  try {
+    const created = await request(`/conversations/${c._id}/actions/invoice`, { role: 'agent', method: 'POST', body: { clientId: crypto.randomUUID(), amount: 26000, paymentProvider: 'moniepoint' } });
+    assert.equal(created.status, 200);
+    const invoice = await Invoice.findOne({ inboxConversation: c._id });
+    assert.equal(invoice.paymentProvider, 'moniepoint');
+    assert.equal(invoice.status, 'pending');
+    assert.equal(invoice.accountNumber, '8143017102');
+    assert.equal(invoice.bankName, 'Moniepoint');
+    assert.equal(invoice.accountName, 'Joshspot Tv Media');
+    assert.ok(!invoice.expiresAt);
+    assert.equal((await request(`/conversations/${c._id}/actions/payment`, { role: 'agent', method: 'POST', body: {} })).data.paid, false);
+    assert.equal((await request(`/conversations/${c._id}/crm/invoices/${invoice._id}/confirm-manual-payment`, { role: 'agent', method: 'POST', body: {} })).status, 403);
+    const confirmed = await request(`/conversations/${c._id}/crm/invoices/${invoice._id}/confirm-manual-payment`, { method: 'POST', body: {} });
+    assert.equal(confirmed.status, 200); assert.equal(confirmed.data.status, 'paid');
+    const saved = await Invoice.findById(invoice._id);
+    assert.equal(saved.status, 'paid'); assert.equal(saved.providerStatus, 'manually_confirmed'); assert.ok(saved.manualPaymentConfirmedAt);
+    const records = await request(`/conversations/${c._id}/crm`);
+    assert.ok(records.data.some((record) => record.id === String(invoice._id) && record.paymentProvider === 'moniepoint' && record.status === 'paid'));
+  } finally {
+    if (oldSecret === undefined) delete process.env.PAYSTACK_SECRET; else process.env.PAYSTACK_SECRET = oldSecret;
+    if (oldUrl === undefined) delete process.env.CLIENT_URL; else process.env.CLIENT_URL = oldUrl;
+  }
+});
+
 test('admin deletion purges Inbox data and saved media but preserves invoices and other customers',async()=>{
  const c=await fixture();const contact=await Contact.findById(c.contact);
  const other=await Contact.create({phone:'2348012345679',name:'Other customer'});const otherChat=await Conversation.create({contact:other._id});

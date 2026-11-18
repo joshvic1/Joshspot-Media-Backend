@@ -25,6 +25,7 @@ const getPublicInvoice = (invoice) => ({
   accountName: invoice.accountName,
   accountNumber: invoice.accountNumber,
   bankName: invoice.bankName,
+  paymentProvider: invoice.paymentProvider,
   expiresAt: invoice.expiresAt,
   paidAt: invoice.paidAt,
   createdAt: invoice.createdAt,
@@ -32,6 +33,9 @@ const getPublicInvoice = (invoice) => ({
 });
 
 const refreshInvoiceStatus = async (invoice, strict = false) => {
+  // Moniepoint transfers are confirmed only by an administrator in the Inbox.
+  // Never infer payment from a customer-facing invoice page or a provider call.
+  if (invoice.paymentProvider === 'moniepoint') return invoice;
   if(invoice.paymentProvider==='flutterwave')return require('../utils/flutterwaveCoursePayment').refresh(invoice,strict);
   if (invoice.status === "paid") { await queueCourseEmail(invoice); return invoice; }
 
@@ -78,6 +82,7 @@ const refreshInvoiceStatus = async (invoice, strict = false) => {
 };
 
 const generateInvoiceTransfer = async (invoice) => {
+  if (invoice.paymentProvider === 'moniepoint') return invoice;
   if(invoice.paymentProvider==='flutterwave')return require('../utils/flutterwaveCoursePayment').generate(invoice);
   const refreshedInvoice = await refreshInvoiceStatus(invoice);
 
