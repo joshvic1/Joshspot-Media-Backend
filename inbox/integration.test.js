@@ -81,9 +81,12 @@ test('Staff shortcuts mask identity, lock CRM identity and restrict admin librar
   assert.equal((await request(`/conversations/${c._id}/actions/customer`)).data.phone, '+2348012345678');
   assert.equal((await request(`/conversations/${c._id}/actions/customer`, { role: 'second' })).status, 404);
   assert.equal((await request('/quick-replies', { role: 'agent', method: 'POST', body: { keyword: 'hi', response: 'Hello' } })).status, 403);
-  assert.equal((await request('/quick-replies', { method: 'POST', body: { keyword: '/welcome', response: 'Hello!\nHow can we help?' } })).status, 200);
+  const quickReply = await request('/quick-replies', { method: 'POST', body: { keyword: '/welcome', response: 'Hello!\nHow can we help?' } });
+  assert.equal(quickReply.status, 200);
   assert.equal((await request('/quick-replies', { role: 'agent' })).data.items[0].keyword, 'welcome');
   assert.equal((await request('/quick-replies', { method: 'POST', body: { keyword: 'welcome', response: 'Duplicate' } })).status, 409);
+  assert.equal((await request(`/quick-replies/${quickReply.data._id}`, { method: 'DELETE' })).status, 200);
+  assert.equal((await request('/quick-replies')).data.items.length, 0);
   assert.equal((await request('/admin-contacts', { role: 'agent' })).status, 403);
   await Contact.insertMany(Array.from({ length: 23 }, (_, i) => ({ name: `Person ${i}`, phone: `234900000${String(i).padStart(4,'0')}` })));
   const first = (await request('/admin-contacts')).data; assert.equal(first.items.length, 20); assert.ok(first.next);
