@@ -53,8 +53,26 @@ async function download(id) {
 }
 async function checkConnection() {
   try {
-    const { data } = await api().get(`/${process.env.WHATSAPP_PHONE_NUMBER_ID}`, { params: { fields: 'id' } });
-    return { valid: String(data.id) === process.env.WHATSAPP_PHONE_NUMBER_ID };
+    const client = api();
+    const { data } = await client.get(`/${process.env.WHATSAPP_PHONE_NUMBER_ID}`, { params: { fields: 'id' } });
+    if (String(data.id) !== process.env.WHATSAPP_PHONE_NUMBER_ID) return { valid: false, code: 'PHONE_NUMBER_UNAVAILABLE' };
+
+    // Templates belong to a WhatsApp Business Account, while messages are sent
+    // from a phone number. A configuration can pass the old phone-only check
+    // but still reject every template with Meta 132001 when those two values
+    // came from different WABAs. Check the relationship without returning IDs
+    // or any secret to the browser.
+    try {
+      const response = await client.get(`/${process.env.WHATSAPP_BUSINESS_ACCOUNT_ID}/phone_numbers`, { params: { fields: 'id', limit: 100 } });
+      const senderBelongsToConfiguredBusiness = (response.data.data || []).some((item) => String(item.id) === process.env.WHATSAPP_PHONE_NUMBER_ID);
+      return senderBelongsToConfiguredBusiness
+        ? { valid: true, senderBelongsToConfiguredBusiness: true }
+        : { valid: false, code: 'PHONE_WABA_MISMATCH', senderBelongsToConfiguredBusiness: false };
+    } catch (error) {
+      // Keep the basic connection check useful when the token is intentionally
+      // restricted to messaging but cannot enumerate the WABA's phone numbers.
+      return { valid: true, senderBelongsToConfiguredBusiness: null, relationshipCheckUnavailable: true };
+    }
   } catch (error) {
     return { valid: false, code: Number(error.response?.data?.error?.code) || null, subcode: Number(error.response?.data?.error?.error_subcode) || null, unavailable: !error.response };
   }

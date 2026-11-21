@@ -5,6 +5,15 @@ const live = require('./live');
 const policy = require('./policy');
 const provider = require('./provider');
 
+function sendFailureMessage(error) {
+  const code = Number(error.response?.data?.error?.code);
+  if (code === 132001) return 'This approved template is not available to the WhatsApp number currently sending messages (code 132001). Check that WHATSAPP_PHONE_NUMBER_ID and WHATSAPP_BUSINESS_ACCOUNT_ID belong to the same WhatsApp Business Account, then refresh templates before retrying.';
+  if (code === 190) return 'WhatsApp rejected this worker’s access token (code 190). Ask your administrator to check the token and ensure only the production worker is running.';
+  return error.safe ? error.message : error.response?.status >= 400 && error.response.status < 500
+    ? `WhatsApp rejected this message${code ? ` (code ${code})` : ''}. Check the recipient, template and provider settings before retrying.`
+    : 'Delivery is uncertain. Wait for a WhatsApp status update before sending again.';
+}
+
 // Optional integrations subscribe here. Durable integrations should consume stored messages by cursor.
 const events = new EventEmitter();
 function publish(name, payload) {
@@ -106,7 +115,7 @@ async function enqueueWebhook(raw, payload) {
   payload=await require('./deleteChat').scrubDeleted(payload);
   const routingPhoneIds = [...new Set((payload.entry || []).flatMap(entry => (entry.changes || []).filter(change => change.field === 'messages').map(change => String(change.value?.metadata?.phone_number_id || '')).filter(Boolean)))];
   const wrongPhone = routingPhoneIds.length && !routingPhoneIds.includes(process.env.WHATSAPP_PHONE_NUMBER_ID);
-  try { await WebhookJob.updateOne({ key }, { $setOnInsert: { key, payload, routingPhoneIds, state: wrongPhone ? 'blocked' : 'pending', ...(wrongPhone ? { errorCode: 'PHONE_NUMBER_MISMATCH', error: 'Webhook is for a different phone number. Payload retained for review.' } : {}) } }, { upsert: true }); }
+  try { await WebhookJob.updateOne({ key }, { $setOnInsert: { key, payload, routingPhoneIds, state: wrongPhone ? 'blocked' : 'pending', ...(wrongPhone ? { errorCode: 'PHONE_NUMBER_MISMATCH', error: 'Webhook is for a different phone number. Payload retained for review.', expiresAt: new Date(Date.now() + 7 * 86400000) } : {}) } }, { upsert: true }); }
   catch (error) { if (error.code !== 11000) throw error; }
 }
 async function deliverMentions(message) {
@@ -180,12 +189,23 @@ async function processOutbox() {
     } catch (error) {
       live.notify();
       const definite = error.safe || (error.response?.status >= 400 && error.response?.status < 500 && error.response.status !== 408);
-      const code = Number(error.response?.data?.error?.code);
-      await Message.updateOne({ _id: message._id, status: 'sending' }, { $set: { status: definite ? 'failed' : 'unknown', error: error.safe ? error.message : code === 190 ? 'WhatsApp rejected this worker’s access token (code 190). Ask your administrator to check the token and ensure only the production worker is running.' : definite ? `WhatsApp rejected this message${code ? ` (code ${code})` : ''}. Check the recipient, template and provider settings before retrying.` : 'Delivery is uncertain. Wait for a WhatsApp status update before sending again.' } });
+      await Message.updateOne({ _id: message._id, status: 'sending' }, { $set: { status: definite ? 'failed' : 'unknown', error: sendFailureMessage(error) } });
     }
   }
 }
 let running = false;
+let lastForeignWebhookRetention = 0;
+async function applyForeignWebhookRetention() {
+  if (Date.now() - lastForeignWebhookRetention < 3600000) return;
+  lastForeignWebhookRetention = Date.now();
+  const now = new Date();
+  const cutoff = new Date(Date.now() - 7 * 86400000);
+  const base = { state: 'blocked', errorCode: 'PHONE_NUMBER_MISMATCH', expiresAt: { $exists: false } };
+  // Foreign-phone events are intentionally never replayed by this inbox. Keep
+  // a short diagnostic window, then let the existing TTL index remove them.
+  await WebhookJob.updateMany({ ...base, createdAt: { $lt: cutoff } }, { $set: { expiresAt: now } });
+  await WebhookJob.updateMany({ ...base, createdAt: { $gte: cutoff } }, { $set: { expiresAt: new Date(Date.now() + 7 * 86400000) } });
+}
 async function scheduleManualInvoice(message){
  const c=await Conversation.findById(message.conversation);
  if(c&&!c.deleting)await require('./ai/followups').schedule(c,message.invoiceDelivery,(await require('./ai/config').getConfig()).data,message);
@@ -211,6 +231,7 @@ async function tick() {
   void require('./shortReminders').tick().catch(()=>console.error('Short reminder worker deferred'));
   void require('./courseReminder').tick().catch(()=>console.error('Course WhatsApp reminder worker deferred'));
   void require('./deleteChat').recover().catch(()=>console.error('Inbox deletion recovery unavailable'));
+  void applyForeignWebhookRetention().catch(()=>console.error('Foreign webhook retention deferred'));
   void require('./ai/worker').tick();
   if (running) return;
   running = true;

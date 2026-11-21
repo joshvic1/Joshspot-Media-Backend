@@ -206,6 +206,28 @@ test('admin deletion purges Inbox data and saved media but preserves invoices an
   assert.equal((await request(`/conversations/${c._id}`,{method:'DELETE',body:{confirm:true}})).status,200);
  }finally{storage.remove=original;}
 });
+test('administrator can remove selected local messages without deleting the conversation or financial records', async () => {
+  const conversation = await fixture();
+  const contact = await Contact.findById(conversation.contact);
+  const outbound = await Message.create({ conversation: conversation._id, direction: 'outbound', type: 'text', status: 'delivered', text: 'Older reply', author: 'admin', clientKey: 'selected-delete-outbound' });
+  const newestInbound = await Message.create({ conversation: conversation._id, direction: 'inbound', type: 'text', status: 'received', text: 'Remove this too', providerId: 'wamid.selected-delete-inbound' });
+  await Conversation.updateOne({ _id: conversation._id }, { $set: { lastMessageId: newestInbound._id, lastInboundId: newestInbound._id, lastInboundAt: newestInbound.createdAt, preview: newestInbound.text } });
+  await Notification.create({ recipient: agent._id, conversation: conversation._id, message: newestInbound._id });
+  const invoice = await Invoice.create({ token: crypto.randomUUID(), amount: 20000, customerPhone: contact.phone, inboxConversation: conversation._id });
+
+  const path = `/conversations/${conversation._id}/messages`;
+  assert.equal((await request(path, { role: 'agent', method: 'DELETE', body: { confirm: true, messageIds: [String(outbound._id)] } })).status, 403);
+  assert.equal((await request(path, { method: 'DELETE', body: { messageIds: [String(outbound._id)] } })).status, 400);
+  const removed = await request(path, { method: 'DELETE', body: { confirm: true, messageIds: [String(outbound._id), String(newestInbound._id)] } });
+  assert.equal(removed.status, 200); assert.equal(removed.data.deleted, 2);
+  assert.equal(await Message.exists({ _id: outbound._id }), null); assert.equal(await Message.exists({ _id: newestInbound._id }), null);
+  assert.equal(await Notification.exists({ message: newestInbound._id }), null);
+  assert.ok(await Conversation.exists({ _id: conversation._id })); assert.ok(await Contact.exists({ _id: contact._id })); assert.ok(await Invoice.exists({ _id: invoice._id }));
+  const rebuilt = await Conversation.findById(conversation._id);
+  const originalInbound = await Message.findOne({ conversation: conversation._id, direction: 'inbound' }).sort({ _id: 1 });
+  assert.equal(String(rebuilt.lastInboundId), String(originalInbound._id));
+  assert.equal(String(rebuilt.lastMessageId), String(originalInbound._id));
+});
 
 async function aiFixture(mode='DRAFT') {
   await aiSettings.seed('admin');
@@ -403,6 +425,20 @@ test('authentication and existing restricted roles are enforced', async () => {
   await Staff.findByIdAndDelete(agent._id);
   assert.equal((await request('/session', { role: 'agent' })).status, 401);
 });
+test('foreign-phone webhook blocks are not presented as retryable failures', async () => {
+  await WebhookJob.create([
+    { key: 'foreign-webhook', state: 'blocked', errorCode: 'PHONE_NUMBER_MISMATCH', payload: {} },
+    { key: 'dead-webhook', state: 'dead', errorCode: 'PROCESSING_FAILED', payload: {} },
+  ]);
+  const session = await request('/session');
+  assert.equal(session.status, 200);
+  assert.equal(session.data.provider.failedJobs, 1);
+  assert.equal(session.data.provider.ignoredForeignWebhookJobs, 1);
+  const retry = await request('/webhooks/retry', { method: 'POST', body: {} });
+  assert.equal(retry.status, 200);
+  assert.equal(retry.data.retried, 1);
+  assert.equal((await WebhookJob.findOne({ key: 'foreign-webhook' })).state, 'blocked');
+});
 test('signed webhook is durably acknowledged and duplicate deliveries create one message/contact', async () => {
   const body = { object: 'whatsapp_business_account', entry: [{ changes: [{ field: 'messages', value: inbound() }] }] };
   const signature = `sha256=${crypto.createHmac('sha256', process.env.WHATSAPP_APP_SECRET).update(JSON.stringify(body)).digest('hex')}`;
@@ -465,6 +501,17 @@ test('closed reply window supports named values, dynamic buttons and template me
   assert.deepEqual(components[0], { type: 'header', parameters: [{ type: 'image', image: { id: 'test-upload' } }] });
   assert.deepEqual(components[1].parameters[0], { type: 'text', parameter_name: 'customer_name', text: 'Ada' });
   assert.equal(components[2].sub_type, 'url');
+});
+test('template availability failures explain the sender and business-account check', async () => {
+  const conversation = await fixture();
+  const template = await Template.create({ externalId: 'template-account-check', name: 'account_check', language: 'en', status: 'APPROVED', components: [{ type: 'BODY', text: 'Hello' }], syncedAt: new Date() });
+  const result = await request(`/conversations/${conversation._id}/messages`, { role: 'agent', method: 'POST', body: { type: 'template', templateId: String(template._id), values: {}, clientId: crypto.randomUUID() } });
+  assert.equal(result.status, 201);
+  provider.send = async () => { throw Object.assign(new Error('Meta template unavailable'), { response: { status: 400, data: { error: { code: 132001 } } } }); };
+  await service.processOutbox();
+  const message = await Message.findById(result.data._id);
+  assert.equal(message.status, 'failed');
+  assert.match(message.error, /WHATSAPP_PHONE_NUMBER_ID and WHATSAPP_BUSINESS_ACCOUNT_ID/);
 });
 test('window and assignment are rechecked at send time', async () => {
   const conversation = await fixture(); const result = await request(`/conversations/${conversation._id}/messages`, { role: 'agent', method: 'POST', body: outgoing() });

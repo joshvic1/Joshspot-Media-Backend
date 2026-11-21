@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const staffAuth = require('../middleware/staffAuth');
 const Staff = require('../models/Staff');
-const { Contact, Conversation, Message, Template, RateBucket, WebhookJob, Notification } = require('./models');
+const { Contact, Conversation, Message, Template, RateBucket, WebhookJob, Notification, Media } = require('./models');
 const policy = require('./policy');
 const provider = require('./provider');
 const mediaService = require('./media');
@@ -141,8 +141,13 @@ router.post('/notifications/:notificationId/read', wrap(async (req, res) => {
 router.get('/session', wrap(async (req, res) => {
   const config = provider.configuration();
   const staff = await Staff.find({ ...require('./staffPermissions').messagingQuery }).select('name role').sort({ name: 1 }).lean();
-  const failedJobs = req.actor.admin ? await WebhookJob.countDocuments({ state: { $in: ['dead', 'blocked'] } }) : undefined;
-  res.json({ actor: req.actor, staff: [adminIdentity.person,...staff], provider: { configured: config.configured, ...(req.actor.admin ? { missing: config.missing, failedJobs } : {}) } });
+  const [failedJobs, ignoredForeignWebhookJobs] = req.actor.admin
+    ? await Promise.all([
+      WebhookJob.countDocuments({ state: 'dead' }),
+      WebhookJob.countDocuments({ state: 'blocked', errorCode: 'PHONE_NUMBER_MISMATCH' }),
+    ])
+    : [undefined, undefined];
+  res.json({ actor: req.actor, staff: [adminIdentity.person,...staff], provider: { configured: config.configured, ...(req.actor.admin ? { missing: config.missing, failedJobs, ignoredForeignWebhookJobs } : {}) } });
 }));
 router.get('/diagnostics', wrap(async (req, res) => {
   if (!req.actor.admin) fail(403, 'Administrator access required.');
@@ -159,7 +164,7 @@ router.post('/connection-check', wrap(async (req, res) => {
 router.post('/webhooks/retry', wrap(async (req, res) => {
   if (!req.actor.admin) fail(403, 'Administrator access required.');
   await rateLimit(req);
-  const result = await WebhookJob.updateMany({ state: { $in: ['dead', 'blocked'] }, $or: [{ routingPhoneIds: process.env.WHATSAPP_PHONE_NUMBER_ID }, { routingPhoneIds: { $exists: false } }] }, { $set: { state: 'pending', attempts: 0, leaseUntil: null }, $unset: { expiresAt: 1 } });
+  const result = await WebhookJob.updateMany({ state: 'dead', $or: [{ routingPhoneIds: process.env.WHATSAPP_PHONE_NUMBER_ID }, { routingPhoneIds: { $exists: false } }] }, { $set: { state: 'pending', attempts: 0, leaseUntil: null }, $unset: { expiresAt: 1 } });
   res.json({ retried: result.modifiedCount });
 }));
 router.get('/conversations', wrap(async (req, res) => {
@@ -356,6 +361,88 @@ router.delete('/conversations/:id',wrap(async(req,res)=>{
   if(!req.actor.admin)fail(403,'Only administrators can delete chats.');
   if(req.body.confirm!==true)fail(400,'Confirm permanent chat deletion.');
   await rateLimit(req);res.json(await require('./deleteChat').deleteChat(id(req.params.id)));
+}));
+async function rebuildConversationPointers(conversationId) {
+  // A deletion can remove a list preview, unread anchor, or current AI input.
+  // Rebuild them from the remaining local Inbox rows rather than leaving an ID
+  // which no longer exists. This never changes any external WhatsApp message.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const current = await Conversation.findById(conversationId).lean();
+    if (!current || current.deleting) return null;
+    const [latest, latestInbound] = await Promise.all([
+      Message.findOne({ conversation: current._id, type: { $ne: 'activity' } }).sort({ _id: -1 }).lean(),
+      Message.findOne({ conversation: current._id, direction: 'inbound' }).sort({ _id: -1 }).lean(),
+    ]);
+    const reads = {};
+    for (const [actor, cursor] of Object.entries(current.reads || {})) {
+      const visible = await Message.findOne({ conversation: current._id, direction: 'inbound', _id: { $lte: cursor } }).sort({ _id: -1 }).select('_id').lean();
+      if (visible) reads[actor] = visible._id;
+    }
+    const lastInboundChanged = String(current.lastInboundId || '') !== String(latestInbound?._id || '');
+    const preview = latest ? (latest.type === 'note' ? 'Internal note' : (latest.text || `[${latest.type}]`).slice(0, 160)) : 'No messages yet';
+    const set = {
+      lastMessageAt: latest?.createdAt || current.createdAt,
+      preview,
+      reads,
+      earningsDirty: true,
+      ...(latest ? { lastMessageId: latest._id } : {}),
+      ...(latestInbound ? { lastInboundId: latestInbound._id, lastInboundAt: latestInbound.occurredAt || latestInbound.createdAt } : {}),
+      ...(lastInboundChanged ? { 'ai.pending': false, 'ai.draft': null, 'ai.handoffPending': null, 'ai.leaseUntil': null, 'ai.leaseToken': null, 'ai.handoffReason': 'MESSAGE_REMOVED' } : {}),
+    };
+    const unset = { ...(latest ? {} : { lastMessageId: 1 }), ...(latestInbound ? {} : { lastInboundId: 1, lastInboundAt: 1 }) };
+    const result = await Conversation.updateOne({ _id: current._id, updatedAt: current.updatedAt }, {
+      $set: set,
+      ...(Object.keys(unset).length ? { $unset: unset } : {}),
+      ...(lastInboundChanged ? { $inc: { 'ai.version': 1 } } : {}),
+    });
+    if (result.modifiedCount) return { latest, latestInbound, lastInboundChanged };
+  }
+  fail(409, 'This conversation changed while messages were being removed. Refresh and try again.');
+}
+router.delete('/conversations/:id/messages', wrap(async (req, res) => {
+  if (!req.actor.admin) fail(403, 'Only administrators can remove messages from the Inbox.');
+  if (req.body.confirm !== true) fail(400, 'Confirm message removal.');
+  if (!Array.isArray(req.body.messageIds) || !req.body.messageIds.length || req.body.messageIds.length > 100) fail(400, 'Select between 1 and 100 messages.');
+  const messageIds = [...new Set(req.body.messageIds.map(value => String(value)))];
+  if (messageIds.some(value => !mongoose.isValidObjectId(value))) fail(400, 'One or more selected messages are invalid.');
+  await rateLimit(req, 20, 'delete-messages');
+  const conversation = await conversationFor(req);
+  const selected = await Message.find({ _id: { $in: messageIds }, conversation: conversation._id }).select('_id direction status media').lean();
+  if (selected.length !== messageIds.length) fail(409, 'One or more selected messages are no longer available. Refresh and select again.');
+  if (selected.some(message => message.direction === 'outbound' && ['queued', 'sending', 'unknown'].includes(message.status))) {
+    fail(409, 'A selected message may still be delivering. Wait for its final status before removing it from the Inbox.');
+  }
+
+  // Do not leave a queued AI response free to send after its latest customer
+  // input has been removed. A currently sending response is deliberately
+  // protected by the guard above and must settle first.
+  const selectedIds = selected.map(message => message._id);
+  const currentInbound = String(conversation.lastInboundId || '');
+  const removedCurrentInbound = selectedIds.some(value => String(value) === currentInbound);
+  if (removedCurrentInbound) {
+    await Message.updateMany({ conversation: conversation._id, author: 'ai', status: 'queued' }, {
+      $set: { status: 'failed', error: 'AI reply cancelled because its latest customer input was removed from the Inbox.' },
+    });
+  }
+
+  const assetIds = [...new Set(selected.map(message => message.media?.asset && String(message.media.asset)).filter(Boolean))];
+  const assets = assetIds.length ? await Media.find({ _id: { $in: assetIds }, conversation: conversation._id }).lean() : [];
+  const removableAssetIds = [];
+  for (const asset of assets) {
+    const stillUsed = await Message.exists({ conversation: conversation._id, 'media.asset': asset._id, _id: { $nin: selectedIds } });
+    if (!stillUsed) {
+      if (asset.key) await mediaStorage.remove(asset.key);
+      removableAssetIds.push(asset._id);
+    }
+  }
+  await Promise.all([
+    Notification.deleteMany({ conversation: conversation._id, message: { $in: selectedIds } }),
+    Message.deleteMany({ _id: { $in: selectedIds }, conversation: conversation._id }),
+    ...(removableAssetIds.length ? [Media.deleteMany({ _id: { $in: removableAssetIds }, conversation: conversation._id })] : []),
+  ]);
+  const rebuilt = await rebuildConversationPointers(conversation._id);
+  live.notify();
+  res.json({ deleted: selected.length, ...(rebuilt?.latest ? { lastMessageId: String(rebuilt.latest._id) } : {}) });
 }));
 router.put('/conversations/:id', wrap(async (req, res) => {
   await rateLimit(req); const current = await conversationFor(req);
