@@ -18,6 +18,7 @@ const Invoice = require('../models/Invoice');
 const shortcutModels = require('./shortcuts');
 const service = require('./service');
 const provider = require('./provider');
+const earningsModels = require('./earnings/models');
 let mongo, server, base, agent, second, tokens, sent;
 const providerOriginal = { ...provider };
 before(async () => {
@@ -26,14 +27,14 @@ before(async () => {
   process.env.WHATSAPP_GRAPH_VERSION = 'v23.0';
   mongo = await MongoMemoryServer.create();
   await mongoose.connect(mongo.getUri());
-  await Promise.all([staffDM.Attachment,staffDM.Thread,staffDM.StaffMessage,push.Subscription, push.Event, DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.init()));
+  await Promise.all([staffDM.Attachment,staffDM.Thread,staffDM.StaffMessage,push.Subscription, push.Event, DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(earningsModels), ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.init()));
   const app = express(); app.use(express.json({ limit: "10mb", verify: (req, res, raw) => { req.rawBody = raw; } })); app.use('/inbox', require('./routes'));
   server = app.listen(0, '127.0.0.1'); await new Promise((resolve) => server.once('listening', resolve));
   base = `http://127.0.0.1:${server.address().port}/inbox`;
 }, { timeout: 300000 });
 after(async () => { Object.assign(provider, providerOriginal); if (server) await new Promise((resolve) => server.close(resolve)); await mongoose.disconnect(); if (mongo) await mongo.stop(); });
 beforeEach(async () => {
-  await Promise.all([staffDM.Attachment,staffDM.Thread,staffDM.StaffMessage,push.Subscription, push.Event, DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.deleteMany({})));
+  await Promise.all([staffDM.Attachment,staffDM.Thread,staffDM.StaffMessage,push.Subscription, push.Event, DeletionGuard, Contact, Conversation, Message, Template, WebhookJob, RateBucket, Staff, Notification, Media, Invoice, ...Object.values(earningsModels), ...Object.values(aiModels), ...Object.values(shortcutModels).filter(m => m?.modelName)].map((model) => model.deleteMany({})));
   agent = await Staff.create({ name: 'Agent One', email: 'one@example.test', password: 'not-a-real-password', role: 'SS' });
   second = await Staff.create({ name: 'Agent Two', email: 'two@example.test', password: 'not-a-real-password', role: 'CSS' });
   const restricted = await Staff.create({ name: 'Restricted', email: 'restricted@example.test', password: 'not-a-real-password', role: 'SES' });
@@ -205,6 +206,17 @@ test('admin deletion purges Inbox data and saved media but preserves invoices an
   const next=inbound('brand-new',Math.floor(Date.now()/1000)+2);await service.receive(next);assert.equal(await Contact.countDocuments({phone:contact.phone}),1);assert.equal(await Message.countDocuments({providerId:'brand-new'}),1);
   assert.equal((await request(`/conversations/${c._id}`,{method:'DELETE',body:{confirm:true}})).status,200);
  }finally{storage.remove=original;}
+});
+test('deleting a chat removes its response-timing data and reopens an affected statement',async()=>{
+ const c=await fixture();
+ const startedAt=new Date('2026-11-20T10:00:00.000Z');
+ await earningsModels.Sample.create({key:`delete-timing:${c._id}`,conversation:c._id,staff:String(agent._id),startedAt,endedAt:new Date('2026-11-20T10:25:00.000Z'),status:'answered'});
+ const ledger=await earningsModels.Month.create({key:`${agent._id}:2026-11`,staff:String(agent._id),month:'2026-11',rule:{graceMinutes:15,blockMinutes:5,blockAmount:1000,startHour:8,endHour:20,days:[1,2,3,4,5,6]},finalizedAt:new Date(),finalizedBy:'admin',finalTotal:2000,snapshot:{days:[{day:'2026-11-20'}]}});
+ const removed=await request(`/conversations/${c._id}`,{method:'DELETE',body:{confirm:true}});
+ assert.equal(removed.status,200);
+ assert.equal(await earningsModels.Sample.countDocuments({conversation:c._id}),0);
+ const reopened=await earningsModels.Month.findById(ledger._id).lean();
+ assert.equal(reopened.finalizedAt,undefined);assert.equal(reopened.snapshot,undefined);assert.equal(reopened.reopenReason,'A related Inbox chat was permanently deleted.');
 });
 test('administrator can remove selected local messages without deleting the conversation or financial records', async () => {
   const conversation = await fixture();

@@ -17,7 +17,28 @@ function redactPayload(payload,phone){
  }
  return copy;
 }
-async function deleteChat(id){
+async function removeEarningsForDeletedConversations(conversations,actor){
+ // Response samples are local Inbox data. A permanently deleted chat must not
+ // continue to affect a staff member's deduction after its messages are gone.
+ const {Sample,Month}=require('./earnings/models');
+ const {dayKey}=require('./earnings/math');
+ const rows=await Sample.find({conversation:{$in:conversations}}).select('staff startedAt').lean();
+ if(!rows.length)return;
+ const months=new Map();
+ for(const row of rows)if(row.staff&&row.startedAt){
+  const month=dayKey(row.startedAt).slice(0,7);
+  months.set(`${row.staff}:${month}`,{staff:String(row.staff),month});
+ }
+ await Sample.deleteMany({conversation:{$in:conversations}});
+ // A finalised snapshot contains the deleted sample, so reopen it for an
+ // administrator to review and finalise again from the remaining records.
+ const now=new Date();
+ for(const {staff,month} of months.values())await Month.updateOne(
+  {staff,month,finalizedAt:{$ne:null}},
+  {$set:{reopenedAt:now,reopenedBy:actor?.id||'',reopenReason:'A related Inbox chat was permanently deleted.'},$unset:{finalizedAt:1,finalizedBy:1,finalTotal:1,snapshot:1}},
+ );
+}
+async function deleteChat(id,actor){
  const first=await Conversation.findById(id);
  if(!first)return {deleted:true}; // Safe retry after a lost success response.
  const contact=await Contact.findById(first.contact);if(!contact)fail(409,'Contact unavailable. Please refresh before deleting.');
@@ -34,6 +55,7 @@ async function deleteChat(id){
   || await Conversation.exists({_id:{$in:conversations},'ai.leaseUntil':{$gt:now}})
   || await WebhookJob.exists({...webhookFilter(contact.phone),state:'processing',leaseUntil:{$gt:now}});
  if(busy)fail(409,'A message or media transfer is finishing. Automatic replies are paused. Please try Delete chat again in a moment.');
+ await removeEarningsForDeletedConversations(conversations,actor);
  // Only a keyed digest and cutoff survive briefly; no phone, name or content.
  await DeletionGuard.updateOne({_id:digest(contact.phone)},{$max:{cutoff:now},$set:{expiresAt:new Date(Date.now()+8*86400000)}},{upsert:true});
  for(const asset of await Media.find(scope).select('key').lean())if(asset.key)await require('./mediaStorage').remove(asset.key);

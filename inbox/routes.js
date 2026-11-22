@@ -361,7 +361,7 @@ router.post('/conversations/:id/course-access/:invoiceId/resend', wrap(async (re
 router.delete('/conversations/:id',wrap(async(req,res)=>{
   if(!req.actor.admin)fail(403,'Only administrators can delete chats.');
   if(req.body.confirm!==true)fail(400,'Confirm permanent chat deletion.');
-  await rateLimit(req);res.json(await require('./deleteChat').deleteChat(id(req.params.id)));
+  await rateLimit(req);res.json(await require('./deleteChat').deleteChat(id(req.params.id),req.actor));
 }));
 async function rebuildConversationPointers(conversationId) {
   // A deletion can remove a list preview, unread anchor, or current AI input.
