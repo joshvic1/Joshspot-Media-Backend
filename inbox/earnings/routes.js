@@ -16,7 +16,7 @@ async function report(staff,from,to,cfg,{actor,latePage}={}){
  const now=new Date();
  const availabilityEnd=rows.reduce((last,row)=>{const end=dayKey(row.endedAt||now);return end>last?end:last},to);
  const availability=await Availability.find({staff,day:{$gte:from,$lte:availabilityEnd}}).lean();
- const controls=await Control.find({staff,$or:[{kind:'reset',from:{$lt:end},to:{$gte:start}},{kind:{$in:['pause','birthday']},from:{$lt:new Date(+dayStart(availabilityEnd)+DAY)},$or:[{to:null},{to:{$gte:start}}]}]}).lean();
+ const controls=await Control.find({staff,$or:[{kind:{$in:['reset','waive']},from:{$lt:end},to:{$gte:start}},{kind:{$in:['pause','birthday']},from:{$lt:new Date(+dayStart(availabilityEnd)+DAY)},$or:[{to:null},{to:{$gte:start}}]}]}).lean();
  for(const row of rows){
   const resets=controls.filter(c=>c.kind==='reset'&&+row.startedAt>=+c.from&&+row.startedAt<+c.to&&+row.startedAt<=+c.at).sort((a,b)=>+b.at-+a.at);
   const reset=resets[0];if(!reset||row.exclusion?.reason)continue;
@@ -37,6 +37,10 @@ async function report(staff,from,to,cfg,{actor,latePage}={}){
    const measured=require('./availability').measure(record,ledger.rule);
    day.responseDeduction=day.deduction;day.offlineMs=measured.offlineMs;day.offlineDeduction=measured.offlineDeduction;day.deduction+=measured.offlineDeduction;
    if(record.day===dayKey(new Date()))day.provisional=true;
+  }
+  for(const day of daily){
+   const waiver=controls.filter(control=>control.kind==='waive'&&day.day>=dayKey(control.from)&&day.day<dayKey(control.to)).sort((a,b)=>+new Date(b.at)-+new Date(a.at))[0];
+   if(waiver){day.responseDeduction??=Math.max(0,(day.deduction||0)-(day.offlineDeduction||0));day.deduction=0;day.waived={reason:waiver.reason,at:waiver.at,by:waiver.by};}
   }
   days.push(...daily);
   const wholeMonth=from<=`${month}-01`&&to>=(month===dayKey(new Date()).slice(0,7)?dayKey(new Date()):new Date(Date.UTC(Number(month.slice(0,4)),Number(month.slice(5)),0)).toISOString().slice(0,10));
@@ -72,12 +76,15 @@ function routes(router,wrap,rateLimit){
    try{await Control.findOneAndUpdate({staff,active:true},{$setOnInsert:{staff,kind:'pause',active:true,from:now,at:now,by:req.actor.id,reason:reason.trim()}},{upsert:true});}catch(e){if(e.code!==11000)throw e;}
   }else if(action==='resume'){
    await Control.updateOne({staff,kind:'pause',active:true},{$set:{active:false,to:now,resumedAt:now,resumedBy:req.actor.id,resumeReason:reason.trim()}});
-  }else if(action==='reset'){
-   const {from,to}=req.body;
-   if(!/^\d{4}-\d{2}-\d{2}$/.test(from||'')||!/^\d{4}-\d{2}-\d{2}$/.test(to||'')||!Number.isFinite(+dayStart(from))||!Number.isFinite(+dayStart(to))||from>to||to>dayKey(now)||(+dayStart(to)-dayStart(from))/DAY>366)fail(400,'Choose a valid past date range of at most one year.');
-   if(await Month.exists({staff,month:{$gte:from.slice(0,7),$lte:to.slice(0,7)},finalizedAt:{$ne:null}}))fail(409,'A selected month is finalized. Use an audited adjustment in an open month instead.');
-   await Control.create({staff,kind:'reset',from:dayStart(from),to:new Date(+dayStart(to)+DAY),at:now,by:req.actor.id,reason:reason.trim()});
+  }else if(action==='reset'||action==='waive'){
+   const cfg=await config(),allTime=req.body.allTime===true;let {from,to}=req.body;
+   if(allTime){if(!cfg.startsAt)fail(400,'Activate tracking before using all-time earnings controls.');from=dayKey(cfg.startsAt);to=dayKey(now);}
+   if(!/^\d{4}-\d{2}-\d{2}$/.test(from||'')||!/^\d{4}-\d{2}-\d{2}$/.test(to||'')||!Number.isFinite(+dayStart(from))||!Number.isFinite(+dayStart(to))||from>to||to>dayKey(now)||(!allTime&&(+dayStart(to)-dayStart(from))/DAY>366))fail(400,'Choose a valid past date range. Standard ranges are limited to one year.');
+   await Control.create({staff,kind:action,from:dayStart(from),to:new Date(+dayStart(to)+DAY),at:now,by:req.actor.id,reason:reason.trim()});
    await Month.updateMany({staff,month:{$gte:from.slice(0,7),$lte:to.slice(0,7)},finalizedAt:null},{$set:{updatedAt:now}});
+   // An override is an admin decision, but previously finalised statements must
+   // be reviewed and finalised again rather than silently retaining old totals.
+   await Month.updateMany({staff,month:{$gte:from.slice(0,7),$lte:to.slice(0,7)},finalizedAt:{$ne:null}},{$set:{reopenedAt:now,reopenedBy:req.actor.id,reopenReason:`Earnings ${action==='waive'?'deduction waiver':'response reset'}: ${reason.trim()}`},$unset:{finalizedAt:1,finalizedBy:1,finalTotal:1,snapshot:1}});
   }else fail(400,'Unknown timer action.');
   res.json({ok:true});
  }));
@@ -111,8 +118,8 @@ function routes(router,wrap,rateLimit){
   const staff=req.actor.admin?(req.query.self==='1'?'':String(req.query.staff||people[0]?._id||'')):req.actor.id;
   if(req.query.staff&&!req.actor.admin&&req.query.staff!==req.actor.id)fail(403,'You can only view your own earnings.');
   if(req.actor.admin&&staff&&!people.some(p=>String(p._id)===staff))fail(404,'Staff not found.');
-  const today=dayKey(new Date()),from=req.query.from||`${today.slice(0,7)}-01`,to=req.query.to||today;
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(from)||!/^\d{4}-\d{2}-\d{2}$/.test(to)||!Number.isFinite(+dayStart(from))||!Number.isFinite(+dayStart(to))||from>to||(+dayStart(to)-dayStart(from))/DAY>366||to>today)fail(400,'Choose a valid date range of at most one year, ending today or earlier.');
+  const today=dayKey(new Date()),allTime=req.query.allTime==='1',from=allTime&&cfg.startsAt?dayKey(cfg.startsAt):req.query.from||`${today.slice(0,7)}-01`,to=allTime?today:req.query.to||today;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(from)||!/^\d{4}-\d{2}-\d{2}$/.test(to)||!Number.isFinite(+dayStart(from))||!Number.isFinite(+dayStart(to))||from>to||(!allTime&&(+dayStart(to)-dayStart(from))/DAY>366)||to>today)fail(400,'Choose a valid date range ending today or earlier. Standard date ranges are limited to one year.');
   if(req.query.latePage!==undefined&&(!/^\d+$/.test(req.query.latePage)||Number(req.query.latePage)>1000))fail(400,'Invalid late-response page.');
   const {Conversation}=require('../models');const outstanding=await Conversation.countDocuments({$or:[{earningsDirty:true},{earningsVersion:{$ne:4}}],deleting:{$ne:true},...(req.actor.admin?{}:{assignedTo:staff})});
   const data=staff&&cfg.startsAt?await report(staff,from,to,cfg,{actor:req.actor,latePage:req.query.latePage===undefined?undefined:Number(req.query.latePage)}):{days:[],months:[],samples:[],answered:0,pending:0,averageMs:0,deduction:0};

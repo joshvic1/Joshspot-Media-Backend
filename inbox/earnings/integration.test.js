@@ -20,7 +20,23 @@ test('earnings permissions, cap, audited adjustment and finalization lock',async
  const locked=await request('/earnings?from=2026-09-01&to=2026-09-30');assert.equal(locked.data.days[0].deduction,2000);assert.equal(locked.data.deduction,100000);
 });
 
-test('sales bonus credits one paid invoice per client, not a second invoice or another role',async()=>{
+test('all-time report starts at the tracking activation date',async()=>{
+ const result=await request('/earnings?allTime=1');
+ assert.equal(result.status,200);assert.equal(result.data.from,'2026-09-01');
+ assert.ok(result.data.to>=result.data.from);assert.ok(result.data.days.some(day=>day.day==='2026-09-02'));
+});
+
+test('an administrator can waive one day of deductions with an audited reason',async()=>{
+ let day=require('./math').dayKey(new Date());const weekday=new Date(`${day}T12:00:00+01:00`);if(weekday.getUTCDay()===0){weekday.setUTCDate(weekday.getUTCDate()-1);day=weekday.toISOString().slice(0,10);}const startedAt=new Date(`${day}T09:00:00+01:00`);
+ await Sample.create({key:`waive-${day}`,staff:String(other._id),startedAt,endedAt:new Date(+startedAt+25*60000),status:'answered'});
+ const before=await request(`/earnings?staff=${other._id}&from=${day}&to=${day}`,null,true);assert.ok(before.data.deduction>0);
+ const override=await request('/earnings/control',{staff:String(other._id),action:'waive',from:day,to:day,reason:'Manager approved a customer-service exception.'},true);
+ assert.equal(override.status,200);
+ const after=await request(`/earnings?staff=${other._id}&from=${day}&to=${day}`,null,true);
+ assert.equal(after.data.deduction,0);assert.equal(after.data.days[0].deduction,0);assert.equal(after.data.days[0].waived.reason,'Manager approved a customer-service exception.');
+});
+
+test('sales bonus credits one qualifying non-course invoice per client',async()=>{
  await Config.findOneAndUpdate({_id:'main'},{$set:{...defaults,enabled:true,startsAt:new Date('2026-09-01')}},{upsert:true});
  const sales=await Staff.create({name:'Sales',email:'sales@test.invalid',password:'test',role:'SS'});
  const css=await Staff.create({name:'Support',email:'support@test.invalid',password:'test',role:'CSS'});
@@ -29,12 +45,28 @@ test('sales bonus credits one paid invoice per client, not a second invoice or a
  const create=extra=>Invoice.create({token:require('node:crypto').randomUUID(),amount:20000,status:'paid',paidAt,paymentProvider:'paystack',customerName:'Bonus client',customerPhone:contact.phone,inboxContact:contact._id,generatedByStaff:String(sales._id),generatedByRole:'SS',...extra});
  const first=await create();assert.equal((await require('./salesBonus').credit(first)).credited,true);
  const second=await create({paymentProvider:'moniepoint'});assert.equal((await require('./salesBonus').credit(second)).reason,'already_credited');
+ const courseContact=await Contact.create({name:'Course customer',phone:'2348110000003'});
+ const course=await Invoice.create({token:require('node:crypto').randomUUID(),amount:8000,status:'paid',paidAt,paymentProvider:'paystack',product:'ads-course',customerName:'Course customer',customerPhone:courseContact.phone,inboxContact:courseContact._id,generatedByStaff:String(sales._id),generatedByRole:'SS'});
+ assert.equal((await require('./salesBonus').credit(course)).reason,'not_eligible');
+ // Simulate an old bonus issued before the course exclusion. Reporting must
+ // remove it, and the later qualifying order must still be eligible.
+ await SalesBonus.create({invoice:course._id,customerKey:`contact:${courseContact._id}`,staff:String(sales._id),amount:1000,paidAt,paymentProvider:'paystack',customerName:'Course customer'});
+ await Invoice.updateOne({_id:course._id},{$set:{salesBonusAwardedAt:paidAt}});
+ await require('./salesBonus').summary(String(sales._id),new Date('2026-10-01T00:00:00+01:00'),new Date('2026-11-01T00:00:00+01:00'));
+ assert.equal(await SalesBonus.exists({invoice:course._id}),null);
+ assert.equal((await Invoice.findById(course._id).lean()).salesBonusAwardedAt,undefined);
+ const laterQualifyingOrder=await Invoice.create({token:require('node:crypto').randomUUID(),amount:20000,status:'paid',paidAt,paymentProvider:'paystack',customerName:'Course customer',customerPhone:courseContact.phone,inboxContact:courseContact._id,generatedByStaff:String(sales._id),generatedByRole:'SS'});
+ assert.equal((await require('./salesBonus').credit(laterQualifyingOrder)).credited,true);
+ const whatsappCourse=await Invoice.create({token:require('node:crypto').randomUUID(),amount:10000,status:'paid',paidAt,paymentProvider:'paystack',product:'whatsapp-course',customerName:'WhatsApp course customer',customerPhone:'2348110000004',generatedByStaff:String(sales._id),generatedByRole:'SS'});
+ assert.equal((await require('./salesBonus').credit(whatsappCourse)).reason,'not_eligible');
+ const lowOrder=await Invoice.create({token:require('node:crypto').randomUUID(),amount:19999,status:'paid',paidAt,paymentProvider:'paystack',customerName:'Small order',customerPhone:'2348110000005',generatedByStaff:String(sales._id),generatedByRole:'SS'});
+ assert.equal((await require('./salesBonus').credit(lowOrder)).reason,'not_eligible');
  const otherContact=await Contact.create({name:'No bonus',phone:'2348110000002'});
  const nonSales=await Invoice.create({token:require('node:crypto').randomUUID(),amount:20000,status:'paid',paidAt,paymentProvider:'paystack',customerName:'No bonus',customerPhone:otherContact.phone,inboxContact:otherContact._id,generatedByStaff:String(css._id),generatedByRole:'CSS'});
  assert.equal((await require('./salesBonus').credit(nonSales)).reason,'not_eligible');
- assert.equal(await SalesBonus.countDocuments(),1);
+ assert.equal(await SalesBonus.countDocuments(),2);
  const report=await request(`/earnings?staff=${sales._id}&from=2026-10-01&to=2026-10-31`,null,true);
- assert.equal(report.status,200);assert.equal(report.data.salesBonusEligible,true);assert.equal(report.data.salesBonus,1000);assert.equal(report.data.salesBonusCount,1);
+ assert.equal(report.status,200);assert.equal(report.data.salesBonusEligible,true);assert.equal(report.data.salesBonus,2000);assert.equal(report.data.salesBonusCount,2);
  const cssReport=await request(`/earnings?staff=${css._id}&from=2026-10-01&to=2026-10-31`,null,true);
  assert.equal(cssReport.data.salesBonusEligible,false);assert.equal(cssReport.data.salesBonus,0);
 });
@@ -139,7 +171,8 @@ test('admin reset and persistent pause are audited, scoped and preserve offline 
   assert.equal(await Sample.countDocuments({key:'admin-pause-example'}),1);
   t.mock.timers.setTime(new Date('2026-10-14T10:20:00+01:00').getTime());await Sample.create({key:'after-reset',staff:who,startedAt:new Date('2026-10-14T10:10:00+01:00'),endedAt:new Date('2026-10-14T10:20:00+01:00'),status:'answered'});
   data=(await request('/earnings?from=2026-10-14&to=2026-10-14')).data;assert.equal(data.averageMs,15*60000);assert.equal(data.answered,1);assert.equal(data.pending,1);
-  assert.equal((await request('/earnings/control',{...body,action:'reset',from:'2026-09-01',to:'2026-09-30'},true)).status,409);
+  assert.equal((await request('/earnings/control',{...body,action:'reset',from:'2026-09-01',to:'2026-09-30'},true)).status,200);
+  assert.equal((await Month.findOne({staff:who,month:'2026-09'}).lean()).finalizedAt,undefined);
  }finally{t.mock.timers.reset()}
 });
 
