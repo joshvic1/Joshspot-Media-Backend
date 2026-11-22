@@ -24,7 +24,29 @@ function botUrl(invoice) {
 }
 
 function paidCourseQuery(email) {
-  return { status: 'paid', deletedAt: null, product: { $in: [...COURSE_PRODUCTS] }, customerEmail: email };
+  return { status: 'paid', deletedAt: null, product: { $in: [...COURSE_PRODUCTS] }, customerEmail: email,
+    $expr: { $lt: [{ $ifNull: ['$refundedAmount', 0] }, '$amount'] } };
+}
+
+// A full course refund should close access from the related private channel.
+// If the same email has another paid purchase of that product, its access is
+// retained. Telegram failures never alter the confirmed payment refund.
+async function revokeRefundedInvoiceAccess(invoice) {
+  if (!invoice || !COURSE_PRODUCTS.has(invoice.product) || !normalizeEmail(invoice.customerEmail) || Number(invoice.refundedAmount || 0) < Number(invoice.amount || 0)) return { skipped: true };
+  const accesses = await Access.find({ invoice: invoice._id, status: 'approved' }).populate('identity channel');
+  const outcomes = [];
+  for (const access of accesses) {
+    const identity = access.identity, channel = access.channel;
+    if (!identity || !channel) continue;
+    const replacement = await Invoice.findOne({ ...paidCourseQuery(identity.email), product: channel.product, _id: { $ne: invoice._id } }).select('_id');
+    if (replacement) { outcomes.push({ kept: true }); continue; }
+    try {
+      await telegram.call('banChatMember', { chat_id: channel.chatId, user_id: Number(identity.telegramUserId) });
+      await Access.updateOne({ _id: access._id, status: 'approved' }, { $set: { status: 'revoked', revokedAt: new Date(), revokedReason: 'Full payment refund confirmed.' } });
+      outcomes.push({ revoked: true });
+    } catch (error) { outcomes.push({ revoked: false, error }); }
+  }
+  return { skipped: false, outcomes };
 }
 
 async function ensureInvoiceAccessToken(invoice) {
@@ -228,4 +250,4 @@ async function resetIdentityBinding(identity, reason = '') {
   return { identity: released, alreadyReleased: false };
 }
 
-module.exports = { COURSE_PRODUCTS, normalizeEmail, botUrl, paidInvoices, ensureInvoiceAccessToken, telegramUrlForInvoice, bindIdentity, sendCourseLinks, approveJoinRequest, revokeIdentity, restoreIdentity, resetIdentityBinding };
+module.exports = { COURSE_PRODUCTS, normalizeEmail, botUrl, paidInvoices, ensureInvoiceAccessToken, telegramUrlForInvoice, bindIdentity, sendCourseLinks, approveJoinRequest, revokeIdentity, restoreIdentity, resetIdentityBinding, revokeRefundedInvoiceAccess };

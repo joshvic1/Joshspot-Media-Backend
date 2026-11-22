@@ -21,6 +21,7 @@ module.exports = (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    req.admin = decoded;
     next();
   } catch {
     res.status(401).json({ message: "Invalid token" });

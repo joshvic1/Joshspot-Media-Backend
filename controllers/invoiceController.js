@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require("uuid");
 const crypto = require("node:crypto");
 const Invoice = require("../models/Invoice");
 const { canEmailCourse, deliverCourseEmail, queueCourseEmail } = require("../utils/deliverCourseEmail");
-const { isPaidCourse } = require("../utils/courseAccess");
+const { isPaidCourse, isFullyRefunded } = require("../utils/courseAccess");
 const { botUrl } = require('../telegram/access');
 const salesBonus = require('../inbox/earnings/salesBonus');
 
@@ -30,7 +30,7 @@ const getPublicInvoice = (invoice) => ({
   expiresAt: invoice.expiresAt,
   paidAt: invoice.paidAt,
   createdAt: invoice.createdAt,
-  ...((isPaidCourse(invoice) || (invoice.product === 'whatsapp-course' && invoice.status === 'paid' && invoice.amount === 10000)) ? { telegramAccessUrl: botUrl(invoice) } : {}),
+  ...((!isFullyRefunded(invoice) && (isPaidCourse(invoice) || (invoice.product === 'whatsapp-course' && invoice.status === 'paid' && invoice.amount === 10000))) ? { telegramAccessUrl: botUrl(invoice) } : {}),
 });
 
 const refreshInvoiceStatus = async (invoice, strict = false) => {

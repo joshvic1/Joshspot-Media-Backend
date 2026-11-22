@@ -1,7 +1,7 @@
 const Invoice = require("../models/Invoice");
 const { Resend } = require("resend");
 const { refreshInvoiceStatus } = require("./invoiceController");
-const { isCourse } = require("../utils/courseAccess");
+const { isCourse, isFullyRefunded } = require("../utils/courseAccess");
 const courseQuery = { deletedAt: null, $or: [{ product: { $in: ["ads-course", "whatsapp-course"] } }, { note: /^Course purchase - WhatsApp:/ }] };
 const phoneOf = (record) => record.customerPhone || (record.note || "").split("WhatsApp:")[1]?.trim() || "";
 async function checkPayment(invoice) {
@@ -133,7 +133,7 @@ exports.resendCourseEmail = async (req, res) => {
   try {
     const invoice = await Invoice.findById(req.params.id);
     if (!invoice || invoice.deletedAt || !isCourse(invoice)) return res.status(404).json({ message: "Course checkout not found." });
-    if (invoice.status !== "paid") return res.status(403).json({ message: "Course access can only be emailed for confirmed payments." });
+    if (invoice.status !== "paid" || isFullyRefunded(invoice)) return res.status(403).json({ message: "Course access cannot be emailed after a fully refunded payment." });
     if (!invoice.customerEmail) return res.status(400).json({ message: "This customer has no saved email address." });
     // Reuse the paid-access email, its payment checks and one-minute send limit.
     return await require("./invoiceController").emailCourseAccess({ params: { token: invoice.token }, body: { email: invoice.customerEmail } }, res);

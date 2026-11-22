@@ -52,6 +52,10 @@ const verificationClientSchema = new mongoose.Schema({
     ref: "Staff",
   },
 
+  retractedAt: { type: Date, default: null },
+  retractedBy: { type: String, default: "" },
+  retractedByRefund: { type: mongoose.Schema.Types.ObjectId, ref: "Refund", default: null },
+
   createdAt: {
     type: Date,
     default: Date.now,
@@ -59,5 +63,6 @@ const verificationClientSchema = new mongoose.Schema({
 });
 
 verificationClientSchema.add({ inboxRequestKey: { type: String, unique: true, sparse: true } });
+verificationClientSchema.index({ retractedAt: 1 });
 
 module.exports = mongoose.model("VerificationClient", verificationClientSchema);

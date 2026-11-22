@@ -12,6 +12,10 @@ exports.paystackWebhook = async (req, res) => {
   if (!/^[a-f0-9]{128}$/i.test(signature) || !crypto.timingSafeEqual(Buffer.from(expected, "hex"), Buffer.from(signature, "hex"))) return res.sendStatus(401);
   try {
     const transaction = req.body.data;
+    if (String(req.body.event || "").startsWith("refund.")) {
+      await require("./refundController").handlePaystackWebhook(transaction);
+      return res.sendStatus(200);
+    }
     if (req.body.event === "charge.success" && transaction?.status === "success" && transaction.currency === "NGN") {
       const invoice = await Invoice.findOne({ reference: transaction.reference, paymentProvider:{$ne:'flutterwave'} });
       if (invoice && transaction.amount === invoice.amount * 100) {

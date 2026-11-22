@@ -1,10 +1,10 @@
 const Invoice = require("../models/Invoice");
 const { Resend } = require("resend");
 const { createHash } = require("node:crypto");
-const { isPaidCourse } = require("./courseAccess");
+const { isPaidCourse, isFullyRefunded } = require("./courseAccess");
 const content = require("./courseEmailContent");
 
-const canEmailCourse = invoice => !invoice.deletedAt && (isPaidCourse(invoice) ||
+const canEmailCourse = invoice => !invoice.deletedAt && !isFullyRefunded(invoice) && (isPaidCourse(invoice) ||
   (invoice.product === "whatsapp-course" && invoice.status === "paid" && invoice.amount === 10000));
 const validEmail = email => typeof email === "string" && email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 

@@ -14,6 +14,10 @@ router.post("/course-payments/:id/resend", adminAuth, require("../controllers/co
 const reports = require("../controllers/adminReportsController");
 router.get("/overview", adminAuth, reports.overview);
 router.get("/paid-invoices", adminAuth, reports.paidInvoices);
+const refunds = require("../controllers/refundController");
+router.get("/paid-invoices/:id/refund-preview", adminAuth, refunds.preview);
+router.post("/paid-invoices/:id/refunds", adminAuth, refunds.create);
+router.post("/refunds/:id/refresh", adminAuth, refunds.refresh);
 router.patch("/paid-invoices/:id/contact", adminAuth, require("../controllers/invoiceContactController").update);
 router.post("/paid-invoices/:id/receipt", adminAuth, require("../controllers/receiptController").sendReceipt);
 router.post("/sync-payments", adminAuth, reports.syncPayments);

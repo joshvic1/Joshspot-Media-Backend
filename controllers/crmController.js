@@ -125,7 +125,7 @@ exports.crmLogin = async (req, res) => {
 
 exports.getClients = async (req, res) => {
   try {
-    const clients = await Client.find().sort({ createdAt: -1 });
+    const clients = await Client.find({ retractedAt: null }).sort({ createdAt: -1 });
     const inboxLinks = await linksForClients(clients, req.staff);
 
     res.json({
@@ -196,7 +196,7 @@ exports.updateClient = async (req, res) => {
 
     update.updatedBy = req.staff.staffId;
 
-    const client = await Client.findByIdAndUpdate(req.params.id, update, {
+    const client = await Client.findOneAndUpdate({ _id: req.params.id, retractedAt: null }, update, {
       returnDocument: 'after',
       runValidators: true,
     });

@@ -59,6 +59,10 @@ const adsClientSchema = new mongoose.Schema({
     ref: "Staff",
   },
 
+  retractedAt: { type: Date, default: null },
+  retractedBy: { type: String, default: "" },
+  retractedByRefund: { type: mongoose.Schema.Types.ObjectId, ref: "Refund", default: null },
+
   createdAt: {
     type: Date,
     default: Date.now,
@@ -66,5 +70,6 @@ const adsClientSchema = new mongoose.Schema({
 });
 
 adsClientSchema.add({ inboxRequestKey: { type: String, unique: true, sparse: true } });
+adsClientSchema.index({ retractedAt: 1 });
 
 module.exports = mongoose.model("AdsClient", adsClientSchema);

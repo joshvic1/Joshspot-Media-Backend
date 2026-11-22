@@ -19,7 +19,7 @@ const maskVerificationClientForRole = (client, role) => {
 
 exports.getVerificationClients = async (req, res) => {
   try {
-    const clients = await VerificationClient.find().sort({ createdAt: -1 });
+    const clients = await VerificationClient.find({ retractedAt: null }).sort({ createdAt: -1 });
     const inboxLinks = await linksForClients(clients, req.staff);
 
     res.json(clients.map((client) => ({
@@ -92,7 +92,7 @@ exports.updateVerificationClient = async (req, res) => {
       }
     }
 
-    const client = await VerificationClient.findByIdAndUpdate(req.params.id, update, {
+    const client = await VerificationClient.findOneAndUpdate({ _id: req.params.id, retractedAt: null }, update, {
       returnDocument: 'after',
       runValidators: true,
     });

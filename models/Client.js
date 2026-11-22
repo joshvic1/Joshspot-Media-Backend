@@ -63,6 +63,12 @@ const clientSchema = new mongoose.Schema({
     default: null,
   },
 
+  // A refund may remove a service record from day-to-day CRM views without
+  // destroying the original record or its audit trail.
+  retractedAt: { type: Date, default: null },
+  retractedBy: { type: String, default: "" },
+  retractedByRefund: { type: mongoose.Schema.Types.ObjectId, ref: "Refund", default: null },
+
   createdAt: {
     type: Date,
     default: Date.now,
@@ -70,5 +76,6 @@ const clientSchema = new mongoose.Schema({
 });
 
 clientSchema.add({ inboxRequestKey: { type: String, unique: true, sparse: true } });
+clientSchema.index({ retractedAt: 1 });
 
 module.exports = mongoose.model("Client", clientSchema);

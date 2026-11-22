@@ -10,6 +10,8 @@ const invoiceService = (row) => row.product === "whatsapp-course" ? "WhatsApp St
 const invoiceRecord = (row) => ({ id: String(row._id), kind: "invoices", name: row.customerName || "",
   email: row.customerEmail || "", phone: row.customerPhone || (row.note || "").split("WhatsApp:")[1]?.trim() || "",
   amount: Number(row.amount || 0), paidAt: row.paidAt || null, createdAt: row.createdAt,
+  refundedAmount: Number(row.refundedAmount || 0), netAmount: Math.max(0, Number(row.amount || 0) - Number(row.refundedAmount || 0)),
+  refundStatus: row.refundStatus || "none", paymentProvider: row.paymentProvider || "paystack",
   service: invoiceService(row), reference: row.reference || "", note: row.note || "", source: "invoices" });
 const bookingRecord = (row) => ({ id: String(row._id), kind: "bookings", name: row.name || "",
   email: row.email || "", phone: row.phone || "", amount: Number(row.price || 0), paidAt: row.paidAt || null,
@@ -41,7 +43,7 @@ exports.paidInvoices = async (req, res) => {
     const all = (await Invoice.find({ ...active, status: "paid" }).sort({ paidAt: -1, _id: -1 }).lean()).map(invoiceRecord);
     const rows = all.filter(filter.matches);
     res.setHeader("Cache-Control", "no-store");
-    return res.json({ ...paginate(rows, req.query), revenue: rows.reduce((sum, row) => sum + row.amount, 0),
+    return res.json({ ...paginate(rows, req.query), revenue: rows.reduce((sum, row) => sum + (row.netAmount ?? row.amount), 0),
       services: [...new Set(all.map((row) => row.service))].sort(), unknownDates: rows.filter((row) => !row.paidAt).length });
   } catch { return res.status(500).json({ message: "Unable to load paid invoices." }); }
 };
@@ -58,15 +60,15 @@ exports.overview = async (req, res) => {
     const services = {};
     for (const row of rows) {
       services[row.service] ||= { service: row.service, count: 0, revenue: 0 };
-      services[row.service].count++; services[row.service].revenue += row.amount;
+      services[row.service].count++; services[row.service].revenue += row.netAmount ?? row.amount;
     }
     const bookingRows = bookings.filter((row) => filter.dateMatches(row.createdAt) && filter.serviceMatches(bookingRecord(row)));
     const leadRows = leads.filter((row) => filter.dateMatches(row.createdAt));
-    const revenue = rows.reduce((sum, row) => sum + row.amount, 0);
+    const revenue = rows.reduce((sum, row) => sum + (row.netAmount ?? row.amount), 0);
     res.setHeader("Cache-Control", "no-store");
     return res.json({ revenue, payments: rows.length, bookingRevenue: rows.filter((row) => row.source === "bookings").reduce((sum, row) => sum + row.amount, 0),
-      invoiceRevenue: rows.filter((row) => row.source === "invoices").reduce((sum, row) => sum + row.amount, 0),
-      courseRevenue: rows.filter((row) => ["Ads course", "WhatsApp Status ads course"].includes(row.service)).reduce((sum, row) => sum + row.amount, 0),
+      invoiceRevenue: rows.filter((row) => row.source === "invoices").reduce((sum, row) => sum + (row.netAmount ?? row.amount), 0),
+      courseRevenue: rows.filter((row) => ["Ads course", "WhatsApp Status ads course"].includes(row.service)).reduce((sum, row) => sum + (row.netAmount ?? row.amount), 0),
       bookings: bookingRows.length, completed: bookingRows.filter((row) => row.status === "completed").length,
       leads: leadRows.length, highPriority: leadRows.filter((row) => row.score >= 70 || row.endpoint === "STRATEGIC_GROWTH_CALL").length,
       unverifiedBookings: bookings.filter((row) => row.paid && !row.paymentVerifiedAt).length,

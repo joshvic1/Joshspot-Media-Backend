@@ -80,7 +80,7 @@ const pickAdsPublishStatus = (body) => {
 
 exports.getAdsClients = async (req, res) => {
   try {
-    const clients = await AdsClient.find().sort({ createdAt: -1 });
+    const clients = await AdsClient.find({ retractedAt: null }).sort({ createdAt: -1 });
     const inboxLinks = await linksForClients(clients, req.staff);
 
     res.json({
@@ -156,7 +156,7 @@ exports.updateAdsClient = async (req, res) => {
 
     update.updatedBy = req.staff.staffId;
 
-    const client = await AdsClient.findByIdAndUpdate(req.params.id, update, {
+    const client = await AdsClient.findOneAndUpdate({ _id: req.params.id, retractedAt: null }, update, {
       returnDocument: 'after',
       runValidators: true,
     });

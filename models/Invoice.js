@@ -80,6 +80,17 @@ const invoiceSchema = new mongoose.Schema({
   flutterwaveTransactionId: String,
   paymentError: String,
   paidAt: Date,
+  // A payment remains a paid invoice for audit purposes after a refund. These
+  // fields describe the provider-confirmed refund state and let reports use
+  // net, rather than misleading gross, revenue.
+  refundStatus: {
+    type: String,
+    enum: ["none", "pending", "processing", "needs_attention", "processed", "failed"],
+    default: "none",
+  },
+  refundedAmount: { type: Number, default: 0 },
+  refundReservedAmount: { type: Number, default: 0 },
+  refundCompletedAt: Date,
   salesBonusAwardedAt: Date,
   tiktokPurchaseQueuedAt: Date,
   tiktokPurchaseSentAt: Date,
