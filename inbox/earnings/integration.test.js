@@ -1,9 +1,9 @@
 // Disposable Mongo only; no .env, Meta calls or real payroll changes.
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
 const mongoose=require('mongoose'),express=require('express');const {MongoMemoryServer}=require('mongodb-memory-server');
-const {Config,Sample,Month}=require('./models');const {routes,defaults}=require('./routes');const Staff=require('../../models/Staff');const {Conversation,Message,Contact}=require('../models');
+const {Config,Sample,Month,SalesBonus}=require('./models');const {routes,defaults}=require('./routes');const Staff=require('../../models/Staff');const Invoice=require('../../models/Invoice');const {Conversation,Message,Contact}=require('../models');
 let mongo,server,url,staff,other;
-before(async()=>{mongo=await MongoMemoryServer.create();await mongoose.connect(mongo.getUri());await Promise.all([Config,Sample,Month,Staff,Conversation,Message,Contact].map(m=>m.init()));staff=await Staff.create({name:'First',email:'first@test.invalid',password:'test',role:'CSS'});other=await Staff.create({name:'Second',email:'second@test.invalid',password:'test',role:'CSS'});const app=express();app.use(express.json());app.use((req,res,next)=>{req.actor=req.headers['x-role']==='admin'?{id:'admin',admin:true}:{id:String(staff._id),admin:false};next()});require('../staffRoutes')(app,fn=>(req,res,next)=>Promise.resolve(fn(req,res,next)).catch(next),async()=>{});routes(app,fn=>(req,res,next)=>Promise.resolve(fn(req,res,next)).catch(next),async()=>{});app.use((e,req,res,next)=>res.status(e.status||500).json({message:e.message}));server=app.listen(0);url=`http://127.0.0.1:${server.address().port}`;});
+before(async()=>{mongo=await MongoMemoryServer.create();await mongoose.connect(mongo.getUri());await Promise.all([Config,Sample,Month,SalesBonus,Invoice,Staff,Conversation,Message,Contact].map(m=>m.init()));staff=await Staff.create({name:'First',email:'first@test.invalid',password:'test',role:'CSS'});other=await Staff.create({name:'Second',email:'second@test.invalid',password:'test',role:'CSS'});const app=express();app.use(express.json());app.use((req,res,next)=>{req.actor=req.headers['x-role']==='admin'?{id:'admin',admin:true}:{id:String(staff._id),admin:false};next()});require('../staffRoutes')(app,fn=>(req,res,next)=>Promise.resolve(fn(req,res,next)).catch(next),async()=>{});routes(app,fn=>(req,res,next)=>Promise.resolve(fn(req,res,next)).catch(next),async()=>{});app.use((e,req,res,next)=>res.status(e.status||500).json({message:e.message}));server=app.listen(0);url=`http://127.0.0.1:${server.address().port}`;});
 after(async()=>{await new Promise(r=>server.close(r));await mongoose.disconnect();await mongo.stop()});
 async function request(path,body,admin=false,method){const r=await fetch(url+path,{method:method||(body?'POST':'GET'),headers:{'content-type':'application/json','x-role':admin?'admin':'staff'},...(body?{body:JSON.stringify(body)}:{})});return {status:r.status,data:await r.json()};}
 test('earnings permissions, cap, audited adjustment and finalization lock',async()=>{
@@ -19,11 +19,32 @@ test('earnings permissions, cap, audited adjustment and finalization lock',async
  await Sample.updateOne({key:'test-1'},{$set:{endedAt:new Date('2026-09-02T08:01:00+01:00')}});
  const locked=await request('/earnings?from=2026-09-01&to=2026-09-30');assert.equal(locked.data.days[0].deduction,2000);assert.equal(locked.data.deduction,100000);
 });
+
+test('sales bonus credits one paid invoice per client, not a second invoice or another role',async()=>{
+ await Config.findOneAndUpdate({_id:'main'},{$set:{...defaults,enabled:true,startsAt:new Date('2026-09-01')}},{upsert:true});
+ const sales=await Staff.create({name:'Sales',email:'sales@test.invalid',password:'test',role:'SS'});
+ const css=await Staff.create({name:'Support',email:'support@test.invalid',password:'test',role:'CSS'});
+ const contact=await Contact.create({name:'Bonus client',phone:'2348110000001'});
+ const paidAt=new Date('2026-10-06T12:00:00+01:00');
+ const create=extra=>Invoice.create({token:require('node:crypto').randomUUID(),amount:20000,status:'paid',paidAt,paymentProvider:'paystack',customerName:'Bonus client',customerPhone:contact.phone,inboxContact:contact._id,generatedByStaff:String(sales._id),generatedByRole:'SS',...extra});
+ const first=await create();assert.equal((await require('./salesBonus').credit(first)).credited,true);
+ const second=await create({paymentProvider:'moniepoint'});assert.equal((await require('./salesBonus').credit(second)).reason,'already_credited');
+ const otherContact=await Contact.create({name:'No bonus',phone:'2348110000002'});
+ const nonSales=await Invoice.create({token:require('node:crypto').randomUUID(),amount:20000,status:'paid',paidAt,paymentProvider:'paystack',customerName:'No bonus',customerPhone:otherContact.phone,inboxContact:otherContact._id,generatedByStaff:String(css._id),generatedByRole:'CSS'});
+ assert.equal((await require('./salesBonus').credit(nonSales)).reason,'not_eligible');
+ assert.equal(await SalesBonus.countDocuments(),1);
+ const report=await request(`/earnings?staff=${sales._id}&from=2026-10-01&to=2026-10-31`,null,true);
+ assert.equal(report.status,200);assert.equal(report.data.salesBonusEligible,true);assert.equal(report.data.salesBonus,1000);assert.equal(report.data.salesBonusCount,1);
+ const cssReport=await request(`/earnings?staff=${css._id}&from=2026-10-01&to=2026-10-31`,null,true);
+ assert.equal(cssReport.data.salesBonusEligible,false);assert.equal(cssReport.data.salesBonus,0);
+});
 test('pending records prevent finalization and config changes preserve existing month rules',async()=>{
  await Sample.create({key:'pending',staff:String(other._id),startedAt:new Date('2026-09-03T08:00:00+01:00'),status:'pending'});
  assert.equal((await request('/earnings/month',{staff:String(other._id),month:'2026-09',action:'finalize'},true)).status,409);
  const pending=await Sample.findOne({key:'pending'});assert.equal((await request('/earnings/exclude',{id:String(pending._id),reason:'System outage review'})).status,403);assert.equal((await request('/earnings/exclude',{id:String(pending._id),reason:'System outage review'},true)).status,200);
  const reviewed=await request('/earnings?staff='+other._id+'&from=2026-09-01&to=2026-09-30',null,true);assert.equal(reviewed.data.pending,0);assert.equal(reviewed.data.excluded,1);
+ // October is an existing statement before the rule change below.
+ await require('./routes').monthly(String(other._id),'2026-10',await Config.findById('main').lean());
  const result=await request('/earnings/config',{...defaults,enabled:true,blockAmount:2000},true,'PUT');assert.equal(result.status,200);
  const old=await Month.findOne({staff:String(staff._id),month:'2026-09'}).lean();assert.equal(old.rule.blockAmount,1000);
 });

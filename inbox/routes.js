@@ -283,6 +283,7 @@ router.post('/conversations/:id/crm/invoices/:recordId/confirm-manual-payment', 
   invoice.manualPaymentConfirmedAt = confirmedAt;
   invoice.manualPaymentConfirmedBy = req.actor.name || 'Administrator';
   await invoice.save();
+  await require('./earnings/salesBonus').credit(invoice);
   res.json({ id: String(invoice._id), status: invoice.status, paidAt: invoice.paidAt, providerStatus: invoice.providerStatus });
 }));
 router.get('/conversations/:id/crm/:kind/:recordId', wrap(async (req, res) => {

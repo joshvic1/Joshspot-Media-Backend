@@ -116,7 +116,10 @@ function routes(router,wrap,rateLimit){
   if(req.query.latePage!==undefined&&(!/^\d+$/.test(req.query.latePage)||Number(req.query.latePage)>1000))fail(400,'Invalid late-response page.');
   const {Conversation}=require('../models');const outstanding=await Conversation.countDocuments({$or:[{earningsDirty:true},{earningsVersion:{$ne:4}}],deleting:{$ne:true},...(req.actor.admin?{}:{assignedTo:staff})});
   const data=staff&&cfg.startsAt?await report(staff,from,to,cfg,{actor:req.actor,latePage:req.query.latePage===undefined?undefined:Number(req.query.latePage)}):{days:[],months:[],samples:[],answered:0,pending:0,averageMs:0,deduction:0};
-  res.json({...data,staff,people,config:cfg,from,to,outstanding});
+  const person=staff?(req.actor.admin?people.find(row=>String(row._id)===staff):await Staff.findById(staff).select('role').lean()):null;
+  const salesBonusEligible=person?.role==='SS';
+  const salesBonus=salesBonusEligible?await require('./salesBonus').summary(staff,dayStart(from),new Date(+dayStart(to)+DAY)):{amount:0,count:0};
+  res.json({...data,staff,people,config:cfg,from,to,outstanding,salesBonus:salesBonus.amount,salesBonusCount:salesBonus.count,salesBonusEligible});
  }));
  router.put('/earnings/config',wrap(async(req,res)=>{
   if(!req.actor.admin)fail(403,'Administrator access required.');await rateLimit(req);

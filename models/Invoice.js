@@ -7,6 +7,11 @@ const invoiceSchema = new mongoose.Schema({
   inboxAIHandledAt: Date,
   inboxConversation: { type: mongoose.Schema.Types.ObjectId, ref: 'InboxConversation' },
   inboxContact: { type: mongoose.Schema.Types.ObjectId, ref: 'InboxContact' },
+  // Captured at the point a staff member creates an Inbox invoice. The later
+  // payment confirmer never decides who receives sales credit.
+  generatedByStaff: { type: String, default: '', index: true },
+  generatedByStaffName: { type: String, default: '' },
+  generatedByRole: { type: String, default: '' },
   token: {
     type: String,
     required: true,
@@ -75,6 +80,7 @@ const invoiceSchema = new mongoose.Schema({
   flutterwaveTransactionId: String,
   paymentError: String,
   paidAt: Date,
+  salesBonusAwardedAt: Date,
   tiktokPurchaseQueuedAt: Date,
   tiktokPurchaseSentAt: Date,
   tiktokPurchaseClaimedAt: Date,

@@ -6,4 +6,9 @@ const month=new Schema({key:{type:String,unique:true},staff:String,month:String,
 month.index({staff:1,month:1});
 const availability=new Schema({_id:String,staff:String,day:String,revision:{type:Number,default:0},offline:{type:Boolean,default:false},intervals:[{start:Date,end:Date}]},{timestamps:true});availability.index({staff:1,day:1},{unique:true});
 const control=new Schema({staff:String,kind:String,celebration:String,from:Date,to:Date,at:Date,by:String,reason:String,active:Boolean,resumedAt:Date,resumedBy:String,resumeReason:String},{timestamps:true});control.index({staff:1,from:1});control.index({staff:1,kind:1,celebration:1},{unique:true,partialFilterExpression:{celebration:{$exists:true}}});control.index({staff:1},{unique:true,partialFilterExpression:{active:true}});
-module.exports={Control:mongoose.model('InboxResponseControl',control),Availability:mongoose.model('InboxStaffAvailability',availability),Config:mongoose.model('InboxEarningsConfig',config),Sample:mongoose.model('InboxResponseSample',sample),Month:mongoose.model('InboxEarningsMonth',month)};
+// customerKey is deliberately unique globally: a client can earn one sales
+// bonus only, even if they later pay another invoice or another sales staff
+// member generates it.
+const salesBonus=new Schema({invoice:{type:Schema.Types.ObjectId,ref:'Invoice',required:true,unique:true},customerKey:{type:String,required:true,unique:true},staff:{type:String,required:true,index:true},amount:{type:Number,required:true},paidAt:{type:Date,required:true,index:true},paymentProvider:String,customerName:String},{timestamps:true});
+salesBonus.index({staff:1,paidAt:1});
+module.exports={Control:mongoose.model('InboxResponseControl',control),Availability:mongoose.model('InboxStaffAvailability',availability),Config:mongoose.model('InboxEarningsConfig',config),Sample:mongoose.model('InboxResponseSample',sample),Month:mongoose.model('InboxEarningsMonth',month),SalesBonus:mongoose.model('InboxSalesBonus',salesBonus)};

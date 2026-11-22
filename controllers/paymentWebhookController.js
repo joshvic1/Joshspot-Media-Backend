@@ -3,6 +3,7 @@ const Invoice = require("../models/Invoice");
 const Booking = require("../models/Booking");
 const { matchesBookingPayment } = require("../utils/bookingPayment");
 const { queueCourseEmail } = require("../utils/deliverCourseEmail");
+const salesBonus = require('../inbox/earnings/salesBonus');
 
 exports.paystackWebhook = async (req, res) => {
   if (!process.env.PAYSTACK_SECRET || !req.rawBody) return res.sendStatus(400);
@@ -17,6 +18,8 @@ exports.paystackWebhook = async (req, res) => {
         await Invoice.updateOne({ _id: invoice._id }, { $set: { status: "paid", paystackStatus: "success",
           paidAt: transaction.paid_at || new Date(), paymentCheckedAt: new Date() } });
         invoice.status = "paid";
+        invoice.paidAt = transaction.paid_at || new Date();
+        await salesBonus.credit(invoice);
         await require("../utils/tiktokEvents").queueTikTokPurchase(invoice);
         await queueCourseEmail(invoice);
       }

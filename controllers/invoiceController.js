@@ -5,6 +5,7 @@ const Invoice = require("../models/Invoice");
 const { canEmailCourse, deliverCourseEmail, queueCourseEmail } = require("../utils/deliverCourseEmail");
 const { isPaidCourse } = require("../utils/courseAccess");
 const { botUrl } = require('../telegram/access');
+const salesBonus = require('../inbox/earnings/salesBonus');
 
 const PAYSTACK_BASE_URL = "https://api.paystack.co";
 const INVOICE_LIFETIME_HOURS = 8;
@@ -35,9 +36,12 @@ const getPublicInvoice = (invoice) => ({
 const refreshInvoiceStatus = async (invoice, strict = false) => {
   // Moniepoint transfers are confirmed only by an administrator in the Inbox.
   // Never infer payment from a customer-facing invoice page or a provider call.
-  if (invoice.paymentProvider === 'moniepoint') return invoice;
+  if (invoice.paymentProvider === 'moniepoint') {
+    if (invoice.status === 'paid') await salesBonus.credit(invoice);
+    return invoice;
+  }
   if(invoice.paymentProvider==='flutterwave')return require('../utils/flutterwaveCoursePayment').refresh(invoice,strict);
-  if (invoice.status === "paid") { await queueCourseEmail(invoice); return invoice; }
+  if (invoice.status === "paid") { await salesBonus.credit(invoice); await queueCourseEmail(invoice); return invoice; }
 
   if (!invoice.reference && invoice.expiresAt && new Date(invoice.expiresAt) < new Date()) {
     invoice.status = "expired";
@@ -70,6 +74,7 @@ const refreshInvoiceStatus = async (invoice, strict = false) => {
 
     await invoice.save();
     if (invoice.status === "paid") {
+      await salesBonus.credit(invoice);
       await require("../utils/tiktokEvents").queueTikTokPurchase(invoice);
       await queueCourseEmail(invoice);
     }

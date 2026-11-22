@@ -66,6 +66,9 @@ module.exports = ({ wrap, fail, id, conversationFor, rateLimit }) => {
         automationKey: key, token: randomUUID(), amount, paymentProvider,
         customerName: c.contact.name, customerPhone: c.contact.phone, customerEmail: c.contact.email,
         inboxContact: c.contact._id, inboxConversation: c._id, note: 'Joshspot Inbox invoice',
+        generatedByStaff: req.actor.admin ? '' : req.actor.id,
+        generatedByStaffName: req.actor.admin ? '' : req.actor.name,
+        generatedByRole: req.actor.admin ? '' : req.actor.role,
         ...(paymentProvider === 'moniepoint' ? { ...moniepointAccount(), status: 'pending', providerStatus: 'awaiting_manual_confirmation' } : { expiresAt: new Date(Date.now() + 8 * 3600000) }),
       });
     } catch (e) { if (e.code !== 11000) throw e; invoice = await Invoice.findOne({ automationKey: key }); } }
